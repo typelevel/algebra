@@ -14,7 +14,7 @@ trait Rig[@sp(Byte, Short, Int, Long, Float, Double) A] extends Semiring[A] with
    */
   override def pow(a: A, n: Int): A =
     if (n >= 0) Monoid.sumn(a, n)(multiplicative)
-    else throw new IllegalArgumentException(s"Illegal negative exponent $n to Monoid#pow")
+    else throw new IllegalArgumentException("Illegal negative exponent %s to Monoid#pow" format n)
 }
 
 object Rig {

@@ -20,7 +20,7 @@ trait Semiring[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveMon
    */
   def pow(a: A, n: Int): A =
     if (n > 0) Semigroup.sumn(a, n)(multiplicative)
-    else throw new IllegalArgumentException(s"Illegal non-positive exponent $n to Semiring#pow")
+    else throw new IllegalArgumentException("Illegal non-positive exponent %s to Semiring#pow" format n)
 }
 
 object Semiring {

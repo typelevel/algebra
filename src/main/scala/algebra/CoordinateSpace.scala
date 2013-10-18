@@ -3,7 +3,6 @@ package algebra
 import scala.{ specialized => sp }
 import scala.collection.SeqLike
 import scala.collection.generic.CanBuildFrom
-import scala.reflect.ClassTag
 import scala.annotation.tailrec
 
 trait CoordinateSpace[V, @sp(Float, Double) F] extends InnerProductSpace[V, F] {
