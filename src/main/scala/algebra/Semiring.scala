@@ -19,7 +19,7 @@ trait Semiring[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveMon
    * a multiplicative identity, and so the exponent must be positive.
    */
   def pow(a: A, n: Int): A =
-    if (n > 0) Semigroup.sumn(a, n)(multiplicative)
+    if (n > 0) multiplicative.sumn(a, n)
     else throw new IllegalArgumentException("Illegal non-positive exponent %s to Semiring#pow" format n)
 }
 

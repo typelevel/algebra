@@ -8,6 +8,7 @@ import scala.{specialized => sp}
  * Moreover, `eqv` should form an equivalence relation.
  */
 trait Eq[@sp A] {
+
   /** Returns `true` if `x` and `y` are equivalent, `false` otherwise. */
   def eqv(x: A, y: A): Boolean
 
@@ -28,5 +29,5 @@ private[algebra] class MappedEq[@sp A, @sp B](eq: Eq[B])(f: A => B) extends Eq[A
 object Eq {
   def apply[A](implicit e: Eq[A]): Eq[A] = e
 
-  def by[@sp A, @sp B](f: A => B)(implicit e: Eq[B]): Eq[A] = new MappedEq(e)(f)
+  def by[@sp A, @sp B](f: A => B)(implicit e: Eq[B]): Eq[A] = e.on(f)
 }

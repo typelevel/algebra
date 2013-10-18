@@ -6,7 +6,8 @@ import scala.{specialized => sp}
  * The `Order` type class is used to define a total ordering on some type `A`.
  */
 trait Order[@sp A] extends Eq[A] {
-  self =>
+
+  def compare(x: A, y: A): Int
 
   def eqv(x: A, y: A): Boolean = compare(x, y) == 0
   def gt(x: A, y: A): Boolean = compare(x, y) > 0
@@ -16,7 +17,6 @@ trait Order[@sp A] extends Eq[A] {
 
   def min(x: A, y: A): A = if (lt(x, y)) x else y
   def max(x: A, y: A): A = if (gt(x, y)) x else y
-  def compare(x: A, y: A): Int
 
   /**
    * Defines an order on `B` by mapping `B` to `A` using `f` and using `A`s
@@ -47,6 +47,9 @@ object Order {
     def compare(x: A, y: A) = f(x, y)
   }
 
+  /**
+   * This implicit provides compatibility with scala.math.Ordering.
+   */
   implicit def ordering[A](implicit o: Order[A]) = new Ordering[A] {
     def compare(x: A, y: A) = o.compare(x, y)
   }

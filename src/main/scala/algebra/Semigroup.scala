@@ -8,6 +8,30 @@ import scala.annotation.{ switch, tailrec }
  */
 trait Semigroup[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] {
   def op(x: A, y: A): A
+
+  /**
+   * Return `a` appended to itself `n` times.
+   */
+  def sumn(a: A, n: Int): A =
+    if (n <= 0) throw new IllegalArgumentException("Repeated summation for semigroups must have reptitions > 0")
+    else positiveSumn(a, n)
+
+  protected def positiveSumn(a: A, n: Int): A = {
+    @tailrec def loop(b: A, k: Int, extra: A): A =
+      (k: @annotation.switch) match {
+        case 0 => b
+        case 1 => op(b, extra)
+        case n => loop(op(b, b), k >>> 1, if ((k & 1) == 1) op(b, extra) else extra)
+      }
+    loop(a, n - 1, a)
+  }
+
+  /**
+   * Given a sequence of `as`, sum them using the semigroup and return the total.
+   * 
+   * If the sequence is empty, returns None. Otherwise, returns Some(total).
+   */
+  def sumOption(as: TraversableOnce[A]): Option[A] = as.reduceOption(op)
 }
 
 object Semigroup {
@@ -24,21 +48,4 @@ object Semigroup {
    * `Semigroup[A]` using `times` for `op`.
    */
   @inline final def multiplicative[A](implicit A: MultiplicativeSemigroup[A]) = A.multiplicative
-
-  /**
-   * Return `a` appended to itself `n` times.
-   */
-  final def sumn[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](a: A, n: Int)(implicit A: Semigroup[A]): A = {
-    @tailrec def loop(b: A, k: Int, extra: A): A = {
-      (k: @annotation.switch) match {
-        case 0 => b
-        case 1 => A.op(b, extra)
-        case n =>
-          loop(A.op(b, b), k >>> 1, if (k % 2 == 1) A.op(b, extra) else extra)
-      }
-    }
-
-    if (n > 0) loop(a, n - 1, a)
-    else throw new IllegalArgumentException("Repeated summation for semigroups must have reptitions > 0")
-  }
 }

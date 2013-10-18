@@ -8,6 +8,15 @@ import scala.{ specialized => sp }
 trait Group[@sp(Byte, Short, Int, Long, Float, Double) A] extends Monoid[A] {
   def inverse(a: A): A
   def opInverse(a: A, b: A): A = op(a, inverse(b))
+
+  /**
+   * Return `a` appended to itself `n` times. If `n` is negative, then
+   * this returns `-a` appended to itself `n` times.
+   */
+  override def sumn(a: A, n: Int): A =
+    if (n < 0) positiveSumn(inverse(a), -n)
+    else if (n == 0) id
+    else positiveSumn(a, n)
 }
 
 object Group {
@@ -15,14 +24,6 @@ object Group {
   @inline final def additive[A](implicit A: AdditiveGroup[A]): Group[A] =  A.additive
   @inline final def multiplicative[A](implicit A: MultiplicativeGroup[A]): Group[A] = A.multiplicative
 
-  /**
-   * Return `a` appended to itself `n` times. If `n` is negative, then
-   * this returns `-a` appended to itself `n` times.
-   */
-  final def sumn[@sp(Byte, Short, Int, Long, Float, Double) A](a: A, n: Int)(implicit A: Group[A]): A =
-    if (n == Int.MinValue) A.op(Monoid.sumn(A.inverse(a), Int.MaxValue), A.inverse(a))
-    else if (n < 0) Monoid.sumn(A.inverse(a), -n)
-    else Monoid.sumn(a, n)
 }
 
 /**
