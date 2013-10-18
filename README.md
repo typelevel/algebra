@@ -18,8 +18,11 @@ pull requests.
 
 ## participants
 
-Oscar Boykin
-Avi Bryant
-Lars Hupel
-Erik Osheim
-Tom Switzer
+Anyone who wants to participate should feel free to send pull requests
+to this repo. The following people have push access:
+
+* Oscar Boykin
+* Avi Bryant
+* Lars Hupel
+* Erik Osheim
+* Tom Switzer
