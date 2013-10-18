@@ -18,11 +18,11 @@ trait Semiring[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveMon
    * `a pow 3 === a * a * a`. Since this is a semiring, there is no notion of
    * a multiplicative identity, and so the exponent must be positive.
    */
-  def pow(a:A, n:Int):A =
+  def pow(a: A, n: Int): A =
     if (n > 0) Semigroup.sumn(a, n)(multiplicative)
     else throw new IllegalArgumentException(s"Illegal non-positive exponent $n to Semiring#pow")
 }
 
 object Semiring {
-  @inline final def apply[A](implicit r:Semiring[A]):Semiring[A] = r
+  @inline final def apply[A](implicit r: Semiring[A]): Semiring[A] = r
 }

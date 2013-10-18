@@ -20,13 +20,10 @@ object Sign {
   case object Positive extends Sign(1)
   case object Negative extends Sign(-1)
 
-  implicit def sign2int(s: Sign): Int = s.toInt
-  implicit def apply(i: Int): Sign = 
+  def apply(i: Int): Sign =
     if (i == 0) Zero else if (i > 0) Positive else Negative
-
-  implicit final val SignAlgebra = new SignAlgebra {}
-
-  trait SignAlgebra extends Group[Sign] with Signed[Sign] with Order[Sign] {
+  
+  implicit final val SignAlgebra = new Group[Sign] with Signed[Sign] with Order[Sign] {
     def id: Sign = Zero
     def op(a: Sign, b: Sign): Sign = Sign(a.toInt * b.toInt)
     def inverse(a: Sign): Sign = Sign(-a.toInt)

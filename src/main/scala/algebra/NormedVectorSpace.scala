@@ -23,21 +23,11 @@ extends VectorSpace[V, F] with MetricSpace[V, F] {
   def distance(v: V, w: V): F = norm(minus(v, w))
 }
 
-object NormedVectorSpace extends NormedVectorSpace0 with NormedVectorSpaceFunctions {
+object NormedVectorSpace extends NormedVectorSpace0 {
   @inline final def apply[V, @sp(Int,Long,Float,Double) R](implicit V: NormedVectorSpace[V, R]) = V
 }
 
 trait NormedVectorSpace0 {
-  implicit def InnerProductSpaceIsNormedVectorSpace[V, @sp(Int, Long, Float, Double) F](implicit
-    space: InnerProductSpace[V, F], nroot: NRoot[F]): NormedVectorSpace[V, F] = space.normed
-}
-
-trait NormedVectorSpaceFunctions {
-  def max[A, CC[A] <: SeqLike[A, CC[A]]](implicit field0: Field[A], order0: Order[A],
-      signed0: Signed[A], cbf0: CanBuildFrom[CC[A], A, CC[A]]): NormedVectorSpace[CC[A], A] =
-    new SeqMaxNormedVectorSpace[A, CC[A]]
-
-  def Lp[A, CC[A] <: SeqLike[A, CC[A]]](p: Int)(implicit field0: Field[A], nroot0: NRoot[A],
-      signed0: Signed[A], cbf0: CanBuildFrom[CC[A], A, CC[A]]): NormedVectorSpace[CC[A], A] =
-    new SeqLpNormedVectorSpace[A, CC[A]](p)
+  implicit def InnerProductSpaceIsNormedVectorSpace[V, @sp(Int, Long, Float, Double) F]
+    (implicit space: InnerProductSpace[V, F], nroot: NRoot[F]): NormedVectorSpace[V, F] = space.normed
 }

@@ -1,6 +1,4 @@
-package spire.algebra
-
-import spire.math._
+package algebra
 
 import scala.{specialized => sp}
 import java.math.MathContext
@@ -22,13 +20,11 @@ import java.math.MathContext
 trait NRoot[@sp(Double,Float,Int,Long) A] {
   def nroot(a: A, n: Int): A
   def sqrt(a: A): A = nroot(a, 2)
-  def fpow(a:A, b:A): A
+  def fpow(a: A, b: A): A
 }
 
-import spire.math.{ConvertableTo, ConvertableFrom, Number}
-
 object NRoot {
-  @inline final def apply[@sp(Int,Long,Float,Double) A](implicit ev:NRoot[A]) = ev
+  @inline final def apply[@sp(Int,Long,Float,Double) A](implicit ev: NRoot[A]) = ev
 
   /**
    * This will return the largest integer that meets some criteria. Specifically,

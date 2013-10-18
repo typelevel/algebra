@@ -9,16 +9,16 @@ import scala.{specialized => sp}
  */
 trait Eq[@sp A] {
   /** Returns `true` if `x` and `y` are equivalent, `false` otherwise. */
-  def eqv(x:A, y:A): Boolean
+  def eqv(x: A, y: A): Boolean
 
   /** Returns `false` if `x` and `y` are equivalent, `true` otherwise. */
-  def neqv(x:A, y:A): Boolean = !eqv(x, y)
+  def neqv(x: A, y: A): Boolean = !eqv(x, y)
 
   /**
    * Constructs a new `Eq` instance for type `B` where 2 elements are
    * equivalent iff `eqv(f(x), f(y))`.
    */
-  def on[@sp B](f:B => A): Eq[B] = new MappedEq(this)(f)
+  def on[@sp B](f: B => A): Eq[B] = new MappedEq(this)(f)
 }
 
 private[algebra] class MappedEq[@sp A, @sp B](eq: Eq[B])(f: A => B) extends Eq[A] {
@@ -26,7 +26,7 @@ private[algebra] class MappedEq[@sp A, @sp B](eq: Eq[B])(f: A => B) extends Eq[A
 }
 
 object Eq {
-  def apply[A](implicit e:Eq[A]):Eq[A] = e
+  def apply[A](implicit e: Eq[A]): Eq[A] = e
 
-  def by[@sp A, @sp B](f:A => B)(implicit e:Eq[B]): Eq[A] = new MappedEq(e)(f)
+  def by[@sp A, @sp B](f: A => B)(implicit e: Eq[B]): Eq[A] = new MappedEq(e)(f)
 }
