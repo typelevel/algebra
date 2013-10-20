@@ -5,7 +5,7 @@ import scala.{ specialized => sp }
 /**
  * A simple type class for numeric types that are a subset of the reals.
  */
-trait IsReal[@sp A] extends Order[A] with Signed[A] {
+trait IsReal[@sp(Byte,Short,Int,Long,Float,Double) A] extends Order[A] with Signed[A] {
   def ceil(a: A): A
   def floor(a: A): A
   def round(a: A): A
@@ -20,6 +20,19 @@ trait IsIntegral[@sp(Byte,Short,Int,Long) A] extends IsReal[A] {
   def isWhole(a: A): Boolean = true
 }
 
-object IsReal {
-  def apply[@sp A](implicit A: IsReal[A]): IsReal[A] = A
+trait IsRealFunctions {
+  def ceil[@sp(Byte,Short,Int,Long,Float,Double) A](a: A)(implicit ev: IsReal[A]): A =
+    ev.ceil(a)
+  def floor[@sp(Byte,Short,Int,Long,Float,Double) A](a: A)(implicit ev: IsReal[A]): A =
+    ev.floor(a)
+  def round[@sp(Byte,Short,Int,Long,Float,Double) A](a: A)(implicit ev: IsReal[A]): A =
+    ev.round(a)
+  def isWhole[@sp(Byte,Short,Int,Long,Float,Double) A](a: A)(implicit ev: IsReal[A]): Boolean =
+    ev.isWhole(a)
+  def toDouble[@sp(Byte,Short,Int,Long,Float,Double) A](a: A)(implicit ev: IsReal[A]): Double =
+    ev.toDouble(a)
+}
+
+object IsReal extends IsRealFunctions {
+  def apply[A](implicit ev: IsReal[A]): IsReal[A] = ev
 }
