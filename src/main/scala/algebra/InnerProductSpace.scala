@@ -12,7 +12,14 @@ trait InnerProductSpace[V, @sp(Int, Long, Float, Double) F] extends VectorSpace[
   }
 }
 
-object InnerProductSpace {
+trait InnerProductSpaceFunctions extends VectorSpaceFunctions {
+  def dot[V, @sp(Int, Long, Float, Double) F](v: V, w: V)(implicit ev: InnerProductSpace[V, F]): F =
+    ev.dot(v, w)
+  def normed[V, @sp(Int, Long, Float, Double) F](implicit ev0: InnerProductSpace[V, F], ev1: NRoot[F]): NormedVectorSpace[V, F] =
+    ev0.normed
+}
+
+object InnerProductSpace extends InnerProductSpaceFunctions {
   @inline final def apply[V, @sp(Int,Long,Float,Double) R](implicit V: InnerProductSpace[V, R]) = V
 }
 

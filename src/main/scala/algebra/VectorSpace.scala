@@ -16,6 +16,11 @@ trait VectorSpace[V, @sp(Int, Long, Float, Double) F] extends Module[V, F] {
   def divr(v: V, f: F): V = timesl(scalar.reciprocal(f), v)
 }
 
-object VectorSpace {
+trait VectorSpaceFunctions extends ModuleFunctions {
+  def divr[V, @sp(Int,Long,Float,Double) F](v: V, f: F)(implicit ev: VectorSpace[V, F]): V =
+    ev.divr(v, f)
+}
+
+object VectorSpace extends VectorSpaceFunctions {
   @inline final def apply[V, @sp(Int,Long,Float,Double) R](implicit V: VectorSpace[V, R]) = V
 }

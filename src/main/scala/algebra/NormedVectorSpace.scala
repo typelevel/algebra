@@ -23,7 +23,16 @@ extends VectorSpace[V, F] with MetricSpace[V, F] {
   def distance(v: V, w: V): F = norm(minus(v, w))
 }
 
-object NormedVectorSpace extends NormedVectorSpace0 {
+trait NormedVectorSpaceFunctions extends VectorSpaceFunctions with MetricSpaceFunctions {
+  def norm[V, @sp(Int, Long, Float, Double) F](v: V)(implicit ev: NormedVectorSpace[V, F]): F =
+    ev.norm(v)
+  def normalize[V, @sp(Int, Long, Float, Double) F](v: V)(implicit ev: NormedVectorSpace[V, F]): V =
+    ev.normalize(v)
+  def distance[V, @sp(Int, Long, Float, Double) F](v: V, w: V)(implicit ev: NormedVectorSpace[V, F]): F =
+    ev.distance(v, w)
+}
+
+object NormedVectorSpace extends NormedVectorSpaceFunctions with NormedVectorSpace0 {
   @inline final def apply[V, @sp(Int,Long,Float,Double) R](implicit V: NormedVectorSpace[V, R]) = V
 }
 

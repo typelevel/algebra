@@ -29,6 +29,11 @@ trait CoordinateSpace[V, @sp(Float, Double) F] extends InnerProductSpace[V, F] {
   }
 }
 
-object CoordinateSpace {
+trait CoordinateSpaceFunctions extends InnerProductSpaceFunctions {
+  def coord[V, @sp(Float, Double) F](v: V, i: Int)(implicit ev: CoordinateSpace[V, F]): F =
+    ev.coord(v, i)
+}
+
+object CoordinateSpace extends CoordinateSpaceFunctions {
   @inline final def apply[V, @sp(Float,Double) F](implicit V: CoordinateSpace[V, F]) = V
 }

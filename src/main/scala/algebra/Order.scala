@@ -38,7 +38,18 @@ private[algebra] class ReversedOrder[@sp A](order: Order[A]) extends Order[A] {
   def compare(x: A, y: A) = order.compare(y, x)
 }
 
-object Order {
+trait OrderFunctions extends EqFunctions {
+  def compare[@sp A](x: A, y: A)(implicit ev: Order[A]): Int = ev.compare(x, y)
+  def gt[@sp A](x: A, y: A)(implicit ev: Order[A]): Boolean = ev.gt(x, y)
+  def lt[@sp A](x: A, y: A)(implicit ev: Order[A]): Boolean = ev.lt(x, y)
+  def gteqv[@sp A](x: A, y: A)(implicit ev: Order[A]): Boolean = ev.gteqv(x, y)
+  def lteqv[@sp A](x: A, y: A)(implicit ev: Order[A]): Boolean = ev.lteqv(x, y)
+
+  def min[@sp A](x: A, y: A)(implicit ev: Order[A]): A = ev.min(x, y)
+  def max[@sp A](x: A, y: A)(implicit ev: Order[A]): A = ev.max(x, y)
+}
+
+object Order extends OrderFunctions {
   @inline final def apply[A](implicit o: Order[A]) = o
 
   def by[@sp A, @sp B](f: A => B)(implicit o: Order[B]): Order[A] = o.on(f)

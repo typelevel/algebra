@@ -26,7 +26,14 @@ private[algebra] class MappedEq[@sp A, @sp B](eq: Eq[B])(f: A => B) extends Eq[A
   def eqv(x: A, y: A): Boolean = eq.eqv(f(x), f(y))
 }
 
-object Eq {
+trait EqFunctions {
+  def eqv[@sp A](x: A, y: A)(implicit ev: Eq[A]): Boolean =
+    ev.eqv(x, y)
+  def neqv[@sp A](x: A, y: A)(implicit ev: Eq[A]): Boolean =
+    ev.neqv(x, y)
+}
+
+object Eq extends EqFunctions {
   def apply[A](implicit e: Eq[A]): Eq[A] = e
 
   def by[@sp A, @sp B](f: A => B)(implicit e: Eq[B]): Eq[A] = e.on(f)

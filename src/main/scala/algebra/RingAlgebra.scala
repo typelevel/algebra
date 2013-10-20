@@ -9,7 +9,7 @@ import scala.{ specialized => sp }
 trait RingAlgebra[V, @sp R] extends Module[V, R] with Rng[V]
 
 object RingAlgebra {
-  implicit def ZAlgebra[A](implicit vector0: Ring[A], scalar0: Ring[Int]) = new ZAlgebra[A] {
+  implicit def ZAlgebra[V](implicit vector0: Ring[V], scalar0: Ring[Int]) = new ZAlgebra[V] {
     val vector = vector0
     val scalar = scalar0
   }

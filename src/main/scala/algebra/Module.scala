@@ -13,14 +13,20 @@ trait Module[V, @sp(Int,Long,Float,Double) R] extends AdditiveCommutativeGroup[V
   def timesr(v: V, r: R): V = timesl(r, v)
 }
 
-object Module {
+trait ModuleFunctions extends AdditiveGroupFunctions {
+  def timesl[V, @sp(Int,Long,Float,Double) R](r: R, v: V)(implicit ev: Module[V, R]): V =
+    ev.timesl(r, v)
+  def timesr[V, @sp(Int,Long,Float,Double) R](v: V, r: R)(implicit ev: Module[V, R]): V =
+    ev.timesr(v, r)
+}
+
+object Module extends ModuleFunctions {
   @inline final def apply[V, @sp(Int,Long,Float,Double) R](implicit V: Module[V, R]) = V
 
-  implicit def IdentityModule[@sp(Int,Long,Float,Double) V](implicit ring: Ring[V]) = {
+  implicit def IdentityModule[@sp(Int,Long,Float,Double) V](implicit ring: Ring[V]) =
     new IdentityModule[V] {
       val scalar = ring
     }
-  }
 }
 
 private[algebra] trait IdentityModule[@sp(Int,Long,Float,Double) V] extends Module[V, V] {
@@ -31,12 +37,3 @@ private[algebra] trait IdentityModule[@sp(Int,Long,Float,Double) V] extends Modu
 
   def timesl(r: V, v: V): V = scalar.times(r, v)
 }
-
-// final case class ZModule[V](vector: Group[V]) extends Module[V, Int] {
-//   def scalar = std.int.IntAlgebra
-// 
-//   def zero: V = vector.id
-//   def negate(v: V): V = vector.inverse(v)
-//   def plus(v: V, w: V): V = vector.op(v, w)
-//   def timesl(k: Int, v: V): V = Group.sumn(v, k)(vector)
-// }
