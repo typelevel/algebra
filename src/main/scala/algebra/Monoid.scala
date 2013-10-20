@@ -25,31 +25,12 @@ trait Monoid[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Semi
   def sum(as: TraversableOnce[A]): A = as.foldLeft(id)(op)
 }
 
-object Monoid {
-  @inline final def apply[A](implicit m: Monoid[A]): Monoid[A] = m
+trait MonoidFunctions extends SemigroupFunctions {
+  def id[A](implicit ev: Monoid[A]): A = ev.id
 
-  /**
-   * If an implicit `AdditiveMonoid[A]` exists, then it is converted to a plain
-   * `Monoid[A]`.
-   */
-  @inline final def additive[A](implicit A: AdditiveMonoid[A]) = A.additive
-
-  /**
-   * If an implicit `MultiplicativeMonoid[A]` exists, then it is converted to a
-   * plain `Monoid[A]`.
-   */
-  @inline final def multiplicative[A](implicit A: MultiplicativeMonoid[A]) = A.multiplicative
+  def sum[A](as: TraversableOnce[A])(implicit ev: Monoid[A]): A = ev.sum(as)
 }
 
-/**
- * CMonoid represents a commutative monoid.
- * 
- * A monoid is commutative if for all x and y, x |+| y === y |+| x.
- */
-trait CMonoid[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Monoid[A]
-
-object CMonoid {
-  @inline final def apply[A](implicit ev: CMonoid[A]): CMonoid[A] = ev
-  @inline final def additive[A](implicit A: AdditiveCMonoid[A]): CMonoid[A] =  A.additive
-  @inline final def multiplicative[A](implicit A: MultiplicativeCMonoid[A]): CMonoid[A] = A.multiplicative
+object Monoid extends MonoidFunctions {
+  @inline final def apply[A](implicit m: Monoid[A]): Monoid[A] = m
 }

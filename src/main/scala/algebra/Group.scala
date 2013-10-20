@@ -19,20 +19,11 @@ trait Group[@sp(Byte, Short, Int, Long, Float, Double) A] extends Monoid[A] {
     else positiveSumn(a, n)
 }
 
-object Group {
-  @inline final def apply[A](implicit ev: Group[A]): Group[A] = ev
-  @inline final def additive[A](implicit A: AdditiveGroup[A]): Group[A] =  A.additive
-  @inline final def multiplicative[A](implicit A: MultiplicativeGroup[A]): Group[A] = A.multiplicative
-
+trait GroupFunctions extends MonoidFunctions {
+  def inverse[A](a: A)(implicit ev: Group[A]): A = ev.inverse(a)
+  def opInverse[A](x: A, y: A)(implicit ev: Group[A]): A = ev.opInverse(x, y)
 }
 
-/**
- * An abelian group is a group whose operation is commutative.
- */
-trait AbGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Group[A] with CMonoid[A]
-
-object AbGroup {
-  @inline final def apply[A](implicit ev: AbGroup[A]): AbGroup[A] = ev
-  @inline final def additive[A](implicit A: AdditiveAbGroup[A]): AbGroup[A] =  A.additive
-  @inline final def multiplicative[A](implicit A: MultiplicativeAbGroup[A]): AbGroup[A] = A.multiplicative
+object Group extends GroupFunctions {
+  @inline final def apply[A](implicit ev: Group[A]): Group[A] = ev
 }

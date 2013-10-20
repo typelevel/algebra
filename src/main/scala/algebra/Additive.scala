@@ -2,36 +2,10 @@ package algebra
 
 import scala.{ specialized => sp }
 
-object Additive {
-  def apply[A](s: Semigroup[A]): AdditiveSemigroup[A] = new AdditiveSemigroup[A] {
-    def plus(x: A, y: A): A = s.op(x, y)
-  }
-
-  def apply[A](m: Monoid[A]): AdditiveMonoid[A] = new AdditiveMonoid[A] {
-    def plus(x: A, y: A): A = m.op(x, y)
-    def zero = m.id
-  }
-
-  def apply[A](g: Group[A]): AdditiveGroup[A] = new AdditiveGroup[A] {
-    def plus(x: A, y: A): A = g.op(x, y)
-    override def minus(x: A, y: A): A = g.op(x, g.inverse(y))
-    def zero: A = g.id
-    def negate(x: A): A = g.inverse(x)
-  }
-
-  def apply[A](g: AbGroup[A]): AdditiveAbGroup[A] = new AdditiveAbGroup[A] {
-    def plus(x: A, y: A): A = g.op(x, y)
-    override def minus(x: A, y: A): A = g.op(x, g.inverse(y))
-    def zero: A = g.id
-    def negate(x: A): A = g.inverse(x)
-  }
-}
-
 trait AdditiveSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] {
   def additive: Semigroup[A] = new Semigroup[A] {
     def op(x: A, y: A): A = plus(x, y)
   }
-
   def plus(x: A, y: A): A
 }
 
@@ -40,12 +14,11 @@ trait AdditiveMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends Addit
     def id = zero
     def op(x: A, y: A): A = plus(x, y)
   }
-
   def zero: A
 }
 
-trait AdditiveCMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveMonoid[A] {
-  override def additive: CMonoid[A] = new CMonoid[A] {
+trait AdditiveCommutativeMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveMonoid[A] {
+  override def additive: CommutativeMonoid[A] = new CommutativeMonoid[A] {
     def id = zero
     def op(x: A, y: A): A = plus(x, y)
   }
@@ -62,10 +35,27 @@ trait AdditiveGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Additi
   def minus(x: A, y: A): A = plus(x, negate(y))
 }
 
-trait AdditiveAbGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveGroup[A] with AdditiveCMonoid[A] {
-  override def additive: AbGroup[A] = new AbGroup[A] {
+trait AdditiveCommutativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveGroup[A] with AdditiveCommutativeMonoid[A] {
+  override def additive: CommutativeGroup[A] = new CommutativeGroup[A] {
     def id = zero
     def op(x: A, y: A): A = plus(x, y)
     def inverse(x: A): A = negate(x)
   }
+}
+
+trait AdditiveSemigroupFunctions {
+  def plus[@sp(Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: AdditiveSemigroup[A]): A =
+    ev.plus(x, y)
+}
+
+trait AdditiveMonoidFunctions extends AdditiveSemigroupFunctions {
+  def zero[@sp(Byte, Short, Int, Long, Float, Double) A](implicit ev: AdditiveMonoid[A]): A =
+    ev.zero
+}
+
+trait AdditiveGroupFunctions extends AdditiveMonoidFunctions {
+  def negate[@sp(Byte, Short, Int, Long, Float, Double) A](x: A)(implicit ev: AdditiveGroup[A]): A =
+    ev.negate(x)
+  def minus[@sp(Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: AdditiveGroup[A]): A =
+    ev.minus(x, y)
 }

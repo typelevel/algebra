@@ -6,7 +6,7 @@ import scala.{ specialized => sp }
  * A module generalizes a vector space by requiring its scalar need only form
  * a ring, rather than a field.
  */
-trait Module[V, @sp(Int,Long,Float,Double) R] extends AdditiveAbGroup[V] {
+trait Module[V, @sp(Int,Long,Float,Double) R] extends AdditiveCommutativeGroup[V] {
   implicit def scalar: Rng[R]
 
   def timesl(r: R, v: V): V

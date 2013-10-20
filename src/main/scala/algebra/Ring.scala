@@ -1,6 +1,5 @@
 package algebra
 
-import annotation.tailrec
 import scala.{specialized => sp}
 
 /**
@@ -20,15 +19,6 @@ trait Ring[@sp(Byte, Short, Int, Long, Float, Double) A] extends Rig[A] with Rng
   def fromInt(n: Int): A = additive.sumn(one, n)
 }
 
-object Ring {
-  @inline final def apply[A](implicit r: Ring[A]): Ring[A] = r
-}
-
-/**
- * CRing is a Ring that is commutative under multiplication.
- */
-trait CRing[@sp(Byte, Short, Int, Long, Float, Double) A] extends Ring[A] with MultiplicativeCMonoid[A]
-
-object CRing {
-  @inline final def apply[A](implicit r: CRing[A]): CRing[A] = r
+object Ring extends AdditiveGroupFunctions with MultiplicativeMonoidFunctions {
+  @inline final def apply[A](implicit ev: Ring[A]): Ring[A] = ev
 }

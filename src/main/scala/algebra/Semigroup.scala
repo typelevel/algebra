@@ -34,18 +34,20 @@ trait Semigroup[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] {
   def sumOption(as: TraversableOnce[A]): Option[A] = as.reduceOption(op)
 }
 
-object Semigroup {
+trait SemigroupFunctions {
+  def op[@sp(Boolean,Byte,Short,Int,Long,Float,Double) A](x: A, y: A)(implicit ev: Semigroup[A]): A =
+    ev.op(x, y)
+
+  def maybeOp[@sp(Boolean,Byte,Short,Int,Long,Float,Double) A](ox: Option[A], y: A)(implicit ev: Semigroup[A]): A =
+    ox.map(x => ev.op(x, y)).getOrElse(y)
+
+  def sumn[@sp(Boolean,Byte,Short,Int,Long,Float,Double) A](a: A, n: Int)(implicit ev: Semigroup[A]): A =
+    ev.sumn(a, n)
+
+  def sumOption[@sp(Boolean,Byte,Short,Int,Long,Float,Double) A](as: TraversableOnce[A])(implicit ev: Semigroup[A]): Option[A] =
+    ev.sumOption(as)
+}
+
+object Semigroup extends SemigroupFunctions {
   @inline final def apply[A](implicit s: Semigroup[A]) = s
-
-  /**
-   * If there exists an implicit `AdditiveSemigroup[A]`, this returns a
-   * `Semigroup[A]` using `plus` for `op`.
-   */
-  @inline final def additive[A](implicit A: AdditiveSemigroup[A]) =  A.additive
-
-  /**
-   * If there exists an implicit `MultiplicativeSemigroup[A]`, this returns a
-   * `Semigroup[A]` using `times` for `op`.
-   */
-  @inline final def multiplicative[A](implicit A: MultiplicativeSemigroup[A]) = A.multiplicative
 }
