@@ -23,7 +23,16 @@ trait NRoot[@sp(Double,Float,Int,Long) A] {
   def fpow(a: A, b: A): A
 }
 
-object NRoot {
+trait NRootFunctions {
+  def nroot[@sp(Double,Float,Int,Long) A](a: A, n: Int)(implicit ev: NRoot[A]): A =
+    ev.nroot(a, n)
+  def sqrt[@sp(Double,Float,Int,Long) A](a: A)(implicit ev: NRoot[A]): A =
+    ev.sqrt(a)
+  def fpow[@sp(Double,Float,Int,Long) A](a: A, b: A)(implicit ev: NRoot[A]): A =
+    ev.fpow(a, b)
+}
+
+object NRoot extends NRootFunctions {
   @inline final def apply[@sp(Int,Long,Float,Double) A](implicit ev: NRoot[A]) = ev
 
   /**

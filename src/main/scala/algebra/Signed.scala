@@ -19,9 +19,19 @@ trait Signed[@sp(Double, Float, Int, Long) A] {
   def isZero(a: A): Boolean = signum(a) == 0
 }
 
-object Signed {
-  implicit def orderedRingIsSigned[A: Order: Ring]: Signed[A] = new OrderedRingIsSigned[A]
+trait SignedFunctions {
+  def sign[@sp(Double, Float, Int, Long) A](a: A)(implicit ev: Signed[A]): Sign =
+    ev.sign(a)
+  def signum[@sp(Double, Float, Int, Long) A](a: A)(implicit ev: Signed[A]): Int =
+    ev.signum(a)
+  def abs[@sp(Double, Float, Int, Long) A](a: A)(implicit ev: Signed[A]): A =
+    ev.abs(a)
+  def isZero[@sp(Double, Float, Int, Long) A](a: A)(implicit ev: Signed[A]): Boolean =
+    ev.isZero(a)
+}
 
+object Signed extends SignedFunctions {
+  implicit def orderedRingIsSigned[A: Order: Ring]: Signed[A] = new OrderedRingIsSigned[A]
   def apply[A](implicit s: Signed[A]): Signed[A] = s
 }
 

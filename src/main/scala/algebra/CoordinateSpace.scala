@@ -30,8 +30,24 @@ trait CoordinateSpace[V, @sp(Float, Double) F] extends InnerProductSpace[V, F] {
 }
 
 trait CoordinateSpaceFunctions extends InnerProductSpaceFunctions {
+  def dimensions[V, @sp(Float, Double) F](implicit ev: CoordinateSpace[V, F]): Int =
+    ev.dimensions
+
   def coord[V, @sp(Float, Double) F](v: V, i: Int)(implicit ev: CoordinateSpace[V, F]): F =
     ev.coord(v, i)
+
+  def axis[V, @sp(Float, Double) F](i: Int)(implicit ev: CoordinateSpace[V, F]): V =
+    ev.axis(i)
+
+  def _x[V, @sp(Float, Double) F](v: V)(implicit ev: CoordinateSpace[V, F]): F =
+    ev._x(v)
+  def _y[V, @sp(Float, Double) F](v: V)(implicit ev: CoordinateSpace[V, F]): F =
+    ev._y(v)
+  def _z[V, @sp(Float, Double) F](v: V)(implicit ev: CoordinateSpace[V, F]): F =
+    ev._z(v)
+
+  def basis[V, @sp(Float, Double) F](implicit ev: CoordinateSpace[V, F]): Vector[V] =
+    ev.basis
 }
 
 object CoordinateSpace extends CoordinateSpaceFunctions {

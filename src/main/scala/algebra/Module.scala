@@ -14,6 +14,8 @@ trait Module[V, @sp(Int,Long,Float,Double) R] extends AdditiveCommutativeGroup[V
 }
 
 trait ModuleFunctions extends AdditiveGroupFunctions {
+  def scalar[V, @sp(Int,Long,Float,Double) R](implicit ev: Module[V, R]): Rng[R] =
+    ev.scalar
   def timesl[V, @sp(Int,Long,Float,Double) R](r: R, v: V)(implicit ev: Module[V, R]): V =
     ev.timesl(r, v)
   def timesr[V, @sp(Int,Long,Float,Double) R](v: V, r: R)(implicit ev: Module[V, R]): V =

@@ -17,6 +17,8 @@ trait VectorSpace[V, @sp(Int, Long, Float, Double) F] extends Module[V, F] {
 }
 
 trait VectorSpaceFunctions extends ModuleFunctions {
+  def scalar[V, @sp(Int,Long,Float,Double) F](implicit ev: VectorSpace[V, F]): Field[F] =
+    ev.scalar
   def divr[V, @sp(Int,Long,Float,Double) F](v: V, f: F)(implicit ev: VectorSpace[V, F]): V =
     ev.divr(v, f)
 }

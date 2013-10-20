@@ -18,7 +18,6 @@ import scala.collection.generic.CanBuildFrom
 trait NormedVectorSpace[V, @sp(Int, Long, Float, Double) F]
 extends VectorSpace[V, F] with MetricSpace[V, F] {
   def norm(v: V): F
-
   def normalize(v: V): V = divr(v, norm(v))
   def distance(v: V, w: V): F = norm(minus(v, w))
 }
