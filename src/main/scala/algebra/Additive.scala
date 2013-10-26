@@ -4,30 +4,31 @@ import scala.{ specialized => sp }
 
 trait AdditiveSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] {
   def additive: Semigroup[A] = new Semigroup[A] {
-    def op(x: A, y: A): A = plus(x, y)
+    def combine(x: A, y: A): A = plus(x, y)
   }
   def plus(x: A, y: A): A
 }
 
 trait AdditiveMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveSemigroup[A] {
   override def additive: Monoid[A] = new Monoid[A] {
-    def id = zero
-    def op(x: A, y: A): A = plus(x, y)
+    def empty = zero
+    def combine(x: A, y: A): A = plus(x, y)
   }
   def zero: A
 }
 
 trait AdditiveCommutativeMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveMonoid[A] {
   override def additive: CommutativeMonoid[A] = new CommutativeMonoid[A] {
-    def id = zero
-    def op(x: A, y: A): A = plus(x, y)
+    def empty = zero
+    def combine(x: A, y: A): A = plus(x, y)
   }
 }
 
 trait AdditiveGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveMonoid[A] {
   override def additive: Group[A] = new Group[A] {
-    def id = zero
-    def op(x: A, y: A): A = plus(x, y)
+    def empty = zero
+    def combine(x: A, y: A): A = plus(x, y)
+    override def uncombine(x: A, y: A): A = minus(x, y)
     def inverse(x: A): A = negate(x)
   }
 
@@ -37,8 +38,9 @@ trait AdditiveGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Additi
 
 trait AdditiveCommutativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveGroup[A] with AdditiveCommutativeMonoid[A] {
   override def additive: CommutativeGroup[A] = new CommutativeGroup[A] {
-    def id = zero
-    def op(x: A, y: A): A = plus(x, y)
+    def empty = zero
+    def combine(x: A, y: A): A = plus(x, y)
+    override def uncombine(x: A, y: A): A = minus(x, y)
     def inverse(x: A): A = negate(x)
   }
 }

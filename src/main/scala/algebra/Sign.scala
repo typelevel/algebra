@@ -24,8 +24,8 @@ object Sign {
     if (i == 0) Zero else if (i > 0) Positive else Negative
   
   implicit final val SignAlgebra = new Group[Sign] with Signed[Sign] with Order[Sign] {
-    def id: Sign = Zero
-    def op(a: Sign, b: Sign): Sign = Sign(a.toInt * b.toInt)
+    def empty: Sign = Zero
+    def combine(a: Sign, b: Sign): Sign = Sign(a.toInt * b.toInt)
     def inverse(a: Sign): Sign = Sign(-a.toInt)
     override def sign(a: Sign): Sign = a
     def signum(a: Sign): Int = a.toInt

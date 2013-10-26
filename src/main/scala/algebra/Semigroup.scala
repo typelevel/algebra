@@ -4,10 +4,10 @@ import scala.{ specialized => sp }
 import scala.annotation.{ switch, tailrec }
 
 /**
- * A semigroup is any set `A` with an associative operation (`op`).
+ * A semigroup is any set `A` with an associative operation (`combine`).
  */
 trait Semigroup[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] {
-  def op(x: A, y: A): A
+  def combine(x: A, y: A): A
 
   /**
    * Return `a` appended to itself `n` times.
@@ -20,8 +20,8 @@ trait Semigroup[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] {
     @tailrec def loop(b: A, k: Int, extra: A): A =
       (k: @annotation.switch) match {
         case 0 => b
-        case 1 => op(b, extra)
-        case n => loop(op(b, b), k >>> 1, if ((k & 1) == 1) op(b, extra) else extra)
+        case 1 => combine(b, extra)
+        case n => loop(combine(b, b), k >>> 1, if ((k & 1) == 1) combine(b, extra) else extra)
       }
     loop(a, n - 1, a)
   }
@@ -31,15 +31,15 @@ trait Semigroup[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] {
    * 
    * If the sequence is empty, returns None. Otherwise, returns Some(total).
    */
-  def sumOption(as: TraversableOnce[A]): Option[A] = as.reduceOption(op)
+  def sumOption(as: TraversableOnce[A]): Option[A] = as.reduceOption(combine)
 }
 
 trait SemigroupFunctions {
-  def op[@sp(Boolean,Byte,Short,Int,Long,Float,Double) A](x: A, y: A)(implicit ev: Semigroup[A]): A =
-    ev.op(x, y)
+  def combine[@sp(Boolean,Byte,Short,Int,Long,Float,Double) A](x: A, y: A)(implicit ev: Semigroup[A]): A =
+    ev.combine(x, y)
 
-  def maybeOp[@sp(Boolean,Byte,Short,Int,Long,Float,Double) A](ox: Option[A], y: A)(implicit ev: Semigroup[A]): A =
-    ox.map(x => ev.op(x, y)).getOrElse(y)
+  def maybeCombine[@sp(Boolean,Byte,Short,Int,Long,Float,Double) A](ox: Option[A], y: A)(implicit ev: Semigroup[A]): A =
+    ox.map(x => ev.combine(x, y)).getOrElse(y)
 
   def sumn[@sp(Boolean,Byte,Short,Int,Long,Float,Double) A](a: A, n: Int)(implicit ev: Semigroup[A]): A =
     ev.sumn(a, n)

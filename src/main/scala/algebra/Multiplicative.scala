@@ -4,7 +4,7 @@ import scala.{ specialized => sp }
 
 trait MultiplicativeSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] {
   def multiplicative: Semigroup[A] = new Semigroup[A] {
-    def op(x: A, y: A): A = times(x, y)
+    def combine(x: A, y: A): A = times(x, y)
   }
 
   def times(x: A, y: A): A
@@ -16,8 +16,8 @@ trait MultiplicativeSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] {
 
 trait MultiplicativeMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends MultiplicativeSemigroup[A] {
   override def multiplicative: Monoid[A] = new Monoid[A] {
-    def id = one
-    def op(x: A, y: A): A = times(x, y)
+    def empty = one
+    def combine(x: A, y: A): A = times(x, y)
   }
 
   def one: A
@@ -29,15 +29,16 @@ trait MultiplicativeMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends
 
 trait MultiplicativeCommutativeMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends MultiplicativeMonoid[A] {
   override def multiplicative: CommutativeMonoid[A] = new CommutativeMonoid[A] {
-    def id = one
-    def op(x: A, y: A): A = times(x, y)
+    def empty = one
+    def combine(x: A, y: A): A = times(x, y)
   }
 }
 
 trait MultiplicativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends MultiplicativeMonoid[A] {
   override def multiplicative: Group[A] = new Group[A] {
-    def id = one
-    def op(x: A, y: A): A = times(x, y)
+    def empty = one
+    def combine(x: A, y: A): A = times(x, y)
+    override def uncombine(x: A, y: A): A = div(x, y)
     def inverse(x: A): A = reciprocal(x)
   }
 
@@ -50,8 +51,9 @@ trait MultiplicativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends 
 
 trait MultiplicativeCommutativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends MultiplicativeGroup[A] with MultiplicativeCommutativeMonoid[A] {
   override def multiplicative: CommutativeGroup[A] = new CommutativeGroup[A] {
-    def id = one
-    def op(x: A, y: A): A = times(x, y)
+    def empty = one
+    def combine(x: A, y: A): A = times(x, y)
+    override def uncombine(x: A, y: A): A = div(x, y)
     def inverse(x: A): A = reciprocal(x)
   }
 }
