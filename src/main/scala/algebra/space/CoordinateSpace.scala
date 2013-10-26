@@ -1,4 +1,5 @@
 package algebra
+package space
 
 import scala.{ specialized => sp }
 import scala.collection.SeqLike
