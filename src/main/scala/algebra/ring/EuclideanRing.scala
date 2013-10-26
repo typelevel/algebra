@@ -1,4 +1,5 @@
 package algebra
+package ring
 
 import scala.annotation.tailrec
 import scala.{specialized => sp}

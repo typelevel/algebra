@@ -1,4 +1,5 @@
 package algebra
+import algebra.ring._
 
 import scala.{ specialized => sp }
 
