@@ -1,7 +1,7 @@
 package algebra
 package space
 
-import algebra.ring._
+import algebra.real.NRoot
 
 import scala.{ specialized => sp }
 import scala.collection.SeqLike

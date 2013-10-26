@@ -1,7 +1,8 @@
 package algebra
 package space
 
-import algebra.ring._
+import algebra.ring.Field
+import algebra.real.NRoot
 
 import scala.{ specialized => sp }
 import scala.annotation.tailrec

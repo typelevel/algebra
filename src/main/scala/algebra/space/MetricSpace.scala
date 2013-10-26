@@ -1,7 +1,8 @@
 package algebra
 package space
 
-import algebra.ring._
+import algebra.ring.Rng
+import algebra.real.IsReal
 
 import scala.{ specialized => sp }
 

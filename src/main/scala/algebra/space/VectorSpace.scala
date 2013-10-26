@@ -1,7 +1,7 @@
 package algebra
 package space
 
-import algebra.ring._
+import algebra.ring.Field
 
 import scala.{ specialized => sp }
 

@@ -1,4 +1,5 @@
 package algebra
+package real
 
 import scala.{ specialized => sp }
 

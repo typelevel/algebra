@@ -1,4 +1,5 @@
 package algebra
+package real
 
 /**
  * A simple ADT representing the `Sign` of an object.
