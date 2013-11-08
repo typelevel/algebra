@@ -1,5 +1,5 @@
 package algebra
-package real
+package number
 
 import algebra.ring._
 

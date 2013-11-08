@@ -1,5 +1,5 @@
 package algebra
-package real
+package number
 
 import scala.{specialized => sp}
 import java.math.MathContext

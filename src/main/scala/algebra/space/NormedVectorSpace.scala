@@ -1,7 +1,7 @@
 package algebra
 package space
 
-import algebra.real.NRoot
+import algebra.number.NRoot
 
 import scala.{ specialized => sp }
 import scala.collection.SeqLike
