@@ -15,8 +15,8 @@ object AlgebraBuild extends Build {
     name := "algebra",
     organization := "org.spire-math",
 
-    scalaVersion := "2.10.2",
-    crossScalaVersions := Seq("2.9.3", "2.10.2"),
+    scalaVersion := "2.10.4",
+    crossScalaVersions := Seq("2.9.3", "2.10.4", "2.11.1"),
 
     scalacOptions ++= Seq(
       "-deprecation",
