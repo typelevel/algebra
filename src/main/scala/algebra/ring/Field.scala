@@ -1,7 +1,7 @@
 package algebra
 package ring
 
-import scala.{specialized => sp}
+import scala.{ specialized => sp }
 
 import java.lang.Double.{ isInfinite, isNaN, doubleToLongBits }
 import java.lang.Long.{ numberOfTrailingZeros }
@@ -11,7 +11,7 @@ trait Field[@sp(Byte, Short, Int, Long, Float, Double) A] extends EuclideanRing[
   /**
    * This is implemented in terms of basic Field ops. However, this is
    * probably significantly less efficient than can be done with a specific
-   * type. So, it is recommended that this method is overriden.
+   * type. So, it is recommended that this method be overriden.
    *
    * This is possible because a Double is a rational number.
    */
@@ -40,6 +40,9 @@ trait Field[@sp(Byte, Short, Int, Long, Float, Double) A] extends EuclideanRing[
 
     if (a < 0) negate(unsigned) else unsigned
   }
+
+  def quot(a: A, b: A): A = div(a, b)
+  def mod(a: A, b: A): A = zero
 }
 
 object Field extends EuclideanRingFunctions with MultiplicativeGroupFunctions {
