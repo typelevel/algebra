@@ -6,7 +6,7 @@ import scala.{specialized => sp}
 
 /**
  * Rig is a ring whose additive structure doesn't have an inverse (ie. it is
- * monoid, not a group). Put another way, a Rig is a Ring without a negative.
+ * monoid, not a group). Put another way, a Rig is a Ring without negation.
  */
 trait Rig[@sp(Byte, Short, Int, Long, Float, Double) A] extends Semiring[A] with MultiplicativeMonoid[A]
 

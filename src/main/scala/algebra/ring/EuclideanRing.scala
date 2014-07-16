@@ -4,6 +4,24 @@ package ring
 import scala.annotation.tailrec
 import scala.{specialized => sp}
 
+/**
+ * EuclideanRing implements a Euclidean domain.
+ * 
+ * The formal definition says that every euclidean domain A has (at
+ * least one) euclidean function f: A -> N (the natural numbers) where:
+ * 
+ *   (for every x and non-zero y) x = yq + r, and r = 0 or f(r) < f(y).
+ * 
+ * The idea is that f represents a measure of length (or absolute
+ * value), and the previous equation represents finding the quotient
+ * and remainder of x and y. So:
+ * 
+ *   quot(x, y) = q
+ *   mod(x, y) = r
+ * 
+ * This type does not provide access to the Euclidean function, but
+ * only provides the quot, mod, and quotmod operators.
+ */
 trait EuclideanRing[@sp(Byte, Short, Int, Long, Float, Double) A] extends CommutativeRing[A] {
   def mod(a: A, b: A): A
   def quot(a: A, b: A): A

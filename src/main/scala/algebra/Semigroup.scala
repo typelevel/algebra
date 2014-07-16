@@ -9,6 +9,8 @@ import scala.annotation.{ switch, tailrec }
 trait Semigroup[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] {
   def combine(x: A, y: A): A
 
+  def isCommutative: Boolean = false
+
   /**
    * Return `a` appended to itself `n` times.
    */

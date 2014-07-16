@@ -8,6 +8,14 @@ trait AdditiveSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] {
     def combine(x: A, y: A): A = plus(x, y)
   }
   def plus(x: A, y: A): A
+  def hasCommutativeAddition: Boolean = false
+}
+
+trait AdditiveCommutativeSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveSemigroup[A] {
+  override def additive: CommutativeSemigroup[A] = new CommutativeSemigroup[A] {
+    def combine(x: A, y: A): A = plus(x, y)
+  }
+  override def hasCommutativeAddition: Boolean = true
 }
 
 trait AdditiveMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveSemigroup[A] {
@@ -18,7 +26,7 @@ trait AdditiveMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends Addit
   def zero: A
 }
 
-trait AdditiveCommutativeMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveMonoid[A] {
+trait AdditiveCommutativeMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveMonoid[A] with AdditiveCommutativeSemigroup[A] {
   override def additive: CommutativeMonoid[A] = new CommutativeMonoid[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
@@ -61,4 +69,28 @@ trait AdditiveGroupFunctions extends AdditiveMonoidFunctions {
     ev.negate(x)
   def minus[@sp(Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: AdditiveGroup[A]): A =
     ev.minus(x, y)
+}
+
+object AdditiveSemigroup extends AdditiveSemigroupFunctions {
+  @inline final def apply[A](implicit ev: AdditiveSemigroup[A]): AdditiveSemigroup[A] = ev
+}
+  
+object AdditiveCommutativeSemigroup extends AdditiveSemigroupFunctions {
+  @inline final def apply[A](implicit ev: AdditiveCommutativeSemigroup[A]): AdditiveCommutativeSemigroup[A] = ev
+}
+  
+object AdditiveMonoid extends AdditiveMonoidFunctions {
+  @inline final def apply[A](implicit ev: AdditiveMonoid[A]): AdditiveMonoid[A] = ev
+}
+  
+object AdditiveCommutativeMonoid extends AdditiveMonoidFunctions {
+  @inline final def apply[A](implicit ev: AdditiveCommutativeMonoid[A]): AdditiveCommutativeMonoid[A] = ev
+}
+  
+object AdditiveGroup extends AdditiveGroupFunctions {
+  @inline final def apply[A](implicit ev: AdditiveGroup[A]): AdditiveGroup[A] = ev
+}
+  
+object AdditiveCommutativeGroup extends AdditiveGroupFunctions {
+  @inline final def apply[A](implicit ev: AdditiveCommutativeGroup[A]): AdditiveCommutativeGroup[A] = ev
 }

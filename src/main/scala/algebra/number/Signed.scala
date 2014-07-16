@@ -19,7 +19,9 @@ trait Signed[@sp(Double, Float, Int, Long) A] {
   /** An idempotent function that ensures an object has a non-negative sign. */
   def abs(a: A): A
 
+  def isPositive(a: A): Boolean = signum(a) > 0
   def isZero(a: A): Boolean = signum(a) == 0
+  def isNegative(a: A): Boolean = signum(a) < 0
 }
 
 trait SignedFunctions {
@@ -29,8 +31,12 @@ trait SignedFunctions {
     ev.signum(a)
   def abs[@sp(Double, Float, Int, Long) A](a: A)(implicit ev: Signed[A]): A =
     ev.abs(a)
+  def isPositive[@sp(Double, Float, Int, Long) A](a: A)(implicit ev: Signed[A]): Boolean =
+    ev.isPositive(a)
   def isZero[@sp(Double, Float, Int, Long) A](a: A)(implicit ev: Signed[A]): Boolean =
     ev.isZero(a)
+  def isNegative[@sp(Double, Float, Int, Long) A](a: A)(implicit ev: Signed[A]): Boolean =
+    ev.isNegative(a)
 }
 
 object Signed extends SignedFunctions {
