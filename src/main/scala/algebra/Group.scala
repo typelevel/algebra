@@ -14,7 +14,8 @@ trait Group[@sp(Byte, Short, Int, Long, Float, Double) A] extends Monoid[A] {
    * this returns `-a` appended to itself `n` times.
    */
   override def sumn(a: A, n: Int): A =
-    if (n < 0) positiveSumn(inverse(a), -n)
+    if (n == Int.MinValue) throw new IllegalArgumentException("Negative exponent is too large")
+    else if (n < 0) positiveSumn(inverse(a), -n)
     else if (n == 0) empty
     else positiveSumn(a, n)
 }

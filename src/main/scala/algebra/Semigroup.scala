@@ -16,14 +16,14 @@ trait Semigroup[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] {
    */
   def sumn(a: A, n: Int): A =
     if (n <= 0) throw new IllegalArgumentException("Repeated summation for semigroups must have reptitions > 0")
+    else if (n == 1) a
     else positiveSumn(a, n)
 
   protected def positiveSumn(a: A, n: Int): A = {
     @tailrec def loop(b: A, k: Int, extra: A): A =
-      (k: @annotation.switch) match {
-        case 0 => b
-        case 1 => combine(b, extra)
-        case n => loop(combine(b, b), k >>> 1, if ((k & 1) == 1) combine(b, extra) else extra)
+      if (k == 1) combine(b, extra) else {
+        val x = if ((k & 1) == 1) combine(b, extra) else extra
+        loop(combine(b, b), k >>> 1, x)
       }
     loop(a, n - 1, a)
   }
