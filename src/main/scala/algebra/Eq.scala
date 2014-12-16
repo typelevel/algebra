@@ -7,7 +7,7 @@ import scala.{specialized => sp}
  * type. Any 2 instances `x` and `y` are equal if `eqv(x, y)` is `true`.
  * Moreover, `eqv` should form an equivalence relation.
  */
-trait Eq[@sp A] {
+trait Eq[@sp A] extends Any { self =>
 
   /** Returns `true` if `x` and `y` are equivalent, `false` otherwise. */
   def eqv(x: A, y: A): Boolean
@@ -19,22 +19,25 @@ trait Eq[@sp A] {
    * Constructs a new `Eq` instance for type `B` where 2 elements are
    * equivalent iff `eqv(f(x), f(y))`.
    */
-  def on[@sp B](f: B => A): Eq[B] = new MappedEq(this)(f)
-}
-
-private[algebra] class MappedEq[@sp A, @sp B](eq: Eq[B])(f: A => B) extends Eq[A] {
-  def eqv(x: A, y: A): Boolean = eq.eqv(f(x), f(y))
-}
-
-trait EqFunctions {
-  def eqv[@sp A](x: A, y: A)(implicit ev: Eq[A]): Boolean =
-    ev.eqv(x, y)
-  def neqv[@sp A](x: A, y: A)(implicit ev: Eq[A]): Boolean =
-    ev.neqv(x, y)
+  def on[@sp B](f: B => A): Eq[B] =
+    new Eq[B] {
+      def eqv(x: B, y: B): Boolean = self.eqv(f(x), f(x))
+    }
 }
 
 object Eq extends EqFunctions {
-  def apply[A](implicit e: Eq[A]): Eq[A] = e
+  def apply[A](implicit ev: Eq[A]): Eq[A] = ev
 
-  def by[@sp A, @sp B](f: A => B)(implicit e: Eq[B]): Eq[A] = e.on(f)
+  def by[@sp A, @sp B](f: A => B)(implicit ev: Eq[B]): Eq[A] =
+    new Eq[A] {
+      def eqv(x: A, y: A): Boolean = ev.eqv(f(x), f(y))
+    }
+}
+
+trait EqFunctions {
+  def eqv[A](x: A, y: A)(implicit ev: Eq[A]): Boolean =
+    ev.eqv(x, y)
+
+  def neqv[A](x: A, y: A)(implicit ev: Eq[A]): Boolean =
+    ev.neqv(x, y)
 }
