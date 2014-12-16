@@ -21,7 +21,7 @@ import scala.{specialized => sp}
  * true      false       = -1.0    (corresponds to x < y)
  * false     true        = 1.0     (corresponds to x > y)
  */
-trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
+trait PartialOrder[@sp A] extends Eq[A] { self =>
 
   /** Result of comparing `x` with `y`. Returns NaN if operands
    * are not comparable. If operands are comparable, returns a
@@ -85,23 +85,6 @@ trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
     }
 }
 
-object PartialOrder extends PartialOrderFunctions {
-  @inline final def apply[A](implicit ev: PartialOrder[A]) = ev
-
-  def by[@sp A, @sp B](f: A => B)(implicit ev: PartialOrder[B]): PartialOrder[A] = ev.on(f)
-
-  def from[@sp A](f: (A, A) => Double): PartialOrder[A] =
-    new PartialOrder[A] {
-      def partialCompare(x: A, y: A) = f(x, y)
-    }
-
-  implicit def partialOrdering[A](implicit ev: PartialOrder[A]): PartialOrdering[A] =
-    new PartialOrdering[A] {
-      def tryCompare(x: A, y: A): Option[Int] = ev.tryCompare(x, y)
-      def lteq(x: A, y: A): Boolean = ev.lteqv(x, y)
-    }
-}
-
 trait PartialOrderFunctions {
   def partialCompare[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Double =
     ev.partialCompare(x, y)
@@ -120,4 +103,21 @@ trait PartialOrderFunctions {
     ev.pmin(x, y)
   def pmax[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Option[A] =
     ev.pmax(x, y)
+}
+
+object PartialOrder extends PartialOrderFunctions {
+  @inline final def apply[A](implicit ev: PartialOrder[A]) = ev
+
+  def by[@sp A, @sp B](f: A => B)(implicit ev: PartialOrder[B]): PartialOrder[A] = ev.on(f)
+
+  def from[@sp A](f: (A, A) => Double): PartialOrder[A] =
+    new PartialOrder[A] {
+      def partialCompare(x: A, y: A) = f(x, y)
+    }
+
+  implicit def partialOrdering[A](implicit ev: PartialOrder[A]): PartialOrdering[A] =
+    new PartialOrdering[A] {
+      def tryCompare(x: A, y: A): Option[Int] = ev.tryCompare(x, y)
+      def lteq(x: A, y: A): Boolean = ev.lteqv(x, y)
+    }
 }

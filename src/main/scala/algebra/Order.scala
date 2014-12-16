@@ -19,7 +19,7 @@ import scala.{specialized => sp}
  * 
  * By the totality law, x <= y and y <= x cannot be both false.
  */
-trait Order[@sp A] extends Any with PartialOrder[A] { self =>
+trait Order[@sp A] extends PartialOrder[A] { self =>
 
   def partialCompare(x: A, y: A): Double = compare(x, y).toDouble
 
@@ -51,22 +51,6 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
     }
 }
 
-object Order extends OrderFunctions {
-  @inline final def apply[A](implicit ev: Order[A]) = ev
-
-  def by[@sp A, @sp B](f: A => B)(implicit ev: Order[B]): Order[A] = ev.on(f)
-
-  def from[@sp A](f: (A, A) => Int): Order[A] =
-    new Order[A] {
-      def compare(x: A, y: A) = f(x, y)
-    }
-
-  implicit def ordering[A](implicit ev: Order[A]): Ordering[A] =
-    new Ordering[A] {
-      def compare(x: A, y: A) = ev.compare(x, y)
-    }
-}
-
 trait OrderFunctions {
   def compare[@sp A](x: A, y: A)(implicit ev: Order[A]): Int =
     ev.compare(x, y)
@@ -83,4 +67,20 @@ trait OrderFunctions {
     ev.min(x, y)
   def max[@sp A](x: A, y: A)(implicit ev: Order[A]): A =
     ev.max(x, y)
+}
+
+object Order extends OrderFunctions {
+  @inline final def apply[A](implicit ev: Order[A]) = ev
+
+  def by[@sp A, @sp B](f: A => B)(implicit ev: Order[B]): Order[A] = ev.on(f)
+
+  def from[@sp A](f: (A, A) => Int): Order[A] =
+    new Order[A] {
+      def compare(x: A, y: A) = f(x, y)
+    }
+
+  implicit def ordering[A](implicit ev: Order[A]): Ordering[A] =
+    new Ordering[A] {
+      def compare(x: A, y: A) = ev.compare(x, y)
+    }
 }

@@ -7,13 +7,21 @@ package number
 sealed abstract class Sign(val toInt: Int) {
   import Sign._
 
-  def unary_-(): Sign = this match {
-    case Positive => Negative
-    case Negative => Positive
-    case Zero => Zero
-  }
+  def unary_-(): Sign =
+    this match {
+      case Positive => Negative
+      case Negative => Positive
+      case Zero => Zero
+    }
 
-  def *(that: Sign): Sign = Sign(this.toInt * that.toInt)
+  def *(that: Sign): Sign =
+    Sign(this.toInt * that.toInt)
+
+  def **(that: Int): Sign =
+    if (this == Negative && (that & 1) == 0) Positive else this
+
+  def pow(that: Int): Sign =
+    this ** that
 }
 
 object Sign {

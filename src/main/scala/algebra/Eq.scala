@@ -7,7 +7,7 @@ import scala.{specialized => sp}
  * type. Any 2 instances `x` and `y` are equal if `eqv(x, y)` is `true`.
  * Moreover, `eqv` should form an equivalence relation.
  */
-trait Eq[@sp A] extends Any { self =>
+trait Eq[@sp A] { self =>
 
   /** Returns `true` if `x` and `y` are equivalent, `false` otherwise. */
   def eqv(x: A, y: A): Boolean
@@ -25,6 +25,14 @@ trait Eq[@sp A] extends Any { self =>
     }
 }
 
+trait EqFunctions {
+  def eqv[A](x: A, y: A)(implicit ev: Eq[A]): Boolean =
+    ev.eqv(x, y)
+
+  def neqv[A](x: A, y: A)(implicit ev: Eq[A]): Boolean =
+    ev.neqv(x, y)
+}
+
 object Eq extends EqFunctions {
   def apply[A](implicit ev: Eq[A]): Eq[A] = ev
 
@@ -32,12 +40,4 @@ object Eq extends EqFunctions {
     new Eq[A] {
       def eqv(x: A, y: A): Boolean = ev.eqv(f(x), f(y))
     }
-}
-
-trait EqFunctions {
-  def eqv[A](x: A, y: A)(implicit ev: Eq[A]): Boolean =
-    ev.eqv(x, y)
-
-  def neqv[A](x: A, y: A)(implicit ev: Eq[A]): Boolean =
-    ev.neqv(x, y)
 }

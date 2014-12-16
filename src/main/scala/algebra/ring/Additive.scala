@@ -37,7 +37,7 @@ trait AdditiveGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Additi
   override def additive: Group[A] = new Group[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
-    override def uncombine(x: A, y: A): A = minus(x, y)
+    override def remove(x: A, y: A): A = minus(x, y)
     def inverse(x: A): A = negate(x)
   }
 
@@ -49,7 +49,7 @@ trait AdditiveCommutativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] ext
   override def additive: CommutativeGroup[A] = new CommutativeGroup[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
-    override def uncombine(x: A, y: A): A = minus(x, y)
+    override def remove(x: A, y: A): A = minus(x, y)
     def inverse(x: A): A = negate(x)
   }
 }

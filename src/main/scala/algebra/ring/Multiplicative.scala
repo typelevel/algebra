@@ -2,19 +2,31 @@ package algebra
 package ring
 
 import scala.{ specialized => sp }
+import scala.annotation.tailrec
 
 trait MultiplicativeSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] {
-  def multiplicative: Semigroup[A] = new Semigroup[A] {
-    def combine(x: A, y: A): A = times(x, y)
-  }
+  def multiplicative: Semigroup[A] =
+    new Semigroup[A] {
+      def combine(x: A, y: A): A = times(x, y)
+    }
 
   def times(x: A, y: A): A
 
   def hasCommutativeMultiplication: Boolean = false
 
   def pow(a: A, n: Int): A =
-    if (n > 0) multiplicative.sumn(a, n)
-    else throw new IllegalArgumentException("Illegal non-positive exponent %s to Semiring#pow" format n)
+    if (n > 0) positivePow(a, n)
+    else throw new IllegalArgumentException("Illegal non-positive exponent to pow: %s" format n)
+
+  protected[this] def positivePow(a: A, n: Int): A = {
+    @tailrec def loop(b: A, k: Int, extra: A): A =
+      if (k == 1) times(b, extra) else {
+        val x = if ((k & 1) == 1) times(b, extra) else extra
+        loop(times(b, b), k >>> 1, x)
+      }
+    if (n == 1) a else loop(a, n - 1, a)
+  }
+
 }
 
 trait MultiplicativeCommutativeSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends MultiplicativeSemigroup[A] {
@@ -33,8 +45,9 @@ trait MultiplicativeMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends
   def one: A
 
   override def pow(a: A, n: Int): A =
-    if (n >= 0) multiplicative.sumn(a, n)
-    else throw new IllegalArgumentException("Illegal negative exponent %s to Monoid#pow" format n)
+    if (n > 0) positivePow(a, n)
+    else if (n == 0) one
+    else throw new IllegalArgumentException("Illegal negative exponent to pow: %s" format n)
 }
 
 trait MultiplicativeCommutativeMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends MultiplicativeMonoid[A] with MultiplicativeCommutativeSemigroup[A] {
@@ -48,7 +61,7 @@ trait MultiplicativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends 
   override def multiplicative: Group[A] = new Group[A] {
     def empty = one
     def combine(x: A, y: A): A = times(x, y)
-    override def uncombine(x: A, y: A): A = div(x, y)
+    override def remove(x: A, y: A): A = div(x, y)
     def inverse(x: A): A = reciprocal(x)
   }
 
@@ -56,14 +69,17 @@ trait MultiplicativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends 
   def div(x: A, y: A): A
 
   override def pow(a: A, n: Int): A =
-    if (n >= 0) multiplicative.sumn(a, n) else multiplicative.sumn(reciprocal(a), -n)
+    if (n > 0) positivePow(a, n)
+    else if (n == 0) one
+    else if (n == Int.MinValue) positivePow(reciprocal(times(a, a)), 1073741824)
+    else positivePow(reciprocal(a), -n)
 }
 
 trait MultiplicativeCommutativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends MultiplicativeGroup[A] with MultiplicativeCommutativeMonoid[A] {
   override def multiplicative: CommutativeGroup[A] = new CommutativeGroup[A] {
     def empty = one
     def combine(x: A, y: A): A = times(x, y)
-    override def uncombine(x: A, y: A): A = div(x, y)
+    override def remove(x: A, y: A): A = div(x, y)
     def inverse(x: A): A = reciprocal(x)
   }
 }

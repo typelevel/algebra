@@ -6,14 +6,25 @@ import algebra.ring._
 import scala.{ specialized => sp }
 
 /**
- * A trait for things that have some notion of sign and the ability to ensure
- * something has a positive sign.
+ * A trait for things that have some notion of sign and the ability to
+ * ensure something has a non-negative sign.
  */
 trait Signed[@sp(Double, Float, Int, Long) A] {
-  /** Returns Zero if `a` is 0, Positive if `a` is positive, and Negative is `a` is negative. */
+
+  /**
+   * Return a's sign:
+   * - Zero if `a` is 0,
+   * - Positive if `a` is positive
+   * - Negative is `a` is negative.
+   */
   def sign(a: A): Sign = Sign(signum(a))
 
-  /** Returns 0 if `a` is 0, > 0 if `a` is positive, and < 0 is `a` is negative. */
+  /**
+   * Return a's sign encoded as an Int (n) where:
+   * - n = 0 if `a` is 0
+   * - n > 0 if `a` is positive
+   * - n < 0 is `a` is negative.
+   */
   def signum(a: A): Int
 
   /** An idempotent function that ensures an object has a non-negative sign. */
@@ -40,11 +51,11 @@ trait SignedFunctions {
 }
 
 object Signed extends SignedFunctions {
-  implicit def orderedRingIsSigned[A: Order: Ring]: Signed[A] = new OrderedRingIsSigned[A]
-  def apply[A](implicit s: Signed[A]): Signed[A] = s
-}
+  def apply[A](implicit ev: Signed[A]): Signed[A] = ev
 
-private[algebra] class OrderedRingIsSigned[A](implicit o: Order[A], r: Ring[A]) extends Signed[A] {
-  def signum(a: A) = o.compare(a, r.zero)
-  def abs(a: A) = if (signum(a) < 0) r.negate(a) else a
+  implicit def orderedAdditiveGroupIsSigned[A](implicit o: Order[A], g: AdditiveGroup[A]): Signed[A] =
+    new Signed[A] {
+      def signum(a: A) = o.compare(a, g.zero)
+      def abs(a: A) = if (o.lt(a, g.zero)) g.negate(a) else a
+    }
 }

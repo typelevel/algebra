@@ -14,11 +14,17 @@ import scala.{specialized => sp}
  * implementations.
  */
 trait Ring[@sp(Byte, Short, Int, Long, Float, Double) A] extends Rig[A] with Rng[A] {
+
   /**
    * Defined to be equivalent to `Group.sumn(one, n)(ring.additive)`. That is,
    * `n` repeated summations of this ring's `one`, or `-one` if `n` is negative.
    */
-  def fromInt(n: Int): A = additive.sumn(one, n)
+  def fromInt(n: Int): A = additive.combineN(one, n)
+}
+
+trait RingFunctions {
+  def fromInt[@sp(Byte, Short, Int, Long, Float, Double) A](n: Int)(implicit ev: Ring[A]): A =
+    ev.fromInt(n)
 }
 
 object Ring extends AdditiveGroupFunctions with MultiplicativeMonoidFunctions {

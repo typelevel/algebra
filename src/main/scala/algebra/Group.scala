@@ -6,23 +6,37 @@ import scala.{ specialized => sp }
  * A group is a monoid where each element has an inverse.
  */
 trait Group[@sp(Byte, Short, Int, Long, Float, Double) A] extends Monoid[A] {
+
+  /**
+   * Find the inverse of `a`.
+   *
+   * `combine(a, inverse(a))` = `combine(inverse(a), a)` = `empty`.
+   */
   def inverse(a: A): A
-  def uncombine(a: A, b: A): A = combine(a, inverse(b))
+
+  /**
+   * Remove the element `b` from `a`.
+   *
+   * Equivalent to `combine(a, inverse(a))`
+   */
+  def remove(a: A, b: A): A = combine(a, inverse(b))
 
   /**
    * Return `a` appended to itself `n` times. If `n` is negative, then
-   * this returns `-a` appended to itself `n` times.
+   * this returns `inverse(a)` appended to itself `n` times.
    */
-  override def sumn(a: A, n: Int): A =
-    if (n == Int.MinValue) throw new IllegalArgumentException("Negative exponent is too large")
-    else if (n < 0) positiveSumn(inverse(a), -n)
+  override def combineN(a: A, n: Int): A =
+    if (n > 0) repeatedCombineN(a, n)
     else if (n == 0) empty
-    else positiveSumn(a, n)
+    else if (n == Int.MinValue) combineN(inverse(combine(a, a)), 1073741824)
+    else repeatedCombineN(inverse(a), -n)
 }
 
 trait GroupFunctions extends MonoidFunctions {
-  def inverse[A](a: A)(implicit ev: Group[A]): A = ev.inverse(a)
-  def uncombine[A](x: A, y: A)(implicit ev: Group[A]): A = ev.uncombine(x, y)
+  def inverse[@sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Group[A]): A =
+    ev.inverse(a)
+  def remove[@sp(Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: Group[A]): A =
+    ev.remove(x, y)
 }
 
 object Group extends GroupFunctions {

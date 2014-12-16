@@ -9,28 +9,40 @@ import scala.{ specialized => sp }
  * with `combine` as string concatenation, then `empty = ""`.
  */
 trait Monoid[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Semigroup[A] {
+
+  /**
+   * Return the identity element for this monoid.
+   */
   def empty: A
+
+  /**
+   * Tests if `a` is the identity.
+   */
+  def isEmpty(a: A)(implicit ev: Eq[A]) = ev.eqv(a, empty)
 
   /**
    * Return `a` appended to itself `n` times.
    */
-  override def sumn(a: A, n: Int): A =
-    if (n < 0) throw new IllegalArgumentException("Repeated summation for monoids must have reptitions >= 0")
+  override def combineN(a: A, n: Int): A =
+    if (n < 0) throw new IllegalArgumentException("Repeated combining for monoids must have n >= 0")
     else if (n == 0) empty
-    else positiveSumn(a, n)
+    else repeatedCombineN(a, n)
 
   /**
    * Given a sequence of `as`, sum them using the monoid and return the total.
    */
-  def sum(as: TraversableOnce[A]): A = as.foldLeft(empty)(combine)
+  def combineAll(as: TraversableOnce[A]): A =
+    as.foldLeft(empty)(combine)
 }
 
 trait MonoidFunctions extends SemigroupFunctions {
-  def empty[A](implicit ev: Monoid[A]): A = ev.empty
+  def empty[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](implicit ev: Monoid[A]): A =
+    ev.empty
 
-  def sum[A](as: TraversableOnce[A])(implicit ev: Monoid[A]): A = ev.sum(as)
+  def combineAll[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: Monoid[A]): A =
+    ev.combineAll(as)
 }
 
 object Monoid extends MonoidFunctions {
-  @inline final def apply[A](implicit m: Monoid[A]): Monoid[A] = m
+  @inline final def apply[A](implicit ev: Monoid[A]): Monoid[A] = ev
 }
