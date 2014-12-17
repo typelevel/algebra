@@ -13,4 +13,7 @@ trait CommutativeSemigroup[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A
 
 object CommutativeSemigroup extends SemigroupFunctions {
   @inline final def apply[A](implicit ev: CommutativeSemigroup[A]): CommutativeSemigroup[A] = ev
+
+  @inline final def additive[A](implicit ev: ring.AdditiveCommutativeSemigroup[A]): CommutativeSemigroup[A] =  ev.additive
+  @inline final def multiplicative[A](implicit ev: ring.MultiplicativeCommutativeSemigroup[A]): CommutativeSemigroup[A] = ev.multiplicative
 }

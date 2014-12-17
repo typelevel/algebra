@@ -12,4 +12,7 @@ trait CommutativeMonoid[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A]
 
 object CommutativeMonoid extends MonoidFunctions {
   @inline final def apply[A](implicit ev: CommutativeMonoid[A]): CommutativeMonoid[A] = ev
+
+  @inline final def additive[A](implicit ev: ring.AdditiveCommutativeMonoid[A]): CommutativeMonoid[A] =  ev.additive
+  @inline final def multiplicative[A](implicit ev: ring.MultiplicativeCommutativeMonoid[A]): CommutativeMonoid[A] = ev.multiplicative
 }

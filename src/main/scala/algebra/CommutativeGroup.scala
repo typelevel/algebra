@@ -10,4 +10,7 @@ trait CommutativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A]
 
 object CommutativeGroup extends GroupFunctions {
   @inline final def apply[A](implicit ev: CommutativeGroup[A]): CommutativeGroup[A] = ev
+
+  @inline final def additive[A](implicit ev: ring.AdditiveCommutativeGroup[A]): CommutativeGroup[A] =  ev.additive
+  @inline final def multiplicative[A](implicit ev: ring.MultiplicativeCommutativeGroup[A]): CommutativeGroup[A] = ev.multiplicative
 }

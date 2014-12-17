@@ -45,4 +45,7 @@ trait MonoidFunctions extends SemigroupFunctions {
 
 object Monoid extends MonoidFunctions {
   @inline final def apply[A](implicit ev: Monoid[A]): Monoid[A] = ev
+
+  @inline final def additive[A](implicit ev: ring.AdditiveMonoid[A]): Monoid[A] =  ev.additive
+  @inline final def multiplicative[A](implicit ev: ring.MultiplicativeMonoid[A]): Monoid[A] = ev.multiplicative
 }

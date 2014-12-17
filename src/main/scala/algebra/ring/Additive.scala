@@ -2,13 +2,37 @@ package algebra
 package ring
 
 import scala.{ specialized => sp }
+import scala.annotation.tailrec
 
 trait AdditiveSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] {
   def additive: Semigroup[A] = new Semigroup[A] {
     def combine(x: A, y: A): A = plus(x, y)
   }
+
   def plus(x: A, y: A): A
+
   def hasCommutativeAddition: Boolean = false
+
+  def sumN(a: A, n: Int): A =
+    if (n > 0) positiveSumN(a, n)
+    else throw new IllegalArgumentException("Illegal non-positive exponent to sumN: %s" format n)
+
+  protected[this] def positiveSumN(a: A, n: Int): A = {
+    @tailrec def loop(b: A, k: Int, extra: A): A =
+      if (k == 1) plus(b, extra) else {
+        val x = if ((k & 1) == 1) plus(b, extra) else extra
+        loop(plus(b, b), k >>> 1, x)
+      }
+    if (n == 1) a else loop(a, n - 1, a)
+  }
+
+  /**
+   * Given a sequence of `as`, combine them and return the total.
+   * 
+   * If the sequence is empty, returns None. Otherwise, returns Some(total).
+   */
+  def trySum(as: TraversableOnce[A]): Option[A] =
+    as.reduceOption(plus)
 }
 
 trait AdditiveCommutativeSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveSemigroup[A] {
@@ -23,7 +47,24 @@ trait AdditiveMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends Addit
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
   }
+
   def zero: A
+
+  /**
+    * Tests if `a` is zero.
+    */
+  def isZero(a: A)(implicit ev: Eq[A]): Boolean = ev.eqv(a, zero)
+
+  override def sumN(a: A, n: Int): A =
+    if (n > 0) positiveSumN(a, n)
+    else if (n == 0) zero
+    else throw new IllegalArgumentException("Illegal negative exponent to sumN: %s" format n)
+
+  /**
+   * Given a sequence of `as`, compute the sum.
+   */
+  def sum(as: TraversableOnce[A]): A =
+    as.foldLeft(zero)(plus)
 }
 
 trait AdditiveCommutativeMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveMonoid[A] with AdditiveCommutativeSemigroup[A] {
@@ -43,6 +84,12 @@ trait AdditiveGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Additi
 
   def negate(x: A): A
   def minus(x: A, y: A): A = plus(x, negate(y))
+
+  override def sumN(a: A, n: Int): A =
+    if (n > 0) positiveSumN(a, n)
+    else if (n == 0) zero
+    else if (n == Int.MinValue) positiveSumN(negate(plus(a, a)), 1073741824)
+    else positiveSumN(negate(a), -n)
 }
 
 trait AdditiveCommutativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveGroup[A] with AdditiveCommutativeMonoid[A] {
@@ -57,11 +104,23 @@ trait AdditiveCommutativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] ext
 trait AdditiveSemigroupFunctions {
   def plus[@sp(Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: AdditiveSemigroup[A]): A =
     ev.plus(x, y)
+
+  def sumN[@sp(Byte, Short, Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: AdditiveSemigroup[A]): A =
+    ev.sumN(a, n)
+
+  def trySum[@sp(Byte, Short, Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: AdditiveSemigroup[A]): Option[A] =
+    ev.trySum(as)
 }
 
 trait AdditiveMonoidFunctions extends AdditiveSemigroupFunctions {
   def zero[@sp(Byte, Short, Int, Long, Float, Double) A](implicit ev: AdditiveMonoid[A]): A =
     ev.zero
+
+  def isZero[@sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev0: AdditiveMonoid[A], ev1: Eq[A]): Boolean =
+    ev0.isZero(a)
+
+  def sum[@sp(Byte, Short, Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: AdditiveMonoid[A]): A =
+    ev.sum(as)
 }
 
 trait AdditiveGroupFunctions extends AdditiveMonoidFunctions {

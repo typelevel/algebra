@@ -66,5 +66,8 @@ trait SemigroupFunctions {
 }
 
 object Semigroup extends SemigroupFunctions {
-  @inline final def apply[A](implicit s: Semigroup[A]) = s
+  @inline final def apply[A](implicit ev: Semigroup[A]) = ev
+
+  @inline final def additive[A](implicit ev: ring.AdditiveSemigroup[A]): Semigroup[A] =  ev.additive
+  @inline final def multiplicative[A](implicit ev: ring.MultiplicativeSemigroup[A]): Semigroup[A] = ev.multiplicative
 }

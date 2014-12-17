@@ -27,6 +27,13 @@ trait MultiplicativeSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] {
     if (n == 1) a else loop(a, n - 1, a)
   }
 
+  /**
+   * Given a sequence of `as`, combine them and return the total.
+   * 
+   * If the sequence is empty, returns None. Otherwise, returns Some(total).
+   */
+  def tryProduct(as: TraversableOnce[A]): Option[A] =
+    as.reduceOption(times)
 }
 
 trait MultiplicativeCommutativeSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends MultiplicativeSemigroup[A] {
@@ -44,10 +51,21 @@ trait MultiplicativeMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends
 
   def one: A
 
+  /**
+    * Tests if `a` is one.
+    */
+  def isOne(a: A)(implicit ev: Eq[A]): Boolean = ev.eqv(a, one)
+
   override def pow(a: A, n: Int): A =
     if (n > 0) positivePow(a, n)
     else if (n == 0) one
     else throw new IllegalArgumentException("Illegal negative exponent to pow: %s" format n)
+
+  /**
+   * Given a sequence of `as`, compute the product.
+   */
+  def product(as: TraversableOnce[A]): A =
+    as.foldLeft(one)(times)
 }
 
 trait MultiplicativeCommutativeMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends MultiplicativeMonoid[A] with MultiplicativeCommutativeSemigroup[A] {
@@ -89,11 +107,20 @@ trait MultiplicativeSemigroupFunctions {
     ev.times(x, y)
   def pow[@sp(Byte, Short, Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: MultiplicativeSemigroup[A]): A =
     ev.pow(a, n)
+
+  def tryProduct[@sp(Byte, Short, Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: MultiplicativeSemigroup[A]): Option[A] =
+    ev.tryProduct(as)
 }
 
 trait MultiplicativeMonoidFunctions extends MultiplicativeSemigroupFunctions {
   def one[@sp(Byte, Short, Int, Long, Float, Double) A](implicit ev: MultiplicativeMonoid[A]): A =
     ev.one
+
+  def isOne[@sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev0: MultiplicativeMonoid[A], ev1: Eq[A]): Boolean =
+    ev0.isOne(a)
+
+  def product[@sp(Byte, Short, Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: MultiplicativeMonoid[A]): A =
+    ev.product(as)
 }
 
 trait MultiplicativeGroupFunctions extends MultiplicativeMonoidFunctions {
