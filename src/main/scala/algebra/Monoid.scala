@@ -44,8 +44,29 @@ trait MonoidFunctions extends SemigroupFunctions {
 }
 
 object Monoid extends MonoidFunctions {
+
+  /**
+   * Access an implicit `Monoid[A]`.
+   */
   @inline final def apply[A](implicit ev: Monoid[A]): Monoid[A] = ev
 
-  @inline final def additive[A](implicit ev: ring.AdditiveMonoid[A]): Monoid[A] =  ev.additive
-  @inline final def multiplicative[A](implicit ev: ring.MultiplicativeMonoid[A]): Monoid[A] = ev.multiplicative
+  /**
+   * This method converts an additive instance into a generic
+   * instance.
+   * 
+   * Given an implicit `AdditiveMonoid[A]`, this method returns a
+   * `Monoid[A]`.
+   */
+  @inline final def additive[A](implicit ev: ring.AdditiveMonoid[A]): Monoid[A] =
+    ev.additive
+
+  /**
+   * This method converts an multiplicative instance into a generic
+   * instance.
+   * 
+   * Given an implicit `MultiplicativeMonoid[A]`, this method returns
+   * a `Monoid[A]`.
+   */
+  @inline final def multiplicative[A](implicit ev: ring.MultiplicativeMonoid[A]): Monoid[A] =
+    ev.multiplicative
 }

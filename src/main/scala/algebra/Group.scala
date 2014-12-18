@@ -40,8 +40,27 @@ trait GroupFunctions extends MonoidFunctions {
 }
 
 object Group extends GroupFunctions {
+
+  /**
+   * Access an implicit `Group[A]`.
+   */
   @inline final def apply[A](implicit ev: Group[A]): Group[A] = ev
 
+  /**
+   * This method converts an additive instance into a generic
+   * instance.
+   * 
+   * Given an implicit `AdditiveGroup[A]`, this method returns a
+   * `Group[A]`.
+   */
   @inline final def additive[A](implicit ev: ring.AdditiveGroup[A]): Group[A] =  ev.additive
+
+  /**
+   * This method converts an multiplicative instance into a generic
+   * instance.
+   * 
+   * Given an implicit `MultiplicativeGroup[A]`, this method returns
+   * a `Group[A]`.
+   */
   @inline final def multiplicative[A](implicit ev: ring.MultiplicativeGroup[A]): Group[A] = ev.multiplicative
 }

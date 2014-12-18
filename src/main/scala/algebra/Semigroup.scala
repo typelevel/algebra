@@ -44,7 +44,7 @@ trait Semigroup[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] {
    * 
    * If the sequence is empty, returns None. Otherwise, returns Some(total).
    */
-  def tryCombineAll(as: TraversableOnce[A]): Option[A] =
+  def combineAllOption(as: TraversableOnce[A]): Option[A] =
     as.reduceOption(combine)
 }
 
@@ -61,13 +61,34 @@ trait SemigroupFunctions {
   def combineN[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: Semigroup[A]): A =
     ev.combineN(a, n)
 
-  def tryCombineAll[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: Semigroup[A]): Option[A] =
-    ev.tryCombineAll(as)
+  def combineAllOption[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: Semigroup[A]): Option[A] =
+    ev.combineAllOption(as)
 }
 
 object Semigroup extends SemigroupFunctions {
+
+  /**
+   * Access an implicit `CommutativeSemigroup[A]`.
+   */
   @inline final def apply[A](implicit ev: Semigroup[A]) = ev
 
-  @inline final def additive[A](implicit ev: ring.AdditiveSemigroup[A]): Semigroup[A] =  ev.additive
-  @inline final def multiplicative[A](implicit ev: ring.MultiplicativeSemigroup[A]): Semigroup[A] = ev.multiplicative
+  /**
+   * This method converts an additive instance into a generic
+   * instance.
+   * 
+   * Given an implicit `AdditiveSemigroup[A]`, this method returns a
+   * `Semigroup[A]`.
+   */
+  @inline final def additive[A](implicit ev: ring.AdditiveSemigroup[A]): Semigroup[A] =
+    ev.additive
+
+  /**
+   * This method converts an multiplicative instance into a generic
+   * instance.
+   * 
+   * Given an implicit `MultiplicativeSemigroup[A]`, this method
+   * returns a `Semigroup[A]`.
+   */
+  @inline final def multiplicative[A](implicit ev: ring.MultiplicativeSemigroup[A]): Semigroup[A] =
+    ev.multiplicative
 }

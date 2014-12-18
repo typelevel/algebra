@@ -21,17 +21,25 @@ import scala.{specialized => sp}
  */
 trait Order[@sp A] extends PartialOrder[A] { self =>
 
+  /**
+   * Result of comparing `x` with `y`. Returns an Int whose sign is:
+   * - negative iff `x < y`
+   * - zero     iff `x = y`
+   * - positive iff `x > y`
+   */
+  def compare(x: A, y: A): Int
+
   def partialCompare(x: A, y: A): Double = compare(x, y).toDouble
 
-  override def eqv(x: A, y: A): Boolean = compare(x, y) == 0
-  override def gt(x: A, y: A): Boolean = compare(x, y) > 0
-  override def lt(x: A, y: A): Boolean = compare(x, y) < 0
-  override def gteqv(x: A, y: A): Boolean = compare(x, y) >= 0
-  override def lteqv(x: A, y: A): Boolean = compare(x, y) <= 0
-
+  /**
+   * If x <= y, return x, else return y.
+   */
   def min(x: A, y: A): A = if (lt(x, y)) x else y
+
+  /**
+   * If x >= y, return x, else return y.
+   */
   def max(x: A, y: A): A = if (gt(x, y)) x else y
-  def compare(x: A, y: A): Int
 
   /**
    * Defines an order on `B` by mapping `B` to `A` using `f` and using `A`s
@@ -49,17 +57,60 @@ trait Order[@sp A] extends PartialOrder[A] { self =>
     new Order[A] {
       def compare(x: A, y: A): Int = self.compare(y, x)
     }
+
+  // The following may be overridden for performance:
+
+  /**
+   * Returns true if `x` = `y`, false otherwise.
+   */
+  override def eqv(x: A, y: A): Boolean =
+    compare(x, y) == 0
+
+  /**
+   * Returns true if `x` != `y`, false otherwise.
+   */
+  override def neqv(x: A, y: A): Boolean =
+    compare(x, y) != 0
+
+  /**
+   * Returns true if `x` <= `y`, false otherwise.
+   */
+  override def lteqv(x: A, y: A): Boolean =
+    compare(x, y) <= 0
+
+  /**
+   * Returns true if `x` < `y`, false otherwise.
+   */
+  override def lt(x: A, y: A): Boolean =
+    compare(x, y) < 0
+
+  /**
+   * Returns true if `x` >= `y`, false otherwise.
+   */
+  override def gteqv(x: A, y: A): Boolean =
+    compare(x, y) >= 0
+
+  /**
+   * Returns true if `x` > `y`, false otherwise.
+   */
+  override def gt(x: A, y: A): Boolean =
+    compare(x, y) > 0
 }
 
 trait OrderFunctions {
   def compare[@sp A](x: A, y: A)(implicit ev: Order[A]): Int =
     ev.compare(x, y)
+
+  def eqv[@sp A](x: A, y: A)(implicit ev: Order[A]): Boolean =
+    ev.eqv(x, y)
+  def neqv[@sp A](x: A, y: A)(implicit ev: Order[A]): Boolean =
+    ev.neqv(x, y)
   def gt[@sp A](x: A, y: A)(implicit ev: Order[A]): Boolean =
     ev.gt(x, y)
-  def lt[@sp A](x: A, y: A)(implicit ev: Order[A]): Boolean =
-    ev.lt(x, y)
   def gteqv[@sp A](x: A, y: A)(implicit ev: Order[A]): Boolean =
     ev.gteqv(x, y)
+  def lt[@sp A](x: A, y: A)(implicit ev: Order[A]): Boolean =
+    ev.lt(x, y)
   def lteqv[@sp A](x: A, y: A)(implicit ev: Order[A]): Boolean =
     ev.lteqv(x, y)
 
@@ -70,15 +121,31 @@ trait OrderFunctions {
 }
 
 object Order extends OrderFunctions {
+
+  /**
+   * Access an implicit `Eq[A]`.
+   */
   @inline final def apply[A](implicit ev: Order[A]) = ev
 
-  def by[@sp A, @sp B](f: A => B)(implicit ev: Order[B]): Order[A] = ev.on(f)
+  /**
+   * Convert an implicit `Order[A]` to an `Order[B]` using the given
+   * function `f`.
+   */
+  def by[@sp A, @sp B](f: A => B)(implicit ev: Order[B]): Order[A] =
+    ev.on(f)
 
+  /**
+   * Define an `Order[A]` using the given function `f`.
+   */
   def from[@sp A](f: (A, A) => Int): Order[A] =
     new Order[A] {
       def compare(x: A, y: A) = f(x, y)
     }
 
+  /**
+   * Implicitly convert a `Order[A]` to a `scala.math.Ordering[A]`
+   * instance.
+   */
   implicit def ordering[A](implicit ev: Order[A]): Ordering[A] =
     new Ordering[A] {
       def compare(x: A, y: A) = ev.compare(x, y)

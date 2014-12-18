@@ -9,10 +9,14 @@ import scala.{specialized => sp}
  */
 trait Eq[@sp A] { self =>
 
-  /** Returns `true` if `x` and `y` are equivalent, `false` otherwise. */
+  /**
+   * Returns `true` if `x` and `y` are equivalent, `false` otherwise.
+   */
   def eqv(x: A, y: A): Boolean
 
-  /** Returns `false` if `x` and `y` are equivalent, `true` otherwise. */
+  /**
+   * Returns `false` if `x` and `y` are equivalent, `true` otherwise.
+   */
   def neqv(x: A, y: A): Boolean = !eqv(x, y)
 
   /**
@@ -34,8 +38,16 @@ trait EqFunctions {
 }
 
 object Eq extends EqFunctions {
-  def apply[A](implicit ev: Eq[A]): Eq[A] = ev
 
+  /**
+   * Access an implicit `Eq[A]`.
+   */
+  @inline final def apply[A](implicit ev: Eq[A]): Eq[A] = ev
+
+  /**
+   * Convert an implicit `Eq[A]` to an `Eq[B]` using the given
+   * function `f`.
+   */
   def by[@sp A, @sp B](f: A => B)(implicit ev: Eq[B]): Eq[A] =
     new Eq[A] {
       def eqv(x: A, y: A): Boolean = ev.eqv(f(x), f(y))

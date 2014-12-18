@@ -16,10 +16,17 @@ import scala.{specialized => sp}
 trait Ring[@sp(Byte, Short, Int, Long, Float, Double) A] extends Rig[A] with Rng[A] {
 
   /**
-   * Defined to be equivalent to `Group.sumn(one, n)(ring.additive)`. That is,
-   * `n` repeated summations of this ring's `one`, or `-one` if `n` is negative.
+   * Convert the given integer to an instance of A.
+   * 
+   * Defined to be equivalent to `sumN(one, n)`.
+   * 
+   * That is, `n` repeated summations of this ring's `one`, or `-n`
+   * summations of `-one` if `n` is negative.
+   * 
+   * Most type class instances should consider overriding this method
+   * for performance reasons.
    */
-  def fromInt(n: Int): A = additive.combineN(one, n)
+  def fromInt(n: Int): A = sumN(one, n)
 }
 
 trait RingFunctions {

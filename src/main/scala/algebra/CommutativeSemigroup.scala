@@ -8,12 +8,37 @@ import scala.{ specialized => sp }
  * A semigroup is commutative if for all x and y, x |+| y === y |+| x.
  */
 trait CommutativeSemigroup[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Semigroup[A] {
+
+  /**
+   * CommutativeSemigroup is guaranteed to be commutative.
+   */
   override def isCommutative: Boolean = true
 }
 
 object CommutativeSemigroup extends SemigroupFunctions {
+
+  /**
+   * Access an implicit `CommutativeSemigroup[A]`.
+   */
   @inline final def apply[A](implicit ev: CommutativeSemigroup[A]): CommutativeSemigroup[A] = ev
 
-  @inline final def additive[A](implicit ev: ring.AdditiveCommutativeSemigroup[A]): CommutativeSemigroup[A] =  ev.additive
-  @inline final def multiplicative[A](implicit ev: ring.MultiplicativeCommutativeSemigroup[A]): CommutativeSemigroup[A] = ev.multiplicative
+  /**
+   * This method converts an additive instance into a generic
+   * instance.
+   * 
+   * Given an implicit `AdditiveCommutativeSemigroup[A]`, this method
+   * returns a `CommutativeSemigroup[A]`.
+   */
+  @inline final def additive[A](implicit ev: ring.AdditiveCommutativeSemigroup[A]): CommutativeSemigroup[A] =
+    ev.additive
+
+  /**
+   * This method converts a multiplicative instance into a generic
+   * instance.
+   * 
+   * Given an implicit `MultiplicativeCommutativeSemigroup[A]`, this
+   * method returns a `CommutativeSemigroup[A]`.
+   */
+  @inline final def multiplicative[A](implicit ev: ring.MultiplicativeCommutativeSemigroup[A]): CommutativeSemigroup[A] =
+    ev.multiplicative
 }

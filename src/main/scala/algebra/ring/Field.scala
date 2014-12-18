@@ -39,13 +39,6 @@ trait Field[@sp(Byte, Short, Int, Long, Float, Double) A] extends EuclideanRing[
 
       if (a < 0) negate(unsigned) else unsigned
     }
-
-  // // Any field can fulfill the EuclideanRing's requirements of a quot
-  // // and mod operator by defining quot as div, and mod as 0.  However,
-  // // other definitions exist (and might be more natural) so concrete
-  // // instances are encouraged to override these where appropriate.
-  // def quot(a: A, b: A): A = div(a, b)
-  // def mod(a: A, b: A): A = zero
 }
 
 trait FieldFunctions extends EuclideanRingFunctions with MultiplicativeGroupFunctions {
