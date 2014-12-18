@@ -26,3 +26,13 @@ to this repo. The following people have push access:
 * Lars Hupel
 * Erik Osheim
 * Tom Switzer
+
+## development process
+Please make a pull request against the master branch. For those that have merge access to the
+repo, we follow these rules:
+
+1. You may not merge your own PR unless `N` people have given you a shipit/+1 etc... and Travis CI is
+   green.
+2. If you are not the author, and you see `N-1` shipits and Travis CI is green, just click
+merge and delete the branch.
+3. N = 2.
