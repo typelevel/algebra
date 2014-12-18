@@ -3,8 +3,18 @@ package lattice
 
 import scala.{specialized => sp}
 
-trait JoinSemilattice[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any {
+/**
+ * A join-semilattice (or upper semilattice) is a semilattice whose
+ * operation is called "join", and which can be thought of as a least
+ * upper bound.
+ */
+trait JoinSemilattice[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any { self =>
   def join(lhs: A, rhs: A): A
+
+  def joinSemilattice: Semilattice[A] =
+    new Semilattice[A] {
+      def combine(x: A, y: A): A = self.join(x, y)
+    }
 }
 
 object JoinSemilattice {

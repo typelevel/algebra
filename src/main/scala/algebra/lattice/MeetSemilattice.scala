@@ -3,8 +3,18 @@ package lattice
 
 import scala.{specialized => sp}
 
-trait MeetSemilattice[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any {
+/**
+ * A meet-semilattice (or lower semilattice) is a semilattice whose
+ * operation is called "meet", and which can be thought of as a
+ * greatest lower bound.
+ */
+trait MeetSemilattice[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any { self =>
   def meet(lhs: A, rhs: A): A
+
+  def meetSemilattice: Semilattice[A] =
+    new Semilattice[A] {
+      def combine(x: A, y: A): A = self.meet(x, y)
+    }
 }
 
 object MeetSemilattice {
