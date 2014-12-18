@@ -1,11 +1,19 @@
 package algebra
 package number
 
+import algebra.ring.MultiplicativeCommutativeMonoid
+
 /**
  * A simple ADT representing the `Sign` of an object.
  */
 sealed abstract class Sign(val toInt: Int) {
   import Sign._
+
+  def abs: Sign =
+    if (this == Negative) Positive else this
+
+  def compare(that: Sign): Int =
+    this.toInt - that.toInt
 
   def unary_-(): Sign =
     this match {
@@ -33,13 +41,19 @@ object Sign {
     if (i == 0) Zero else if (i > 0) Positive else Negative
   
   implicit final val SignAlgebra =
-    new Group[Sign] with Signed[Sign] with Order[Sign] {
-      def empty: Sign = Zero
-      def combine(a: Sign, b: Sign): Sign = Sign(a.toInt * b.toInt)
-      def inverse(a: Sign): Sign = Sign(-a.toInt)
+    new CommutativeMonoid[Sign] with Signed[Sign] with Order[Sign] {
+      def empty: Sign = Positive
+      def combine(a: Sign, b: Sign): Sign = a * b
       override def sign(a: Sign): Sign = a
       def signum(a: Sign): Int = a.toInt
-      def abs(a: Sign): Sign = if (a == Negative) Positive else a
-      def compare(x: Sign, y: Sign): Int = x.toInt - y.toInt
+      def abs(a: Sign): Sign = a.abs
+      def compare(x: Sign, y: Sign): Int = x compare y
+    }
+
+  implicit final val SignMultiplicative =
+    new MultiplicativeCommutativeMonoid[Sign] {
+      def one: Sign = Positive
+      def times(a: Sign, b: Sign): Sign = a * b
+      override def pow(a: Sign, n: Int): Sign = a ** n
     }
 }
