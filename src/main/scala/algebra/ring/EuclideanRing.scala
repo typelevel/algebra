@@ -22,7 +22,7 @@ import scala.{specialized => sp}
  * This type does not provide access to the Euclidean function, but
  * only provides the quot, mod, and quotmod operators.
  */
-trait EuclideanRing[@sp(Byte, Short, Int, Long, Float, Double) A] extends CommutativeRing[A] {
+trait EuclideanRing[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with CommutativeRing[A] {
   def mod(a: A, b: A): A
   def quot(a: A, b: A): A
   def quotmod(a: A, b: A): (A, A) = (quot(a, b), mod(a, b))

@@ -7,7 +7,7 @@ import scala.{ specialized => sp }
  * 
  * A semigroup is commutative if for all x and y, x |+| y === y |+| x.
  */
-trait CommutativeSemigroup[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Semigroup[A] {
+trait CommutativeSemigroup[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any with Semigroup[A] {
 
   /**
    * CommutativeSemigroup is guaranteed to be commutative.

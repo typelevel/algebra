@@ -9,7 +9,7 @@ import scala.{ specialized => sp }
  * A trait for things that have some notion of sign and the ability to
  * ensure something has a non-negative sign.
  */
-trait Signed[@sp(Byte, Short, Int, Long, Float, Double) A] {
+trait Signed[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any {
 
   /**
    * Return a's sign:

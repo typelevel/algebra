@@ -6,7 +6,7 @@ import scala.{ specialized => sp }
 /**
  * A simple type class for numeric types that are a subset of the reals.
  */
-trait IsReal[@sp(Byte,Short,Int,Long,Float,Double) A] extends Order[A] with Signed[A] {
+trait IsReal[@sp(Byte,Short,Int,Long,Float,Double) A] extends Any with Order[A] with Signed[A] {
   def ceil(a: A): A
   def floor(a: A): A
   def round(a: A): A
@@ -14,7 +14,7 @@ trait IsReal[@sp(Byte,Short,Int,Long,Float,Double) A] extends Order[A] with Sign
   def toDouble(a: A): Double
 }
 
-trait IsIntegral[@sp(Byte,Short,Int,Long) A] extends IsReal[A] {
+trait IsIntegral[@sp(Byte,Short,Int,Long) A] extends Any with IsReal[A] {
   def ceil(a: A): A = a
   def floor(a: A): A = a
   def round(a: A): A = a
