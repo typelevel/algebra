@@ -5,19 +5,28 @@ organization := "org.spire-math"
 homepage := Some(url("http://spire-math.org"))
 licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 
-
 // build information
 
 scalaVersion := "2.11.4"
-crossScalaVersions := Seq("2.9.3", "2.10.4", "2.11.4")
+crossScalaVersions := Seq("2.10.4", "2.11.4")
 
 scalacOptions ++= (
-  "-deprecation" ::
+  "-deprecation" ::           
+  "-encoding" :: "UTF-8" ::
+  "-feature" ::                
+  "-language:existentials" ::
+  "-language:higherKinds" ::
+  "-language:implicitConversions" ::
   "-unchecked" ::
-  "-optimize" ::
+  "-Xfatal-warnings" ::       
+  "-Xlint" ::
+  "-Yno-adapted-args" ::       
+  "-Ywarn-dead-code" ::
+  "-Ywarn-numeric-widen" ::   
+  //"-Ywarn-value-discard" :: // fails with @sp on Unit
+  "-Xfuture" ::
   Nil
 )
-
 
 // publishing/release details follow
 

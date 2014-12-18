@@ -4,7 +4,7 @@ package ring
 import scala.{ specialized => sp }
 import scala.annotation.tailrec
 
-trait AdditiveSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] {
+trait AdditiveSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any {
   def additive: Semigroup[A] = new Semigroup[A] {
     def combine(x: A, y: A): A = plus(x, y)
   }
@@ -35,14 +35,14 @@ trait AdditiveSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] {
     as.reduceOption(plus)
 }
 
-trait AdditiveCommutativeSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveSemigroup[A] {
+trait AdditiveCommutativeSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with AdditiveSemigroup[A] {
   override def additive: CommutativeSemigroup[A] = new CommutativeSemigroup[A] {
     def combine(x: A, y: A): A = plus(x, y)
   }
   override def hasCommutativeAddition: Boolean = true
 }
 
-trait AdditiveMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveSemigroup[A] {
+trait AdditiveMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with AdditiveSemigroup[A] {
   override def additive: Monoid[A] = new Monoid[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
@@ -67,14 +67,14 @@ trait AdditiveMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends Addit
     as.foldLeft(zero)(plus)
 }
 
-trait AdditiveCommutativeMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveMonoid[A] with AdditiveCommutativeSemigroup[A] {
+trait AdditiveCommutativeMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with AdditiveMonoid[A] with AdditiveCommutativeSemigroup[A] {
   override def additive: CommutativeMonoid[A] = new CommutativeMonoid[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
   }
 }
 
-trait AdditiveGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveMonoid[A] {
+trait AdditiveGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with AdditiveMonoid[A] {
   override def additive: Group[A] = new Group[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
@@ -92,7 +92,7 @@ trait AdditiveGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Additi
     else positiveSumN(negate(a), -n)
 }
 
-trait AdditiveCommutativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends AdditiveGroup[A] with AdditiveCommutativeMonoid[A] {
+trait AdditiveCommutativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with AdditiveGroup[A] with AdditiveCommutativeMonoid[A] {
   override def additive: CommutativeGroup[A] = new CommutativeGroup[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
