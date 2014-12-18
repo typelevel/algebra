@@ -19,7 +19,7 @@ import scala.{specialized => sp}
  * 
  * By the totality law, x <= y and y <= x cannot be both false.
  */
-trait Order[@sp A] extends PartialOrder[A] { self =>
+trait Order[@sp A] extends Any with PartialOrder[A] { self =>
 
   /**
    * Result of comparing `x` with `y`. Returns an Int whose sign is:

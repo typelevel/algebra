@@ -6,7 +6,7 @@ import scala.{ specialized => sp }
 import java.lang.Double.{ isInfinite, isNaN, doubleToLongBits }
 import java.lang.Long.{ numberOfTrailingZeros }
 
-trait Field[@sp(Byte, Short, Int, Long, Float, Double) A] extends EuclideanRing[A] with MultiplicativeCommutativeGroup[A] {
+trait Field[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with EuclideanRing[A] with MultiplicativeCommutativeGroup[A] {
 
   /**
    * This is implemented in terms of basic Field ops. However, this is

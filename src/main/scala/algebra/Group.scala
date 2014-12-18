@@ -5,7 +5,7 @@ import scala.{ specialized => sp }
 /**
  * A group is a monoid where each element has an inverse.
  */
-trait Group[@sp(Byte, Short, Int, Long, Float, Double) A] extends Monoid[A] {
+trait Group[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with Monoid[A] {
 
   /**
    * Find the inverse of `a`.

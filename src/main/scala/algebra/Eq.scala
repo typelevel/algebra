@@ -7,7 +7,7 @@ import scala.{specialized => sp}
  * type. Any 2 instances `x` and `y` are equal if `eqv(x, y)` is `true`.
  * Moreover, `eqv` should form an equivalence relation.
  */
-trait Eq[@sp A] { self =>
+trait Eq[@sp A] extends Any { self =>
 
   /**
    * Returns `true` if `x` and `y` are equivalent, `false` otherwise.
