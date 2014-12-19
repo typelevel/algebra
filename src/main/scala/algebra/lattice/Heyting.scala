@@ -1,6 +1,8 @@
 package algebra
 package lattice
 
+import ring.CommutativeRing
+
 import scala.{specialized => sp}
 
 /**
@@ -33,7 +35,7 @@ import scala.{specialized => sp}
  * classical logic, see the boolean algebra type class implemented as
  * `Bool`.
  */
-trait Heyting[@sp(Boolean, Byte, Short, Int, Long) A] extends Any with BoundedLattice[A] {
+trait Heyting[@sp(Boolean, Byte, Short, Int, Long) A] extends Any with BoundedLattice[A] { self =>
   def and(a: A, b: A): A
   def meet(a: A, b: A): A = and(a, b)
 
@@ -42,6 +44,20 @@ trait Heyting[@sp(Boolean, Byte, Short, Int, Long) A] extends Any with BoundedLa
 
   def imp(a: A, b: A): A
   def complement(a: A): A
+
+  def xor(a: A, b: A): A = or(and(a, complement(b)), and(complement(a), b))
+  def nand(a: A, b: A): A = complement(and(a, b))
+  def nor(a: A, b: A): A = complement(or(a, b))
+  def nxor(a: A, b: A): A = complement(xor(a, b))
+
+  def asCommutativeRing: CommutativeRing[A] =
+    new CommutativeRing[A] {
+      def zero: A = self.zero
+      def one: A = self.one
+      def plus(x: A, y: A): A = self.xor(x, y)
+      def negate(x: A): A = self.complement(x)
+      def times(x: A, y: A): A = self.and(x, y)
+    }
 }
 
 trait HeytingFunctions {

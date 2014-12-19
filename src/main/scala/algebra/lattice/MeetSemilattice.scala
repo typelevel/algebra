@@ -15,6 +15,9 @@ trait MeetSemilattice[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] ext
     new Semilattice[A] {
       def combine(x: A, y: A): A = self.meet(x, y)
     }
+
+  def meetPartialOrder(implicit ev: Eq[A]): PartialOrder[A] =
+    meetSemilattice.asPartialOrder
 }
 
 object MeetSemilattice {

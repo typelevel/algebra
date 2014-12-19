@@ -23,11 +23,7 @@ import scala.{specialized => sp}
  * true/false as well as and/or.
  */
 trait Bool[@sp(Boolean, Byte, Short, Int, Long) A] extends Any with Heyting[A] {
-  def xor(a: A, b: A): A = or(and(a, complement(b)), and(complement(a), b))
   def imp(a: A, b: A): A = or(complement(a), b)
-  def nand(a: A, b: A): A = complement(and(a, b))
-  def nor(a: A, b: A): A = complement(or(a, b))
-  def nxor(a: A, b: A): A = and(or(a, complement(b)), or(complement(a), b))
 
   def dual: Bool[A] = new DualBool(this)
 }
