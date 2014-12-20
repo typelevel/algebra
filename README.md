@@ -62,7 +62,6 @@ method (if present) will be called `inverse`.
 |BoundedSemilattice  |           ✓|           ✓|        ✓|        |          ✓|
 |Group               |           ✓|            |        ✓|       ✓|           |
 |CommutativeGroup    |           ✓|           ✓|        ✓|       ✓|           |
-|--------------------|------------|------------|---------|--------|-----------|
 
 (For a description of what each column means, see *§algebraic
 properties and terminology*.)
@@ -91,7 +90,6 @@ have a `zero` element (an identity for `+`).
 |CommutativeRing     |            ✓|               ✓|       ✓|                 |           |               ✓|
 |EuclideanRing       |            ✓|               ✓|       ✓|                 |          ✓|               ✓|
 |Field               |            ✓|               ✓|       ✓|                ✓|          ✓|               ✓|
-|--------------------|-------------|----------------|--------|-----------------|-----------|----------------|
 
 With the exception of `CommutativeRig` and `Rng`, every lower
 structure is also an instance of the structures above it. For example,
@@ -111,7 +109,6 @@ on.
 |Inverse      | If `¬` is an inverse for `⊕` and `id`, then `a ⊕ ¬a` = `¬a ⊕ a` = `id`.        |
 |Distributive | If `⊕` and `⊗` distribute, then `a ⊗ (b ⊕ c)` = `(a ⊗ b) ⊕ (a ⊗ c)` and `a ⊕ (b ⊗ c)` = `(a ⊕ b) ⊗ (a ⊕ c)`. |
 |Idempotent   | If `⊕` is idempotent, then `a ⊕ (a ⊕ b)` = `(a ⊕ b) ⊕ a` = `(a ⊕ b)` and `b ⊕ (a ⊕ b)` = `(a ⊕ b) ⊕ b` = `(a ⊕ b)`. |
-|-------------|--------------------------------------------------------------------------------|
 
 (Though these properties are illustrated with infix operators, they
 work equally-well with functions. When you see `x ⊕ y` that is
