@@ -1,6 +1,6 @@
 // basic project info
 
-name := "algebra"
+//name := "algebra"
 organization := "org.spire-math"
 homepage := Some(url("http://spire-math.org"))
 licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
@@ -49,9 +49,24 @@ pomExtra := (
 </scm>
 <developers>
   <developer>
-    <id>d_m</id>
+    <id>johnynek</id>
+    <name>P. Oscar Boykin</name>
+    <url>https://github.com/johnynek/</url>
+  </developer>
+  <developer>
+    <id>avibryant</id>
+    <name>Avi Bryant</name>
+    <url>https://github.com/avibryant/</url>
+  </developer>
+  <developer>
+    <id>non</id>
     <name>Erik Osheim</name>
     <url>http://github.com/non/</url>
+  </developer>
+  <developer>
+    <id>tixxit</id>
+    <name>Tom Switzer</name>
+    <url>http://github.com/tixxit/</url>
   </developer>
 </developers>
 )
