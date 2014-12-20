@@ -30,6 +30,12 @@ trait GroupLaws[A] extends Laws {
     Rules.repeat2("combineN", "|+|")(A.combineN)(A.combine)
   )
 
+  def commutativeSemigroup(implicit A: CommutativeSemigroup[A]) = new GroupProperties(
+    name = "commutative semigroup",
+    parent = Some(semigroup),
+    Rules.commutative(A.combine)
+  )
+
   def monoid(implicit A: Monoid[A]) = new GroupProperties(
     name = "monoid",
     parent = Some(semigroup),
@@ -38,6 +44,12 @@ trait GroupLaws[A] extends Laws {
     Rules.repeat0("combineN", "id", A.empty)(A.combineN),
     Rules.collect0("combineAll", "id", A.empty)(A.combineAll),
     Rules.isId("isEmpty", A.empty)(A.isEmpty)
+  )
+
+  def commutativeMonoid(implicit A: CommutativeMonoid[A]) = new GroupProperties(
+    name = "commutative monoid",
+    parent = Some(monoid),
+    Rules.commutative(A.combine)
   )
 
   def group(implicit A: Group[A]) = new GroupProperties(
@@ -49,7 +61,7 @@ trait GroupLaws[A] extends Laws {
   )
 
   def commutativeGroup(implicit A: CommutativeGroup[A]) = new GroupProperties(
-    name = "abelian group",
+    name = "commutative group",
     parent = Some(group),
     Rules.commutative(A.combine)
   )

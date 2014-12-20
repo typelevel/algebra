@@ -6,6 +6,8 @@ import org.typelevel.discipline.Laws
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop._
 
+import algebra.std.boolean._
+
 object OrderLaws {
   def apply[A: Eq: Arbitrary] = new OrderLaws[A] {
     def Equ = Eq[A]
@@ -22,22 +24,22 @@ trait OrderLaws[A] extends Laws {
     name = "partialOrder",
     parent = None,
     "reflexitivity" -> forAll { (x: A) =>
-      A.lteqv(x, x)
+      x ?<= x
     },
     "antisymmetry" -> forAll { (x: A, y: A) =>
-      !(A.lteqv(x, y) && A.lteqv(y, x)) || (x == y)
+      !(A.lteqv(x, y) && A.lteqv(y, x)) ?|| (x == y)
     },
     "transitivity" -> forAll { (x: A, y: A, z: A) =>
-      !(A.lteqv(x, y) && A.lteqv(y, z)) || A.lteqv(x, z)
+      !(A.lteqv(x, y) && A.lteqv(y, z)) ?|| A.lteqv(x, z)
     },
     "gteqv" -> forAll { (x: A, y: A) =>
-      A.lteqv(x, y) == A.gteqv(y, x)
+      A.lteqv(x, y) ?== A.gteqv(y, x)
     },
     "lt" -> forAll { (x: A, y: A) =>
-      A.lt(x, y) == A.lteqv(x, y) && A.neqv(x, y)
+      A.lt(x, y) ?== (A.lteqv(x, y) && A.neqv(x, y))
     },
     "gt" -> forAll { (x: A, y: A) =>
-      A.lt(x, y) == A.gt(y, x)
+      A.lt(x, y) ?== A.gt(y, x)
     }
   )
 
@@ -45,7 +47,7 @@ trait OrderLaws[A] extends Laws {
     name = "order",
     parent = Some(partialOrder),
     "totality" -> forAll { (x: A, y: A) =>
-      A.lteqv(x, y) || A.lteqv(y, x)
+      A.lteqv(x, y) ?|| A.lteqv(y, x)
     }
   )
 

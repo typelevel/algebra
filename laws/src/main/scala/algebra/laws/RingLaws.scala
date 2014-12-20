@@ -35,7 +35,6 @@ trait RingLaws[A] extends GroupLaws[A] {
   implicit def Arb: Arbitrary[A]
   implicit def Equ: Eq[A] = nonZeroLaws.Equ
 
-
   // multiplicative groups
 
   def multiplicativeSemigroup(implicit A: MultiplicativeSemigroup[A]) = new MultiplicativeProperties(
@@ -55,14 +54,16 @@ trait RingLaws[A] extends GroupLaws[A] {
   def multiplicativeGroup(implicit A: MultiplicativeGroup[A]) = new MultiplicativeProperties(
     base = _.group(A.multiplicative),
     parent = Some(multiplicativeMonoid),
-    Rules.consistentInverse("division")(A.div)(A.times)(A.reciprocal)
+    // pred is used to ensure y is not zero.
+    "consistent division" -> forAll { (x: A, y: A) =>
+      pred(y) ==> (A.div(x, y) ?== A.times(x, A.reciprocal(y)))
+    }
   )
 
   def multiplicativeCommutativeGroup(implicit A: MultiplicativeCommutativeGroup[A]) = new MultiplicativeProperties(
     base = _.commutativeGroup(A.multiplicative),
     parent = Some(multiplicativeGroup)
   )
-
 
   // rings
 
