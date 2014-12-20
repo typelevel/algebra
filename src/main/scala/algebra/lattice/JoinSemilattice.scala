@@ -17,7 +17,7 @@ trait JoinSemilattice[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] ext
     }
 
   def joinPartialOrder(implicit ev: Eq[A]): PartialOrder[A] =
-    joinSemilattice.asPartialOrder
+    joinSemilattice.asJoinPartialOrder
 }
 
 object JoinSemilattice {

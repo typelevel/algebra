@@ -17,7 +17,7 @@ trait MeetSemilattice[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] ext
     }
 
   def meetPartialOrder(implicit ev: Eq[A]): PartialOrder[A] =
-    meetSemilattice.asPartialOrder
+    meetSemilattice.asMeetPartialOrder
 }
 
 object MeetSemilattice {
