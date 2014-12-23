@@ -14,5 +14,11 @@ object string {
   class StringMonoid extends Monoid[String] {
     def empty: String = ""
     def combine(x: String, y: String): String = x + y
+
+    override def combineAll(xs: TraversableOnce[String]): String = {
+      val sb = new StringBuilder
+      xs.foreach(sb.append)
+      sb.toString
+    }
   }
 }

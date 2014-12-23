@@ -1,6 +1,5 @@
 // basic project info
 
-//name := "algebra"
 organization := "org.spire-math"
 homepage := Some(url("http://spire-math.org"))
 licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))

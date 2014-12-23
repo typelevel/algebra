@@ -1,6 +1,8 @@
 package algebra
 package std
 
+import scala.collection.mutable
+
 object list {
 
   implicit def listOrder[A: Order]: Order[List[A]] = new ListOrder[A]
@@ -21,6 +23,18 @@ object list {
 
   class ListMonoid[A] extends Monoid[List[A]] {
     def empty: List[A] = Nil
-    def combine(x: List[A], y: List[A]): List[A] = x ++ y
+    def combine(x: List[A], y: List[A]): List[A] = x ::: y
+
+    override def combineN(x: List[A], n: Int): List[A] = {
+      val buf = mutable.ListBuffer.empty[A]
+      (0 until n).foreach(_ => x.foreach(buf += _))
+      buf.toList
+    }
+
+    override def combineAll(xs: TraversableOnce[List[A]]): List[A] = {
+      val buf = mutable.ListBuffer.empty[A]
+      xs.foreach(_.foreach(buf += _))
+      buf.toList
+    }
   }
 }

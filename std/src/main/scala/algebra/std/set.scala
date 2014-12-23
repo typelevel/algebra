@@ -1,6 +1,8 @@
 package algebra
 package std
 
+import algebra.ring.Semiring
+
 object set {
 
   implicit def setEq[A]: Eq[Set[A]] = new SetEq[A]
@@ -9,10 +11,11 @@ object set {
     def eqv(x: Set[A], y: Set[A]): Boolean = x == y
   }
 
-  implicit def setMonoid[A] = new SetMonoid[A]
+  implicit def setSemiring[A] = new SetSemiring[A]
 
-  class SetMonoid[A] extends CommutativeMonoid[Set[A]] {
-    def empty: Set[A] = Set.empty
-    def combine(x: Set[A], y: Set[A]): Set[A] = x | y
+  class SetSemiring[A] extends Semiring[Set[A]] {
+    def zero: Set[A] = Set.empty
+    def plus(x: Set[A], y: Set[A]): Set[A] = x | y
+    def times(x: Set[A], y: Set[A]): Set[A] = x & y
   }
 }

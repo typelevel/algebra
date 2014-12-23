@@ -22,7 +22,8 @@ object rat {
 
   object Rat {
     def apply(num: BigInt, den: BigInt): Rat =
-      if (den < 0) apply(-num, -den)
+      if (den == 0) throw new ArithmeticException("/0")
+      else if (den < 0) apply(-num, -den)
       else if (num == 0) new Rat(0, 1)
       else {
         val g = num gcd den

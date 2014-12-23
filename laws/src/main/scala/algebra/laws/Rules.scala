@@ -79,7 +79,7 @@ object Rules {
 
   def isId[A: Arbitrary: Eq](name: String, id: A)(p: A => Boolean): (String, Prop) =
     name -> forAll { (x: A) =>
-      (x == id) ?== p(x)
+      Eq.eqv(x, id) ?== p(x)
     }
 
   def distributive[A: Arbitrary: Eq](a: (A, A) => A)(m: (A, A) => A): (String, Prop) =
