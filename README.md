@@ -5,16 +5,17 @@
 This repo represents an attempt to unify the basic algebraic type
 classes from [Spire](http://github.com/non/spire) and
 [Algebird](http://github.com/twitter/algebird). By targeting just
-these type classes, the hope is that we can distribute a package with
-no dependencies that works with Scala 2.9 and 2.10+.
+these type classes, we will distribute an `algebra` package with no
+dependencies that works with Scala 2.10 and 2.11, and which can be
+shared by all Scala libraries interesting in abstract algebra.
 
 ## what we have so far
 
 This repo has been seeded with most of the contents of
-`spire.algebra`. Over the next week or two we will be removing
-"extraneous" type classes and adding additional ones as
-needed. Discussions over removals and additions shoudl take place on
-pull requests.
+`spire.algebra`, and has been modified to fit an
+initially-conservative and shared vision for algebraic type classes.
+Discussions over removals and additions should take place on the issue
+tracker or on relevant pull requests.
 
 ## participants
 
@@ -28,6 +29,7 @@ to this repo. The following people have push access:
 * Tom Switzer
 
 ## development process
+
 Please make a pull request against the master branch. For those that have merge access to the
 repo, we follow these rules:
 
@@ -39,11 +41,35 @@ merge and delete the branch.
 
 ## algebra overview
 
-Algebra uses type classes to represent algebraic structures. You can use
-these type classes to represent the abstract capabilities (and requirements)
-you want generic parameters to possess.
+Algebra uses type classes to represent algebraic structures. You can
+use these type classes to represent the abstract capabilities (and
+requirements) you want generic parameters to possess.
 
 This section will explain the structures available.
+
+### algebraic properties and terminology
+
+We will be talking about properties like *associativity* and
+*commutativity*. Here is a quick explanation of what those properties
+mean:
+
+|Name         |Description                                                                     |
+|-------------|--------------------------------------------------------------------------------|
+|Associative  | If `⊕` is associative, then `a ⊕ (b ⊕ c)` = `(a ⊕ b) ⊕ c)`.                    |
+|Commutative  | If `⊕` is commutative, then `a ⊕ b` = `b ⊕ a`.                                 |
+|Identity     | If `id` is an identity for `⊕`, then `a ⊕ id` = `id ⊕ a` = `a`.                |
+|Inverse      | If `¬` is an inverse for `⊕` and `id`, then `a ⊕ ¬a` = `¬a ⊕ a` = `id`.        |
+|Distributive | If `⊕` and `⊗` distribute, then `a ⊗ (b ⊕ c)` = `(a ⊗ b) ⊕ (a ⊗ c)` and `a ⊕ (b ⊗ c)` = `(a ⊕ b) ⊗ (a ⊕ c)`. |
+|Idempotent   | If `⊕` is idempotent, then `a ⊕ (a ⊕ b)` = `(a ⊕ b) ⊕ a` = `(a ⊕ b)` and `b ⊕ (a ⊕ b)` = `(a ⊕ b) ⊕ b` = `(a ⊕ b)`. |
+
+Though these properties are illustrated with symbolic operators, they
+work equally-well with functions. When you see `a ⊕ b` that is
+equivalent to `f(a, b)`: `⊕` is an infix representation of the binary
+function `f`, and `a` and `b` are values (of some type `A`).
+
+Similarly, when you see `¬a` that is equivalent to `g(a)`: `¬` is a
+prefix representation of the unary function `g`, and `a` is a value
+(of some type `A`).
 
 ### basic algebraic structures
 
@@ -99,19 +125,3 @@ on.
 (For a description of what the terminology in each column means, see
 *§algebraic properties and terminology*.)
 
-### algebraic properties and terminology
-
-|Name         |Description                                                                     |
-|-------------|--------------------------------------------------------------------------------|
-|Associative  | If `⊕` is associative, then `a ⊕ (b ⊕ c)` = `(a ⊕ b) ⊕ c)`.                    |
-|Commutative  | If `f` is commutative, then `a ⊕ b` = `b ⊕ a`.                                 |
-|Identity     | If `id` is an identity for `⊕`, then `a ⊕ id` = `id ⊕ a` = `a`.                |
-|Inverse      | If `¬` is an inverse for `⊕` and `id`, then `a ⊕ ¬a` = `¬a ⊕ a` = `id`.        |
-|Distributive | If `⊕` and `⊗` distribute, then `a ⊗ (b ⊕ c)` = `(a ⊗ b) ⊕ (a ⊗ c)` and `a ⊕ (b ⊗ c)` = `(a ⊕ b) ⊗ (a ⊕ c)`. |
-|Idempotent   | If `⊕` is idempotent, then `a ⊕ (a ⊕ b)` = `(a ⊕ b) ⊕ a` = `(a ⊕ b)` and `b ⊕ (a ⊕ b)` = `(a ⊕ b) ⊕ b` = `(a ⊕ b)`. |
-
-(Though these properties are illustrated with infix operators, they
-work equally-well with functions. When you see `x ⊕ y` that is
-equivalent to `f(x, y)`: `⊕` is an infix representation of the binary
-function `f`. Similarly, when you see `¬x` that is equivalent to
-`g(x)`: `¬` is a prefix representation of the unary function `g`).
