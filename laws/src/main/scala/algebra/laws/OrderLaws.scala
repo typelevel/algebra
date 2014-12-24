@@ -27,7 +27,7 @@ trait OrderLaws[A] extends Laws {
       x ?<= x
     },
     "antisymmetry" -> forAll { (x: A, y: A) =>
-      !(A.lteqv(x, y) && A.lteqv(y, x)) ?|| (x == y)
+      !(A.lteqv(x, y) && A.lteqv(y, x)) ?|| A.eqv(x, y)
     },
     "transitivity" -> forAll { (x: A, y: A, z: A) =>
       !(A.lteqv(x, y) && A.lteqv(y, z)) ?|| A.lteqv(x, z)

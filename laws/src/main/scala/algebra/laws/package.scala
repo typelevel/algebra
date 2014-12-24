@@ -10,9 +10,9 @@ import Prop.{False, Proof, Result}
 
 package object laws {
 
-  implicit def PredicateFromMonoid[A: Eq](implicit A: AdditiveMonoid[A]): Predicate[A] =
+  implicit def PredicateFromMonoid[A](implicit ev: Eq[A], A: AdditiveMonoid[A]): Predicate[A] =
     new Predicate[A] {
-      def apply(a: A) = a != A.zero
+      def apply(a: A) = ev.neqv(a, A.zero)
     }
 
   lazy val proved = Prop(Result(status = Proof))
