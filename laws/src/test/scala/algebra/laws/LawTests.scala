@@ -27,11 +27,11 @@ class LawTests extends FunSuite with Discipline {
   checkAll("Int", OrderLaws[Int].order)
   checkAll("Int", RingLaws[Int].euclideanRing)
 
-  checkAll("BigInt", OrderLaws[BigInt].order)
-  checkAll("BigInt", BaseLaws[BigInt].signed)
+  //checkAll("BigInt", OrderLaws[BigInt].order)
+  checkAll("BigInt", BaseLaws[BigInt].isReal)
   checkAll("BigInt", RingLaws[BigInt].euclideanRing)
 
-  checkAll("Rat", OrderLaws[Rat].order)
-  checkAll("Rat", BaseLaws[Rat].signed)
+  //checkAll("Rat", OrderLaws[Rat].order)
+  checkAll("Rat", BaseLaws[Rat].isReal)
   checkAll("Rat", RingLaws[Rat].field)
 }

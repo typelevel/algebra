@@ -73,8 +73,17 @@ class RatAlgebra extends Field[Rat] with Order[Rat] with Signed[Rat] with IsReal
   override def toDouble(a: Rat): Double =
     a.num.toDouble / a.den.toDouble
 
-  def ceil(a: Rat): Rat = Rat((a.num + a.den - 1) / a.den, 1)
-  def floor(a: Rat): Rat = Rat(a.num / a.den, 1)
   def isWhole(a: Rat): Boolean = a.den == 1
-  def round(a: Rat): Rat = Rat((a.num + (a.den / 2)) / a.den, 1)
+
+  def ceil(a: Rat): Rat =
+    if (a.num >= 0) Rat((a.num + a.den - 1) / a.den, 1)
+    else Rat(a.num / a.den, 1)
+
+  def floor(a: Rat): Rat =
+    if (a.num >= 0) Rat(a.num / a.den, 1)
+    else Rat((a.num - a.den + 1) / a.den, 1)
+
+  def round(a: Rat): Rat =
+    if (a.num >= 0) Rat((a.num + (a.den / 2)) / a.den, 1)
+    else Rat((a.num - (a.den / 2)) / a.den, 1)
 }
