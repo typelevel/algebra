@@ -3,14 +3,8 @@ package laws
 
 import algebra.number._
 import algebra.ring._
-
-import algebra.std.bigInt._
-import algebra.std.int._
-import algebra.std.list._
-import algebra.std.map._
-import algebra.std.rat._
-import algebra.std.set._
-import algebra.std.string._
+import algebra.std.all._
+import algebra.std.Rat
 
 import org.typelevel.discipline.scalatest.Discipline
 import org.scalatest.FunSuite
@@ -19,7 +13,10 @@ class LawTests extends FunSuite with Discipline {
   checkAll("String", OrderLaws[String].order)
   checkAll("String", GroupLaws[String].monoid)
 
+  checkAll("List[Int]", OrderLaws[List[Int]].order)
   checkAll("List[Int]", GroupLaws[List[Int]].monoid)
+  checkAll("List[String]", OrderLaws[List[Int]].order)
+  checkAll("List[String]", GroupLaws[List[Int]].monoid)
 
   checkAll("Set[Int]", RingLaws[Set[Int]].semiring)
   checkAll("Set[String]", RingLaws[Set[Int]].semiring)
