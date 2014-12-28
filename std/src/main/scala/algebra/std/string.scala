@@ -1,7 +1,7 @@
 package algebra
 package std
 
-object string extends StringInstances
+package object string extends StringInstances
 
 trait StringInstances {
   implicit val stringOrder: Order[String] = new StringOrder

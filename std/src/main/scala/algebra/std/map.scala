@@ -3,7 +3,7 @@ package std
 
 import algebra.ring.{AdditiveMonoid, Rng}
 
-object map extends MapInstances
+package object map extends MapInstances
 
 trait MapInstances {
   implicit def mapEq[K, V: Eq: AdditiveMonoid]: Eq[Map[K, V]] =

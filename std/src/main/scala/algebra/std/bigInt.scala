@@ -4,7 +4,7 @@ package std
 import algebra.number._
 import algebra.ring._
 
-object bigInt extends BigIntInstances
+package object bigInt extends BigIntInstances
 
 trait BigIntInstances {
   implicit val bigIntAlgebra = new BigIntAlgebra

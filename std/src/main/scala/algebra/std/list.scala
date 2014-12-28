@@ -3,7 +3,7 @@ package std
 
 import scala.collection.mutable
 
-object list extends ListInstances 
+package object list extends ListInstances 
 
 trait ListInstances {
   implicit def listOrder[A: Order] = new ListOrder[A]

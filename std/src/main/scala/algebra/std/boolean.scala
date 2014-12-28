@@ -1,7 +1,7 @@
 package algebra
 package std
 
-object boolean extends BooleanInstances
+package object boolean extends BooleanInstances
 
 trait BooleanInstances {
   implicit val booleanEq: Eq[Boolean] = new BooleanEq

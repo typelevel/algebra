@@ -3,7 +3,7 @@ package std
 
 import algebra.ring.Semiring
 
-object set extends SetInstances
+package object set extends SetInstances
 
 trait SetInstances {
   implicit def setEq[A]: Eq[Set[A]] = new SetEq[A]

@@ -4,7 +4,7 @@ package std
 import algebra.number._
 import algebra.ring._
 
-object int extends IntInstances
+package object int extends IntInstances
 
 trait IntInstances {
   implicit val intAlgebra = new IntAlgebra

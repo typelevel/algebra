@@ -1,7 +1,7 @@
 package algebra
 package std
 
-object all
+package object all
     extends BigIntInstances
     with BooleanInstances
     with IntInstances
