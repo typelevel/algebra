@@ -7,8 +7,10 @@ import algebra.ring._
 import org.scalacheck._
 import Arbitrary.arbitrary
 
-class Rat(val num: BigInt, val den: BigInt) {
-  override def toString: String = s"($num/$den)"
+class Rat(val num: BigInt, val den: BigInt) { lhs =>
+
+  override def toString: String =
+    if (den == 1) s"$num" else s"$num/$den"
 
   override def equals(that: Any): Boolean =
     that match {
@@ -17,9 +19,70 @@ class Rat(val num: BigInt, val den: BigInt) {
     }
 
   override def hashCode(): Int = (num, den).##
+
+  def isZero: Boolean = num == 0
+
+  def isOne: Boolean = num == 1 && den == 1
+
+  def compare(rhs: Rat): Int =
+    (lhs.num * rhs.den) compare (rhs.num * lhs.den)
+
+  def abs(): Rat = Rat(num.abs, den)
+
+  def signum(): Int = num.signum
+
+  def +(rhs: Rat): Rat =
+    Rat((lhs.num * rhs.den) + (rhs.num * lhs.den), (lhs.den * rhs.den))
+
+  def unary_-(): Rat =
+    Rat(-lhs.num, lhs.den)
+
+  def *(rhs: Rat): Rat =
+    Rat(lhs.num * rhs.num, lhs.den * rhs.den)
+
+  def /~(rhs: Rat) = lhs / rhs
+
+  def %(rhs: Rat) = Rat.Zero
+
+  def reciprocal(): Rat =
+    if (num == 0) throw new ArithmeticException("/0") else Rat(den, num)
+
+  def /(rhs: Rat): Rat =
+    lhs * rhs.reciprocal
+
+  def **(k: Int): Rat =
+    Rat(num.pow(k), den.pow(k))
+
+  def toDouble(): Double = num.toDouble / den.toDouble
+
+  def toInt(): Int = toDouble.toInt
+
+  def isWhole(): Boolean = den == 1
+
+  def ceil(): Rat =
+    if (num >= 0) Rat((num + den - 1) / den, 1)
+    else Rat(num / den, 1)
+
+  def floor(): Rat =
+    if (num >= 0) Rat(num / den, 1)
+    else Rat((num - den + 1) / den, 1)
+
+  def round(): Rat =
+    if (num >= 0) Rat((num + (den / 2)) / den, 1)
+    else Rat((num - (den / 2)) / den, 1)
+
 }
 
 object Rat {
+
+  val MinusOne: Rat = Rat(-1)
+  val Zero: Rat = Rat(0)
+  val One: Rat = Rat(1)
+  val Two: Rat = Rat(2)
+
+  def apply(n: BigInt): Rat =
+    Rat(n, 1)
+
   def apply(num: BigInt, den: BigInt): Rat =
     if (den == 0) throw new ArithmeticException("/0")
     else if (den < 0) apply(-num, -den)
@@ -29,61 +92,37 @@ object Rat {
       new Rat(num / g, den / g)
     }
 
+  def unapply(r: Rat): Some[(BigInt, BigInt)] = Some((r.num, r.den))
+
   implicit val ratArbitrary =
     Arbitrary(arbitrary[(BigInt, BigInt)].filter(_._2 != 0).map { case (n, d) => Rat(n, d) })
+
   implicit val ratAlgebra =
     new RatAlgebra
 }
 
 class RatAlgebra extends Field[Rat] with Order[Rat] with Signed[Rat] with IsReal[Rat] with Serializable {
 
-  def compare(x: Rat, y: Rat): Int =
-    (x.num * y.den) compare (y.num * x.den)
+  def compare(x: Rat, y: Rat): Int = x compare y
+  def abs(x: Rat): Rat = x.abs
+  def signum(x: Rat): Int = x.signum
 
-  def abs(x: Rat): Rat =
-    Rat(x.num.abs, x.den)
+  val zero: Rat = Rat.Zero
+  val one: Rat = Rat.One
 
-  def signum(x: Rat): Int =
-    x.num.signum
+  def plus(a: Rat, b: Rat): Rat = a + b
+  def negate(a: Rat): Rat = -a
+  def times(a: Rat, b: Rat): Rat = a * b
+  def quot(a: Rat, b: Rat) = a /~ b
+  def mod(a: Rat, b: Rat) = a % b
+  override def reciprocal(a: Rat): Rat = a.reciprocal
+  def div(a: Rat, b: Rat): Rat = a / b
 
-  val zero: Rat = Rat(0, 1)
-  val one: Rat = Rat(1, 1)
+  override def fromInt(n: Int): Rat = Rat(n)
+  override def toDouble(a: Rat): Double = a.toDouble
 
-  def plus(a: Rat, b: Rat): Rat =
-    Rat((a.num * b.den) + (b.num * a.den), (a.den * b.den))
-
-  def negate(a: Rat): Rat =
-    Rat(-a.num, a.den)
-
-  def times(a: Rat, b: Rat): Rat =
-    Rat(a.num * b.num, a.den * b.den)
-
-  def quot(a: Rat, b: Rat) = div(a, b)
-  def mod(a: Rat, b: Rat) = zero
-
-  override def reciprocal(a: Rat): Rat =
-    if (a.num == 0) throw new ArithmeticException("/0") else Rat(a.den, a.num)
-
-  def div(a: Rat, b: Rat): Rat =
-    times(a, reciprocal(b))
-
-  override def fromInt(n: Int): Rat =
-    Rat(n, 1)
-
-  override def toDouble(a: Rat): Double =
-    a.num.toDouble / a.den.toDouble
-
-  def isWhole(a: Rat): Boolean = a.den == 1
-
-  def ceil(a: Rat): Rat =
-    if (a.num >= 0) Rat((a.num + a.den - 1) / a.den, 1)
-    else Rat(a.num / a.den, 1)
-
-  def floor(a: Rat): Rat =
-    if (a.num >= 0) Rat(a.num / a.den, 1)
-    else Rat((a.num - a.den + 1) / a.den, 1)
-
-  def round(a: Rat): Rat =
-    if (a.num >= 0) Rat((a.num + (a.den / 2)) / a.den, 1)
-    else Rat((a.num - (a.den / 2)) / a.den, 1)
+  def isWhole(a: Rat): Boolean = a.isWhole
+  def ceil(a: Rat): Rat = a.ceil
+  def floor(a: Rat): Rat = a .floor
+  def round(a: Rat): Rat = a. round
 }
