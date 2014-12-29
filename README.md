@@ -59,8 +59,8 @@ mean:
 |Commutative  | If `⊕` is commutative, then `a ⊕ b` = `b ⊕ a`.                                 |
 |Identity     | If `id` is an identity for `⊕`, then `a ⊕ id` = `id ⊕ a` = `a`.                |
 |Inverse      | If `¬` is an inverse for `⊕` and `id`, then `a ⊕ ¬a` = `¬a ⊕ a` = `id`.        |
-|Distributive | If `⊕` and `⊗` distribute, then `a ⊗ (b ⊕ c)` = `(a ⊗ b) ⊕ (a ⊗ c)` and `(a ⊕ b) ⊗ c` = `(a ⊕ c) ⊗ (b ⊕ c)`. |
-|Idempotent   | If `⊕` is idempotent, then `a ⊕ (a ⊕ b)` = `(a ⊕ b) ⊕ a` = `(a ⊕ b)` and `b ⊕ (a ⊕ b)` = `(a ⊕ b) ⊕ b` = `(a ⊕ b)`. |
+|Distributive | If `⊕` and `⊙` distribute, then `a ⊙ (b ⊕ c)` = `(a ⊙ b) ⊕ (a ⊙ c)` and `(a ⊕ b) ⊙ c` = `(a ⊙ c) ⊕ (b ⊙ c)`. |
+|Idempotent   | If `⊕` is idempotent, then `a ⊕ (a ⊕ b)` = `(a ⊕ b)` and `(a ⊕ b) ⊕ b` = `(a ⊕ b)`. |
 
 Though these properties are illustrated with symbolic operators, they
 work equally-well with functions. When you see `a ⊕ b` that is
