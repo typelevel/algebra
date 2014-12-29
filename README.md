@@ -90,7 +90,7 @@ method (if present) will be called `inverse`.
 |CommutativeGroup    |           ✓|           ✓|        ✓|       ✓|           |
 
 (For a description of what each column means, see [§algebraic
-properties and terminology](https://github.com/non/algebra/blob/topic/basic-property-tables/README.md#algebraic-properties-and-terminology).)
+properties and terminology](https://github.com/non/algebra/blob/master/README.md#algebraic-properties-and-terminology).)
 
 ### ring-like structures
 
@@ -123,5 +123,6 @@ every `Ring` is a `Rig`, every `Field` is a `CommutativeRing`, and so
 on.
 
 (For a description of what the terminology in each column means, see
-[§algebraic properties and terminology](https://github.com/non/algebra/blob/topic/basic-property-tables/README.md#algebraic-properties-and-terminology).)
+[§algebraic properties and terminology](https://github.com/non/algebra
+https://github.com/non/algebra/blob/master/README.md#algebraic-properties-and-terminology).)
 
