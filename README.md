@@ -89,8 +89,8 @@ method (if present) will be called `inverse`.
 |Group               |           ✓|            |        ✓|       ✓|           |
 |CommutativeGroup    |           ✓|           ✓|        ✓|       ✓|           |
 
-(For a description of what each column means, see *§algebraic
-properties and terminology*.)
+(For a description of what each column means, see [§algebraic
+properties and terminology](README.md#algebraic-properties-and-terminology).)
 
 ### ring-like structures
 
