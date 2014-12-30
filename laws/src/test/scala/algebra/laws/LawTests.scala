@@ -6,6 +6,8 @@ import algebra.ring._
 import algebra.std.all._
 import algebra.std.Rat
 
+import CheckSupport._
+
 import org.typelevel.discipline.scalatest.Discipline
 import org.scalatest.FunSuite
 

@@ -4,8 +4,8 @@ package std
 import algebra.number._
 import algebra.ring._
 
-import org.scalacheck._
-import Arbitrary.arbitrary
+//import org.scalacheck._
+//import Arbitrary.arbitrary
 
 class Rat(val num: BigInt, val den: BigInt) { lhs =>
 
@@ -94,8 +94,8 @@ object Rat {
 
   def unapply(r: Rat): Some[(BigInt, BigInt)] = Some((r.num, r.den))
 
-  implicit val ratArbitrary =
-    Arbitrary(arbitrary[(BigInt, BigInt)].filter(_._2 != 0).map { case (n, d) => Rat(n, d) })
+  // implicit val ratArbitrary =
+  //   Arbitrary(arbitrary[(BigInt, BigInt)].filter(_._2 != 0).map { case (n, d) => Rat(n, d) })
 
   implicit val ratAlgebra =
     new RatAlgebra
