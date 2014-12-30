@@ -10,6 +10,10 @@ import org.typelevel.discipline.scalatest.Discipline
 import org.scalatest.FunSuite
 
 class LawTests extends FunSuite with Discipline {
+  checkAll("Boolean", OrderLaws[Boolean].order)
+  checkAll("Boolean", LatticeLaws[Boolean].boundedLattice)
+  checkAll("Boolean", LatticePartialOrderLaws[Boolean].boundedLatticePartialOrder)
+
   checkAll("String", OrderLaws[String].order)
   checkAll("String", GroupLaws[String].monoid)
 

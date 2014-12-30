@@ -52,6 +52,11 @@ object Rules {
       f(x, y) ?== f(y, x)
     }
 
+  def idempotence[A: Arbitrary: Eq](f: (A, A) => A): (String, Prop) =
+    "idempotence" -> forAll { (x: A) =>
+      f(x, x) ?== x
+    }
+
   def consistentInverse[A: Arbitrary: Eq](name: String)(m: (A, A) => A)(f: (A, A) => A)(inv: A => A): (String, Prop) =
     s"consistent $name" -> forAll { (x: A, y: A) =>
       m(x, y) ?== f(x, inv(y))

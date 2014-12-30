@@ -24,7 +24,7 @@ trait GroupLaws[A] extends Laws {
 
   def semigroup(implicit A: Semigroup[A]) = new GroupProperties(
     name = "semigroup",
-    parent = None,
+    parents = Nil,
     Rules.associativity(A.combine),
     Rules.repeat1("combineN")(A.combineN),
     Rules.repeat2("combineN", "|+|")(A.combineN)(A.combine)
@@ -32,13 +32,19 @@ trait GroupLaws[A] extends Laws {
 
   def commutativeSemigroup(implicit A: CommutativeSemigroup[A]) = new GroupProperties(
     name = "commutative semigroup",
-    parent = Some(semigroup),
+    parents = List(semigroup),
     Rules.commutative(A.combine)
+  )
+
+  def semilattice(implicit A: Semilattice[A]) = new GroupProperties(
+    name = "semilattice",
+    parents = List(commutativeSemigroup),
+    Rules.idempotence(A.combine)
   )
 
   def monoid(implicit A: Monoid[A]) = new GroupProperties(
     name = "monoid",
-    parent = Some(semigroup),
+    parents = List(semigroup),
     Rules.leftIdentity(A.empty)(A.combine),
     Rules.rightIdentity(A.empty)(A.combine),
     Rules.repeat0("combineN", "id", A.empty)(A.combineN),
@@ -48,13 +54,17 @@ trait GroupLaws[A] extends Laws {
 
   def commutativeMonoid(implicit A: CommutativeMonoid[A]) = new GroupProperties(
     name = "commutative monoid",
-    parent = Some(monoid),
-    Rules.commutative(A.combine)
+    parents = List(monoid, commutativeSemigroup)
+  )
+
+  def boundedSemilattice(implicit A: BoundedSemilattice[A]) = new GroupProperties(
+    name = "boundedSemilattice",
+    parents = List(commutativeMonoid, semilattice)
   )
 
   def group(implicit A: Group[A]) = new GroupProperties(
     name = "group",
-    parent = Some(monoid),
+    parents = List(monoid),
     Rules.leftInverse(A.empty)(A.combine)(A.inverse),
     Rules.rightInverse(A.empty)(A.combine)(A.inverse),
     Rules.consistentInverse("remove")(A.remove)(A.combine)(A.inverse)
@@ -62,52 +72,63 @@ trait GroupLaws[A] extends Laws {
 
   def commutativeGroup(implicit A: CommutativeGroup[A]) = new GroupProperties(
     name = "commutative group",
-    parent = Some(group),
-    Rules.commutative(A.combine)
+    parents = List(group, commutativeMonoid)
   )
 
   // additive groups
 
   def additiveSemigroup(implicit A: AdditiveSemigroup[A]) = new AdditiveProperties(
     base = semigroup(A.additive),
-    parent = None,
+    parents = Nil,
     Rules.repeat1("sumN")(A.sumN),
     Rules.repeat2("sumN", "+")(A.sumN)(A.plus)
   )
 
+  def additiveCommutativeSemigroup(implicit A: AdditiveCommutativeSemigroup[A]) = new AdditiveProperties(
+    base = commutativeSemigroup(A.additive),
+    parents = List(additiveSemigroup)
+  )
+
   def additiveMonoid(implicit A: AdditiveMonoid[A]) = new AdditiveProperties(
     base = monoid(A.additive),
-    parent = Some(additiveSemigroup),
+    parents = List(additiveSemigroup),
     Rules.repeat0("sumN", "zero", A.zero)(A.sumN),
     Rules.collect0("sum", "zero", A.zero)(A.sum)
   )
 
+  def additiveCommutativeMonoid(implicit A: AdditiveCommutativeMonoid[A]) = new AdditiveProperties(
+    base = commutativeMonoid(A.additive),
+    parents = List(additiveMonoid)
+  )
+
   def additiveGroup(implicit A: AdditiveGroup[A]) = new AdditiveProperties(
     base = group(A.additive),
-    parent = Some(additiveMonoid),
+    parents = List(additiveMonoid),
     Rules.consistentInverse("subtract")(A.minus)(A.plus)(A.negate)
   )
 
   def additiveCommutativeGroup(implicit A: AdditiveCommutativeGroup[A]) = new AdditiveProperties(
     base = commutativeGroup(A.additive),
-    parent = Some(additiveGroup)
+    parents = List(additiveGroup)
   )
 
 
   // property classes
 
   class GroupProperties(
-    name: String,
-    parent: Option[GroupProperties],
-    props: (String, Prop)*
-  ) extends DefaultRuleSet(name, parent, props: _*)
+    val name: String,
+    val parents: Seq[GroupProperties],
+    val props: (String, Prop)*
+  ) extends RuleSet {
+    val bases = Nil
+  }
 
   class AdditiveProperties(
     val base: GroupProperties,
-    val parent: Option[AdditiveProperties],
+    val parents: Seq[AdditiveProperties],
     val props: (String, Prop)*
-  ) extends RuleSet with HasOneParent {
+  ) extends RuleSet {
     val name = base.name
-    val bases = Seq("base" -> base)
+    val bases = List("base" -> base)
   }
 }
