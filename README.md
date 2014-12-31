@@ -103,19 +103,19 @@ inverses will be called `one` and `reciprocal` (respectively).
 Additionally some structures support a quotient operation, called
 `quot`.
 
-All ring-like structures are associative for both `+` and `*`, and
-have a `zero` element (an identity for `+`).
+All ring-like structures are associative for both `+` and `*`, have
+commutative `+`, and have a `zero` element (an identity for `+`).
 
-|Name                |Has `negate`?|Commutative `+`?|Has `1`?|Has `reciprocal`?|Has `quot`?|Commutative `*`?|
-|--------------------|-------------|----------------|--------|-----------------|-----------|----------------|
-|Semiring            |             |                |        |                 |           |                |
-|Rig                 |             |                |       ✓|                 |           |                |
-|CommutativeRig      |             |                |       ✓|                 |           |               ✓|
-|Rng                 |            ✓|               ✓|        |                 |           |                |
-|Ring                |            ✓|               ✓|       ✓|                 |           |                |
-|CommutativeRing     |            ✓|               ✓|       ✓|                 |           |               ✓|
-|EuclideanRing       |            ✓|               ✓|       ✓|                 |          ✓|               ✓|
-|Field               |            ✓|               ✓|       ✓|                ✓|          ✓|               ✓|
+|Name                |Has `negate`?|Has `1`?|Has `reciprocal`?|Has `quot`?|Commutative `*`?|
+|--------------------|-------------|--------|-----------------|-----------|----------------|
+|Semiring            |             |        |                 |           |                |
+|Rig                 |             |       ✓|                 |           |                |
+|CommutativeRig      |             |       ✓|                 |           |               ✓|
+|Rng                 |            ✓|        |                 |           |                |
+|Ring                |            ✓|       ✓|                 |           |                |
+|CommutativeRing     |            ✓|       ✓|                 |           |               ✓|
+|EuclideanRing       |            ✓|       ✓|                 |          ✓|               ✓|
+|Field               |            ✓|       ✓|                ✓|          ✓|               ✓|
 
 With the exception of `CommutativeRig` and `Rng`, every lower
 structure is also an instance of the structures above it. For example,

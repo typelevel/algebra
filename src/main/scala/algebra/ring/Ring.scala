@@ -4,10 +4,13 @@ package ring
 import scala.{specialized => sp}
 
 /**
- * Ring represents a set (A) that is a group over addition (+) and a
- * monoid over multiplication (*). Aside from this, the multiplication
- * must distribute over addition.
- *
+ * Ring consists of:
+ * 
+ *  - a commutative group for addition (+)
+ *  - a monoid for multiplication (*)
+ * 
+ * Additionally, multiplication must distribute over addition.
+ * 
  * Ring implements some methods (for example fromInt) in terms of
  * other more fundamental methods (zero, one and plus). Where
  * possible, these methods should be overridden by more efficient
