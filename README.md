@@ -109,9 +109,9 @@ commutative `+`, and have a `zero` element (an identity for `+`).
 |Name                |Has `negate`?|Has `1`?|Has `reciprocal`?|Has `quot`?|Commutative `*`?|
 |--------------------|-------------|--------|-----------------|-----------|----------------|
 |Semiring            |             |        |                 |           |                |
+|Rng                 |            ✓|        |                 |           |                |
 |Rig                 |             |       ✓|                 |           |                |
 |CommutativeRig      |             |       ✓|                 |           |               ✓|
-|Rng                 |            ✓|        |                 |           |                |
 |Ring                |            ✓|       ✓|                 |           |                |
 |CommutativeRing     |            ✓|       ✓|                 |           |               ✓|
 |EuclideanRing       |            ✓|       ✓|                 |          ✓|               ✓|
