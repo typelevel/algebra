@@ -10,7 +10,7 @@ import scala.{specialized => sp}
  *  - a commutative monoid for addition (+)
  *  - a monoid for multiplication (*)
  * 
- * Alternately, a Semiring can be thought of as a ring without
+ * Alternately, a Rig can be thought of as a ring without
  * multiplicative or additive inverses (or as a semiring with a
  * multiplicative identity).
 
