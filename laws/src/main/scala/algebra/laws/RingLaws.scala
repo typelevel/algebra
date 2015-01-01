@@ -69,7 +69,7 @@ trait RingLaws[A] extends GroupLaws[A] {
 
   def semiring(implicit A: Semiring[A]) = new RingProperties(
     name = "semiring",
-    al = additiveSemigroup,
+    al = additiveCommutativeMonoid,
     ml = multiplicativeSemigroup,
     parents = Seq.empty,
     Rules.distributive(A.plus)(A.times)
@@ -84,7 +84,7 @@ trait RingLaws[A] extends GroupLaws[A] {
 
   def rig(implicit A: Rig[A]) = new RingProperties(
     name = "rig",
-    al = additiveMonoid,
+    al = additiveCommutativeMonoid,
     ml = multiplicativeMonoid,
     parents = Seq(semiring)
   )
@@ -106,7 +106,8 @@ trait RingLaws[A] extends GroupLaws[A] {
   // Everything below fields (e.g. rings) does not require their multiplication
   // operation to be a group. Hence, we do not check for the existence of an
   // inverse. On the other hand, fields require their multiplication to be an
-  // abelian group. No we have to worry about zero.
+  // abelian group. Now we have to worry about zero.
+  //
   // The usual text book definition says: Fields consist of two abelian groups
   // (set, +, zero) and (set \ zero, *, one). We do the same thing here.
   // However, since law checking for the multiplication does not include zero
