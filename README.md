@@ -123,6 +123,5 @@ every `Ring` is a `Rig`, every `Field` is a `CommutativeRing`, and so
 on.
 
 (For a description of what the terminology in each column means, see
-[§algebraic properties and terminology](https://github.com/non/algebra
-https://github.com/non/algebra/blob/master/README.md#algebraic-properties-and-terminology).)
+[§algebraic properties and terminology](https://github.com/non/algebra/blob/master/README.md#algebraic-properties-and-terminology).)
 
