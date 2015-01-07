@@ -11,8 +11,19 @@ import sbtrelease.Utilities._
  
 object AlgebraBuild extends Build {
 
-  lazy val spire = Project("algebra", file(".")).
-    settings(algebraSettings: _*)
+  lazy val core =
+    Project("core", file("core")).settings(algebraSettings: _*)
+
+  lazy val std =
+    Project("std", file("std")).settings(algebraSettings: _*).dependsOn(core)
+
+  lazy val laws =
+    Project("laws", file("laws")).settings(algebraSettings: _*).dependsOn(core, std)
+
+  lazy val aggregate =
+    Project("aggregate", file(".")).settings(aggregateSettings: _*).dependsOn(core, std, laws)
+
+  lazy val aggregateSettings = algebraSettings ++ noPublishSettings
 
   lazy val algebraSettings = Defaults.defaultSettings ++ releaseSettings ++ Seq(
     releaseProcess := Seq[ReleaseStep](
@@ -43,5 +54,11 @@ object AlgebraBuild extends Build {
       st
     },
     enableCrossBuild = true
+  )
+
+  lazy val noPublishSettings = Seq(
+    publish := (),
+    publishLocal := (),
+    publishArtifact := false
   )
 }
