@@ -3,10 +3,16 @@ package laws
 
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop._
+import Prop.{False, Proof, Result}
 
 import algebra.std.boolean._
 
 object Rules {
+
+  def serializable[M](m: M): (String, Prop) =
+    "serializable" -> Prop { _ =>
+      Result(status = if (m.isInstanceOf[Serializable]) Proof else False)
+    }
 
   // Comparison operators for testing are supplied by CheckEqOps and
   // CheckOrderOps in package.scala. They are:
