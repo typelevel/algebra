@@ -3,8 +3,6 @@ package lattice
 
 import ring.CommutativeRing
 
-import scala.{specialized => sp}
-
 /**
  * Heyting algebras are bounded lattices that are also equipped with
  * an additional binary operation `imp` (for impliciation, also
@@ -35,7 +33,7 @@ import scala.{specialized => sp}
  * classical logic, see the boolean algebra type class implemented as
  * `Bool`.
  */
-trait Heyting[@sp(Boolean, Byte, Short, Int, Long) A] extends Any with BoundedLattice[A] { self =>
+trait Heyting[@mb @sp(Boolean, Byte, Short, Int, Long) A] extends Any with BoundedLattice[A] { self =>
   def and(a: A, b: A): A
   def meet(a: A, b: A): A = and(a, b)
 
@@ -61,17 +59,17 @@ trait Heyting[@sp(Boolean, Byte, Short, Int, Long) A] extends Any with BoundedLa
 }
 
 trait HeytingFunctions {
-  def zero[@sp(Boolean, Byte, Short, Int, Long) A](implicit ev: Bool[A]): A = ev.zero
-  def one[@sp(Boolean, Byte, Short, Int, Long) A](implicit ev: Bool[A]): A = ev.one
+  def zero[@mb @sp(Boolean, Byte, Short, Int, Long) A](implicit ev: Bool[A]): A = ev.zero
+  def one[@mb @sp(Boolean, Byte, Short, Int, Long) A](implicit ev: Bool[A]): A = ev.one
 
-  def complement[@sp(Boolean, Byte, Short, Int, Long) A](x: A)(implicit ev: Bool[A]): A =
+  def complement[@mb @sp(Boolean, Byte, Short, Int, Long) A](x: A)(implicit ev: Bool[A]): A =
     ev.complement(x)
 
-  def and[@sp(Boolean, Byte, Short, Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
+  def and[@mb @sp(Boolean, Byte, Short, Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
     ev.and(x, y)
-  def or[@sp(Boolean, Byte, Short, Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
+  def or[@mb @sp(Boolean, Byte, Short, Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
     ev.or(x, y)
-  def imp[@sp(Boolean, Byte, Short, Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
+  def imp[@mb @sp(Boolean, Byte, Short, Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
     ev.imp(x, y)
 }
 
@@ -81,5 +79,5 @@ object Heyting extends HeytingFunctions {
   /**
    * Access an implicit `Heyting[A]`.
    */
-  @inline final def apply[@sp(Boolean, Byte, Short, Int, Long) A](implicit ev: Heyting[A]): Heyting[A] = ev
+  @inline final def apply[@mb @sp(Boolean, Byte, Short, Int, Long) A](implicit ev: Heyting[A]): Heyting[A] = ev
 }

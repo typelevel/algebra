@@ -1,13 +1,11 @@
 package algebra
 
-import scala.{ specialized => sp }
-
 /**
  * CommutativeSemigroup represents a commutative semigroup.
  * 
  * A semigroup is commutative if for all x and y, x |+| y === y |+| x.
  */
-trait CommutativeSemigroup[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any with Semigroup[A] {
+trait CommutativeSemigroup[@mb @sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any with Semigroup[A] {
 
   /**
    * CommutativeSemigroup is guaranteed to be commutative.

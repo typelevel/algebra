@@ -1,14 +1,12 @@
 package algebra
 package lattice
 
-import scala.{specialized => sp}
-
 /**
  * A meet-semilattice (or lower semilattice) is a semilattice whose
  * operation is called "meet", and which can be thought of as a
  * greatest lower bound.
  */
-trait MeetSemilattice[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any { self =>
+trait MeetSemilattice[@mb @sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any { self =>
   def meet(lhs: A, rhs: A): A
 
   def meetSemilattice: Semilattice[A] =
@@ -25,5 +23,5 @@ object MeetSemilattice {
   /**
    * Access an implicit `MeetSemilattice[A]`.
    */
-  @inline final def apply[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](implicit ev: MeetSemilattice[A]): MeetSemilattice[A] = ev
+  @inline final def apply[@mb @sp(Boolean, Byte, Short, Int, Long, Float, Double) A](implicit ev: MeetSemilattice[A]): MeetSemilattice[A] = ev
 }

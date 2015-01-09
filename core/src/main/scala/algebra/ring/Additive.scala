@@ -1,10 +1,9 @@
 package algebra
 package ring
 
-import scala.{ specialized => sp }
 import scala.annotation.tailrec
 
-trait AdditiveSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any {
+trait AdditiveSemigroup[@mb @sp(Byte, Short, Int, Long, Float, Double) A] extends Any {
   def additive: Semigroup[A] = new Semigroup[A] {
     def combine(x: A, y: A): A = plus(x, y)
   }
@@ -35,14 +34,14 @@ trait AdditiveSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends An
     as.reduceOption(plus)
 }
 
-trait AdditiveCommutativeSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with AdditiveSemigroup[A] {
+trait AdditiveCommutativeSemigroup[@mb @sp(Byte, Short, Int, Long, Float, Double) A] extends Any with AdditiveSemigroup[A] {
   override def additive: CommutativeSemigroup[A] = new CommutativeSemigroup[A] {
     def combine(x: A, y: A): A = plus(x, y)
   }
   override def hasCommutativeAddition: Boolean = true
 }
 
-trait AdditiveMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with AdditiveSemigroup[A] {
+trait AdditiveMonoid[@mb @sp(Byte, Short, Int, Long, Float, Double) A] extends Any with AdditiveSemigroup[A] {
   override def additive: Monoid[A] = new Monoid[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
@@ -67,14 +66,14 @@ trait AdditiveMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any w
     as.foldLeft(zero)(plus)
 }
 
-trait AdditiveCommutativeMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with AdditiveMonoid[A] with AdditiveCommutativeSemigroup[A] {
+trait AdditiveCommutativeMonoid[@mb @sp(Byte, Short, Int, Long, Float, Double) A] extends Any with AdditiveMonoid[A] with AdditiveCommutativeSemigroup[A] {
   override def additive: CommutativeMonoid[A] = new CommutativeMonoid[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
   }
 }
 
-trait AdditiveGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with AdditiveMonoid[A] {
+trait AdditiveGroup[@mb @sp(Byte, Short, Int, Long, Float, Double) A] extends Any with AdditiveMonoid[A] {
   override def additive: Group[A] = new Group[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
@@ -92,7 +91,7 @@ trait AdditiveGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any wi
     else positiveSumN(negate(a), -n)
 }
 
-trait AdditiveCommutativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with AdditiveGroup[A] with AdditiveCommutativeMonoid[A] {
+trait AdditiveCommutativeGroup[@mb @sp(Byte, Short, Int, Long, Float, Double) A] extends Any with AdditiveGroup[A] with AdditiveCommutativeMonoid[A] {
   override def additive: CommutativeGroup[A] = new CommutativeGroup[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
@@ -102,31 +101,31 @@ trait AdditiveCommutativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] ext
 }
 
 trait AdditiveSemigroupFunctions {
-  def plus[@sp(Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: AdditiveSemigroup[A]): A =
+  def plus[@mb @sp(Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: AdditiveSemigroup[A]): A =
     ev.plus(x, y)
 
-  def sumN[@sp(Byte, Short, Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: AdditiveSemigroup[A]): A =
+  def sumN[@mb @sp(Byte, Short, Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: AdditiveSemigroup[A]): A =
     ev.sumN(a, n)
 
-  def trySum[@sp(Byte, Short, Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: AdditiveSemigroup[A]): Option[A] =
+  def trySum[@mb @sp(Byte, Short, Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: AdditiveSemigroup[A]): Option[A] =
     ev.trySum(as)
 }
 
 trait AdditiveMonoidFunctions extends AdditiveSemigroupFunctions {
-  def zero[@sp(Byte, Short, Int, Long, Float, Double) A](implicit ev: AdditiveMonoid[A]): A =
+  def zero[@mb @sp(Byte, Short, Int, Long, Float, Double) A](implicit ev: AdditiveMonoid[A]): A =
     ev.zero
 
-  def isZero[@sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev0: AdditiveMonoid[A], ev1: Eq[A]): Boolean =
+  def isZero[@mb @sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev0: AdditiveMonoid[A], ev1: Eq[A]): Boolean =
     ev0.isZero(a)
 
-  def sum[@sp(Byte, Short, Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: AdditiveMonoid[A]): A =
+  def sum[@mb @sp(Byte, Short, Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: AdditiveMonoid[A]): A =
     ev.sum(as)
 }
 
 trait AdditiveGroupFunctions extends AdditiveMonoidFunctions {
-  def negate[@sp(Byte, Short, Int, Long, Float, Double) A](x: A)(implicit ev: AdditiveGroup[A]): A =
+  def negate[@mb @sp(Byte, Short, Int, Long, Float, Double) A](x: A)(implicit ev: AdditiveGroup[A]): A =
     ev.negate(x)
-  def minus[@sp(Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: AdditiveGroup[A]): A =
+  def minus[@mb @sp(Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: AdditiveGroup[A]): A =
     ev.minus(x, y)
 }
 

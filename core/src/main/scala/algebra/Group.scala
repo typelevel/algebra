@@ -1,11 +1,9 @@
 package algebra
 
-import scala.{ specialized => sp }
-
 /**
  * A group is a monoid where each element has an inverse.
  */
-trait Group[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with Monoid[A] {
+trait Group[@mb @sp(Byte, Short, Int, Long, Float, Double) A] extends Any with Monoid[A] {
 
   /**
    * Find the inverse of `a`.
@@ -33,9 +31,9 @@ trait Group[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with Monoi
 }
 
 trait GroupFunctions extends MonoidFunctions {
-  def inverse[@sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Group[A]): A =
+  def inverse[@mb @sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Group[A]): A =
     ev.inverse(a)
-  def remove[@sp(Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: Group[A]): A =
+  def remove[@mb @sp(Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: Group[A]): A =
     ev.remove(x, y)
 }
 

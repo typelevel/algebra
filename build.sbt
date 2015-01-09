@@ -27,6 +27,8 @@ scalacOptions ++= (
   Nil
 )
 
+resolvers in ThisBuild += Resolver.sonatypeRepo("snapshots")
+
 // publishing/release details follow
 
 publishMavenStyle := true

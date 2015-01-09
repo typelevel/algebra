@@ -1,8 +1,6 @@
 package algebra
 package number
 
-import scala.{specialized => sp}
-
 /**
  * This is a type class for types with n-roots.
  *
@@ -19,21 +17,21 @@ import scala.{specialized => sp}
  * ideal. So, do not count on `ArithmeticException`s to save you from
  * bad arithmetic!
  */
-trait NRoot[@sp(Double,Float,Int,Long) A] {
+trait NRoot[@mb @sp(Double,Float,Int,Long) A] {
   def nroot(a: A, n: Int): A
   def sqrt(a: A): A = nroot(a, 2)
   def fpow(a: A, b: A): A
 }
 
 trait NRootFunctions {
-  def nroot[@sp(Double,Float,Int,Long) A](a: A, n: Int)(implicit ev: NRoot[A]): A =
+  def nroot[@mb @sp(Double,Float,Int,Long) A](a: A, n: Int)(implicit ev: NRoot[A]): A =
     ev.nroot(a, n)
-  def sqrt[@sp(Double,Float,Int,Long) A](a: A)(implicit ev: NRoot[A]): A =
+  def sqrt[@mb @sp(Double,Float,Int,Long) A](a: A)(implicit ev: NRoot[A]): A =
     ev.sqrt(a)
-  def fpow[@sp(Double,Float,Int,Long) A](a: A, b: A)(implicit ev: NRoot[A]): A =
+  def fpow[@mb @sp(Double,Float,Int,Long) A](a: A, b: A)(implicit ev: NRoot[A]): A =
     ev.fpow(a, b)
 }
 
 object NRoot extends NRootFunctions {
-  @inline final def apply[@sp(Int,Long,Float,Double) A](implicit ev: NRoot[A]) = ev
+  @inline final def apply[@mb @sp(Int,Long,Float,Double) A](implicit ev: NRoot[A]) = ev
 }

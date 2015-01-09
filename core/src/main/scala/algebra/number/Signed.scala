@@ -3,13 +3,11 @@ package number
 
 import algebra.ring._
 
-import scala.{ specialized => sp }
-
 /**
  * A trait for things that have some notion of sign and the ability to
  * ensure something has a non-negative sign.
  */
-trait Signed[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any {
+trait Signed[@mb @sp(Byte, Short, Int, Long, Float, Double) A] extends Any {
 
   /**
    * Return a's sign:
@@ -40,25 +38,25 @@ trait Signed[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any {
 }
 
 trait SignedFunctions {
-  def sign[@sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Signed[A]): Sign =
+  def sign[@mb @sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Signed[A]): Sign =
     ev.sign(a)
-  def signum[@sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Signed[A]): Int =
+  def signum[@mb @sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Signed[A]): Int =
     ev.signum(a)
-  def abs[@sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Signed[A]): A =
+  def abs[@mb @sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Signed[A]): A =
     ev.abs(a)
 
-  def isSignPositive[@sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Signed[A]): Boolean =
+  def isSignPositive[@mb @sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Signed[A]): Boolean =
     ev.isSignPositive(a)
-  def isSignZero[@sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Signed[A]): Boolean =
+  def isSignZero[@mb @sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Signed[A]): Boolean =
     ev.isSignZero(a)
-  def isSignNegative[@sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Signed[A]): Boolean =
+  def isSignNegative[@mb @sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Signed[A]): Boolean =
     ev.isSignNegative(a)
 
-  def isSignNonPositive[@sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Signed[A]): Boolean =
+  def isSignNonPositive[@mb @sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Signed[A]): Boolean =
     ev.isSignNonPositive(a)
-  def isSignNonZero[@sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Signed[A]): Boolean =
+  def isSignNonZero[@mb @sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Signed[A]): Boolean =
     ev.isSignNonZero(a)
-  def isSignNonNegative[@sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Signed[A]): Boolean =
+  def isSignNonNegative[@mb @sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev: Signed[A]): Boolean =
     ev.isSignNonNegative(a)
 }
 

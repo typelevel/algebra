@@ -1,11 +1,9 @@
 package algebra
 
-import scala.{ specialized => sp }
-
 /**
  * An abelian group is a group whose operation is commutative.
  */
-trait CommutativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with Group[A] with CommutativeMonoid[A]
+trait CommutativeGroup[@mb @sp(Byte, Short, Int, Long, Float, Double) A] extends Any with Group[A] with CommutativeMonoid[A]
 
 object CommutativeGroup extends GroupFunctions {
 

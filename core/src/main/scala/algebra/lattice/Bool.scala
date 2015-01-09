@@ -1,8 +1,6 @@
 package algebra
 package lattice
 
-import scala.{specialized => sp}
-
 /**
  * Boolean algebras are Heyting algebras with the additional
  * constraint that the law of the excluded middle is true
@@ -22,13 +20,13 @@ import scala.{specialized => sp}
  * Every boolean algebras has a dual algebra, which involves reversing
  * true/false as well as and/or.
  */
-trait Bool[@sp(Boolean, Byte, Short, Int, Long) A] extends Any with Heyting[A] {
+trait Bool[@mb @sp(Boolean, Byte, Short, Int, Long) A] extends Any with Heyting[A] {
   def imp(a: A, b: A): A = or(complement(a), b)
 
   def dual: Bool[A] = new DualBool(this)
 }
 
-class DualBool[@sp(Boolean, Byte, Short, Int, Long) A](orig: Bool[A]) extends Bool[A] {
+class DualBool[@mb @sp(Boolean, Byte, Short, Int, Long) A](orig: Bool[A]) extends Bool[A] {
   def one: A = orig.zero
   def zero: A = orig.one
   def and(a: A, b: A): A = orig.or(a, b)
@@ -45,15 +43,15 @@ class DualBool[@sp(Boolean, Byte, Short, Int, Long) A](orig: Bool[A]) extends Bo
 }
 
 trait BoolFunctions {
-  def dual[@sp(Boolean, Byte, Short, Int, Long) A](implicit ev: Bool[A]): Bool[A] =
+  def dual[@mb @sp(Boolean, Byte, Short, Int, Long) A](implicit ev: Bool[A]): Bool[A] =
     ev.dual
-  def xor[@sp(Boolean, Byte, Short, Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
+  def xor[@mb @sp(Boolean, Byte, Short, Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
     ev.xor(x, y)
-  def nand[@sp(Boolean, Byte, Short, Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
+  def nand[@mb @sp(Boolean, Byte, Short, Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
     ev.nand(x, y)
-  def nor[@sp(Boolean, Byte, Short, Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
+  def nor[@mb @sp(Boolean, Byte, Short, Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
     ev.nor(x, y)
-  def nxor[@sp(Boolean, Byte, Short, Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
+  def nxor[@mb @sp(Boolean, Byte, Short, Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
     ev.nxor(x, y)
 }
 
@@ -62,5 +60,5 @@ object Bool extends HeytingFunctions with BoolFunctions {
   /**
    * Access an implicit `Bool[A]`.
    */
-  @inline final def apply[@sp(Boolean, Byte, Short, Int, Long) A](implicit ev: Bool[A]): Bool[A] = ev
+  @inline final def apply[@mb @sp(Boolean, Byte, Short, Int, Long) A](implicit ev: Bool[A]): Bool[A] = ev
 }

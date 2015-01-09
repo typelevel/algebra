@@ -1,18 +1,15 @@
 import sbt._
 import sbt.Keys._
 
-import com.typesafe.sbt.pgp.PgpKeys._
- 
-import sbtrelease._
-import sbtrelease.ReleasePlugin._
-import sbtrelease.ReleasePlugin.ReleaseKeys._
-import sbtrelease.ReleaseStateTransformations._
-import sbtrelease.Utilities._
- 
 object AlgebraBuild extends Build {
 
   lazy val core =
-    Project("core", file("core")).settings(algebraSettings: _*)
+    Project("core", file("core"))
+      .settings(algebraSettings: _*)
+      .settings(
+        unmanagedSourceDirectories in Compile +=
+          (sourceDirectory in Compile).value / s"scala_spec"
+      )
 
   lazy val std =
     Project("std", file("std")).settings(algebraSettings: _*).dependsOn(core)
@@ -23,42 +20,20 @@ object AlgebraBuild extends Build {
   lazy val aggregate =
     Project("aggregate", file(".")).settings(aggregateSettings: _*).dependsOn(core, std, laws)
 
-  lazy val aggregateSettings = algebraSettings ++ noPublishSettings
+  lazy val coreMinibox =
+    Project("core-minibox", file("core-minibox"))
+      .settings(algebraSettings: _*)
+      .settings(Minibox.miniboxed(core): _*)
 
-  lazy val algebraSettings = Defaults.defaultSettings ++ releaseSettings ++ Seq(
-    releaseProcess := Seq[ReleaseStep](
-      checkSnapshotDependencies,
-      inquireVersions,
-      runTest,
-      setReleaseVersion,
-      commitReleaseVersion,
-      tagRelease,
-      publishSignedArtifacts,
-      setNextVersion,
-      commitNextVersion,
-      pushChanges
-    )
-  )
+  lazy val stdMinibox =
+    Project("std-minibox", file("std-minibox"))
+      .settings(algebraSettings: _*)
+      .settings(Minibox.miniboxed(std): _*)
+      .dependsOn(coreMinibox)
 
-  lazy val publishSignedArtifacts = ReleaseStep(
-    action = { st =>
-      val extracted = st.extract
-      val ref = extracted.get(thisProjectRef)
-      extracted.runAggregated(publishSigned in Global in ref, st)
-    },
-    check = { st =>
-      // getPublishTo fails if no publish repository is set up.
-      val ex = st.extract
-      val ref = ex.get(thisProjectRef)
-      Classpaths.getPublishTo(ex.get(publishTo in Global in ref))
-      st
-    },
-    enableCrossBuild = true
-  )
+  lazy val algebraSettings =
+    Defaults.defaultSettings ++ Publish.settings
 
-  lazy val noPublishSettings = Seq(
-    publish := (),
-    publishLocal := (),
-    publishArtifact := false
-  )
+  lazy val aggregateSettings =
+    algebraSettings ++ Publish.noPublishSettings
 }

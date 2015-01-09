@@ -1,7 +1,5 @@
 package algebra
 
-import scala.{specialized => sp}
-
 /**
  * The `PartialOrder` type class is used to define a partial ordering on some type `A`.
  * 
@@ -21,7 +19,7 @@ import scala.{specialized => sp}
  * true      false       = -1.0    (corresponds to x < y)
  * false     true        = 1.0     (corresponds to x > y)
  */
-trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
+trait PartialOrder[@mb @sp A] extends Any with Eq[A] { self =>
 
   /**
    * Result of comparing `x` with `y`. Returns NaN if operands are not
@@ -70,7 +68,7 @@ trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
    * Defines a partial order on `B` by mapping `B` to `A` using `f`
    * and using `A`s order to order `B`.
    */
-  override def on[@sp B](f: B => A): PartialOrder[B] =
+  override def on[@mb @sp B](f: B => A): PartialOrder[B] =
     new PartialOrder[B] {
       def partialCompare(x: B, y: B): Double = self.partialCompare(f(x), f(y))
     }
@@ -113,25 +111,25 @@ trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
 
 trait PartialOrderFunctions {
 
-  def partialCompare[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Double =
+  def partialCompare[@mb @sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Double =
     ev.partialCompare(x, y)
-  def tryCompare[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Option[Int] =
+  def tryCompare[@mb @sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Option[Int] =
     ev.tryCompare(x, y)
 
-  def pmin[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Option[A] =
+  def pmin[@mb @sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Option[A] =
     ev.pmin(x, y)
-  def pmax[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Option[A] =
+  def pmax[@mb @sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Option[A] =
     ev.pmax(x, y)
 
-  def eqv[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Boolean =
+  def eqv[@mb @sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Boolean =
     ev.eqv(x, y)
-  def lteqv[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Boolean =
+  def lteqv[@mb @sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Boolean =
     ev.lteqv(x, y)
-  def lt[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Boolean =
+  def lt[@mb @sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Boolean =
     ev.lt(x, y)
-  def gteqv[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Boolean =
+  def gteqv[@mb @sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Boolean =
     ev.gteqv(x, y)
-  def gt[@sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Boolean =
+  def gt[@mb @sp A](x: A, y: A)(implicit ev: PartialOrder[A]): Boolean =
     ev.gt(x, y)
 }
 
@@ -146,13 +144,13 @@ object PartialOrder extends PartialOrderFunctions {
    * Convert an implicit `PartialOrder[A]` to an `PartialOrder[B]`
    * using the given function `f`.
    */
-  def by[@sp A, @sp B](f: A => B)(implicit ev: PartialOrder[B]): PartialOrder[A] =
+  def by[@mb @sp A, @mb @sp B](f: A => B)(implicit ev: PartialOrder[B]): PartialOrder[A] =
     ev.on(f)
 
   /**
    * Define a `PartialOrder[A]` using the given function `f`.
    */
-  def from[@sp A](f: (A, A) => Double): PartialOrder[A] =
+  def from[@mb @sp A](f: (A, A) => Double): PartialOrder[A] =
     new PartialOrder[A] {
       def partialCompare(x: A, y: A) = f(x, y)
     }

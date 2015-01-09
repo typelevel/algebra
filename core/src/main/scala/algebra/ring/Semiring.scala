@@ -1,8 +1,7 @@
 package algebra
 package ring
 
-import annotation.tailrec
-import scala.{specialized => sp}
+import scala.annotation.tailrec
 
 /**
  * Semiring consists of:
@@ -17,7 +16,7 @@ import scala.{specialized => sp}
  * A Semiring with a multiplicative identity (1) is a Rig.
  * A Semiring with both of those is a Ring.
  */
-trait Semiring[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with AdditiveCommutativeMonoid[A] with MultiplicativeSemigroup[A]
+trait Semiring[@mb @sp(Byte, Short, Int, Long, Float, Double) A] extends Any with AdditiveCommutativeMonoid[A] with MultiplicativeSemigroup[A]
 
 object Semiring extends AdditiveMonoidFunctions with MultiplicativeSemigroupFunctions {
   @inline final def apply[A](implicit ev: Semiring[A]): Semiring[A] = ev

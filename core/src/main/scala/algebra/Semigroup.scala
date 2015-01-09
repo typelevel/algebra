@@ -1,12 +1,11 @@
 package algebra
 
-import scala.{ specialized => sp }
 import scala.annotation.{ switch, tailrec }
 
 /**
  * A semigroup is any set `A` with an associative operation (`combine`).
  */
-trait Semigroup[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any {
+trait Semigroup[@mb @sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any {
 
   /**
    * Associative operation taking which combines two values.
@@ -49,19 +48,19 @@ trait Semigroup[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends A
 }
 
 trait SemigroupFunctions {
-  def combine[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: Semigroup[A]): A =
+  def combine[@mb @sp(Boolean, Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: Semigroup[A]): A =
     ev.combine(x, y)
 
-  def maybeCombine[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](ox: Option[A], y: A)(implicit ev: Semigroup[A]): A =
+  def maybeCombine[@mb @sp(Boolean, Byte, Short, Int, Long, Float, Double) A](ox: Option[A], y: A)(implicit ev: Semigroup[A]): A =
     ox match {
       case Some(x) => ev.combine(x, y)
       case None => y
     }
 
-  def combineN[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: Semigroup[A]): A =
+  def combineN[@mb @sp(Boolean, Byte, Short, Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: Semigroup[A]): A =
     ev.combineN(a, n)
 
-  def combineAllOption[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: Semigroup[A]): Option[A] =
+  def combineAllOption[@mb @sp(Boolean, Byte, Short, Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: Semigroup[A]): Option[A] =
     ev.combineAllOption(as)
 }
 
