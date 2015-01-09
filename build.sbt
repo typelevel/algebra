@@ -27,47 +27,38 @@ scalacOptions ++= (
   Nil
 )
 
+// extra repositories (for miniboxing)
+
 resolvers in ThisBuild += Resolver.sonatypeRepo("snapshots")
 
-// publishing/release details follow
+// publish pre-amble
 
-publishMavenStyle := true
-publishArtifact in Test := false
-pomIncludeRepository := { _ => false }
+Publish.preamble
 
-publishTo <<= version { (v: String) =>
-  val nexus = "https://oss.sonatype.org/"
-  if (v.trim.endsWith("SNAPSHOT"))
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-}
+// projects
 
-pomExtra := (
-<scm>
-  <url>git@github.com:non/algebra.git</url>
-  <connection>scm:git:git@github.com:non/algebra.git</connection>
-</scm>
-<developers>
-  <developer>
-    <id>johnynek</id>
-    <name>P. Oscar Boykin</name>
-    <url>https://github.com/johnynek/</url>
-  </developer>
-  <developer>
-    <id>avibryant</id>
-    <name>Avi Bryant</name>
-    <url>https://github.com/avibryant/</url>
-  </developer>
-  <developer>
-    <id>non</id>
-    <name>Erik Osheim</name>
-    <url>http://github.com/non/</url>
-  </developer>
-  <developer>
-    <id>tixxit</id>
-    <name>Tom Switzer</name>
-    <url>http://github.com/tixxit/</url>
-  </developer>
-</developers>
-)
+lazy val aggregate = project.
+  in(file(".")).
+  aggregate(core, std, laws, coreMinibox, stdMinibox).
+  settings(Publish.noPublishSettings: _*)
+
+lazy val core = project.
+  in(file("core")).
+  settings(Minibox.specDirectory)
+
+lazy val std = project.
+  in(file("std")).
+  dependsOn(core)
+
+lazy val laws = project.
+  in(file("laws")).
+  dependsOn(core, std)
+
+lazy val coreMinibox = project.
+  in(file("core-minibox")).
+  settings(Minibox.miniboxed(core): _*)
+
+lazy val stdMinibox = project.
+  in(file("std-minibox")).
+  dependsOn(coreMinibox).
+  settings(Minibox.miniboxed(core): _*)

@@ -1,1 +1,3 @@
 name := "algebra"
+
+Publish.settings

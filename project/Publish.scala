@@ -13,6 +13,47 @@ import scala.xml.{ Node, NodeSeq }
 import scala.xml.transform.{ RewriteRule, RuleTransformer }
 
 object Publish {
+  lazy val preamble = Seq(
+    publishMavenStyle := true,
+    publishArtifact in Test := false,
+    pomIncludeRepository := { _ => false },
+    publishTo <<= version { (v: String) =>
+      val nexus = "https://oss.sonatype.org/"
+      if (v.trim.endsWith("SNAPSHOT"))
+        Some("snapshots" at nexus + "content/repositories/snapshots")
+      else
+        Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+    },
+    pomExtra := (
+    <scm>
+      <url>git@github.com:non/algebra.git</url>
+      <connection>scm:git:git@github.com:non/algebra.git</connection>
+    </scm>
+    <developers>
+      <developer>
+        <id>johnynek</id>
+        <name>P. Oscar Boykin</name>
+        <url>https://github.com/johnynek/</url>
+      </developer>
+      <developer>
+        <id>avibryant</id>
+        <name>Avi Bryant</name>
+        <url>https://github.com/avibryant/</url>
+      </developer>
+      <developer>
+        <id>non</id>
+        <name>Erik Osheim</name>
+        <url>http://github.com/non/</url>
+      </developer>
+      <developer>
+        <id>tixxit</id>
+        <name>Tom Switzer</name>
+        <url>http://github.com/tixxit/</url>
+      </developer>
+    </developers>
+    )
+  )
+
   lazy val settings =
     releaseSettings ++
     Seq(
@@ -27,27 +68,7 @@ object Publish {
         setNextVersion,
         commitNextVersion,
         pushChanges
-      ),
-      pomDependencyExclusions <<= pomDependencyExclusions ?? Seq(),
-      pomPostProcess := { (node: Node) =>
-        val exclusions = pomDependencyExclusions.value.toSet
-        val rule = new RewriteRule {
-          override def transform(n: Node): NodeSeq = {
-            if (n.label == "dependency") {
-              val groupId = (n \ "groupId").text
-              val artifactId = (n \ "artifactId").text
-              if (exclusions.contains(groupId -> artifactId)) {
-                NodeSeq.Empty
-              } else {
-                n
-              }
-            } else {
-              n
-            }
-          }
-        }
-        new RuleTransformer(rule).transform(node)(0)
-      }
+      )
     )
 
   lazy val publishSignedArtifacts = ReleaseStep(
@@ -71,10 +92,4 @@ object Publish {
     publishLocal := (),
     publishArtifact := false
   )
-
-  val pomDependencyExclusions =
-    SettingKey[Seq[(String, String)]](
-      "pom-dependency-exclusions",
-      "Group ID / Artifact ID dependencies to exclude from the maven POM."
-    )
 }
