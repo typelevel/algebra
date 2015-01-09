@@ -15,8 +15,6 @@ import scala.xml.transform.{ RewriteRule, RuleTransformer }
 object Publish {
   lazy val preamble = Seq(
     publishMavenStyle := true,
-    publishArtifact in Test := false,
-    pomIncludeRepository := { _ => false },
     publishTo <<= version { (v: String) =>
       val nexus = "https://oss.sonatype.org/"
       if (v.trim.endsWith("SNAPSHOT"))
@@ -24,7 +22,9 @@ object Publish {
       else
         Some("releases"  at nexus + "service/local/staging/deploy/maven2")
     },
-    pomExtra := (
+    publishArtifact in Test in ThisBuild := false,
+    pomIncludeRepository in ThisBuild := { _ => false },
+    pomExtra in ThisBuild := (
     <scm>
       <url>git@github.com:non/algebra.git</url>
       <connection>scm:git:git@github.com:non/algebra.git</connection>
