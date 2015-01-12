@@ -11,7 +11,24 @@ object Rules {
 
   def serializable[M](m: M): (String, Prop) =
     "serializable" -> Prop { _ =>
-      Result(status = if (m.isInstanceOf[Serializable]) Proof else False)
+      import java.io._
+      val baos = new ByteArrayOutputStream()
+      val oos = new ObjectOutputStream(baos)
+      var ois: ObjectInputStream = null
+      try {
+        oos.writeObject(m)
+        oos.close()
+        val bais = new ByteArrayInputStream(baos.toByteArray())
+        ois = new ObjectInputStream(bais)
+        val m2 = ois.readObject() // just ensure we can read it back
+        ois.close()
+        Result(status = Proof)
+      } catch { case _: Throwable =>
+        Result(status = False)
+      } finally {
+        oos.close()
+        if (ois != null) ois.close()
+      }
     }
 
   // Comparison operators for testing are supplied by CheckEqOps and
