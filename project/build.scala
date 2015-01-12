@@ -21,7 +21,7 @@ object AlgebraBuild extends Build {
     Project("laws", file("laws")).settings(algebraSettings: _*).dependsOn(core, std)
 
   lazy val aggregate =
-    Project("aggregate", file(".")).settings(aggregateSettings: _*).dependsOn(core, std, laws)
+    Project("aggregate", file(".")).settings(aggregateSettings: _*).aggregate(core, std, laws)
 
   lazy val aggregateSettings = algebraSettings ++ noPublishSettings
 
