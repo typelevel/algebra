@@ -1,0 +1,10 @@
+language: scala
+scala:
+  - 2.10.4
+  - 2.11.4
+notifications:
+  irc:
+    channels:
+      - "chat.freenode.net#spire-math"
+    on_success: change
+    on_failure: always
