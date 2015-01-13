@@ -4,7 +4,7 @@ package ring
 import scala.{ specialized => sp }
 import scala.annotation.tailrec
 
-trait MultiplicativeSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with Serializable {
+trait MultiplicativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
   def multiplicative: Semigroup[A] =
     new Semigroup[A] {
       def combine(x: A, y: A): A = times(x, y)
@@ -36,14 +36,14 @@ trait MultiplicativeSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] exte
     as.reduceOption(times)
 }
 
-trait MultiplicativeCommutativeSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with MultiplicativeSemigroup[A] {
+trait MultiplicativeCommutativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeSemigroup[A] {
   override def hasCommutativeMultiplication: Boolean = false
   override def multiplicative: CommutativeSemigroup[A] = new CommutativeSemigroup[A] {
     def combine(x: A, y: A): A = times(x, y)
   }
 }
 
-trait MultiplicativeMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with MultiplicativeSemigroup[A] {
+trait MultiplicativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeSemigroup[A] {
   override def multiplicative: Monoid[A] = new Monoid[A] {
     def empty = one
     def combine(x: A, y: A): A = times(x, y)
@@ -68,14 +68,14 @@ trait MultiplicativeMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends
     as.foldLeft(one)(times)
 }
 
-trait MultiplicativeCommutativeMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with MultiplicativeMonoid[A] with MultiplicativeCommutativeSemigroup[A] {
+trait MultiplicativeCommutativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeMonoid[A] with MultiplicativeCommutativeSemigroup[A] {
   override def multiplicative: CommutativeMonoid[A] = new CommutativeMonoid[A] {
     def empty = one
     def combine(x: A, y: A): A = times(x, y)
   }
 }
 
-trait MultiplicativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with MultiplicativeMonoid[A] {
+trait MultiplicativeGroup[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeMonoid[A] {
   override def multiplicative: Group[A] = new Group[A] {
     def empty = one
     def combine(x: A, y: A): A = times(x, y)
@@ -93,7 +93,7 @@ trait MultiplicativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends 
     else positivePow(reciprocal(a), -n)
 }
 
-trait MultiplicativeCommutativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with MultiplicativeGroup[A] with MultiplicativeCommutativeMonoid[A] {
+trait MultiplicativeCommutativeGroup[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeGroup[A] with MultiplicativeCommutativeMonoid[A] {
   override def multiplicative: CommutativeGroup[A] = new CommutativeGroup[A] {
     def empty = one
     def combine(x: A, y: A): A = times(x, y)
@@ -103,30 +103,30 @@ trait MultiplicativeCommutativeGroup[@sp(Byte, Short, Int, Long, Float, Double) 
 }
 
 trait MultiplicativeSemigroupFunctions {
-  def times[@sp(Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: MultiplicativeSemigroup[A]): A =
+  def times[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: MultiplicativeSemigroup[A]): A =
     ev.times(x, y)
-  def pow[@sp(Byte, Short, Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: MultiplicativeSemigroup[A]): A =
+  def pow[@sp(Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: MultiplicativeSemigroup[A]): A =
     ev.pow(a, n)
 
-  def tryProduct[@sp(Byte, Short, Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: MultiplicativeSemigroup[A]): Option[A] =
+  def tryProduct[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: MultiplicativeSemigroup[A]): Option[A] =
     ev.tryProduct(as)
 }
 
 trait MultiplicativeMonoidFunctions extends MultiplicativeSemigroupFunctions {
-  def one[@sp(Byte, Short, Int, Long, Float, Double) A](implicit ev: MultiplicativeMonoid[A]): A =
+  def one[@sp(Int, Long, Float, Double) A](implicit ev: MultiplicativeMonoid[A]): A =
     ev.one
 
-  def isOne[@sp(Byte, Short, Int, Long, Float, Double) A](a: A)(implicit ev0: MultiplicativeMonoid[A], ev1: Eq[A]): Boolean =
+  def isOne[@sp(Int, Long, Float, Double) A](a: A)(implicit ev0: MultiplicativeMonoid[A], ev1: Eq[A]): Boolean =
     ev0.isOne(a)
 
-  def product[@sp(Byte, Short, Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: MultiplicativeMonoid[A]): A =
+  def product[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: MultiplicativeMonoid[A]): A =
     ev.product(as)
 }
 
 trait MultiplicativeGroupFunctions extends MultiplicativeMonoidFunctions {
-  def reciprocal[@sp(Byte, Short, Int, Long, Float, Double) A](x: A)(implicit ev: MultiplicativeGroup[A]): A =
+  def reciprocal[@sp(Int, Long, Float, Double) A](x: A)(implicit ev: MultiplicativeGroup[A]): A =
     ev.reciprocal(x)
-  def div[@sp(Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: MultiplicativeGroup[A]): A =
+  def div[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: MultiplicativeGroup[A]): A =
     ev.div(x, y)
 }
 

@@ -22,13 +22,13 @@ import scala.{specialized => sp}
  * Every boolean algebras has a dual algebra, which involves reversing
  * true/false as well as and/or.
  */
-trait Bool[@sp(Boolean, Byte, Short, Int, Long) A] extends Any with Heyting[A] {
+trait Bool[@sp(Int, Long) A] extends Any with Heyting[A] {
   def imp(a: A, b: A): A = or(complement(a), b)
 
   def dual: Bool[A] = new DualBool(this)
 }
 
-class DualBool[@sp(Boolean, Byte, Short, Int, Long) A](orig: Bool[A]) extends Bool[A] {
+class DualBool[@sp(Int, Long) A](orig: Bool[A]) extends Bool[A] {
   def one: A = orig.zero
   def zero: A = orig.one
   def and(a: A, b: A): A = orig.or(a, b)
@@ -45,15 +45,15 @@ class DualBool[@sp(Boolean, Byte, Short, Int, Long) A](orig: Bool[A]) extends Bo
 }
 
 trait BoolFunctions {
-  def dual[@sp(Boolean, Byte, Short, Int, Long) A](implicit ev: Bool[A]): Bool[A] =
+  def dual[@sp(Int, Long) A](implicit ev: Bool[A]): Bool[A] =
     ev.dual
-  def xor[@sp(Boolean, Byte, Short, Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
+  def xor[@sp(Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
     ev.xor(x, y)
-  def nand[@sp(Boolean, Byte, Short, Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
+  def nand[@sp(Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
     ev.nand(x, y)
-  def nor[@sp(Boolean, Byte, Short, Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
+  def nor[@sp(Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
     ev.nor(x, y)
-  def nxor[@sp(Boolean, Byte, Short, Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
+  def nxor[@sp(Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
     ev.nxor(x, y)
 }
 
@@ -62,5 +62,5 @@ object Bool extends HeytingFunctions with BoolFunctions {
   /**
    * Access an implicit `Bool[A]`.
    */
-  @inline final def apply[@sp(Boolean, Byte, Short, Int, Long) A](implicit ev: Bool[A]): Bool[A] = ev
+  @inline final def apply[@sp(Int, Long) A](implicit ev: Bool[A]): Bool[A] = ev
 }

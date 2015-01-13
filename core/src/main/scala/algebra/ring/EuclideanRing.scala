@@ -22,18 +22,18 @@ import scala.{specialized => sp}
  * This type does not provide access to the Euclidean function, but
  * only provides the quot, mod, and quotmod operators.
  */
-trait EuclideanRing[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with CommutativeRing[A] {
+trait EuclideanRing[@sp(Int, Long, Float, Double) A] extends Any with CommutativeRing[A] {
   def mod(a: A, b: A): A
   def quot(a: A, b: A): A
   def quotmod(a: A, b: A): (A, A) = (quot(a, b), mod(a, b))
 }
 
 trait EuclideanRingFunctions extends AdditiveGroupFunctions with MultiplicativeMonoidFunctions {
-  def quot[@sp(Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: EuclideanRing[A]): A =
+  def quot[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: EuclideanRing[A]): A =
     ev.quot(x, y)
-  def mod[@sp(Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: EuclideanRing[A]): A =
+  def mod[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: EuclideanRing[A]): A =
     ev.mod(x, y)
-  def quotmod[@sp(Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: EuclideanRing[A]): (A, A) =
+  def quotmod[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: EuclideanRing[A]): (A, A) =
     ev.quotmod(x, y)
 }
 

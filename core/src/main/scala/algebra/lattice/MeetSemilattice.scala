@@ -8,7 +8,7 @@ import scala.{specialized => sp}
  * operation is called "meet", and which can be thought of as a
  * greatest lower bound.
  */
-trait MeetSemilattice[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any with Serializable { self =>
+trait MeetSemilattice[@sp(Int, Long, Float, Double) A] extends Any with Serializable { self =>
   def meet(lhs: A, rhs: A): A
 
   def meetSemilattice: Semilattice[A] =
@@ -25,5 +25,5 @@ object MeetSemilattice {
   /**
    * Access an implicit `MeetSemilattice[A]`.
    */
-  @inline final def apply[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](implicit ev: MeetSemilattice[A]): MeetSemilattice[A] = ev
+  @inline final def apply[@sp(Int, Long, Float, Double) A](implicit ev: MeetSemilattice[A]): MeetSemilattice[A] = ev
 }
