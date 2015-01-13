@@ -25,6 +25,7 @@ trait GroupLaws[A] extends Laws {
   def semigroup(implicit A: Semigroup[A]) = new GroupProperties(
     name = "semigroup",
     parents = Nil,
+    Rules.serializable(A),
     Rules.associativity(A.combine),
     Rules.repeat1("combineN")(A.combineN),
     Rules.repeat2("combineN", "|+|")(A.combineN)(A.combine)
@@ -80,6 +81,7 @@ trait GroupLaws[A] extends Laws {
   def additiveSemigroup(implicit A: AdditiveSemigroup[A]) = new AdditiveProperties(
     base = semigroup(A.additive),
     parents = Nil,
+    Rules.serializable(A),
     Rules.repeat1("sumN")(A.sumN),
     Rules.repeat2("sumN", "+")(A.sumN)(A.plus)
   )

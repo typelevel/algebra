@@ -1,6 +1,7 @@
 package algebra
 package laws
 
+import algebra.lattice._
 import algebra.number._
 import algebra.ring._
 import algebra.std.all._
@@ -12,6 +13,9 @@ import org.typelevel.discipline.scalatest.Discipline
 import org.scalatest.FunSuite
 
 class LawTests extends FunSuite with Discipline {
+
+  implicit val intLattice: Lattice[Int] = IntMinMaxLattice
+
   checkAll("Boolean", OrderLaws[Boolean].order)
   checkAll("Boolean", LogicLaws[Boolean].bool)
   checkAll("Boolean", LatticePartialOrderLaws[Boolean].boundedLatticePartialOrder)
@@ -32,6 +36,7 @@ class LawTests extends FunSuite with Discipline {
 
   checkAll("Int", OrderLaws[Int].order)
   checkAll("Int", RingLaws[Int].euclideanRing)
+  checkAll("Int", LatticeLaws[Int].lattice)
 
   checkAll("BigInt", BaseLaws[BigInt].isReal)
   checkAll("BigInt", RingLaws[BigInt].euclideanRing)

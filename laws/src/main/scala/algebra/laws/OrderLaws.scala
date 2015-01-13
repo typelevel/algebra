@@ -23,6 +23,7 @@ trait OrderLaws[A] extends Laws {
   def partialOrder(implicit A: PartialOrder[A]) = new OrderProperties(
     name = "partialOrder",
     parent = None,
+    Rules.serializable(A),
     "reflexitivity" -> forAll { (x: A) =>
       x ?<= x
     },

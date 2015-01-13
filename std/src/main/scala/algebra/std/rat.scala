@@ -4,7 +4,7 @@ package std
 import algebra.number._
 import algebra.ring._
 
-class Rat(val num: BigInt, val den: BigInt) { lhs =>
+class Rat(val num: BigInt, val den: BigInt) extends Serializable { lhs =>
 
   override def toString: String =
     if (den == 1) s"$num" else s"$num/$den"

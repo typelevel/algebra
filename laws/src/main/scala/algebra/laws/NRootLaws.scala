@@ -26,6 +26,7 @@ trait NRootLaws[A] extends Laws {
 
   def nroot(implicit A: NRoot[A]) = new SimpleRuleSet(
     name = "nroot",
+    Rules.serializable(A),
     "pow/nroot" -> forAll { (x: A, n0: Byte) =>
       val n = (n0 & 0xff) % 10 + 1
       val z1 = F.pow(A.nroot(x, n), n)

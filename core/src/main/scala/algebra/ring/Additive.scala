@@ -4,7 +4,7 @@ package ring
 import scala.{ specialized => sp }
 import scala.annotation.tailrec
 
-trait AdditiveSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any {
+trait AdditiveSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with Serializable {
   def additive: Semigroup[A] = new Semigroup[A] {
     def combine(x: A, y: A): A = plus(x, y)
   }
