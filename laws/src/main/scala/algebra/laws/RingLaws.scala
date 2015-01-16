@@ -40,6 +40,7 @@ trait RingLaws[A] extends GroupLaws[A] {
   def multiplicativeSemigroup(implicit A: MultiplicativeSemigroup[A]) = new MultiplicativeProperties(
     base = _.semigroup(A.multiplicative),
     parent = None,
+    Rules.serializable(A),
     Rules.repeat1("pow")(A.pow),
     Rules.repeat2("pow", "*")(A.pow)(A.times)
   )

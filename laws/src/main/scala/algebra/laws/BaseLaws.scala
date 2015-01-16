@@ -26,6 +26,7 @@ trait BaseLaws[A] extends Laws {
     name = "signed",
     parent = None,
     bases = Seq.empty,
+    Rules.serializable(A),
     "abs non-negative" -> forAll { (x: A) =>
       A.sign(A.abs(x)) ?!= Sign.Negative
     },

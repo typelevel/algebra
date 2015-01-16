@@ -8,7 +8,7 @@ import scala.{specialized => sp}
  * operation is called "join", and which can be thought of as a least
  * upper bound.
  */
-trait JoinSemilattice[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any { self =>
+trait JoinSemilattice[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any with Serializable { self =>
   def join(lhs: A, rhs: A): A
 
   def joinSemilattice: Semilattice[A] =

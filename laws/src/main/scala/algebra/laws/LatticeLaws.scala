@@ -36,6 +36,7 @@ trait LatticeLaws[A] extends Laws {
   def joinSemilattice(implicit A: JoinSemilattice[A]) = new LatticeProperties(
     name = "joinSemilattice",
     parents = Nil,
+    Rules.serializable(A),
     Rules.associativity(A.join),
     Rules.commutative(A.join),
     Rules.idempotence(A.join)
@@ -44,6 +45,7 @@ trait LatticeLaws[A] extends Laws {
   def meetSemilattice(implicit A: MeetSemilattice[A]) = new LatticeProperties(
     name = "meetSemilattice",
     parents = Nil,
+    Rules.serializable(A),
     Rules.associativity(A.meet),
     Rules.commutative(A.meet),
     Rules.idempotence(A.meet)
