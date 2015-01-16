@@ -38,4 +38,14 @@ class LawTests extends FunSuite with Discipline {
 
   checkAll("Rat", BaseLaws[Rat].isReal)
   checkAll("Rat", RingLaws[Rat].field)
+
+  {
+    implicit val tupEq: Eq[(Int, Int)] = new Eq[(Int, Int)] {
+      def eqv(a: (Int, Int), b: (Int, Int)) = a == b
+    }
+    implicit val band = new Band[(Int, Int)] {
+      def combine(a: (Int, Int), b: (Int, Int)) = (a._1, b._2)
+    }
+    checkAll("(Int, Int) Band", LatticeLaws[(Int, Int)].band)
+  }
 }
