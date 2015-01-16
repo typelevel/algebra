@@ -20,19 +20,6 @@ trait LatticeLaws[A] extends Laws {
   implicit def Equ: Eq[A]
   implicit def Arb: Arbitrary[A]
 
-  def band(implicit A: Band[A]) = new LatticeProperties(
-    name = "band",
-    parents = Nil,
-    Rules.associativity(A.combine),
-    Rules.idempotence(A.combine)
-  )
-
-  def semilattice(implicit A: Semilattice[A]) = new LatticeProperties(
-    name = "semilattice",
-    parents = List(band),
-    Rules.commutative(A.combine)
-  )
-
   def joinSemilattice(implicit A: JoinSemilattice[A]) = new LatticeProperties(
     name = "joinSemilattice",
     parents = Nil,

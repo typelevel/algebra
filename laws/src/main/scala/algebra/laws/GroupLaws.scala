@@ -31,16 +31,23 @@ trait GroupLaws[A] extends Laws {
     Rules.repeat2("combineN", "|+|")(A.combineN)(A.combine)
   )
 
+  def band(implicit A: Band[A]) = new GroupProperties(
+    name = "band",
+    parents = List(semigroup),
+    Rules.idempotence(A.combine),
+    "isIdempotent" -> Semigroup.isIdempotent[A]
+  )
+
   def commutativeSemigroup(implicit A: CommutativeSemigroup[A]) = new GroupProperties(
     name = "commutative semigroup",
     parents = List(semigroup),
-    Rules.commutative(A.combine)
+    Rules.commutative(A.combine),
+    "isCommutative" -> Semigroup.isCommutative[A]
   )
 
   def semilattice(implicit A: Semilattice[A]) = new GroupProperties(
     name = "semilattice",
-    parents = List(commutativeSemigroup),
-    Rules.idempotence(A.combine)
+    parents = List(band, commutativeSemigroup)
   )
 
   def monoid(implicit A: Monoid[A]) = new GroupProperties(
