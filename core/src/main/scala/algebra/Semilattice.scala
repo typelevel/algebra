@@ -9,15 +9,17 @@ import scala.{specialized => sp}
  * Semilattices are commutative semigroups whose operation
  * (i.e. combine) is also idempotent.
  */
-trait Semilattice[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any with CommutativeSemigroup[A] { self =>
+trait Semilattice[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any
+  with Band[A]
+  with CommutativeSemigroup[A] { self =>
 
   /**
    * Given Eq[A], return a PartialOrder[A] using the `combine`
    * operator to determine the partial ordering. This method assumes
    * `combine` functions as `meet` (that is, as a lower bound).
-   * 
+   *
    * This method returns:
-   * 
+   *
    *    0.0 if x = y
    *   -1.0 if x = combine(x, y)
    *    1.0 if y = combine(x, y)
@@ -36,9 +38,9 @@ trait Semilattice[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends
    * Given Eq[A], return a PartialOrder[A] using the `combine`
    * operator to determine the partial ordering. This method assumes
    * `combine` functions as `join` (that is, as an upper bound).
-   * 
+   *
    * This method returns:
-   * 
+   *
    *    0.0 if x = y
    *   -1.0 if y = combine(x, y)
    *    1.0 if x = combine(x, y)
