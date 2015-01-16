@@ -11,8 +11,6 @@ trait AdditiveSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends An
 
   def plus(x: A, y: A): A
 
-  def hasCommutativeAddition: Boolean = false
-
   def sumN(a: A, n: Int): A =
     if (n > 0) positiveSumN(a, n)
     else throw new IllegalArgumentException("Illegal non-positive exponent to sumN: %s" format n)
@@ -28,7 +26,7 @@ trait AdditiveSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A] extends An
 
   /**
    * Given a sequence of `as`, combine them and return the total.
-   * 
+   *
    * If the sequence is empty, returns None. Otherwise, returns Some(total).
    */
   def trySum(as: TraversableOnce[A]): Option[A] =
@@ -39,7 +37,6 @@ trait AdditiveCommutativeSemigroup[@sp(Byte, Short, Int, Long, Float, Double) A]
   override def additive: CommutativeSemigroup[A] = new CommutativeSemigroup[A] {
     def combine(x: A, y: A): A = plus(x, y)
   }
-  override def hasCommutativeAddition: Boolean = true
 }
 
 trait AdditiveMonoid[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with AdditiveSemigroup[A] {
@@ -102,6 +99,9 @@ trait AdditiveCommutativeGroup[@sp(Byte, Short, Int, Long, Float, Double) A] ext
 }
 
 trait AdditiveSemigroupFunctions {
+  def isCommutative[A](implicit ev: AdditiveSemigroup[A]): Boolean =
+    ev.isInstanceOf[AdditiveCommutativeSemigroup[_]]
+
   def plus[@sp(Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: AdditiveSemigroup[A]): A =
     ev.plus(x, y)
 
@@ -133,23 +133,23 @@ trait AdditiveGroupFunctions extends AdditiveMonoidFunctions {
 object AdditiveSemigroup extends AdditiveSemigroupFunctions {
   @inline final def apply[A](implicit ev: AdditiveSemigroup[A]): AdditiveSemigroup[A] = ev
 }
-  
+
 object AdditiveCommutativeSemigroup extends AdditiveSemigroupFunctions {
   @inline final def apply[A](implicit ev: AdditiveCommutativeSemigroup[A]): AdditiveCommutativeSemigroup[A] = ev
 }
-  
+
 object AdditiveMonoid extends AdditiveMonoidFunctions {
   @inline final def apply[A](implicit ev: AdditiveMonoid[A]): AdditiveMonoid[A] = ev
 }
-  
+
 object AdditiveCommutativeMonoid extends AdditiveMonoidFunctions {
   @inline final def apply[A](implicit ev: AdditiveCommutativeMonoid[A]): AdditiveCommutativeMonoid[A] = ev
 }
-  
+
 object AdditiveGroup extends AdditiveGroupFunctions {
   @inline final def apply[A](implicit ev: AdditiveGroup[A]): AdditiveGroup[A] = ev
 }
-  
+
 object AdditiveCommutativeGroup extends AdditiveGroupFunctions {
   @inline final def apply[A](implicit ev: AdditiveCommutativeGroup[A]): AdditiveCommutativeGroup[A] = ev
 }
