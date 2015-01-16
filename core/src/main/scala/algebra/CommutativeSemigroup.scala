@@ -4,16 +4,10 @@ import scala.{ specialized => sp }
 
 /**
  * CommutativeSemigroup represents a commutative semigroup.
- * 
+ *
  * A semigroup is commutative if for all x and y, x |+| y === y |+| x.
  */
-trait CommutativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
-
-  /**
-   * CommutativeSemigroup is guaranteed to be commutative.
-   */
-  override def isCommutative: Boolean = true
-}
+trait CommutativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A]
 
 object CommutativeSemigroup extends SemigroupFunctions {
 
@@ -25,7 +19,7 @@ object CommutativeSemigroup extends SemigroupFunctions {
   /**
    * This method converts an additive instance into a generic
    * instance.
-   * 
+   *
    * Given an implicit `AdditiveCommutativeSemigroup[A]`, this method
    * returns a `CommutativeSemigroup[A]`.
    */
@@ -35,7 +29,7 @@ object CommutativeSemigroup extends SemigroupFunctions {
   /**
    * This method converts a multiplicative instance into a generic
    * instance.
-   * 
+   *
    * Given an implicit `MultiplicativeCommutativeSemigroup[A]`, this
    * method returns a `CommutativeSemigroup[A]`.
    */

@@ -14,13 +14,6 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
   def combine(x: A, y: A): A
 
   /**
-   * Whether or not this particular Semigroup is commutative.
-   *
-   * For guaranteed commutativity, see CommutativeSemigroup.
-   */
-  def isCommutative: Boolean = false
-
-  /**
    * Return `a` combined with itself `n` times.
    */
   def combineN(a: A, n: Int): A =
@@ -41,7 +34,7 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
 
   /**
    * Given a sequence of `as`, combine them and return the total.
-   * 
+   *
    * If the sequence is empty, returns None. Otherwise, returns Some(total).
    */
   def combineAllOption(as: TraversableOnce[A]): Option[A] =
@@ -57,6 +50,18 @@ trait SemigroupFunctions {
       case Some(x) => ev.combine(x, y)
       case None => y
     }
+
+  def maybeCombine[@sp(Int, Long, Float, Double) A](x: A, oy: Option[A])(implicit ev: Semigroup[A]): A =
+    oy match {
+      case Some(y) => ev.combine(x, y)
+      case None => x
+    }
+
+  def isCommutative[A](implicit ev: Semigroup[A]): Boolean =
+    ev.isInstanceOf[CommutativeSemigroup[_]]
+
+  def isIdempotent[A](implicit ev: Semigroup[A]): Boolean =
+    ev.isInstanceOf[Band[_]]
 
   def combineN[@sp(Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: Semigroup[A]): A =
     ev.combineN(a, n)
@@ -75,17 +80,18 @@ object Semigroup extends SemigroupFunctions {
   /**
    * This method converts an additive instance into a generic
    * instance.
-   * 
+   *
    * Given an implicit `AdditiveSemigroup[A]`, this method returns a
    * `Semigroup[A]`.
    */
   @inline final def additive[A](implicit ev: ring.AdditiveSemigroup[A]): Semigroup[A] =
     ev.additive
 
+
   /**
    * This method converts an multiplicative instance into a generic
    * instance.
-   * 
+   *
    * Given an implicit `MultiplicativeSemigroup[A]`, this method
    * returns a `Semigroup[A]`.
    */
