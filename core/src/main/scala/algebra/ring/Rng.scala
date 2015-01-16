@@ -16,7 +16,7 @@ import scala.{specialized => sp}
  * 
  * Mnemonic: "Rng is a Ring without multiplicative 'I'dentity."
  */
-trait Rng[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with Semiring[A] with AdditiveCommutativeGroup[A]
+trait Rng[@sp(Int, Long, Float, Double) A] extends Any with Semiring[A] with AdditiveCommutativeGroup[A]
 
 object Rng extends AdditiveGroupFunctions with MultiplicativeSemigroupFunctions {
   @inline final def apply[A](implicit ev: Rng[A]): Rng[A] = ev

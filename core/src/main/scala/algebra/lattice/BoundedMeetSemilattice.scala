@@ -3,7 +3,7 @@ package lattice
 
 import scala.{specialized => sp}
 
-trait BoundedMeetSemilattice[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any with MeetSemilattice[A] { self =>
+trait BoundedMeetSemilattice[@sp(Int, Long, Float, Double) A] extends Any with MeetSemilattice[A] { self =>
   def one: A
   def isOne(a: A)(implicit ev: Eq[A]): Boolean = ev.eqv(a, one)
 
@@ -19,5 +19,5 @@ object BoundedMeetSemilattice {
   /**
    * Access an implicit `BoundedMeetSemilattice[A]`.
    */
-  @inline final def apply[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](implicit ev: BoundedMeetSemilattice[A]): BoundedMeetSemilattice[A] = ev
+  @inline final def apply[@sp(Int, Long, Float, Double) A](implicit ev: BoundedMeetSemilattice[A]): BoundedMeetSemilattice[A] = ev
 }

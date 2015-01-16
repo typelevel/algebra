@@ -16,7 +16,7 @@ import scala.{specialized => sp}
  * possible, these methods should be overridden by more efficient
  * implementations.
  */
-trait Ring[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with Rig[A] with Rng[A] {
+trait Ring[@sp(Int, Long, Float, Double) A] extends Any with Rig[A] with Rng[A] {
 
   /**
    * Convert the given integer to an instance of A.
@@ -33,7 +33,7 @@ trait Ring[@sp(Byte, Short, Int, Long, Float, Double) A] extends Any with Rig[A]
 }
 
 trait RingFunctions {
-  def fromInt[@sp(Byte, Short, Int, Long, Float, Double) A](n: Int)(implicit ev: Ring[A]): A =
+  def fromInt[@sp(Int, Long, Float, Double) A](n: Int)(implicit ev: Ring[A]): A =
     ev.fromInt(n)
 }
 

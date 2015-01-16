@@ -8,7 +8,7 @@ import scala.{ specialized => sp }
  * `combine(x, empty) == combine(empty, x) == x`. For example, if we have `Monoid[String]`,
  * with `combine` as string concatenation, then `empty = ""`.
  */
-trait Monoid[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any with Semigroup[A] {
+trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
 
   /**
    * Return the identity element for this monoid.
@@ -36,10 +36,10 @@ trait Monoid[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any 
 }
 
 trait MonoidFunctions extends SemigroupFunctions {
-  def empty[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](implicit ev: Monoid[A]): A =
+  def empty[@sp(Int, Long, Float, Double) A](implicit ev: Monoid[A]): A =
     ev.empty
 
-  def combineAll[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: Monoid[A]): A =
+  def combineAll[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: Monoid[A]): A =
     ev.combineAll(as)
 }
 

@@ -6,7 +6,7 @@ import scala.annotation.{ switch, tailrec }
 /**
  * A semigroup is any set `A` with an associative operation (`combine`).
  */
-trait Semigroup[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any with Serializable {
+trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
 
   /**
    * Associative operation taking which combines two values.
@@ -42,16 +42,16 @@ trait Semigroup[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends A
 }
 
 trait SemigroupFunctions {
-  def combine[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](x: A, y: A)(implicit ev: Semigroup[A]): A =
+  def combine[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: Semigroup[A]): A =
     ev.combine(x, y)
 
-  def maybeCombine[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](ox: Option[A], y: A)(implicit ev: Semigroup[A]): A =
+  def maybeCombine[@sp(Int, Long, Float, Double) A](ox: Option[A], y: A)(implicit ev: Semigroup[A]): A =
     ox match {
       case Some(x) => ev.combine(x, y)
       case None => y
     }
 
-  def maybeCombine[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](x: A, oy: Option[A])(implicit ev: Semigroup[A]): A =
+  def maybeCombine[@sp(Int, Long, Float, Double) A](x: A, oy: Option[A])(implicit ev: Semigroup[A]): A =
     oy match {
       case Some(y) => ev.combine(x, y)
       case None => x
@@ -63,10 +63,10 @@ trait SemigroupFunctions {
   def isIdempotent[A](implicit ev: Semigroup[A]): Boolean =
     ev.isInstanceOf[Band[_]]
 
-  def combineN[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: Semigroup[A]): A =
+  def combineN[@sp(Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: Semigroup[A]): A =
     ev.combineN(a, n)
 
-  def combineAllOption[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: Semigroup[A]): Option[A] =
+  def combineAllOption[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: Semigroup[A]): Option[A] =
     ev.combineAllOption(as)
 }
 
