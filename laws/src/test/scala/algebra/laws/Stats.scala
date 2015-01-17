@@ -5,6 +5,9 @@ import scala.math.{floor, exp, Pi, pow, sqrt}
 
 object Stats {
 
+  // basic strategy based on code found at:
+  // http://rosettacode.org/wiki/Verify_distribution_uniformity/Chi-squared_test
+
   def uniformProbability(expected: Double, buckets: Array[Int]): Double = {
     val dof = buckets.length - 1
     val distance = buckets.map(x => pow(x - expected, 2)).sum / expected
