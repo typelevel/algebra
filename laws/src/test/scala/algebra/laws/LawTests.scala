@@ -51,6 +51,6 @@ class LawTests extends FunSuite with Discipline {
     implicit val band = new Band[(Int, Int)] {
       def combine(a: (Int, Int), b: (Int, Int)) = (a._1, b._2)
     }
-    checkAll("(Int, Int) Band", LatticeLaws[(Int, Int)].band)
+    checkAll("(Int, Int) Band", GroupLaws[(Int, Int)].band)
   }
 }
