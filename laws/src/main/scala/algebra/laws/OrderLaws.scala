@@ -54,7 +54,8 @@ trait OrderLaws[A] extends Laws {
 
   class OrderProperties(
     name: String,
-    parent: Option[OrderProperties],
+    parent: Option[RuleSet],
     props: (String, Prop)*
   ) extends DefaultRuleSet(name, parent, props: _*)
+
 }
