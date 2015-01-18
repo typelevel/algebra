@@ -15,45 +15,32 @@ object LatticeLaws {
   }
 }
 
-trait LatticeLaws[A] extends Laws {
+trait LatticeLaws[A] extends GroupLaws[A] {
 
   implicit def Equ: Eq[A]
   implicit def Arb: Arbitrary[A]
 
-  def band(implicit A: Band[A]) = new LatticeProperties(
-    name = "band",
-    parents = Nil,
-    Rules.associativity(A.combine),
-    Rules.idempotence(A.combine)
-  )
-
-  def semilattice(implicit A: Semilattice[A]) = new LatticeProperties(
-    name = "semilattice",
-    parents = List(band),
-    Rules.commutative(A.combine)
-  )
-
   def joinSemilattice(implicit A: JoinSemilattice[A]) = new LatticeProperties(
     name = "joinSemilattice",
     parents = Nil,
-    Rules.serializable(A),
-    Rules.associativity(A.join),
-    Rules.commutative(A.join),
-    Rules.idempotence(A.join)
+    join = Some(semilattice(A.joinSemilattice)),
+    meet = None,
+    Rules.serializable(A)
   )
 
   def meetSemilattice(implicit A: MeetSemilattice[A]) = new LatticeProperties(
     name = "meetSemilattice",
     parents = Nil,
-    Rules.serializable(A),
-    Rules.associativity(A.meet),
-    Rules.commutative(A.meet),
-    Rules.idempotence(A.meet)
+    join = None,
+    meet = Some(semilattice(A.meetSemilattice)),
+    Rules.serializable(A)
   )
 
   def lattice(implicit A: Lattice[A]) = new LatticeProperties(
     name = "lattice",
     parents = Seq(joinSemilattice, meetSemilattice),
+    join = Some(semilattice(A.joinSemilattice)),
+    meet = Some(semilattice(A.meetSemilattice)),
     "absorption" -> forAll { (x: A, y: A) =>
       (A.join(x, A.meet(x, y)) ?== x) && (A.meet(x, A.join(x, y)) ?== x)
     }
@@ -62,37 +49,49 @@ trait LatticeLaws[A] extends Laws {
   def boundedJoinSemilattice(implicit A: BoundedJoinSemilattice[A]) = new LatticeProperties(
     name = "boundedJoinSemilattice",
     parents = Seq(joinSemilattice),
-    Rules.leftIdentity(A.zero)(A.join),
-    Rules.rightIdentity(A.zero)(A.join)
+    join = Some(boundedSemilattice(A.joinSemilattice)),
+    meet = None
   )
 
   def boundedMeetSemilattice(implicit A: BoundedMeetSemilattice[A]) = new LatticeProperties(
     name = "boundedMeetSemilattice",
     parents = Seq(meetSemilattice),
-    Rules.leftIdentity(A.one)(A.meet),
-    Rules.rightIdentity(A.one)(A.meet)
+    join = None,
+    meet = Some(boundedSemilattice(A.meetSemilattice))
   )
 
   def boundedBelowLattice(implicit A: Lattice[A] with BoundedJoinSemilattice[A]) = new LatticeProperties(
     name = "boundedBelowLattice",
-    parents = Seq(boundedJoinSemilattice, lattice)
+    parents = Seq(boundedJoinSemilattice, lattice),
+    join = Some(boundedSemilattice(A.joinSemilattice)),
+    meet = Some(semilattice(A.meetSemilattice))
   )
 
   def boundedAboveLattice(implicit A: Lattice[A] with BoundedMeetSemilattice[A]) = new LatticeProperties(
     name = "boundedAboveLattice",
-    parents = Seq(boundedMeetSemilattice, lattice)
+    parents = Seq(boundedMeetSemilattice, lattice),
+    join = Some(semilattice(A.joinSemilattice)),
+    meet = Some(boundedSemilattice(A.meetSemilattice))
   )
 
   def boundedLattice(implicit A: BoundedLattice[A]) = new LatticeProperties(
     name = "boundedLattice",
-    parents = Seq(boundedJoinSemilattice, boundedMeetSemilattice, lattice)
+    parents = Seq(boundedJoinSemilattice, boundedMeetSemilattice, lattice),
+    join = Some(boundedSemilattice(A.joinSemilattice)),
+    meet = Some(boundedSemilattice(A.meetSemilattice))
   )
 
   class LatticeProperties(
     val name: String,
     val parents: Seq[LatticeProperties],
+    val join: Option[GroupProperties],
+    val meet: Option[GroupProperties],
     val props: (String, Prop)*
   ) extends RuleSet {
-    val bases = Seq.empty
+    private val _m = meet map { "meet" -> _ }
+    private val _j = join map { "join" -> _ }
+
+    val bases = _m.toList ::: _j.toList
   }
+
 }
