@@ -2,6 +2,8 @@ package algebra
 
 import scala.{specialized => sp}
 
+import scala.math.Equiv
+
 /**
  * A type class used to determine equality between 2 instances of the same
  * type. Any 2 instances `x` and `y` are equal if `eqv(x, y)` is `true`.
@@ -30,10 +32,10 @@ trait Eq[@sp A] extends Any with Serializable { self =>
 }
 
 trait EqFunctions {
-  def eqv[A](x: A, y: A)(implicit ev: Eq[A]): Boolean =
+  def eqv[@sp A](x: A, y: A)(implicit ev: Eq[A]): Boolean =
     ev.eqv(x, y)
 
-  def neqv[A](x: A, y: A)(implicit ev: Eq[A]): Boolean =
+  def neqv[@sp A](x: A, y: A)(implicit ev: Eq[A]): Boolean =
     ev.neqv(x, y)
 }
 
@@ -45,11 +47,20 @@ object Eq extends EqFunctions {
   @inline final def apply[A](implicit ev: Eq[A]): Eq[A] = ev
 
   /**
-   * Convert an implicit `Eq[A]` to an `Eq[B]` using the given
+   * Convert an implicit `Eq[B]` to an `Eq[A]` using the given
    * function `f`.
    */
   def by[@sp A, @sp B](f: A => B)(implicit ev: Eq[B]): Eq[A] =
     new Eq[A] {
       def eqv(x: A, y: A): Boolean = ev.eqv(f(x), f(y))
+    }
+
+
+  /**
+   * This gives compatibility with scala's Equiv trait
+   */
+  implicit def equiv[A](implicit ev: Eq[A]): Equiv[A] =
+    new Equiv[A] {
+      def equiv(a: A, b: A) = ev.eqv(a, b)
     }
 }
