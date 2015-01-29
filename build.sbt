@@ -1,15 +1,15 @@
 // basic project info
 
-organization := "org.spire-math"
-homepage := Some(url("http://spire-math.org"))
-licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
+organization in ThisBuild := "org.spire-math"
+homepage in ThisBuild := Some(url("http://spire-math.org"))
+licenses in ThisBuild := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 
 // build information
 
-scalaVersion := "2.11.4"
-crossScalaVersions := Seq("2.10.4", "2.11.4")
+scalaVersion in ThisBuild := "2.11.4"
+crossScalaVersions in ThisBuild := Seq("2.10.4", "2.11.4")
 
-scalacOptions ++= (
+scalacOptions in ThisBuild ++= (
   "-deprecation" ::           
   "-encoding" :: "UTF-8" ::
   "-feature" ::                
@@ -29,11 +29,11 @@ scalacOptions ++= (
 
 // publishing/release details follow
 
-publishMavenStyle := true
-publishArtifact in Test := false
-pomIncludeRepository := { _ => false }
+publishMavenStyle in ThisBuild := true
+publishArtifact in ThisBuild in Test := false
+pomIncludeRepository in ThisBuild := { _ => false }
 
-publishTo <<= version { (v: String) =>
+publishTo in ThisBuild <<= version { (v: String) =>
   val nexus = "https://oss.sonatype.org/"
   if (v.trim.endsWith("SNAPSHOT"))
     Some("snapshots" at nexus + "content/repositories/snapshots")
@@ -41,7 +41,7 @@ publishTo <<= version { (v: String) =>
     Some("releases"  at nexus + "service/local/staging/deploy/maven2")
 }
 
-pomExtra := (
+pomExtra in ThisBuild := (
 <scm>
   <url>git@github.com:non/algebra.git</url>
   <connection>scm:git:git@github.com:non/algebra.git</connection>

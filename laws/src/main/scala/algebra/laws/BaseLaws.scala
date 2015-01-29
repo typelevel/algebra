@@ -31,7 +31,8 @@ trait BaseLaws[A] extends Laws {
       A.sign(A.abs(x)) ?!= Sign.Negative
     },
     "signum returns -1/0/1" -> forAll { (x: A) =>
-      A.signum(x).abs ?<= 1
+      val n: Int = A.signum(x)
+      n.abs ?<= 1
     },
     "signum is sign.toInt" -> forAll { (x: A) =>
       A.signum(x) ?== A.sign(x).toInt
