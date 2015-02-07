@@ -26,6 +26,15 @@ class LawTests extends FunSuite with Discipline {
   checkAll("String", OrderLaws[String].order)
   checkAll("String", GroupLaws[String].monoid)
 
+  {
+    // TODO: test a type that has Eq but not Order
+    implicit val g: Group[Int] = Group.additive[Int]
+    checkAll("Option[Int]", OrderLaws[Option[Int]].order)
+    checkAll("Option[Int]", GroupLaws[Option[Int]].monoid)
+    checkAll("Option[String]", OrderLaws[Option[Int]].order)
+    checkAll("Option[String]", GroupLaws[Option[Int]].monoid)
+  }
+
   checkAll("List[Int]", OrderLaws[List[Int]].order)
   checkAll("List[Int]", GroupLaws[List[Int]].monoid)
   checkAll("List[String]", OrderLaws[List[Int]].order)

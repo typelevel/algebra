@@ -2,16 +2,17 @@ package algebra
 package std
 
 package object all
-    extends BooleanInstances
+    extends BigIntInstances
+    with BooleanInstances
     with ByteInstances
-    with ShortInstances
     with CharInstances
-    with IntInstances
-    with LongInstances
-    with FloatInstances
     with DoubleInstances
-    with BigIntInstances
+    with FloatInstances
+    with IntInstances
     with ListInstances
+    with LongInstances
     with MapInstances
+    with OptionInstances
     with SetInstances
+    with ShortInstances
     with StringInstances
