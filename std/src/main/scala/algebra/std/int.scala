@@ -4,6 +4,7 @@ package std
 import algebra.lattice._
 import algebra.number._
 import algebra.ring._
+import algebra.std.util.StaticMethods
 
 package object int extends IntInstances
 
@@ -22,6 +23,13 @@ class IntAlgebra extends EuclideanRing[Int]
   def compare(x: Int, y: Int): Int =
     if (x < y) -1 else if (x > y) 1 else 0
 
+  override def eqv(x: Int, y: Int) = x == y
+  override def neqv(x: Int, y: Int) = x != y
+  override def gt(x: Int, y: Int) = x > y
+  override def gteqv(x: Int, y: Int) = x >= y
+  override def lt(x: Int, y: Int) = x < y
+  override def lteqv(x: Int, y: Int) = x <= y
+
   def abs(x: Int): Int =
     if (x < 0) -x else x
 
@@ -31,13 +39,19 @@ class IntAlgebra extends EuclideanRing[Int]
   def zero: Int = 0
   def one: Int = 1
 
-  def plus(a: Int, b: Int): Int = a + b
-  def negate(a: Int): Int = -a
-  override def minus(a: Int, b: Int): Int = a - b
+  def plus(x: Int, y: Int): Int = x + y
+  def negate(x: Int): Int = -x
+  override def minus(x: Int, y: Int): Int = x - y
 
-  def times(a: Int, b: Int): Int = a * b
-  def quot(a: Int, b: Int) = a / b
-  def mod(a: Int, b: Int) = a % b
+  def times(x: Int, y: Int): Int = x * y
+  def quot(x: Int, y: Int) = x / y
+  def mod(x: Int, y: Int) = x % y
+
+  override def pow(x: Int, y: Int): Int =
+    StaticMethods.pow(x.toLong, y.toLong).toInt
+
+  def gcd(x: Int, y: Int): Int =
+    StaticMethods.gcd(x.toLong, y.toLong).toInt
 
   override def fromInt(n: Int): Int = n
   override def toDouble(n: Int): Double = n.toDouble
