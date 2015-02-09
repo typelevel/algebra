@@ -7,7 +7,7 @@ classes from [Spire](http://github.com/non/spire) and
 [Algebird](http://github.com/twitter/algebird). By targeting just
 these type classes, we will distribute an `algebra` package with no
 dependencies that works with Scala 2.10 and 2.11, and which can be
-shared by all Scala libraries interesting in abstract algebra.
+shared by all Scala libraries interested in abstract algebra.
 
 ## what we have so far
 
