@@ -34,7 +34,6 @@ lazy val algebraSettings = buildSettings ++ commonSettings ++ publishSettings ++
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  apiURL := Some(url("https://non.github.io/algebra/api/")),
   unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(core, std, laws),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   git.remoteRepo := "git@github.com:non/algebra.git"
@@ -72,6 +71,8 @@ lazy val laws = project.dependsOn(core, std)
 lazy val publishSettings = Seq(
   homepage := Some(url("http://spire-math.org")),
   licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
+  autoAPIMappings := true,
+  apiURL := Some(url("https://non.github.io/algebra/api/")),
   publishMavenStyle := true,
   publishArtifact in Test := false,
   pomIncludeRepository := { _ => false },
