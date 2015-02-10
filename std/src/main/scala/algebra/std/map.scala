@@ -3,6 +3,7 @@ package std
 
 import algebra.ring._
 import algebra.std.util.StaticMethods
+import scala.collection.mutable
 
 package object map extends MapInstances
 
@@ -19,9 +20,6 @@ trait MapInstances2 extends MapInstances1 {
 }
 
 trait MapInstances1 extends MapInstances0 {
-  implicit def mapOrder[K: Order, V: Order: AdditiveMonoid]: Order[Map[K, V]] =
-    new MapVectorOrder[K, V]
-
   implicit def mapGroup[K, V: Group]: MapGroup[K, V] =
     new MapGroup[K, V]
   implicit def mapAdditiveGroup[K, V: AdditiveGroup]: MapAdditiveGroup[K, V] =
@@ -37,6 +35,16 @@ trait MapInstances0 {
     new MapAdditiveMonoid[K, V]
 }
 
+class MapEq[K, V](implicit ev: Eq[V], a: AdditiveMonoid[V]) extends Eq[Map[K, V]] {
+  def eqv(x: Map[K, V], y: Map[K, V]): Boolean =
+    x.size == y.size && x.forall { case (k, v1) =>
+      y.get(k) match {
+        case Some(v2) => ev.eqv(v1, v2)
+        case None => false
+      }
+    }
+}
+
 class MapVectorEq[K, V](implicit ev: Eq[V], a: AdditiveMonoid[V]) extends Eq[Map[K, V]] {
   private[this] def check(x: Map[K, V], y: Map[K, V]): Boolean =
     x.forall { case (k, v1) =>
@@ -50,39 +58,11 @@ class MapVectorEq[K, V](implicit ev: Eq[V], a: AdditiveMonoid[V]) extends Eq[Map
     check(x, y) && check(y, x)
 }
 
-class MapVectorOrder[K, V](implicit K: Order[K], V: Order[V], V0: AdditiveMonoid[V]) extends Order[Map[K, V]] {
-  def compare(x: Map[K, V], y: Map[K, V]): Int = {
-    val zero = V0.zero
-    def check(progress: (K, Int), x: Map[K, V], y: Map[K, V], sign: Int): (K, Int) = {
-      val it = x.iterator
-      var mink: K = progress._1
-      var outv: Int = progress._2
-      while (it.hasNext) {
-        val (k, v1) = it.next
-        if (outv == 0 || K.lt(k, mink)) {
-          val v2 = y.getOrElse(k, zero)
-          val r = V.compare(v1, v2)
-          if (r != 0) {
-            mink = k
-            outv = r * sign
-          }
-        }
-      }
-      (mink, outv)
-    }
-
-    val init = (null.asInstanceOf[K], 0)
-    val progress = check(init, x, y, 1)
-    val (_, result) = check(progress, y, x, -1)
-    result
-  }
-}
-
 class MapMonoid[K, V](implicit sg: Semigroup[V]) extends Monoid[Map[K, V]]  {
   def empty: Map[K, V] = Map.empty
 
   def combine(x: Map[K, V], y: Map[K, V]): Map[K, V] =
-    StaticMethods.combineMap(x, y)(sg.combine)(v => v)
+    StaticMethods.addMap(x, y)(sg.combine)
 }
 
 class MapGroup[K, V](implicit g: Group[V]) extends MapMonoid[K, V] with Group[Map[K, V]] {
@@ -90,14 +70,14 @@ class MapGroup[K, V](implicit g: Group[V]) extends MapMonoid[K, V] with Group[Ma
     x.map { case (k, v) => (k, g.inverse(v)) }
 
   override def remove(x: Map[K, V], y: Map[K, V]): Map[K, V] =
-    StaticMethods.combineMap(x, y)(g.remove)(g.inverse)
+    StaticMethods.subtractMap(x, y)(g.remove)(g.inverse)
 }
 
 class MapAdditiveMonoid[K, V](implicit sg: AdditiveSemigroup[V]) extends AdditiveMonoid[Map[K, V]]  {
   def zero: Map[K, V] = Map.empty
 
   def plus(x: Map[K, V], y: Map[K, V]): Map[K, V] =
-    StaticMethods.combineMap(x, y)(sg.plus)(v => v)
+    StaticMethods.addMap(x, y)(sg.plus)
 }
 
 class MapAdditiveGroup[K, V](implicit g: AdditiveGroup[V]) extends MapAdditiveMonoid[K, V] with AdditiveGroup[Map[K, V]] {
@@ -105,16 +85,39 @@ class MapAdditiveGroup[K, V](implicit g: AdditiveGroup[V]) extends MapAdditiveMo
     x.map { case (k, v) => (k, g.negate(v)) }
 
   override def minus(x: Map[K, V], y: Map[K, V]): Map[K, V] =
-    StaticMethods.combineMap(x, y)(g.minus)(g.negate)
+    StaticMethods.subtractMap(x, y)(g.minus)(g.negate)
 }
 
 class MapSemiring[K, V](implicit val sr: Semiring[V]) extends MapAdditiveMonoid[K, V] with Semiring[Map[K, V]] {
 
   override def plus(x: Map[K, V], y: Map[K, V]): Map[K, V] =
-    StaticMethods.combineMapCommutative(x, y)(sr.plus)
+    if (y.size < x.size) plus(y, x) else {
+      val m = StaticMethods.initMutableMap(y)
+      x.foreach { case (k, v1) =>
+        m(k) = m.get(k) match {
+          case Some(v2) => sr.plus(v1, v2)
+          case None => v1
+        }
+      }
+      m.toMap
+    }
 
-  def times(x: Map[K, V], y: Map[K, V]): Map[K, V] =
-    StaticMethods.zipMap(x, y)(sr.times)
+  def times(x: Map[K, V], y: Map[K, V]): Map[K, V] = {
+    // we can't just flip arguments to times() since
+    // sr.times is not guaranteed to be commutative.
+    val (small, big, f) =
+      if (x.size <= y.size) (x, y, sr.times _)
+      else (y, x, (v1: V, v2: V) => sr.times(v2, v1))
+
+    val m = mutable.Map.empty[K, V]
+    small.foreach { case (k, v1) =>
+      big.get(k) match {
+        case Some(v2) => m(k) = f(v1, v2)
+        case None => ()
+      }
+    }
+    m.toMap
+  }
 
   override def pow(x: Map[K, V], n: Int): Map[K, V] =
     x.map { case (k, v) => (k, sr.pow(v, n)) }
@@ -125,5 +128,5 @@ class MapRng[K, V](implicit r: Rng[V]) extends MapSemiring[K, V] with Rng[Map[K,
     x.map { case (k, v) => (k, r.negate(v)) }
 
   override def minus(x: Map[K, V], y: Map[K, V]): Map[K, V] =
-    StaticMethods.combineMap(x, y)(r.minus)(r.negate)
+    StaticMethods.subtractMap(x, y)(r.minus)(r.negate)
 }

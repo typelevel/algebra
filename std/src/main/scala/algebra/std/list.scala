@@ -35,13 +35,17 @@ class ListMonoid[A] extends Monoid[List[A]] {
 
   override def combineN(x: List[A], n: Int): List[A] = {
     val buf = mutable.ListBuffer.empty[A]
-    (0 until n).foreach(_ => x.foreach(buf += _))
-    buf.toList
+    @tailrec def loop(i: Int): List[A] =
+      if (i <= 0) buf.toList else {
+        buf ++= x
+        loop(i - 1)
+      }
+    loop(n)
   }
 
   override def combineAll(xs: TraversableOnce[List[A]]): List[A] = {
     val buf = mutable.ListBuffer.empty[A]
-    xs.foreach(_.foreach(buf += _))
+    xs.foreach(buf ++= _)
     buf.toList
   }
 }

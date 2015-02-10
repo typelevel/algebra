@@ -5,6 +5,7 @@ import java.lang.Float.{ intBitsToFloat, floatToIntBits }
 import java.lang.Long.{ numberOfTrailingZeros, numberOfLeadingZeros }
 import java.lang.Math
 import scala.annotation.tailrec
+import scala.collection.mutable
 
 object StaticMethods {
 
@@ -133,31 +134,37 @@ object StaticMethods {
     }
   }
 
-  def combineMapCommutative[K, V](x: Map[K, V], y: Map[K, V])(f: (V, V) => V): Map[K, V] =
-    if (y.size < x.size) combineMapCommutative(y, x)(f) else {
-      x.foldLeft(y) { case (z, (k, v1)) =>
-        val v3 = y.get(k) match {
-          case Some(v2) => f(v1, v2)
-          case None => v1
-        }
-        z.updated(k, v3)
-      }
-    }
+  def initMutableMap[K, V](m: Map[K, V]): mutable.Map[K, V] = {
+    val result = mutable.Map.empty[K, V]
+    m.foreach { case (k, v) => result(k) = v }
+    result
+  }
 
-  def combineMap[K, V](x: Map[K, V], y: Map[K, V])(f: (V, V) => V)(g: V => V): Map[K, V] =
-    y.foldLeft(x) { case (z, (k, v2)) =>
-      val v3 = x.get(k) match {
-        case Some(v1) => f(v1, v2)
-        case None => g(v2)
-      }
-      z.updated(k, v3)
-    }
+  def addMap[K, V](x: Map[K, V], y: Map[K, V])(f: (V, V) => V): Map[K, V] = {
+    val (small, big, g) =
+      if (x.size <= y.size) (x, y, f)
+      else (y, x, (v1: V, v2: V) => f(v2, v1))
 
-  def zipMap[K, V](x: Map[K, V], y: Map[K, V])(f: (V, V) => V): Map[K, V] =
-    y.foldLeft(Map.empty[K, V]) { case (z, (k, v2)) =>
-      x.get(k) match {
-        case Some(v1) => z.updated(k, f(v1, v2))
-        case None => z
+    val m = initMutableMap(big)
+    small.foreach { case (k, v1) =>
+      m(k) = m.get(k) match {
+        case Some(v2) => g(v1, v2)
+        case None => v1
       }
     }
+    m.toMap
+  }
+
+  def subtractMap[K, V](x: Map[K, V], y: Map[K, V])(subtract: (V, V) => V)(negate: V => V): Map[K, V] = {
+    // even if x is smaller, we'd need to call map/foreach on y to
+    // negate all its values, so this is just as fast or faster.
+    val m = initMutableMap(x)
+    y.foreach { case (k, v2) =>
+      m(k) = m.get(k) match {
+        case Some(v1) => subtract(v1, v2)
+        case None => negate(v2)
+      }
+    }
+    m.toMap
+  }
 }

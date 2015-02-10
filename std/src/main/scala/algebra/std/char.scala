@@ -1,7 +1,7 @@
 package algebra
 package std
 
-package object char extends ByteInstances
+package object char extends CharInstances
 
 trait CharInstances {
   implicit val charAlgebra = new CharAlgebra
