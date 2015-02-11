@@ -35,22 +35,22 @@ trait MapInstances0 {
     new MapAdditiveMonoid[K, V]
 }
 
-class MapEq[K, V](implicit ev: Eq[V], a: AdditiveMonoid[V]) extends Eq[Map[K, V]] {
+class MapEq[K, V](implicit V: Eq[V]) extends Eq[Map[K, V]] {
   def eqv(x: Map[K, V], y: Map[K, V]): Boolean =
     x.size == y.size && x.forall { case (k, v1) =>
       y.get(k) match {
-        case Some(v2) => ev.eqv(v1, v2)
+        case Some(v2) => V.eqv(v1, v2)
         case None => false
       }
     }
 }
 
-class MapVectorEq[K, V](implicit ev: Eq[V], a: AdditiveMonoid[V]) extends Eq[Map[K, V]] {
+class MapVectorEq[K, V](implicit V0: Eq[V], V1: AdditiveMonoid[V]) extends Eq[Map[K, V]] {
   private[this] def check(x: Map[K, V], y: Map[K, V]): Boolean =
     x.forall { case (k, v1) =>
       y.get(k) match {
-        case Some(v2) => ev.eqv(v1, v2)
-        case None => a.isZero(v1)
+        case Some(v2) => V0.eqv(v1, v2)
+        case None => V1.isZero(v1)
       }
     }
 
@@ -58,44 +58,44 @@ class MapVectorEq[K, V](implicit ev: Eq[V], a: AdditiveMonoid[V]) extends Eq[Map
     (x eq y) || (check(x, y) && check(y, x))
 }
 
-class MapMonoid[K, V](implicit sg: Semigroup[V]) extends Monoid[Map[K, V]]  {
+class MapMonoid[K, V](implicit V: Semigroup[V]) extends Monoid[Map[K, V]]  {
   def empty: Map[K, V] = Map.empty
 
   def combine(x: Map[K, V], y: Map[K, V]): Map[K, V] =
-    addMap(x, y)(sg.combine)
+    addMap(x, y)(V.combine)
 }
 
-class MapGroup[K, V](implicit g: Group[V]) extends MapMonoid[K, V] with Group[Map[K, V]] {
+class MapGroup[K, V](implicit V: Group[V]) extends MapMonoid[K, V] with Group[Map[K, V]] {
   def inverse(x: Map[K, V]): Map[K, V] =
-    x.map { case (k, v) => (k, g.inverse(v)) }
+    x.map { case (k, v) => (k, V.inverse(v)) }
 
   override def remove(x: Map[K, V], y: Map[K, V]): Map[K, V] =
-    subtractMap(x, y)(g.remove)(g.inverse)
+    subtractMap(x, y)(V.remove)(V.inverse)
 }
 
-class MapAdditiveMonoid[K, V](implicit sg: AdditiveSemigroup[V]) extends AdditiveMonoid[Map[K, V]]  {
+class MapAdditiveMonoid[K, V](implicit V: AdditiveSemigroup[V]) extends AdditiveMonoid[Map[K, V]]  {
   def zero: Map[K, V] = Map.empty
 
   def plus(x: Map[K, V], y: Map[K, V]): Map[K, V] =
-    addMap(x, y)(sg.plus)
+    addMap(x, y)(V.plus)
 }
 
-class MapAdditiveGroup[K, V](implicit g: AdditiveGroup[V]) extends MapAdditiveMonoid[K, V] with AdditiveGroup[Map[K, V]] {
+class MapAdditiveGroup[K, V](implicit V: AdditiveGroup[V]) extends MapAdditiveMonoid[K, V] with AdditiveGroup[Map[K, V]] {
   def negate(x: Map[K, V]): Map[K, V] =
-    x.map { case (k, v) => (k, g.negate(v)) }
+    x.map { case (k, v) => (k, V.negate(v)) }
 
   override def minus(x: Map[K, V], y: Map[K, V]): Map[K, V] =
-    subtractMap(x, y)(g.minus)(g.negate)
+    subtractMap(x, y)(V.minus)(V.negate)
 }
 
-class MapSemiring[K, V](implicit val sr: Semiring[V]) extends MapAdditiveMonoid[K, V] with Semiring[Map[K, V]] {
+class MapSemiring[K, V](implicit V: Semiring[V]) extends MapAdditiveMonoid[K, V] with Semiring[Map[K, V]] {
 
   override def plus(x: Map[K, V], y: Map[K, V]): Map[K, V] =
     if (y.size < x.size) plus(y, x) else {
       val m = initMutableMap(y)
       x.foreach { case (k, v1) =>
         m(k) = m.get(k) match {
-          case Some(v2) => sr.plus(v1, v2)
+          case Some(v2) => V.plus(v1, v2)
           case None => v1
         }
       }
@@ -104,10 +104,10 @@ class MapSemiring[K, V](implicit val sr: Semiring[V]) extends MapAdditiveMonoid[
 
   def times(x: Map[K, V], y: Map[K, V]): Map[K, V] = {
     // we can't just flip arguments to times() since
-    // sr.times is not guaranteed to be commutative.
+    // V.times is not guaranteed to be commutative.
     val (small, big, f) =
-      if (x.size <= y.size) (x, y, sr.times _)
-      else (y, x, (v1: V, v2: V) => sr.times(v2, v1))
+      if (x.size <= y.size) (x, y, V.times _)
+      else (y, x, (v1: V, v2: V) => V.times(v2, v1))
 
     val m = mutable.Map.empty[K, V]
     small.foreach { case (k, v1) =>
@@ -120,13 +120,13 @@ class MapSemiring[K, V](implicit val sr: Semiring[V]) extends MapAdditiveMonoid[
   }
 
   override def pow(x: Map[K, V], n: Int): Map[K, V] =
-    x.map { case (k, v) => (k, sr.pow(v, n)) }
+    x.map { case (k, v) => (k, V.pow(v, n)) }
 }
 
-class MapRng[K, V](implicit r: Rng[V]) extends MapSemiring[K, V] with Rng[Map[K, V]] {
+class MapRng[K, V](implicit V: Rng[V]) extends MapSemiring[K, V] with Rng[Map[K, V]] {
   def negate(x: Map[K, V]): Map[K, V] =
-    x.map { case (k, v) => (k, r.negate(v)) }
+    x.map { case (k, v) => (k, V.negate(v)) }
 
   override def minus(x: Map[K, V], y: Map[K, V]): Map[K, V] =
-    subtractMap(x, y)(r.minus)(r.negate)
+    subtractMap(x, y)(V.minus)(V.negate)
 }
