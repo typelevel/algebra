@@ -140,6 +140,17 @@ object StaticMethods {
     result
   }
 
+  def wrapMutableMap[K, V](m: mutable.Map[K, V]): Map[K, V] =
+    new WrappedMutableMap(m)
+
+  private[algebra] class WrappedMutableMap[K, V](m: mutable.Map[K, V]) extends Map[K, V] {
+    override def size: Int = m.size
+    def get(k: K): Option[V] = m.get(k)
+    def iterator: Iterator[(K, V)] = m.iterator
+    def +[V2 >: V](kv: (K, V2)): Map[K, V2] = m.toMap + kv
+    def -(key: K): Map[K, V] = m.toMap - key
+  }
+
   def addMap[K, V](x: Map[K, V], y: Map[K, V])(f: (V, V) => V): Map[K, V] = {
     val (small, big, g) =
       if (x.size <= y.size) (x, y, f)
@@ -152,7 +163,7 @@ object StaticMethods {
         case None => v1
       }
     }
-    m.toMap
+    wrapMutableMap(m)
   }
 
   def subtractMap[K, V](x: Map[K, V], y: Map[K, V])(subtract: (V, V) => V)(negate: V => V): Map[K, V] = {
@@ -165,6 +176,6 @@ object StaticMethods {
         case None => negate(v2)
       }
     }
-    m.toMap
+    wrapMutableMap(m)
   }
 }

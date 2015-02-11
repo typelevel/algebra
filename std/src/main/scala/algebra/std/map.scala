@@ -2,7 +2,7 @@ package algebra
 package std
 
 import algebra.ring._
-import algebra.std.util.StaticMethods
+import algebra.std.util.StaticMethods.{addMap, initMutableMap, subtractMap, wrapMutableMap}
 import scala.collection.mutable
 
 package object map extends MapInstances
@@ -55,14 +55,14 @@ class MapVectorEq[K, V](implicit ev: Eq[V], a: AdditiveMonoid[V]) extends Eq[Map
     }
 
   def eqv(x: Map[K, V], y: Map[K, V]): Boolean =
-    check(x, y) && check(y, x)
+    (x eq y) || (check(x, y) && check(y, x))
 }
 
 class MapMonoid[K, V](implicit sg: Semigroup[V]) extends Monoid[Map[K, V]]  {
   def empty: Map[K, V] = Map.empty
 
   def combine(x: Map[K, V], y: Map[K, V]): Map[K, V] =
-    StaticMethods.addMap(x, y)(sg.combine)
+    addMap(x, y)(sg.combine)
 }
 
 class MapGroup[K, V](implicit g: Group[V]) extends MapMonoid[K, V] with Group[Map[K, V]] {
@@ -70,14 +70,14 @@ class MapGroup[K, V](implicit g: Group[V]) extends MapMonoid[K, V] with Group[Ma
     x.map { case (k, v) => (k, g.inverse(v)) }
 
   override def remove(x: Map[K, V], y: Map[K, V]): Map[K, V] =
-    StaticMethods.subtractMap(x, y)(g.remove)(g.inverse)
+    subtractMap(x, y)(g.remove)(g.inverse)
 }
 
 class MapAdditiveMonoid[K, V](implicit sg: AdditiveSemigroup[V]) extends AdditiveMonoid[Map[K, V]]  {
   def zero: Map[K, V] = Map.empty
 
   def plus(x: Map[K, V], y: Map[K, V]): Map[K, V] =
-    StaticMethods.addMap(x, y)(sg.plus)
+    addMap(x, y)(sg.plus)
 }
 
 class MapAdditiveGroup[K, V](implicit g: AdditiveGroup[V]) extends MapAdditiveMonoid[K, V] with AdditiveGroup[Map[K, V]] {
@@ -85,21 +85,21 @@ class MapAdditiveGroup[K, V](implicit g: AdditiveGroup[V]) extends MapAdditiveMo
     x.map { case (k, v) => (k, g.negate(v)) }
 
   override def minus(x: Map[K, V], y: Map[K, V]): Map[K, V] =
-    StaticMethods.subtractMap(x, y)(g.minus)(g.negate)
+    subtractMap(x, y)(g.minus)(g.negate)
 }
 
 class MapSemiring[K, V](implicit val sr: Semiring[V]) extends MapAdditiveMonoid[K, V] with Semiring[Map[K, V]] {
 
   override def plus(x: Map[K, V], y: Map[K, V]): Map[K, V] =
     if (y.size < x.size) plus(y, x) else {
-      val m = StaticMethods.initMutableMap(y)
+      val m = initMutableMap(y)
       x.foreach { case (k, v1) =>
         m(k) = m.get(k) match {
           case Some(v2) => sr.plus(v1, v2)
           case None => v1
         }
       }
-      m.toMap
+      wrapMutableMap(m)
     }
 
   def times(x: Map[K, V], y: Map[K, V]): Map[K, V] = {
@@ -116,7 +116,7 @@ class MapSemiring[K, V](implicit val sr: Semiring[V]) extends MapAdditiveMonoid[
         case None => ()
       }
     }
-    m.toMap
+    wrapMutableMap(m)
   }
 
   override def pow(x: Map[K, V], n: Int): Map[K, V] =
@@ -128,5 +128,5 @@ class MapRng[K, V](implicit r: Rng[V]) extends MapSemiring[K, V] with Rng[Map[K,
     x.map { case (k, v) => (k, r.negate(v)) }
 
   override def minus(x: Map[K, V], y: Map[K, V]): Map[K, V] =
-    StaticMethods.subtractMap(x, y)(r.minus)(r.negate)
+    subtractMap(x, y)(r.minus)(r.negate)
 }
