@@ -63,4 +63,23 @@ object Eq extends EqFunctions {
     new Equiv[A] {
       def equiv(a: A, b: A) = ev.eqv(a, b)
     }
+
+  /**
+   * Create an `Eq` instance from an `eqv` implementation.
+   */
+  def instance[A](f: (A, A) => Boolean): Eq[A] =
+    new Eq[A] {
+      def eqv(x: A, y: A) = f(x, y)
+    }
+
+  /**
+   * An `Eq[A]` that delegates to universal equality (`==`).
+   *
+   * This can be useful for case classes, which have reasonable `equals`
+   * implementations
+   */
+  def fromUniversalEquals[A]: Eq[A] =
+    new Eq[A] {
+      def eqv(x: A, y: A) = x == y
+    }
 }
