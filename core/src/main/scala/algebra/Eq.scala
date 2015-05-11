@@ -27,7 +27,7 @@ trait Eq[@sp A] extends Any with Serializable { self =>
    */
   def on[@sp B](f: B => A): Eq[B] =
     new Eq[B] {
-      def eqv(x: B, y: B): Boolean = self.eqv(f(x), f(x))
+      def eqv(x: B, y: B): Boolean = self.eqv(f(x), f(y))
     }
 }
 
