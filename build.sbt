@@ -7,8 +7,8 @@ import sbtunidoc.Plugin.UnidocKeys._
 
 lazy val buildSettings = Seq(
   organization := "org.spire-math",
-  scalaVersion := "2.11.5",
-  crossScalaVersions := Seq("2.10.4", "2.11.5")
+  scalaVersion := "2.11.6",
+  crossScalaVersions := Seq("2.10.5", "2.11.6")
 )
 
 lazy val commonSettings = Seq(
@@ -62,9 +62,9 @@ lazy val laws = project.dependsOn(core, std)
   .settings(algebraSettings: _*)
   .settings(
     libraryDependencies ++= Seq(
-      "org.scalacheck" %% "scalacheck" % "1.11.3",
+      "org.scalacheck" %% "scalacheck" % "1.12.2",
       "org.typelevel" %% "discipline" % "0.2.1",
-      "org.scalatest" %% "scalatest" % "2.1.3" % "test"
+      "org.scalatest" %% "scalatest" % "2.2.4" % "test"
     )
   )
 
