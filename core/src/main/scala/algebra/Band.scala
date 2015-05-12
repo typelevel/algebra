@@ -12,7 +12,7 @@ trait Band[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A] extends Any wi
 object Band {
 
   /**
-   * Access an implicit `Semilattice[A]`.
+   * Access an implicit `Band[A]`.
    */
   @inline final def apply[@sp(Boolean, Byte, Short, Int, Long, Float, Double) A](implicit ev: Band[A]): Band[A] = ev
 }
