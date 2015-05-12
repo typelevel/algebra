@@ -11,10 +11,8 @@ package object short extends ShortInstances
 trait ShortInstances {
   implicit val shortAlgebra = new ShortAlgebra
 
-  val ShortMinMaxLattice = new Lattice[Short] {
-    def join(x: Short, y: Short): Short = if (x > y) x else y
-    def meet(x: Short, y: Short): Short = if (x < y) x else y
-  }
+  val ShortMinMaxLattice: Lattice[Short] =
+    Lattice.minMax[Short](shortAlgebra)
 }
 
 class ShortAlgebra extends EuclideanRing[Short]

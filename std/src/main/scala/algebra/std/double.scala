@@ -15,12 +15,18 @@ import scala.annotation.tailrec
 trait DoubleInstances {
   implicit val doubleAlgebra = new DoubleAlgebra
 
-  val DoubleMinMaxLattice = new Lattice[Double] {
-    def join(x: Double, y: Double): Double = if (x > y) x else y
-    def meet(x: Double, y: Double): Double = if (x < y) x else y
-  }
+  val DoubleMinMaxLattice: Lattice[Double] =
+    Lattice.minMax[Double](doubleAlgebra)
 }
 
+/**
+ * Due to the way floating-point equality works, this instance is not
+ * lawful under equality, but is correct when taken as an
+ * approximation of an exact value.
+ *
+ * If you would prefer an absolutely lawful fractional value, you'll
+ * need to investigate rational numbers or more exotic types.
+ */
 class DoubleAlgebra extends Field[Double] with NRoot[Double] with Order[Double] with Signed[Double] with IsReal[Double] with Serializable {
 
   def compare(x: Double, y: Double) =

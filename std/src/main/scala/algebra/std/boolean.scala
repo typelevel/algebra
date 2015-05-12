@@ -11,7 +11,12 @@ trait BooleanInstances {
     new BooleanAlgebra
 }
 
-class BooleanAlgebra extends Bool[Boolean] with Order[Boolean] with CommutativeRig[Boolean] with Serializable {
+/**
+ * This commutative rig is different than the one obtained from GF(2).
+ *
+ * It uses || for plus, and && for times.
+ */
+class BooleanAlgebra extends Bool[Boolean] with Order[Boolean] with CommutativeRig[Boolean] {
   def compare(x: Boolean, y: Boolean): Int =
     if (x) { if (y) 0 else 1 } else { if (y) -1 else 0 }
 

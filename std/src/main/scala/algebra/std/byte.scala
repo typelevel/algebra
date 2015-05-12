@@ -11,10 +11,8 @@ package object byte extends ByteInstances
 trait ByteInstances {
   implicit val byteAlgebra = new ByteAlgebra
 
-  val ByteMinMaxLattice = new Lattice[Byte] {
-    def join(x: Byte, y: Byte): Byte = if (x > y) x else y
-    def meet(x: Byte, y: Byte): Byte = if (x < y) x else y
-  }
+  val ByteMinMaxLattice: Lattice[Byte] =
+    Lattice.minMax[Byte](byteAlgebra)
 }
 
 class ByteAlgebra extends EuclideanRing[Byte]

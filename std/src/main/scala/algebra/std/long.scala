@@ -12,10 +12,8 @@ package object long extends LongInstances
 trait LongInstances {
   implicit val longAlgebra = new LongAlgebra
 
-  val LongMinMaxLattice = new Lattice[Long] {
-    def join(x: Long, y: Long): Long = if (x > y) x else y
-    def meet(x: Long, y: Long): Long = if (x < y) x else y
-  }
+  val LongMinMaxLattice: Lattice[Long] =
+    Lattice.minMax[Long](longAlgebra)
 }
 
 class LongAlgebra extends EuclideanRing[Long]

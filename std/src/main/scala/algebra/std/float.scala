@@ -11,12 +11,18 @@ import scala.annotation.tailrec
 trait FloatInstances {
   implicit val floatAlgebra = new FloatAlgebra
 
-  val FloatMinMaxLattice = new Lattice[Float] {
-    def join(x: Float, y: Float): Float = if (x > y) x else y
-    def meet(x: Float, y: Float): Float = if (x < y) x else y
-  }
+  val FloatMinMaxLattice: Lattice[Float] =
+    Lattice.minMax[Float](floatAlgebra)
 }
 
+/**
+ * Due to the way floating-point equality works, this instance is not
+ * lawful under equality, but is correct when taken as an
+ * approximation of an exact value.
+ *
+ * If you would prefer an absolutely lawful fractional value, you'll
+ * need to investigate rational numbers or more exotic types.
+ */
 class FloatAlgebra extends Field[Float] with NRoot[Float] with Order[Float] with Signed[Float] with IsReal[Float] with Serializable {
 
   def compare(x: Float, y: Float) =

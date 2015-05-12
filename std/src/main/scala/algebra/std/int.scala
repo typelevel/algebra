@@ -11,10 +11,8 @@ package object int extends IntInstances
 trait IntInstances {
   implicit val intAlgebra = new IntAlgebra
 
-  val IntMinMaxLattice = new Lattice[Int] {
-    def join(x: Int, y: Int): Int = if (x > y) x else y
-    def meet(x: Int, y: Int): Int = if (x < y) x else y
-  }
+  val IntMinMaxLattice: Lattice[Int] =
+    Lattice.minMax[Int](intAlgebra)
 }
 
 class IntAlgebra extends EuclideanRing[Int]
