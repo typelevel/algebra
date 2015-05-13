@@ -52,6 +52,12 @@ lazy val aggregate = project.in(file("."))
 lazy val core = project
   .settings(moduleName := "algebra")
   .settings(algebraSettings: _*)
+  .settings(
+    libraryDependencies ++= Seq(
+      "com.github.mpilquist" %% "simulacrum" % "0.3.0",
+      compilerPlugin("org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full)
+    )
+  )
 
 lazy val std = project.dependsOn(core)
   .settings(moduleName := "algebra-std")

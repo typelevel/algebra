@@ -4,14 +4,16 @@ package ring
 import scala.{ specialized => sp }
 import scala.annotation.tailrec
 
-trait AdditiveSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
-  def additive: Semigroup[A] = new Semigroup[A] {
+import simulacrum._
+
+@typeclass trait AdditiveSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
+  @noop def additive: Semigroup[A] = new Semigroup[A] {
     def combine(x: A, y: A): A = plus(x, y)
   }
 
   def plus(x: A, y: A): A
 
-  def sumN(a: A, n: Int): A =
+  @noop def sumN(a: A, n: Int): A =
     if (n > 0) positiveSumN(a, n)
     else throw new IllegalArgumentException("Illegal non-positive exponent to sumN: %s" format n)
 
@@ -33,26 +35,26 @@ trait AdditiveSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Serial
     as.reduceOption(plus)
 }
 
-trait AdditiveCommutativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with AdditiveSemigroup[A] {
-  override def additive: CommutativeSemigroup[A] = new CommutativeSemigroup[A] {
+@typeclass trait AdditiveCommutativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with AdditiveSemigroup[A] {
+  @noop override def additive: CommutativeSemigroup[A] = new CommutativeSemigroup[A] {
     def combine(x: A, y: A): A = plus(x, y)
   }
 }
 
-trait AdditiveMonoid[@sp(Int, Long, Float, Double) A] extends Any with AdditiveSemigroup[A] {
-  override def additive: Monoid[A] = new Monoid[A] {
+@typeclass trait AdditiveMonoid[@sp(Int, Long, Float, Double) A] extends Any with AdditiveSemigroup[A] {
+  @noop override def additive: Monoid[A] = new Monoid[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
   }
 
-  def zero: A
+  @noop def zero: A
 
   /**
     * Tests if `a` is zero.
     */
   def isZero(a: A)(implicit ev: Eq[A]): Boolean = ev.eqv(a, zero)
 
-  override def sumN(a: A, n: Int): A =
+  @noop override def sumN(a: A, n: Int): A =
     if (n > 0) positiveSumN(a, n)
     else if (n == 0) zero
     else throw new IllegalArgumentException("Illegal negative exponent to sumN: %s" format n)
@@ -64,15 +66,15 @@ trait AdditiveMonoid[@sp(Int, Long, Float, Double) A] extends Any with AdditiveS
     as.foldLeft(zero)(plus)
 }
 
-trait AdditiveCommutativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with AdditiveMonoid[A] with AdditiveCommutativeSemigroup[A] {
-  override def additive: CommutativeMonoid[A] = new CommutativeMonoid[A] {
+@typeclass trait AdditiveCommutativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with AdditiveMonoid[A] with AdditiveCommutativeSemigroup[A] {
+  @noop override def additive: CommutativeMonoid[A] = new CommutativeMonoid[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
   }
 }
 
-trait AdditiveGroup[@sp(Int, Long, Float, Double) A] extends Any with AdditiveMonoid[A] {
-  override def additive: Group[A] = new Group[A] {
+@typeclass trait AdditiveGroup[@sp(Int, Long, Float, Double) A] extends Any with AdditiveMonoid[A] {
+  @noop override def additive: Group[A] = new Group[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
     override def remove(x: A, y: A): A = minus(x, y)
@@ -82,15 +84,15 @@ trait AdditiveGroup[@sp(Int, Long, Float, Double) A] extends Any with AdditiveMo
   def negate(x: A): A
   def minus(x: A, y: A): A = plus(x, negate(y))
 
-  override def sumN(a: A, n: Int): A =
+  @noop override def sumN(a: A, n: Int): A =
     if (n > 0) positiveSumN(a, n)
     else if (n == 0) zero
     else if (n == Int.MinValue) positiveSumN(negate(plus(a, a)), 1073741824)
     else positiveSumN(negate(a), -n)
 }
 
-trait AdditiveCommutativeGroup[@sp(Int, Long, Float, Double) A] extends Any with AdditiveGroup[A] with AdditiveCommutativeMonoid[A] {
-  override def additive: CommutativeGroup[A] = new CommutativeGroup[A] {
+@typeclass trait AdditiveCommutativeGroup[@sp(Int, Long, Float, Double) A] extends Any with AdditiveGroup[A] with AdditiveCommutativeMonoid[A] {
+  @noop override def additive: CommutativeGroup[A] = new CommutativeGroup[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
     override def remove(x: A, y: A): A = minus(x, y)
@@ -130,26 +132,14 @@ trait AdditiveGroupFunctions extends AdditiveMonoidFunctions {
     ev.minus(x, y)
 }
 
-object AdditiveSemigroup extends AdditiveSemigroupFunctions {
-  @inline final def apply[A](implicit ev: AdditiveSemigroup[A]): AdditiveSemigroup[A] = ev
-}
+object AdditiveSemigroup extends AdditiveSemigroupFunctions
 
-object AdditiveCommutativeSemigroup extends AdditiveSemigroupFunctions {
-  @inline final def apply[A](implicit ev: AdditiveCommutativeSemigroup[A]): AdditiveCommutativeSemigroup[A] = ev
-}
+object AdditiveCommutativeSemigroup extends AdditiveSemigroupFunctions
 
-object AdditiveMonoid extends AdditiveMonoidFunctions {
-  @inline final def apply[A](implicit ev: AdditiveMonoid[A]): AdditiveMonoid[A] = ev
-}
+object AdditiveMonoid extends AdditiveMonoidFunctions
 
-object AdditiveCommutativeMonoid extends AdditiveMonoidFunctions {
-  @inline final def apply[A](implicit ev: AdditiveCommutativeMonoid[A]): AdditiveCommutativeMonoid[A] = ev
-}
+object AdditiveCommutativeMonoid extends AdditiveMonoidFunctions
 
-object AdditiveGroup extends AdditiveGroupFunctions {
-  @inline final def apply[A](implicit ev: AdditiveGroup[A]): AdditiveGroup[A] = ev
-}
+object AdditiveGroup extends AdditiveGroupFunctions
 
-object AdditiveCommutativeGroup extends AdditiveGroupFunctions {
-  @inline final def apply[A](implicit ev: AdditiveCommutativeGroup[A]): AdditiveCommutativeGroup[A] = ev
-}
+object AdditiveCommutativeGroup extends AdditiveGroupFunctions

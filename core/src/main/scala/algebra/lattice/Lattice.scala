@@ -3,6 +3,8 @@ package lattice
 
 import scala.{specialized => sp}
 
+import simulacrum._
+
 /**
  * A lattice is a set `A` together with two operations (meet and
  * join). Both operations individually constitute semilattices (join-
@@ -27,7 +29,7 @@ import scala.{specialized => sp}
  *   - ∧ for meet
  *   - ∨ for join
  */
-trait Lattice[@sp(Int, Long, Float, Double) A] extends Any with JoinSemilattice[A] with MeetSemilattice[A]
+@typeclass trait Lattice[@sp(Int, Long, Float, Double) A] extends Any with JoinSemilattice[A] with MeetSemilattice[A]
 
 trait LatticeFunctions {
   def join[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: JoinSemilattice[A]): A =
@@ -37,10 +39,4 @@ trait LatticeFunctions {
     ev.meet(x, y)
 }
 
-object Lattice extends LatticeFunctions {
-
-  /**
-   * Access an implicit `Lattice[A]`.
-   */
-  @inline final def apply[@sp(Int, Long, Float, Double) A](implicit ev: Lattice[A]): Lattice[A] = ev
-}
+object Lattice extends LatticeFunctions

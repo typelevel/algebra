@@ -3,6 +3,8 @@ package lattice
 
 import scala.{specialized => sp}
 
+import simulacrum._
+
 /**
  * A bounded lattice is a lattice that additionally has one element
  * that is the bottom (zero, also written as ⊥), and one element that
@@ -16,7 +18,7 @@ import scala.{specialized => sp}
  * 
  *   (0 ∨ a) = a = (1 ∧ a)
  */
-trait BoundedLattice[@sp(Int, Long, Float, Double) A] extends Any with Lattice[A] with BoundedMeetSemilattice[A] with BoundedJoinSemilattice[A]
+@typeclass trait BoundedLattice[@sp(Int, Long, Float, Double) A] extends Any with Lattice[A] with BoundedMeetSemilattice[A] with BoundedJoinSemilattice[A]
 
 trait BoundedLatticeFunctions {
   def zero[@sp(Int, Long, Float, Double) A](implicit ev: BoundedJoinSemilattice[A]): A =
@@ -26,10 +28,4 @@ trait BoundedLatticeFunctions {
     ev.one
 }
 
-object BoundedLattice extends LatticeFunctions with BoundedLatticeFunctions {
-
-  /**
-   * Access an implicit `BoundedLattice[A]`.
-   */
-  @inline final def apply[@sp(Int, Long, Float, Double) A](implicit ev: BoundedLattice[A]): BoundedLattice[A] = ev
-}
+object BoundedLattice extends LatticeFunctions with BoundedLatticeFunctions

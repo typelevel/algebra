@@ -1,8 +1,9 @@
 package algebra
 package ring
 
-import annotation.tailrec
 import scala.{specialized => sp}
+
+import simulacrum._
 
 /**
  * Rig consists of:
@@ -16,8 +17,6 @@ import scala.{specialized => sp}
 
  * Mnemonic: "Rig is a Ring without 'N'egation."
  */
-trait Rig[@sp(Int, Long, Float, Double) A] extends Any with Semiring[A] with MultiplicativeMonoid[A]
+@typeclass trait Rig[@sp(Int, Long, Float, Double) A] extends Any with Semiring[A] with MultiplicativeMonoid[A]
 
-object Rig extends AdditiveMonoidFunctions with MultiplicativeMonoidFunctions {
-  @inline final def apply[A](implicit ev: Rig[A]): Rig[A] = ev
-}
+object Rig extends AdditiveMonoidFunctions with MultiplicativeMonoidFunctions

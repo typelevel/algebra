@@ -5,6 +5,8 @@ import ring.CommutativeRing
 
 import scala.{specialized => sp}
 
+import simulacrum._
+
 /**
  * Heyting algebras are bounded lattices that are also equipped with
  * an additional binary operation `imp` (for impliciation, also
@@ -35,12 +37,12 @@ import scala.{specialized => sp}
  * classical logic, see the boolean algebra type class implemented as
  * `Bool`.
  */
-trait Heyting[@sp(Int, Long) A] extends Any with BoundedLattice[A] { self =>
+@typeclass trait Heyting[@sp(Int, Long) A] extends Any with BoundedLattice[A] { self =>
   def and(a: A, b: A): A
-  def meet(a: A, b: A): A = and(a, b)
+  override def meet(a: A, b: A): A = and(a, b)
 
   def or(a: A, b: A): A
-  def join(a: A, b: A): A = or(a, b)
+  override def join(a: A, b: A): A = or(a, b)
 
   def imp(a: A, b: A): A
   def complement(a: A): A
@@ -50,7 +52,7 @@ trait Heyting[@sp(Int, Long) A] extends Any with BoundedLattice[A] { self =>
   def nor(a: A, b: A): A = complement(or(a, b))
   def nxor(a: A, b: A): A = complement(xor(a, b))
 
-  def asCommutativeRing: CommutativeRing[A] =
+  @noop def asCommutativeRing: CommutativeRing[A] =
     new CommutativeRing[A] {
       def zero: A = self.zero
       def one: A = self.one
@@ -76,10 +78,4 @@ trait HeytingFunctions {
 }
 
 
-object Heyting extends HeytingFunctions {
-
-  /**
-   * Access an implicit `Heyting[A]`.
-   */
-  @inline final def apply[@sp(Int, Long) A](implicit ev: Heyting[A]): Heyting[A] = ev
-}
+object Heyting extends HeytingFunctions

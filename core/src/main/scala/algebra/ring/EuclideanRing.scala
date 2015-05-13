@@ -1,8 +1,9 @@
 package algebra
 package ring
 
-import scala.annotation.tailrec
 import scala.{specialized => sp}
+
+import simulacrum._
 
 /**
  * EuclideanRing implements a Euclidean domain.
@@ -22,7 +23,7 @@ import scala.{specialized => sp}
  * This type does not provide access to the Euclidean function, but
  * only provides the quot, mod, and quotmod operators.
  */
-trait EuclideanRing[@sp(Int, Long, Float, Double) A] extends Any with CommutativeRing[A] {
+@typeclass trait EuclideanRing[@sp(Int, Long, Float, Double) A] extends Any with CommutativeRing[A] {
   def mod(a: A, b: A): A
   def quot(a: A, b: A): A
   def quotmod(a: A, b: A): (A, A) = (quot(a, b), mod(a, b))
@@ -37,6 +38,4 @@ trait EuclideanRingFunctions extends AdditiveGroupFunctions with MultiplicativeM
     ev.quotmod(x, y)
 }
 
-object EuclideanRing extends EuclideanRingFunctions {
-  @inline final def apply[A](implicit ev: EuclideanRing[A]): EuclideanRing[A] = ev
-}
+object EuclideanRing extends EuclideanRingFunctions

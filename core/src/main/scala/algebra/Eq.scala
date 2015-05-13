@@ -4,17 +4,19 @@ import scala.{specialized => sp}
 
 import scala.math.Equiv
 
+import simulacrum._
+
 /**
  * A type class used to determine equality between 2 instances of the same
  * type. Any 2 instances `x` and `y` are equal if `eqv(x, y)` is `true`.
  * Moreover, `eqv` should form an equivalence relation.
  */
-trait Eq[@sp A] extends Any with Serializable { self =>
+@typeclass trait Eq[@sp A] extends Any with Serializable { self =>
 
   /**
    * Returns `true` if `x` and `y` are equivalent, `false` otherwise.
    */
-  def eqv(x: A, y: A): Boolean
+  @op("===") def eqv(x: A, y: A): Boolean
 
   /**
    * Returns `false` if `x` and `y` are equivalent, `true` otherwise.
@@ -25,7 +27,7 @@ trait Eq[@sp A] extends Any with Serializable { self =>
    * Constructs a new `Eq` instance for type `B` where 2 elements are
    * equivalent iff `eqv(f(x), f(y))`.
    */
-  def on[@sp B](f: B => A): Eq[B] =
+  @noop def on[@sp B](f: B => A): Eq[B] =
     new Eq[B] {
       def eqv(x: B, y: B): Boolean = self.eqv(f(x), f(y))
     }
@@ -42,19 +44,11 @@ trait EqFunctions {
 object Eq extends EqFunctions {
 
   /**
-   * Access an implicit `Eq[A]`.
-   */
-  @inline final def apply[A](implicit ev: Eq[A]): Eq[A] = ev
-
-  /**
    * Convert an implicit `Eq[B]` to an `Eq[A]` using the given
    * function `f`.
    */
   def by[@sp A, @sp B](f: A => B)(implicit ev: Eq[B]): Eq[A] =
-    new Eq[A] {
-      def eqv(x: A, y: A): Boolean = ev.eqv(f(x), f(y))
-    }
-
+    ev.on(f)
 
   /**
    * This gives compatibility with scala's Equiv trait

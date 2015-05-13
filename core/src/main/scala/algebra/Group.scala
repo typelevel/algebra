@@ -2,10 +2,12 @@ package algebra
 
 import scala.{ specialized => sp }
 
+import simulacrum._
+
 /**
  * A group is a monoid where each element has an inverse.
  */
-trait Group[@sp(Int, Long, Float, Double) A] extends Any with Monoid[A] {
+@typeclass trait Group[@sp(Int, Long, Float, Double) A] extends Any with Monoid[A] {
 
   /**
    * Find the inverse of `a`.
@@ -25,7 +27,7 @@ trait Group[@sp(Int, Long, Float, Double) A] extends Any with Monoid[A] {
    * Return `a` appended to itself `n` times. If `n` is negative, then
    * this returns `inverse(a)` appended to itself `n` times.
    */
-  override def combineN(a: A, n: Int): A =
+  @noop override def combineN(a: A, n: Int): A =
     if (n > 0) repeatedCombineN(a, n)
     else if (n == 0) empty
     else if (n == Int.MinValue) combineN(inverse(combine(a, a)), 1073741824)
@@ -40,11 +42,6 @@ trait GroupFunctions extends MonoidFunctions {
 }
 
 object Group extends GroupFunctions {
-
-  /**
-   * Access an implicit `Group[A]`.
-   */
-  @inline final def apply[A](implicit ev: Group[A]): Group[A] = ev
 
   /**
    * This method converts an additive instance into a generic

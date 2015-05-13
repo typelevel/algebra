@@ -4,12 +4,13 @@ import lattice.{ MeetSemilattice, JoinSemilattice }
 
 import scala.{specialized => sp}
 
+import simulacrum._
 
 /**
  * Semilattices are commutative semigroups whose operation
  * (i.e. combine) is also idempotent.
  */
-trait Semilattice[@sp(Int, Long, Float, Double) A] extends Any
+@typeclass trait Semilattice[@sp(Int, Long, Float, Double) A] extends Any
   with Band[A]
   with CommutativeSemigroup[A] { self =>
 
@@ -25,7 +26,7 @@ trait Semilattice[@sp(Int, Long, Float, Double) A] extends Any
    *    1.0 if y = combine(x, y)
    *    NaN otherwise
    */
-  def asMeetPartialOrder(implicit ev: Eq[A]): PartialOrder[A] =
+  @noop def asMeetPartialOrder(implicit ev: Eq[A]): PartialOrder[A] =
     new PartialOrder[A] {
       def partialCompare(x: A, y: A): Double =
         if (ev.eqv(x, y)) 0.0 else {
@@ -46,7 +47,7 @@ trait Semilattice[@sp(Int, Long, Float, Double) A] extends Any
    *    1.0 if x = combine(x, y)
    *    NaN otherwise
    */
-  def asJoinPartialOrder(implicit ev: Eq[A]): PartialOrder[A] =
+  @noop def asJoinPartialOrder(implicit ev: Eq[A]): PartialOrder[A] =
     new PartialOrder[A] {
       def partialCompare(x: A, y: A): Double =
         if (ev.eqv(x, y)) 0.0 else {
@@ -55,21 +56,13 @@ trait Semilattice[@sp(Int, Long, Float, Double) A] extends Any
         }
     }
 
-  def asMeetSemilattice: MeetSemilattice[A] =
+  @noop def asMeetSemilattice: MeetSemilattice[A] =
     new MeetSemilattice[A] {
       def meet(x: A, y: A): A = self.combine(x, y)
     }
 
-  def asJoinSemilattice: JoinSemilattice[A] =
+  @noop def asJoinSemilattice: JoinSemilattice[A] =
     new JoinSemilattice[A] {
       def join(x: A, y: A): A = self.combine(x, y)
     }
-}
-
-object Semilattice {
-
-  /**
-   * Access an implicit `Semilattice[A]`.
-   */
-  @inline final def apply[@sp(Int, Long, Float, Double) A](implicit ev: Semilattice[A]): Semilattice[A] = ev
 }

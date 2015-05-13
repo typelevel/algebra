@@ -1,22 +1,24 @@
 package algebra
 
 import scala.{ specialized => sp }
-import scala.annotation.{ switch, tailrec }
+import scala.annotation.tailrec
+
+import simulacrum._
 
 /**
  * A semigroup is any set `A` with an associative operation (`combine`).
  */
-trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
+@typeclass trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
 
   /**
    * Associative operation taking which combines two values.
    */
-  def combine(x: A, y: A): A
+  @op("|+|") def combine(x: A, y: A): A
 
   /**
    * Return `a` combined with itself `n` times.
    */
-  def combineN(a: A, n: Int): A =
+  @noop def combineN(a: A, n: Int): A =
     if (n <= 0) throw new IllegalArgumentException("Repeated combining for semigroups must have n > 0")
     else repeatedCombineN(a, n)
 
@@ -71,11 +73,6 @@ trait SemigroupFunctions {
 }
 
 object Semigroup extends SemigroupFunctions {
-
-  /**
-   * Access an implicit `CommutativeSemigroup[A]`.
-   */
-  @inline final def apply[A](implicit ev: Semigroup[A]) = ev
 
   /**
    * This method converts an additive instance into a generic

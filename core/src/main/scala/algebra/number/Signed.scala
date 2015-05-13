@@ -5,11 +5,13 @@ import algebra.ring._
 
 import scala.{ specialized => sp }
 
+import simulacrum._
+
 /**
  * A trait for things that have some notion of sign and the ability to
  * ensure something has a non-negative sign.
  */
-trait Signed[@sp(Int, Long, Float, Double) A] extends Any {
+@typeclass trait Signed[@sp(Int, Long, Float, Double) A] extends Any {
 
   /**
    * Return a's sign:
@@ -63,8 +65,6 @@ trait SignedFunctions {
 }
 
 object Signed extends SignedFunctions {
-  def apply[A](implicit ev: Signed[A]): Signed[A] = ev
-
   implicit def orderedAdditiveGroupIsSigned[A](implicit o: Order[A], g: AdditiveGroup[A]): Signed[A] =
     new Signed[A] {
       def signum(a: A) = o.compare(a, g.zero)

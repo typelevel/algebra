@@ -3,27 +3,21 @@ package lattice
 
 import scala.{specialized => sp}
 
+import simulacrum._
+
 /**
  * A meet-semilattice (or lower semilattice) is a semilattice whose
  * operation is called "meet", and which can be thought of as a
  * greatest lower bound.
  */
-trait MeetSemilattice[@sp(Int, Long, Float, Double) A] extends Any with Serializable { self =>
+@typeclass trait MeetSemilattice[@sp(Int, Long, Float, Double) A] extends Any with Serializable { self =>
   def meet(lhs: A, rhs: A): A
 
-  def meetSemilattice: Semilattice[A] =
+  @noop def meetSemilattice: Semilattice[A] =
     new Semilattice[A] {
       def combine(x: A, y: A): A = self.meet(x, y)
     }
 
-  def meetPartialOrder(implicit ev: Eq[A]): PartialOrder[A] =
+  @noop def meetPartialOrder(implicit ev: Eq[A]): PartialOrder[A] =
     meetSemilattice.asMeetPartialOrder
-}
-
-object MeetSemilattice {
-
-  /**
-   * Access an implicit `MeetSemilattice[A]`.
-   */
-  @inline final def apply[@sp(Int, Long, Float, Double) A](implicit ev: MeetSemilattice[A]): MeetSemilattice[A] = ev
 }

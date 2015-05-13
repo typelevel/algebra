@@ -6,7 +6,9 @@ import scala.{ specialized => sp }
 import java.lang.Double.{ isInfinite, isNaN, doubleToLongBits }
 import java.lang.Long.{ numberOfTrailingZeros }
 
-trait Field[@sp(Int, Long, Float, Double) A] extends Any with EuclideanRing[A] with MultiplicativeCommutativeGroup[A] {
+import simulacrum._
+
+@typeclass trait Field[@sp(Int, Long, Float, Double) A] extends Any with EuclideanRing[A] with MultiplicativeCommutativeGroup[A] {
 
   /**
    * This is implemented in terms of basic Field ops. However, this is
@@ -16,7 +18,7 @@ trait Field[@sp(Int, Long, Float, Double) A] extends Any with EuclideanRing[A] w
    *
    * This is possible because a Double is a rational number.
    */
-  def fromDouble(a: Double): A =
+  @noop def fromDouble(a: Double): A =
     if (a == 0.0) zero else if (a.isValidInt) fromInt(a.toInt) else {
       require(!isInfinite(a) && !isNaN(a), "Double must be representable as a fraction.")
 
@@ -46,6 +48,4 @@ trait FieldFunctions extends EuclideanRingFunctions with MultiplicativeGroupFunc
     ev.fromDouble(n)
 }
 
-object Field extends FieldFunctions {
-  @inline final def apply[A](implicit ev: Field[A]): Field[A] = ev
-}
+object Field extends FieldFunctions

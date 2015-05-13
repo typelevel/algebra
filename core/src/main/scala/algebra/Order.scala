@@ -2,6 +2,8 @@ package algebra
 
 import scala.{specialized => sp}
 
+import simulacrum._
+
 /**
  * The `Order` type class is used to define a total ordering on some type `A`.
  * An order is defined by a relation <=, which obeys the following laws:
@@ -19,7 +21,7 @@ import scala.{specialized => sp}
  * 
  * By the totality law, x <= y and y <= x cannot be both false.
  */
-trait Order[@sp A] extends Any with PartialOrder[A] { self =>
+@typeclass trait Order[@sp A] extends Any with PartialOrder[A] { self =>
 
   /**
    * Result of comparing `x` with `y`. Returns an Int whose sign is:
@@ -29,7 +31,7 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
    */
   def compare(x: A, y: A): Int
 
-  def partialCompare(x: A, y: A): Double = compare(x, y).toDouble
+  override def partialCompare(x: A, y: A): Double = compare(x, y).toDouble
 
   /**
    * If x <= y, return x, else return y.
@@ -45,7 +47,7 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
    * Defines an order on `B` by mapping `B` to `A` using `f` and using `A`s
    * order to order `B`.
    */
-  override def on[@sp B](f: B => A): Order[B] =
+  @noop override def on[@sp B](f: B => A): Order[B] =
     new Order[B] {
       def compare(x: B, y: B): Int = self.compare(f(x), f(y))
     }
@@ -53,7 +55,7 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
   /**
    * Defines an ordering on `A` where all arrows switch direction.
    */
-  override def reverse: Order[A] =
+  @noop override def reverse: Order[A] =
     new Order[A] {
       def compare(x: A, y: A): Int = self.compare(y, x)
     }
@@ -121,11 +123,6 @@ trait OrderFunctions {
 }
 
 object Order extends OrderFunctions {
-
-  /**
-   * Access an implicit `Eq[A]`.
-   */
-  @inline final def apply[A](implicit ev: Order[A]) = ev
 
   /**
    * Convert an implicit `Order[A]` to an `Order[B]` using the given

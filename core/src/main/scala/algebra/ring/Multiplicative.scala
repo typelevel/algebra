@@ -4,8 +4,10 @@ package ring
 import scala.{ specialized => sp }
 import scala.annotation.tailrec
 
-trait MultiplicativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
-  def multiplicative: Semigroup[A] =
+import simulacrum._
+
+@typeclass trait MultiplicativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
+  @noop def multiplicative: Semigroup[A] =
     new Semigroup[A] {
       def combine(x: A, y: A): A = times(x, y)
     }
@@ -34,19 +36,19 @@ trait MultiplicativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with 
     as.reduceOption(times)
 }
 
-trait MultiplicativeCommutativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeSemigroup[A] {
-  override def multiplicative: CommutativeSemigroup[A] = new CommutativeSemigroup[A] {
+@typeclass trait MultiplicativeCommutativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeSemigroup[A] {
+  @noop override def multiplicative: CommutativeSemigroup[A] = new CommutativeSemigroup[A] {
     def combine(x: A, y: A): A = times(x, y)
   }
 }
 
-trait MultiplicativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeSemigroup[A] {
-  override def multiplicative: Monoid[A] = new Monoid[A] {
+@typeclass trait MultiplicativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeSemigroup[A] {
+  @noop override def multiplicative: Monoid[A] = new Monoid[A] {
     def empty = one
     def combine(x: A, y: A): A = times(x, y)
   }
 
-  def one: A
+  @noop def one: A
 
   /**
     * Tests if `a` is one.
@@ -65,15 +67,18 @@ trait MultiplicativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with Mul
     as.foldLeft(one)(times)
 }
 
-trait MultiplicativeCommutativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeMonoid[A] with MultiplicativeCommutativeSemigroup[A] {
-  override def multiplicative: CommutativeMonoid[A] = new CommutativeMonoid[A] {
+@typeclass trait MultiplicativeCommutativeMonoid[@sp(Int, Long, Float, Double) A] extends Any
+  with MultiplicativeMonoid[A]
+  with MultiplicativeCommutativeSemigroup[A] {
+
+  @noop override def multiplicative: CommutativeMonoid[A] = new CommutativeMonoid[A] {
     def empty = one
     def combine(x: A, y: A): A = times(x, y)
   }
 }
 
-trait MultiplicativeGroup[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeMonoid[A] {
-  override def multiplicative: Group[A] = new Group[A] {
+@typeclass trait MultiplicativeGroup[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeMonoid[A] {
+  @noop override def multiplicative: Group[A] = new Group[A] {
     def empty = one
     def combine(x: A, y: A): A = times(x, y)
     override def remove(x: A, y: A): A = div(x, y)
@@ -90,8 +95,11 @@ trait MultiplicativeGroup[@sp(Int, Long, Float, Double) A] extends Any with Mult
     else positivePow(reciprocal(a), -n)
 }
 
-trait MultiplicativeCommutativeGroup[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeGroup[A] with MultiplicativeCommutativeMonoid[A] {
-  override def multiplicative: CommutativeGroup[A] = new CommutativeGroup[A] {
+@typeclass trait MultiplicativeCommutativeGroup[@sp(Int, Long, Float, Double) A] extends Any
+  with MultiplicativeGroup[A]
+  with MultiplicativeCommutativeMonoid[A] {
+
+  @noop override def multiplicative: CommutativeGroup[A] = new CommutativeGroup[A] {
     def empty = one
     def combine(x: A, y: A): A = times(x, y)
     override def remove(x: A, y: A): A = div(x, y)
@@ -130,26 +138,14 @@ trait MultiplicativeGroupFunctions extends MultiplicativeMonoidFunctions {
     ev.div(x, y)
 }
 
-object MultiplicativeSemigroup extends MultiplicativeSemigroupFunctions {
-  @inline final def apply[A](implicit ev: MultiplicativeSemigroup[A]): MultiplicativeSemigroup[A] = ev
-}
+object MultiplicativeSemigroup extends MultiplicativeSemigroupFunctions
 
-object MultiplicativeCommutativeSemigroup extends MultiplicativeSemigroupFunctions {
-  @inline final def apply[A](implicit ev: MultiplicativeCommutativeSemigroup[A]): MultiplicativeCommutativeSemigroup[A] = ev
-}
+object MultiplicativeCommutativeSemigroup extends MultiplicativeSemigroupFunctions
 
-object MultiplicativeMonoid extends MultiplicativeMonoidFunctions {
-  @inline final def apply[A](implicit ev: MultiplicativeMonoid[A]): MultiplicativeMonoid[A] = ev
-}
+object MultiplicativeMonoid extends MultiplicativeMonoidFunctions
 
-object MultiplicativeCommutativeMonoid extends MultiplicativeMonoidFunctions {
-  @inline final def apply[A](implicit ev: MultiplicativeCommutativeMonoid[A]): MultiplicativeCommutativeMonoid[A] = ev
-}
+object MultiplicativeCommutativeMonoid extends MultiplicativeMonoidFunctions
 
-object MultiplicativeGroup extends MultiplicativeGroupFunctions {
-  @inline final def apply[A](implicit ev: MultiplicativeGroup[A]): MultiplicativeGroup[A] = ev
-}
+object MultiplicativeGroup extends MultiplicativeGroupFunctions
 
-object MultiplicativeCommutativeGroup extends MultiplicativeGroupFunctions {
-  @inline final def apply[A](implicit ev: MultiplicativeCommutativeGroup[A]): MultiplicativeCommutativeGroup[A] = ev
-}
+object MultiplicativeCommutativeGroup extends MultiplicativeGroupFunctions

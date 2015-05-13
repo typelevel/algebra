@@ -3,10 +3,12 @@ package number
 
 import scala.{ specialized => sp }
 
+import simulacrum._
+
 /**
  * A simple type class for numeric types that are a subset of the reals.
  */
-trait IsReal[@sp(Int, Long, Float, Double) A] extends Any with Order[A] with Signed[A] {
+@typeclass trait IsReal[@sp(Int, Long, Float, Double) A] extends Any with Order[A] with Signed[A] {
   def ceil(a: A): A
   def floor(a: A): A
   def round(a: A): A
@@ -14,11 +16,11 @@ trait IsReal[@sp(Int, Long, Float, Double) A] extends Any with Order[A] with Sig
   def toDouble(a: A): Double
 }
 
-trait IsIntegral[@sp(Int, Long) A] extends Any with IsReal[A] {
-  def ceil(a: A): A = a
-  def floor(a: A): A = a
-  def round(a: A): A = a
-  def isWhole(a: A): Boolean = true
+@typeclass trait IsIntegral[@sp(Int, Long) A] extends Any with IsReal[A] {
+  override def ceil(a: A): A = a
+  override def floor(a: A): A = a
+  override def round(a: A): A = a
+  override def isWhole(a: A): Boolean = true
 }
 
 trait IsRealFunctions {
@@ -34,6 +36,4 @@ trait IsRealFunctions {
     ev.toDouble(a)
 }
 
-object IsReal extends IsRealFunctions {
-  def apply[A](implicit ev: IsReal[A]): IsReal[A] = ev
-}
+object IsReal extends IsRealFunctions

@@ -3,6 +3,8 @@ package ring
 
 import scala.{specialized => sp}
 
+import simulacrum._
+
 /**
  * Ring consists of:
  * 
@@ -16,7 +18,7 @@ import scala.{specialized => sp}
  * possible, these methods should be overridden by more efficient
  * implementations.
  */
-trait Ring[@sp(Int, Long, Float, Double) A] extends Any with Rig[A] with Rng[A] {
+@typeclass trait Ring[@sp(Int, Long, Float, Double) A] extends Any with Rig[A] with Rng[A] {
 
   /**
    * Convert the given integer to an instance of A.
@@ -29,14 +31,10 @@ trait Ring[@sp(Int, Long, Float, Double) A] extends Any with Rig[A] with Rng[A] 
    * Most type class instances should consider overriding this method
    * for performance reasons.
    */
-  def fromInt(n: Int): A = sumN(one, n)
+  @noop def fromInt(n: Int): A = sumN(one, n)
 }
 
 trait RingFunctions {
   def fromInt[@sp(Int, Long, Float, Double) A](n: Int)(implicit ev: Ring[A]): A =
     ev.fromInt(n)
-}
-
-object Ring extends AdditiveGroupFunctions with MultiplicativeMonoidFunctions {
-  @inline final def apply[A](implicit ev: Ring[A]): Ring[A] = ev
 }

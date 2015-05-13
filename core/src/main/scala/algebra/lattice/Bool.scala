@@ -3,6 +3,8 @@ package lattice
 
 import scala.{specialized => sp}
 
+import simulacrum._
+
 /**
  * Boolean algebras are Heyting algebras with the additional
  * constraint that the law of the excluded middle is true
@@ -22,8 +24,8 @@ import scala.{specialized => sp}
  * Every boolean algebras has a dual algebra, which involves reversing
  * true/false as well as and/or.
  */
-trait Bool[@sp(Int, Long) A] extends Any with Heyting[A] {
-  def imp(a: A, b: A): A = or(complement(a), b)
+@typeclass trait Bool[@sp(Int, Long) A] extends Any with Heyting[A] {
+  override def imp(a: A, b: A): A = or(complement(a), b)
 
   def dual: Bool[A] = new DualBool(this)
 }
@@ -57,10 +59,4 @@ trait BoolFunctions {
     ev.nxor(x, y)
 }
 
-object Bool extends HeytingFunctions with BoolFunctions {
-
-  /**
-   * Access an implicit `Bool[A]`.
-   */
-  @inline final def apply[@sp(Int, Long) A](implicit ev: Bool[A]): Bool[A] = ev
-}
+object Bool extends HeytingFunctions with BoolFunctions

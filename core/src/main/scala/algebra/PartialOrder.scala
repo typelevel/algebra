@@ -2,6 +2,8 @@ package algebra
 
 import scala.{specialized => sp}
 
+import simulacrum._
+
 /**
  * The `PartialOrder` type class is used to define a partial ordering on some type `A`.
  * 
@@ -21,7 +23,7 @@ import scala.{specialized => sp}
  * true      false       = -1.0    (corresponds to x < y)
  * false     true        = 1.0     (corresponds to x > y)
  */
-trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
+@typeclass trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
 
   /**
    * Result of comparing `x` with `y`. Returns NaN if operands are not
@@ -70,7 +72,7 @@ trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
    * Defines a partial order on `B` by mapping `B` to `A` using `f`
    * and using `A`s order to order `B`.
    */
-  override def on[@sp B](f: B => A): PartialOrder[B] =
+  @noop override def on[@sp B](f: B => A): PartialOrder[B] =
     new PartialOrder[B] {
       def partialCompare(x: B, y: B): Double = self.partialCompare(f(x), f(y))
     }
@@ -78,7 +80,7 @@ trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
   /**
    * Defines a partial order on `A` where all arrows switch direction.
    */
-  def reverse: PartialOrder[A] =
+  @noop def reverse: PartialOrder[A] =
     new PartialOrder[A] {
       def partialCompare(x: A, y: A): Double = self.partialCompare(y, x)
     }
@@ -136,11 +138,6 @@ trait PartialOrderFunctions {
 }
 
 object PartialOrder extends PartialOrderFunctions {
-
-  /**
-   * Access an implicit `Eq[A]`.
-   */
-  @inline final def apply[A](implicit ev: PartialOrder[A]) = ev
 
   /**
    * Convert an implicit `PartialOrder[A]` to an `PartialOrder[B]`

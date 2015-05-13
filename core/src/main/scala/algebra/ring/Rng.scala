@@ -1,8 +1,9 @@
 package algebra
 package ring
 
-import annotation.tailrec
 import scala.{specialized => sp}
+
+import simulacrum._
 
 /**
  * Rng (pronounced "Rung") consists of:
@@ -16,8 +17,6 @@ import scala.{specialized => sp}
  * 
  * Mnemonic: "Rng is a Ring without multiplicative 'I'dentity."
  */
-trait Rng[@sp(Int, Long, Float, Double) A] extends Any with Semiring[A] with AdditiveCommutativeGroup[A]
+@typeclass trait Rng[@sp(Int, Long, Float, Double) A] extends Any with Semiring[A] with AdditiveCommutativeGroup[A]
 
-object Rng extends AdditiveGroupFunctions with MultiplicativeSemigroupFunctions {
-  @inline final def apply[A](implicit ev: Rng[A]): Rng[A] = ev
-}
+object Rng extends AdditiveGroupFunctions with MultiplicativeSemigroupFunctions

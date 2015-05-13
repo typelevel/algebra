@@ -3,6 +3,8 @@ package number
 
 import scala.{specialized => sp}
 
+import simulacrum._
+
 /**
  * This is a type class for types with n-roots.
  *
@@ -19,7 +21,7 @@ import scala.{specialized => sp}
  * ideal. So, do not count on `ArithmeticException`s to save you from
  * bad arithmetic!
  */
-trait NRoot[@sp(Double, Float, Int, Long) A] {
+@typeclass trait NRoot[@sp(Double, Float, Int, Long) A] {
   def nroot(a: A, n: Int): A
   def sqrt(a: A): A = nroot(a, 2)
   def fpow(a: A, b: A): A
@@ -34,6 +36,4 @@ trait NRootFunctions {
     ev.fpow(a, b)
 }
 
-object NRoot extends NRootFunctions {
-  @inline final def apply[@sp(Int, Long, Float, Double) A](implicit ev: NRoot[A]) = ev
-}
+object NRoot extends NRootFunctions

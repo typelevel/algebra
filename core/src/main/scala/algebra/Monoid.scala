@@ -2,13 +2,15 @@ package algebra
 
 import scala.{ specialized => sp }
 
+import simulacrum._
+
 /**
  * A monoid is a semigroup with an identity. A monoid is a specialization of a
  * semigroup, so its operation must be associative. Additionally,
  * `combine(x, empty) == combine(empty, x) == x`. For example, if we have `Monoid[String]`,
  * with `combine` as string concatenation, then `empty = ""`.
  */
-trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
+@typeclass trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
 
   /**
    * Return the identity element for this monoid.
@@ -23,7 +25,7 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
   /**
    * Return `a` appended to itself `n` times.
    */
-  override def combineN(a: A, n: Int): A =
+  @noop override def combineN(a: A, n: Int): A =
     if (n < 0) throw new IllegalArgumentException("Repeated combining for monoids must have n >= 0")
     else if (n == 0) empty
     else repeatedCombineN(a, n)
@@ -44,11 +46,6 @@ trait MonoidFunctions extends SemigroupFunctions {
 }
 
 object Monoid extends MonoidFunctions {
-
-  /**
-   * Access an implicit `Monoid[A]`.
-   */
-  @inline final def apply[A](implicit ev: Monoid[A]): Monoid[A] = ev
 
   /**
    * This method converts an additive instance into a generic
