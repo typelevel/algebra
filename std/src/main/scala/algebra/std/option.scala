@@ -5,11 +5,15 @@ import algebra.ring._
 import scala.annotation.tailrec
 import scala.collection.mutable
 
-package object option extends OptionInstances 
+package object option extends OptionInstances
 
-trait OptionInstances {
+trait OptionInstances extends OptionInstances1 {
   implicit def optionOrder[A: Order] = new OptionOrder[A]
   implicit def optionMonoid[A: Semigroup] = new OptionMonoid[A]
+}
+
+trait OptionInstances1 extends OptionInstances0 {
+  implicit def optionPartialOrder[A: PartialOrder] = new OptionPartialOrder[A]
 }
 
 trait OptionInstances0 {
@@ -25,6 +29,19 @@ class OptionOrder[A](implicit A: Order[A]) extends Order[Option[A]] {
         y match {
           case None => 1
           case Some(b) => A.compare(a, b)
+        }
+    }
+}
+
+class OptionPartialOrder[A](implicit A: PartialOrder[A]) extends PartialOrder[Option[A]] {
+  def partialCompare(x: Option[A], y: Option[A]): Double =
+    x match {
+      case None =>
+        if (y.isEmpty) 0.0 else -1.0
+      case Some(a) =>
+        y match {
+          case None => 1.0
+          case Some(b) => A.partialCompare(a, b)
         }
     }
 }
