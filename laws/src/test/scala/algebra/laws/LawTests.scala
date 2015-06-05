@@ -28,6 +28,11 @@ class LawTests extends FunSuite with Discipline {
   checkAll("List[String]", OrderLaws[List[String]].order)
   checkAll("List[String]", GroupLaws[List[String]].monoid)
 
+  checkAll("Vector[Int]", OrderLaws[Vector[Int]].order)
+  checkAll("Vector[Int]", GroupLaws[Vector[Int]].monoid)
+  checkAll("Vector[String]", OrderLaws[Vector[Int]].order)
+  checkAll("Vector[String]", GroupLaws[Vector[Int]].monoid)
+
   checkAll("Set[Int]", RingLaws[Set[Int]].semiring)
   checkAll("Set[String]", RingLaws[Set[String]].semiring)
 

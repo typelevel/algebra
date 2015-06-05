@@ -6,6 +6,7 @@ package object all
     with BooleanInstances
     with IntInstances
     with ListInstances
+    with VectorInstances
     with MapInstances
     with SetInstances
     with StringInstances
