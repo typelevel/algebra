@@ -18,7 +18,7 @@ trait BooleanInstances {
  */
 class BooleanAlgebra extends Bool[Boolean] with Order[Boolean] with CommutativeRig[Boolean] {
   def compare(x: Boolean, y: Boolean): Int =
-    if (x) { if (y) 0 else 1 } else { if (y) -1 else 0 }
+    if (x == y) 0 else if (x) 1 else -1
 
   override def eqv(x:Boolean, y:Boolean): Boolean = x == y
   override def neqv(x:Boolean, y:Boolean): Boolean = x != y
