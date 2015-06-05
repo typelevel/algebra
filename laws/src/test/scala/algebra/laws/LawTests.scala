@@ -31,17 +31,17 @@ class LawTests extends FunSuite with Discipline {
     implicit val g: Group[Int] = Group.additive[Int]
     checkAll("Option[Int]", OrderLaws[Option[Int]].order)
     checkAll("Option[Int]", GroupLaws[Option[Int]].monoid)
-    checkAll("Option[String]", OrderLaws[Option[Int]].order)
-    checkAll("Option[String]", GroupLaws[Option[Int]].monoid)
+    checkAll("Option[String]", OrderLaws[Option[String]].order)
+    checkAll("Option[String]", GroupLaws[Option[String]].monoid)
   }
 
   checkAll("List[Int]", OrderLaws[List[Int]].order)
   checkAll("List[Int]", GroupLaws[List[Int]].monoid)
-  checkAll("List[String]", OrderLaws[List[Int]].order)
-  checkAll("List[String]", GroupLaws[List[Int]].monoid)
+  checkAll("List[String]", OrderLaws[List[String]].order)
+  checkAll("List[String]", GroupLaws[List[String]].monoid)
 
   checkAll("Set[Int]", RingLaws[Set[Int]].semiring)
-  checkAll("Set[String]", RingLaws[Set[Int]].semiring)
+  checkAll("Set[String]", RingLaws[Set[String]].semiring)
 
   checkAll("Map[Char, Int]", OrderLaws[Map[Char, Int]].eq)
   checkAll("Map[Char, Int]", RingLaws[Map[Char, Int]].rng)
