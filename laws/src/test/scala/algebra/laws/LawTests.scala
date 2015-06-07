@@ -14,7 +14,10 @@ import org.scalatest.FunSuite
 
 class LawTests extends FunSuite with Discipline {
 
+  implicit val byteLattice: Lattice[Byte] = ByteMinMaxLattice
+  implicit val shortLattice: Lattice[Short] = ShortMinMaxLattice
   implicit val intLattice: Lattice[Int] = IntMinMaxLattice
+  implicit val longLattice: Lattice[Long] = LongMinMaxLattice
 
   checkAll("Boolean", OrderLaws[Boolean].order)
   checkAll("Boolean", LogicLaws[Boolean].bool)
@@ -22,6 +25,15 @@ class LawTests extends FunSuite with Discipline {
 
   checkAll("String", OrderLaws[String].order)
   checkAll("String", GroupLaws[String].monoid)
+
+  {
+    // TODO: test a type that has Eq but not Order
+    implicit val g: Group[Int] = Group.additive[Int]
+    checkAll("Option[Int]", OrderLaws[Option[Int]].order)
+    checkAll("Option[Int]", GroupLaws[Option[Int]].monoid)
+    checkAll("Option[String]", OrderLaws[Option[String]].order)
+    checkAll("Option[String]", GroupLaws[Option[String]].monoid)
+  }
 
   checkAll("List[Int]", OrderLaws[List[Int]].order)
   checkAll("List[Int]", GroupLaws[List[Int]].monoid)
@@ -31,12 +43,28 @@ class LawTests extends FunSuite with Discipline {
   checkAll("Set[Int]", RingLaws[Set[Int]].semiring)
   checkAll("Set[String]", RingLaws[Set[String]].semiring)
 
-  checkAll("Map[String, Int]", RingLaws[Map[String, Int]].rng)
+  checkAll("Map[Char, Int]", OrderLaws[Map[Char, Int]].eq)
+  checkAll("Map[Char, Int]", RingLaws[Map[Char, Int]].rng)
+  checkAll("Map[Int, BigInt]", OrderLaws[Map[Int, BigInt]].eq)
   checkAll("Map[Int, BigInt]", RingLaws[Map[Int, BigInt]].rng)
+
+  checkAll("Byte", OrderLaws[Byte].order)
+  checkAll("Byte", RingLaws[Byte].euclideanRing)
+  checkAll("Byte", LatticeLaws[Byte].lattice)
+
+  checkAll("Short", OrderLaws[Short].order)
+  checkAll("Short", RingLaws[Short].euclideanRing)
+  checkAll("Short", LatticeLaws[Short].lattice)
+
+  checkAll("Char", OrderLaws[Char].order)
 
   checkAll("Int", OrderLaws[Int].order)
   checkAll("Int", RingLaws[Int].euclideanRing)
   checkAll("Int", LatticeLaws[Int].lattice)
+
+  checkAll("Long", OrderLaws[Long].order)
+  checkAll("Long", RingLaws[Long].euclideanRing)
+  checkAll("Long", LatticeLaws[Long].lattice)
 
   checkAll("BigInt", BaseLaws[BigInt].isReal)
   checkAll("BigInt", RingLaws[BigInt].euclideanRing)
