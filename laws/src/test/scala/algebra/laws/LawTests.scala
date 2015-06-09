@@ -43,9 +43,9 @@ class LawTests extends FunSuite with Discipline {
   checkAll("Set[Int]", RingLaws[Set[Int]].semiring)
   checkAll("Set[String]", RingLaws[Set[String]].semiring)
 
-  checkAll("Map[Char, Int]", OrderLaws[Map[Char, Int]].eq)
+  checkAll("Map[Char, Int]", OrderLaws[Map[Char, Int]].eqv)
   checkAll("Map[Char, Int]", RingLaws[Map[Char, Int]].rng)
-  checkAll("Map[Int, BigInt]", OrderLaws[Map[Int, BigInt]].eq)
+  checkAll("Map[Int, BigInt]", OrderLaws[Map[Int, BigInt]].eqv)
   checkAll("Map[Int, BigInt]", RingLaws[Map[Int, BigInt]].rng)
 
   checkAll("Byte", OrderLaws[Byte].order)

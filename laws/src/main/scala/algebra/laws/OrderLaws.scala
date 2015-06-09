@@ -20,7 +20,7 @@ trait OrderLaws[A] extends Laws {
   implicit def Equ: Eq[A]
   implicit def Arb: Arbitrary[A]
 
-  def eq = new OrderProperties(
+  def eqv = new OrderProperties(
     name = "eq",
     parent = None,
     Rules.serializable(Equ),
@@ -40,7 +40,7 @@ trait OrderLaws[A] extends Laws {
 
   def partialOrder(implicit A: PartialOrder[A]) = new OrderProperties(
     name = "partialOrder",
-    parent = Some(eq),
+    parent = Some(eqv),
     Rules.serializable(A),
     "reflexitivity" -> forAll { (x: A) =>
       x ?<= x
