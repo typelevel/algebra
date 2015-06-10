@@ -1,20 +1,31 @@
 package algebra
 package std
 
+import algebra.lattice.Lattice
 import algebra.ring.Semiring
 
 package object set extends SetInstances
 
 trait SetInstances {
+  implicit def setLattice[A]: Lattice[Set[A]] = new SetLattice[A]
   implicit def setPartialOrder[A]: PartialOrder[Set[A]] = new SetPartialOrder[A]
   implicit def setSemiring[A] = new SetSemiring[A]
+}
+
+class SetLattice[A] extends Lattice[Set[A]] {
+  def join(lhs: Set[A], rhs: Set[A]): Set[A] = lhs.union(rhs)
+
+  def meet(lhs: Set[A], rhs: Set[A]): Set[A] = lhs.intersect(rhs)
 }
 
 class SetPartialOrder[A] extends PartialOrder[Set[A]] {
   def partialCompare(x: Set[A], y: Set[A]): Double =
     if (x == y) 0.0
+    else if (y.subsetOf(x)) 1.0
     else if (x.subsetOf(y)) -1.0
-    else 1.0
+    else Double.NaN
+
+  override def eqv(x: Set[A], y: Set[A]): Boolean = x == y
 }
 
 class SetSemiring[A] extends Semiring[Set[A]] {

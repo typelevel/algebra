@@ -40,6 +40,8 @@ class LawTests extends FunSuite with Discipline {
   checkAll("List[String]", OrderLaws[List[String]].order)
   checkAll("List[String]", GroupLaws[List[String]].monoid)
 
+  checkAll("Set[Int]", LatticeLaws[Set[Int]].lattice)
+  checkAll("Set[Int]", OrderLaws[Set[Int]].partialOrder)
   checkAll("Set[Int]", RingLaws[Set[Int]].semiring)
   checkAll("Set[String]", RingLaws[Set[String]].semiring)
 
