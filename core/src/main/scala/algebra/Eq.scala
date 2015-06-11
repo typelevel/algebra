@@ -51,10 +51,7 @@ object Eq extends EqFunctions {
    * function `f`.
    */
   def by[@sp A, @sp B](f: A => B)(implicit ev: Eq[B]): Eq[A] =
-    new Eq[A] {
-      def eqv(x: A, y: A): Boolean = ev.eqv(f(x), f(y))
-    }
-
+    ev.on(f)
 
   /**
    * This gives compatibility with scala's Equiv trait
