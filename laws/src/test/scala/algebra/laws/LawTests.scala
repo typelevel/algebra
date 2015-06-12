@@ -1,6 +1,8 @@
 package algebra
 package laws
 
+import scala.reflect.runtime.universe.TypeTag
+
 import algebra.lattice._
 import algebra.number._
 import algebra.ring._
@@ -9,7 +11,9 @@ import algebra.std.Rat
 
 import CheckSupport._
 
+import org.typelevel.discipline.{Laws, Predicate}
 import org.typelevel.discipline.scalatest.Discipline
+import org.scalacheck.Arbitrary
 import org.scalatest.FunSuite
 
 class LawTests extends FunSuite with Discipline {
@@ -19,60 +23,76 @@ class LawTests extends FunSuite with Discipline {
   implicit val intLattice: Lattice[Int] = IntMinMaxLattice
   implicit val longLattice: Lattice[Long] = LongMinMaxLattice
 
-  checkAll("Boolean", OrderLaws[Boolean].order)
-  checkAll("Boolean", LogicLaws[Boolean].bool)
-  checkAll("Boolean", LatticePartialOrderLaws[Boolean].boundedLatticePartialOrder)
+  implicit def orderLaws[A: Eq: Arbitrary] = OrderLaws[A]
+  implicit def groupLaws[A: Eq: Arbitrary] = GroupLaws[A]
+  implicit def logicLaws[A: Eq: Arbitrary] = LogicLaws[A]
+  implicit def latticeLaws[A: Eq: Arbitrary] = LatticeLaws[A]
+  implicit def ringLaws[A: Eq: Arbitrary: Predicate] = RingLaws[A]
+  implicit def baseLaws[A: Eq: Arbitrary] = BaseLaws[A]
+  implicit def latticePartialOrderLaws[A: Eq: Arbitrary] = LatticePartialOrderLaws[A]
 
-  checkAll("String", OrderLaws[String].order)
-  checkAll("String", GroupLaws[String].monoid)
+  case class LawChecker[L <: Laws](name: String, laws: L) {
+    def check(f: L => L#RuleSet): Unit = checkAll(name, f(laws))
+  }
+
+  private def laws[L[_] <: Laws, A](implicit
+      laws: L[A], tag: TypeTag[A]): LawChecker[L[A]] =
+    LawChecker("[" + tag.tpe.toString + "]", laws)
+
+  laws[OrderLaws, Boolean].check(_.order)
+  laws[LogicLaws, Boolean].check(_.bool)
+  laws[LatticePartialOrderLaws, Boolean].check(_.boundedLatticePartialOrder)
+
+  laws[OrderLaws, String].check(_.order)
+  laws[GroupLaws, String].check(_.monoid)
 
   {
     // TODO: test a type that has Eq but not Order
     implicit val g: Group[Int] = Group.additive[Int]
-    checkAll("Option[Int]", OrderLaws[Option[Int]].order)
-    checkAll("Option[Int]", GroupLaws[Option[Int]].monoid)
-    checkAll("Option[String]", OrderLaws[Option[String]].order)
-    checkAll("Option[String]", GroupLaws[Option[String]].monoid)
+    laws[OrderLaws, Option[Int]].check(_.order)
+    laws[GroupLaws, Option[Int]].check(_.monoid)
+    laws[OrderLaws, Option[String]].check(_.order)
+    laws[GroupLaws, Option[String]].check(_.monoid)
   }
 
-  checkAll("List[Int]", OrderLaws[List[Int]].order)
-  checkAll("List[Int]", GroupLaws[List[Int]].monoid)
-  checkAll("List[String]", OrderLaws[List[String]].order)
-  checkAll("List[String]", GroupLaws[List[String]].monoid)
+  laws[OrderLaws, List[Int]].check(_.order)
+  laws[GroupLaws, List[Int]].check(_.monoid)
+  laws[OrderLaws, List[String]].check(_.order)
+  laws[GroupLaws, List[String]].check(_.monoid)
 
-  checkAll("Set[Int]", LatticeLaws[Set[Int]].lattice)
-  checkAll("Set[Int]", OrderLaws[Set[Int]].partialOrder)
-  checkAll("Set[Int]", RingLaws[Set[Int]].semiring)
-  checkAll("Set[String]", RingLaws[Set[String]].semiring)
+  laws[LatticeLaws, Set[Int]].check(_.lattice)
+  laws[OrderLaws, Set[Int]].check(_.partialOrder)
+  laws[RingLaws, Set[Int]].check(_.semiring)
+  laws[RingLaws, Set[String]].check(_.semiring)
 
-  checkAll("Map[Char, Int]", OrderLaws[Map[Char, Int]].eqv)
-  checkAll("Map[Char, Int]", RingLaws[Map[Char, Int]].rng)
-  checkAll("Map[Int, BigInt]", OrderLaws[Map[Int, BigInt]].eqv)
-  checkAll("Map[Int, BigInt]", RingLaws[Map[Int, BigInt]].rng)
+  laws[OrderLaws, Map[Char, Int]].check(_.eqv)
+  laws[RingLaws, Map[Char, Int]].check(_.rng)
+  laws[OrderLaws, Map[Int, BigInt]].check(_.eqv)
+  laws[RingLaws, Map[Int, BigInt]].check(_.rng)
 
-  checkAll("Byte", OrderLaws[Byte].order)
-  checkAll("Byte", RingLaws[Byte].euclideanRing)
-  checkAll("Byte", LatticeLaws[Byte].lattice)
+  laws[OrderLaws, Byte].check(_.order)
+  laws[RingLaws, Byte].check(_.euclideanRing)
+  laws[LatticeLaws, Byte].check(_.lattice)
 
-  checkAll("Short", OrderLaws[Short].order)
-  checkAll("Short", RingLaws[Short].euclideanRing)
-  checkAll("Short", LatticeLaws[Short].lattice)
+  laws[OrderLaws, Short].check(_.order)
+  laws[RingLaws, Short].check(_.euclideanRing)
+  laws[LatticeLaws, Short].check(_.lattice)
 
-  checkAll("Char", OrderLaws[Char].order)
+  laws[OrderLaws, Char].check(_.order)
 
-  checkAll("Int", OrderLaws[Int].order)
-  checkAll("Int", RingLaws[Int].euclideanRing)
-  checkAll("Int", LatticeLaws[Int].lattice)
+  laws[OrderLaws, Int].check(_.order)
+  laws[RingLaws, Int].check(_.euclideanRing)
+  laws[LatticeLaws, Int].check(_.lattice)
 
-  checkAll("Long", OrderLaws[Long].order)
-  checkAll("Long", RingLaws[Long].euclideanRing)
-  checkAll("Long", LatticeLaws[Long].lattice)
+  laws[OrderLaws, Long].check(_.order)
+  laws[RingLaws, Long].check(_.euclideanRing)
+  laws[LatticeLaws, Long].check(_.lattice)
 
-  checkAll("BigInt", BaseLaws[BigInt].isReal)
-  checkAll("BigInt", RingLaws[BigInt].euclideanRing)
+  laws[BaseLaws, BigInt].check(_.isReal)
+  laws[RingLaws, BigInt].check(_.euclideanRing)
 
-  checkAll("Rat", BaseLaws[Rat].isReal)
-  checkAll("Rat", RingLaws[Rat].field)
+  laws[BaseLaws, Rat].check(_.isReal)
+  laws[RingLaws, Rat].check(_.field)
 
   {
     implicit val tupEq: Eq[(Int, Int)] = new Eq[(Int, Int)] {
