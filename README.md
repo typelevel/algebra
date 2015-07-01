@@ -55,7 +55,7 @@ mean:
 
 |Name         |Description                                                                     |
 |-------------|--------------------------------------------------------------------------------|
-|Associative  | If `⊕` is associative, then `a ⊕ (b ⊕ c)` = `(a ⊕ b) ⊕ c)`.                    |
+|Associative  | If `⊕` is associative, then `a ⊕ (b ⊕ c)` = `(a ⊕ b) ⊕ c`.                    |
 |Commutative  | If `⊕` is commutative, then `a ⊕ b` = `b ⊕ a`.                                 |
 |Identity     | If `id` is an identity for `⊕`, then `a ⊕ id` = `id ⊕ a` = `a`.                |
 |Inverse      | If `¬` is an inverse for `⊕` and `id`, then `a ⊕ ¬a` = `¬a ⊕ a` = `id`.        |
