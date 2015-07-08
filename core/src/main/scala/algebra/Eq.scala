@@ -69,6 +69,11 @@ object Eq extends EqFunctions {
       def eqv(x: A, y: A) = f(x, y)
     }
 
+  def fromAll[A](fs : ((A,A) => Boolean)*) : Eq[A] =
+    new Eq[A] {
+      def eqv(x : A, y: A) = fs.map(_(x,y)).fold(true)(_ && _)
+    }
+
   /**
    * An `Eq[A]` that delegates to universal equality (`==`).
    *
