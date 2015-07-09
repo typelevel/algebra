@@ -108,7 +108,7 @@ class LawTests extends FunSuite with Discipline with GeneratorDrivenPropertyChec
     checkAll("(Int, Int) Band", GroupLaws[(Int, Int)].band)
   }
 
-  case class Foo(a: Int, b : String, c : Boolean)
+  case class Foo(a: Int, b: String, c: Boolean)
 
   import Arbitrary._
 
@@ -147,7 +147,7 @@ class LawTests extends FunSuite with Discipline with GeneratorDrivenPropertyChec
       (x, y) => x.b == y.b
     )
 
-    forAll { (a1 : Int, b1 : String, a2 : Int, b2: String) =>
+    forAll { (a1: Int, b1: String, a2: Int, b2: String) =>
       val foo1 = Foo(a1, b1, true)
       val foo2 = Foo(a2, b2, false)
 

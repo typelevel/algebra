@@ -148,8 +148,11 @@ object Order extends OrderFunctions {
    */
   def fromAll[@sp A](fs: ((A, A) => Int)*): Order[A] =
     new Order[A] {
-      def compare(x : A, y: A) =
-        fs.map(_(x,y)).dropWhile(_ == 0).headOption.getOrElse(0)
+      def compare(x: A, y: A) =
+        fs.foldLeft(0) {
+          case (0, f) => f(x,y)
+          case (r, _) => r
+        }
     }
 
   /**

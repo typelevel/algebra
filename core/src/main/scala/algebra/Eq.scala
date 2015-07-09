@@ -69,9 +69,17 @@ object Eq extends EqFunctions {
       def eqv(x: A, y: A) = f(x, y)
     }
 
-  def fromAll[A](fs : ((A,A) => Boolean)*) : Eq[A] =
+  /**
+   * Create an `Eq` instance that defines equality via the conjunction
+   * of each of the given functions `fs`.
+   */
+  def fromAll[@sp A](fs : ((A,A) => Boolean)*) : Eq[A] =
     new Eq[A] {
-      def eqv(x : A, y: A) = fs.map(_(x,y)).fold(true)(_ && _)
+      def eqv(x: A, y: A) =
+        fs.foldLeft(true) {
+          case (true, f) => f(x, y)
+          case (r, _) => r
+        }
     }
 
   /**

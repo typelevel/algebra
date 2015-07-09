@@ -163,8 +163,11 @@ object PartialOrder extends PartialOrderFunctions {
    */
   def fromAll[@sp A](fs: ((A, A) => Double)*): PartialOrder[A] =
     new PartialOrder[A] {
-      def partialCompare(x : A, y: A) =
-        fs.map(_(x,y)).dropWhile(_ == 0).headOption.getOrElse(0.0)
+      def partialCompare(x: A, y: A) =
+        fs.foldLeft(0.0) {
+          case (0.0, f) => f(x,y)
+          case (r, _) => r
+        }
     }
 
   /**
