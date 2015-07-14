@@ -1,14 +1,11 @@
 import com.typesafe.sbt.pgp.PgpKeys.publishSigned
-import sbtrelease.ReleaseStep
-import sbtrelease.ReleasePlugin.ReleaseKeys.releaseProcess
-import sbtrelease.ReleaseStateTransformations._
 import sbtrelease.Utilities._
 import sbtunidoc.Plugin.UnidocKeys._
 
 lazy val buildSettings = Seq(
   organization := "org.spire-math",
-  scalaVersion := "2.11.6",
-  crossScalaVersions := Seq("2.10.5", "2.11.6")
+  scalaVersion := "2.11.7",
+  crossScalaVersions := Seq("2.10.5", "2.11.7")
 )
 
 lazy val commonSettings = Seq(
@@ -30,7 +27,7 @@ lazy val commonSettings = Seq(
   )
 )
 
-lazy val algebraSettings = buildSettings ++ commonSettings ++ publishSettings ++ releaseSettings
+lazy val algebraSettings = buildSettings ++ commonSettings ++ publishSettings
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
@@ -73,12 +70,13 @@ lazy val publishSettings = Seq(
   licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
   autoAPIMappings := true,
   apiURL := Some(url("https://non.github.io/algebra/api/")),
+  releaseCrossBuild := true,
+  releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   publishMavenStyle := true,
   publishArtifact in Test := false,
-  pomIncludeRepository := { _ => false },
-  publishTo <<= version { (v: String) =>
+  pomIncludeRepository := Function.const(false),
+  publishTo <<= (version).apply { v =>
     val nexus = "https://oss.sonatype.org/"
-
     if (v.trim.endsWith("SNAPSHOT"))
       Some("snapshots" at nexus + "content/repositories/snapshots")
     else
@@ -111,35 +109,7 @@ lazy val publishSettings = Seq(
         <url>http://github.com/tixxit/</url>
       </developer>
     </developers>
-  ),
-  releaseProcess := Seq[ReleaseStep](
-    checkSnapshotDependencies,
-    inquireVersions,
-    runTest,
-    setReleaseVersion,
-    commitReleaseVersion,
-    tagRelease,
-    publishSignedArtifacts,
-    setNextVersion,
-    commitNextVersion,
-    pushChanges
   )
-)
-
-lazy val publishSignedArtifacts = ReleaseStep(
-  action = { st =>
-    val extracted = st.extract
-    val ref = extracted.get(thisProjectRef)
-    extracted.runAggregated(publishSigned in Global in ref, st)
-  },
-  check = { st =>
-    // getPublishTo fails if no publish repository is set up.
-    val ex = st.extract
-    val ref = ex.get(thisProjectRef)
-    Classpaths.getPublishTo(ex.get(publishTo in Global in ref))
-    st
-  },
-  enableCrossBuild = true
 )
 
 lazy val noPublishSettings = Seq(
