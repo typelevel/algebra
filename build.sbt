@@ -128,9 +128,9 @@ lazy val publishSettings = Seq(
 
 lazy val publishSignedArtifacts = ReleaseStep(
   action = { st =>
-    val extracted = st.extract
-    val ref = extracted.get(thisProjectRef)
-    extracted.runAggregated(publishSigned in Global in ref, st)
+    val ex = st.extract
+    val ref = ex.get(thisProjectRef)
+    ex.runAggregated(publishSigned in Global in ref, st)
   },
   check = { st =>
     // getPublishTo fails if no publish repository is set up.
