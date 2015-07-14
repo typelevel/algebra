@@ -37,7 +37,7 @@ repo, we follow these rules:
    green.
 2. If you are not the author, and you see `N-1` shipits and Travis CI is green, just click
 merge and delete the branch.
-3. N = 2.
+3. N = 1.
 
 ## algebra overview
 
