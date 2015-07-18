@@ -143,6 +143,19 @@ object Order extends OrderFunctions {
     }
 
   /**
+   * Define an `Order[A]` using the given functions `fs` until
+   * the first one returns a non-0 result.
+   */
+  def fromAll[@sp A](fs: ((A, A) => Int)*): Order[A] =
+    new Order[A] {
+      def compare(x: A, y: A) =
+        fs.foldLeft(0) {
+          case (0, f) => f(x,y)
+          case (r, _) => r
+        }
+    }
+
+  /**
    * Implicitly convert a `Order[A]` to a `scala.math.Ordering[A]`
    * instance.
    */

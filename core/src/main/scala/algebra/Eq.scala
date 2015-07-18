@@ -70,6 +70,19 @@ object Eq extends EqFunctions {
     }
 
   /**
+   * Create an `Eq` instance that defines equality via the conjunction
+   * of each of the given functions `fs`.
+   */
+  def fromAll[@sp A](fs : ((A,A) => Boolean)*) : Eq[A] =
+    new Eq[A] {
+      def eqv(x: A, y: A) =
+        fs.foldLeft(true) {
+          case (true, f) => f(x, y)
+          case (r, _) => r
+        }
+    }
+
+  /**
    * An `Eq[A]` that delegates to universal equality (`==`).
    *
    * This can be useful for case classes, which have reasonable `equals`
