@@ -1,6 +1,6 @@
-import com.typesafe.sbt.pgp.PgpKeys.publishSigned
 import sbtrelease.Utilities._
 import sbtunidoc.Plugin.UnidocKeys._
+import ReleaseTransformations._
 
 lazy val buildSettings = Seq(
   organization := "org.spire-math",
@@ -59,9 +59,9 @@ lazy val laws = project.dependsOn(core, std)
   .settings(algebraSettings: _*)
   .settings(
     libraryDependencies ++= Seq(
-      "org.scalacheck" %% "scalacheck" % "1.12.2",
-      "org.typelevel" %% "discipline" % "0.2.1",
-      "org.scalatest" %% "scalatest" % "2.2.4" % "test"
+      "org.scalacheck" %% "scalacheck" % "1.12.4",
+      "org.typelevel" %% "discipline" % "0.3",
+      "org.scalatest" %% "scalatest" % "2.2.5" % "test"
     )
   )
 
@@ -109,8 +109,21 @@ lazy val publishSettings = Seq(
         <url>http://github.com/tixxit/</url>
       </developer>
     </developers>
-  )
-)
+  ),
+
+  releaseProcess := Seq[ReleaseStep](
+    checkSnapshotDependencies,
+    inquireVersions,
+    runClean,
+    runTest,
+    setReleaseVersion,
+    commitReleaseVersion,
+    tagRelease,
+    ReleaseStep(action = Command.process("publishSigned", _)),
+    setNextVersion,
+    commitNextVersion,
+    ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
+    pushChanges))
 
 lazy val noPublishSettings = Seq(
   publish := (),
