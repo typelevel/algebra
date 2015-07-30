@@ -9,6 +9,20 @@ these type classes, we will distribute an `algebra` package with no
 dependencies that works with Scala 2.10 and 2.11, and which can be
 shared by all Scala libraries interested in abstract algebra.
 
+## getting algebra
+
+Algebra supports Scala 2.10 and 2.11, and is available from Sonatype
+(and Maven Central). To use algebra in your own projects, include this
+snippet in your `build.sbt` file:
+
+```scala
+resolvers += Resolver.sonatypeRepo("releases")
+
+libraryDependencies += "org.spire-math" %% "algebra" % "0.3.0"
+```
+
+As of 0.3.0 algebra also supports scala.js!
+
 ## what we have so far
 
 This repo has been seeded with most of the contents of
@@ -30,14 +44,16 @@ to this repo. The following people have push access:
 
 ## development process
 
-Please make a pull request against the master branch. For those that have merge access to the
-repo, we follow these rules:
+Please make a pull request against the master branch. For those that
+have merge access to the repo, we follow these rules:
 
-1. You may not merge your own PR unless `N` people have given you a shipit/+1 etc... and Travis CI is
-   green.
-2. If you are not the author, and you see `N-1` shipits and Travis CI is green, just click
-merge and delete the branch.
-3. N = 1.
+1. Do not merge your own PR unless *N* people have signed-off on the
+   PR (e.g. given a thumbs-up, +1, shipit, etc) and Travis is green.
+
+2. If you are not the author, and you see *N-1* sign-offs and Travis
+   is green, just click merge and delete the branch.
+
+3. Currently, *N = 1*.
 
 ## algebra overview
 
@@ -125,4 +141,3 @@ on.
 
 (For a description of what the terminology in each column means, see
 [§algebraic properties and terminology](#algebraic-properties-and-terminology).)
-
