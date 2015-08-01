@@ -161,7 +161,7 @@ object PartialOrder extends PartialOrderFunctions {
    * Define a `PartialOrder[A]` using the given functions `fs` until
    * the first one returns a non-0 result or NaN.
    */
-  def fromAll[@sp A](fs: ((A, A) => Double)*): PartialOrder[A] =
+  def fromLazily[A](fs: ((A, A) => Double)*): PartialOrder[A] =
     new PartialOrder[A] {
       def partialCompare(x: A, y: A) =
         fs.foldLeft(0.0) {

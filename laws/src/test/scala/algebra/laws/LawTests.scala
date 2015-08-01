@@ -121,7 +121,7 @@ class LawTests extends FunSuite with Discipline with GeneratorDrivenPropertyChec
   implicit val arbitraryFoo = Arbitrary(fooGenerator)
 
   {
-    implicit val fooOrder = Order.fromAll[Foo](
+    implicit val fooOrder = Order.fromLazily[Foo](
       (x, y) => x.a compare y.a,
       (x, y) => x.b compare y.b,
       (x, y) => x.c compare y.c)
@@ -130,7 +130,7 @@ class LawTests extends FunSuite with Discipline with GeneratorDrivenPropertyChec
   }
 
   {
-    implicit val fooPartialOrder = PartialOrder.fromAll[Foo](
+    implicit val fooPartialOrder = PartialOrder.fromLazily[Foo](
       (x, y) => (x.a compare y.a).toDouble,
       (x, y) =>
         if (x.b == y.b) 0.0
