@@ -73,7 +73,7 @@ trait SemigroupFunctions {
 object Semigroup extends SemigroupFunctions {
 
   /**
-   * Access an implicit `CommutativeSemigroup[A]`.
+   * Access an implicit `Semigroup[A]`.
    */
   @inline final def apply[A](implicit ev: Semigroup[A]) = ev
 
@@ -89,7 +89,7 @@ object Semigroup extends SemigroupFunctions {
 
 
   /**
-   * This method converts an multiplicative instance into a generic
+   * This method converts a multiplicative instance into a generic
    * instance.
    *
    * Given an implicit `MultiplicativeSemigroup[A]`, this method

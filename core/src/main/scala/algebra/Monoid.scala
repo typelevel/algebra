@@ -61,7 +61,7 @@ object Monoid extends MonoidFunctions {
     ev.additive
 
   /**
-   * This method converts an multiplicative instance into a generic
+   * This method converts a multiplicative instance into a generic
    * instance.
    * 
    * Given an implicit `MultiplicativeMonoid[A]`, this method returns
