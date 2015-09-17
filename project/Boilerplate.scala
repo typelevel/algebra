@@ -88,9 +88,10 @@ object Boilerplate {
       def constraints(constraint: String) =
         synTypes.map(tpe => s"${tpe}: ${constraint}[${tpe}]").mkString(", ")
 
-      def tuple(results: IndexedSeq[String]) = {
+      def tuple(results: TraversableOnce[String]) = {
+        val resultsVec = results.toVector
         val a = synTypes.size
-        val r =  s"${0.until(a).map(i => results(i)).mkString(", ")}"
+        val r =  s"${0.until(a).map(i => resultsVec(i)).mkString(", ")}"
         if (a == 1) "Tuple1(" ++ r ++ ")"
         else s"(${r})"
       }
