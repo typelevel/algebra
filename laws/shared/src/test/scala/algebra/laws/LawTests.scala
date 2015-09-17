@@ -89,13 +89,7 @@ trait LawTestsBase extends FunSuite with Discipline {
   laws[RingLaws, BigInt].check(_.euclideanRing)
 
   {
-    implicit val tupEq: Eq[(Int, Int)] = new Eq[(Int, Int)] {
-      def eqv(a: (Int, Int), b: (Int, Int)) = a == b
-    }
-    implicit val band = new Band[(Int, Int)] {
-      def combine(a: (Int, Int), b: (Int, Int)) = (a._1, b._2)
-    }
-    checkAll("(Int, Int) Band", GroupLaws[(Int, Int)].band)
+    checkAll("(String, String) Semigroup", GroupLaws[(String, String)].semigroup)
   }
 }
 
