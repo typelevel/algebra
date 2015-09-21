@@ -88,6 +88,8 @@ trait LawTestsBase extends FunSuite with Discipline {
   laws[BaseLaws, BigInt].check(_.isReal)
   laws[RingLaws, BigInt].check(_.euclideanRing)
 
+  laws[RingLaws, (Int, Int)].check(_.euclideanRing)
+
   {
     implicit val band = new Band[(Int, Int)] {
       def combine(a: (Int, Int), b: (Int, Int)) = (a._1, b._2)
