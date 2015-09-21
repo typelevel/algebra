@@ -123,6 +123,11 @@ object Boilerplate {
         |import algebra.ring.{EuclideanRing, Rig, Ring, Rng, Semiring}
         |
         |private[std] trait TupleInstances {
+        -  implicit def tuple${arity}Band[${`A..N`}](implicit ${constraints("Band")}): Band[${`(A..N)`}] =
+        -    new Band[${`(A..N)`}] {
+        -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
+        -    }
+        -
         -  implicit def tuple${arity}Group[${`A..N`}](implicit ${constraints("Group")}): Group[${`(A..N)`}] =
         -    new Group[${`(A..N)`}] {
         -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
@@ -137,18 +142,6 @@ object Boilerplate {
         -
         -  implicit def tuple${arity}EuclideanRing[${`A..N`}](implicit ${constraints("EuclideanRing")}): EuclideanRing[${`(A..N)`}] =
         -    new EuclideanRing[${`(A..N)`}] {
-        -      def mod(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("mod")}
-        -      def negate(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("negate")}
-        -      def one: ${`(A..N)`} = ${nullaryTuple("one")}
-        -      def plus(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("plus")}
-        -      def quot(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("quot")}
-        -      def times(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("times")}
-        -      def zero: ${`(A..N)`} = ${nullaryTuple("zero")}
-        -    }
-        -
-        -  implicit def tuple${arity}Field[${`A..N`}](implicit ${constraints("Field")}): Field[${`(A..N)`}] =
-        -    new Field[${`(A..N)`}] {
-        -      def div(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("div")}
         -      def mod(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("mod")}
         -      def negate(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("negate")}
         -      def one: ${`(A..N)`} = ${nullaryTuple("one")}
