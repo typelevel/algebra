@@ -59,6 +59,7 @@ lazy val aggregate = project.in(file("."))
 lazy val core = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "algebra")
   .settings(algebraSettings: _*)
+  .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
 
 lazy val coreJVM = core.jvm 
 lazy val coreJS = core.js
