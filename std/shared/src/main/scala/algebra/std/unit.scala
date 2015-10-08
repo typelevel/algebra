@@ -1,16 +1,16 @@
 package algebra
 package std
 
-import algebra.ring.CommutativeRig
+import algebra.ring.CommutativeRing
 
 package object unit extends UnitInstances
 
 trait UnitInstances {
-  implicit val unitAlgebra: Order[Unit] with CommutativeRig[Unit] =
+  implicit val unitAlgebra: Order[Unit] with CommutativeRing[Unit] with BoundedSemilattice[Unit] =
     new UnitAlgebra
 }
 
-class UnitAlgebra extends Order[Unit] with CommutativeRig[Unit] {
+class UnitAlgebra extends Order[Unit] with CommutativeRing[Unit] with BoundedSemilattice[Unit] {
   def compare(x: Unit, y: Unit): Int = 0
 
   override def eqv(x: Unit, y: Unit): Boolean = true
@@ -30,6 +30,10 @@ class UnitAlgebra extends Order[Unit] with CommutativeRig[Unit] {
   override def isOne(x: Unit)(implicit ev: Eq[Unit]): Boolean = true
 
   def plus(a: Unit, b: Unit): Unit = ()
+  def negate(x: Unit): Unit = ()
   def times(a: Unit, b: Unit): Unit = ()
   override def pow(a: Unit, b: Int): Unit = ()
+
+  def empty: Unit = ()
+  def combine(x: Unit, y: Unit): Unit = ()
 }

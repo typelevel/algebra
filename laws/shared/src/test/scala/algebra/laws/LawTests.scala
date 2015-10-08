@@ -98,7 +98,8 @@ trait LawTestsBase extends FunSuite with Discipline {
   }
 
   laws[OrderLaws, Unit].check(_.order)
-  laws[RingLaws, Unit].check(_.rig)
+  laws[RingLaws, Unit].check(_.ring)
   laws[RingLaws, Unit].check(_.multiplicativeMonoid)
+  laws[LatticeLaws, Unit].check(_.boundedSemilattice)
 }
 
