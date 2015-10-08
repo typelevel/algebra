@@ -21,7 +21,7 @@ class UnitAlgebra extends Order[Unit] with CommutativeRing[Unit] with BoundedSem
   override def lteqv(x: Unit, y: Unit): Boolean = true
 
   override def min(x: Unit, y: Unit): Unit = ()
-  override def max(x: Unit, y: Unit): Unit = Unit
+  override def max(x: Unit, y: Unit): Unit = ()
 
   def zero: Unit = ()
   def one: Unit = ()
