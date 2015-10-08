@@ -96,5 +96,9 @@ trait LawTestsBase extends FunSuite with Discipline {
     }
     checkAll("(Int, Int) Band", GroupLaws[(Int, Int)].band)
   }
+
+  laws[OrderLaws, Unit].check(_.order)
+  laws[RingLaws, Unit].check(_.rig)
+  laws[RingLaws, Unit].check(_.multiplicativeMonoid)
 }
 

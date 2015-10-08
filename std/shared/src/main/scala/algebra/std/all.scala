@@ -17,3 +17,4 @@ package object all
     with ShortInstances
     with StringInstances
     with TupleInstances
+    with UnitInstances
