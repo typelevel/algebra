@@ -1,12 +1,12 @@
 sudo: false
 language: scala
-scala:
-  - 2.10.5
-  - 2.11.7
-# Temporary to fix travis-ci/travis-ci#4527
-before_script:
-- mkdir -p $HOME/.sbt/launchers/0.13.8/
-- curl -L -o $HOME/.sbt/launchers/0.13.8/sbt-launch.jar http://dl.bintray.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.8/sbt-launch.jar
+matrix:
+  include:
+    - scala: 2.10.5
+      script: ./sbt ++$TRAVIS_SCALA_VERSION clean test && ./sbt ++$TRAVIS_SCALA_VERSION core:mima-report-binary-issues
+
+    - scala: 2.11.7
+      script: ./sbt ++$TRAVIS_SCALA_VERSION clean test && ./sbt ++$TRAVIS_SCALA_VERSION core:mima-report-binary-issues
 notifications:
   irc:
     channels:
