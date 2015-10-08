@@ -1,6 +1,8 @@
 import sbtrelease.Utilities._
 import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
+import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
+import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
 
 lazy val buildSettings = Seq(
   organization := "org.spire-math",
@@ -58,6 +60,8 @@ lazy val aggregate = project.in(file("."))
 
 lazy val core = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "algebra")
+  .settings(mimaDefaultSettings: _*)
+  .settings(previousArtifact := Some("org.spire-math" %% "algebra" % "0.3.1"))
   .settings(algebraSettings: _*)
   .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
 
