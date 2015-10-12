@@ -38,6 +38,7 @@ trait LawTestsBase extends FunSuite with Discipline {
 
   laws[OrderLaws, Boolean].check(_.order)
   laws[LogicLaws, Boolean].check(_.bool)
+  laws[LogicLaws, SimpleHeyting].check(_.heyting)
   laws[LatticePartialOrderLaws, Boolean].check(_.boundedLatticePartialOrder)
 
   laws[OrderLaws, String].check(_.order)
