@@ -37,7 +37,7 @@ trait Bool[@sp(Int, Long) A] extends Any with Heyting[A] { self =>
       def zero: A = self.zero
       def one: A = self.one
       def plus(x: A, y: A): A = self.xor(x, y)
-      def negate(x: A): A = self.complement(x)
+      def negate(x: A): A = x
       def times(x: A, y: A): A = self.and(x, y)
     }
 }
