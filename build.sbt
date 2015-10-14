@@ -63,7 +63,6 @@ lazy val core = crossProject.crossType(CrossType.Pure)
   .settings(mimaDefaultSettings: _*)
   // TODO: update this to a published stable version, e.g. 0.4.0
   //.settings(previousArtifact := Some("org.spire-math" %% "algebra" % "0.3.1"))
-  .settings(previousArtifact := None)
   .settings(algebraSettings: _*)
   .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
 
