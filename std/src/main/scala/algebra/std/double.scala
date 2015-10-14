@@ -77,6 +77,6 @@ class DoubleAlgebra extends Field[Double] with NRoot[Double] with Order[Double] 
 
   def ceil(x: Double): Double = Math.ceil(x)
   def floor(x: Double): Double = Math.floor(x)
-  def round(x: Double): Double = Platform.rint(x)
+  def round(x: Double): Double = Math.rint(x)
   def isWhole(x: Double): Boolean = x % 1.0 == 0.0
 }
