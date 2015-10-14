@@ -61,7 +61,7 @@ lazy val aggregate = project.in(file("."))
 lazy val core = crossProject.crossType(CrossType.Pure)
   .settings(moduleName := "algebra")
   .settings(mimaDefaultSettings: _*)
-  .settings(previousArtifact := Some("org.spire-math" %% "algebra" % "0.3.1"))
+  .settings(previousArtifact := None)
   .settings(algebraSettings: _*)
   .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
 
