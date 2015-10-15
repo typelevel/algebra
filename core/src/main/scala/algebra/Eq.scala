@@ -79,4 +79,12 @@ object Eq extends EqFunctions {
     new Eq[A] {
       def eqv(x: A, y: A) = x == y
     }
+
+  /**
+   * This gives compatibility with scala's Equiv trait
+   */
+  implicit def equiv[A](implicit ev: Eq[A]): Equiv[A] =
+    new Equiv[A] {
+      def equiv(a: A, b: A) = ev.eqv(a, b)
+    }
 }

@@ -4,17 +4,17 @@ import scala.{specialized => sp}
 
 /**
  * The `PartialOrder` type class is used to define a partial ordering on some type `A`.
- * 
+ *
  * A partial order is defined by a relation <=, which obeys the following laws:
- * 
+ *
  * - x <= x (reflexivity)
  * - if x <= y and y <= x, then x = y (anti-symmetry)
  * - if x <= y and y <= z, then x <= z (transitivity)
- * 
+ *
  * To compute both <= and >= at the same time, we use a Double number
  * to encode the result of the comparisons x <= y and x >= y.
  * The truth table is defined as follows:
- * 
+ *
  * x <= y    x >= y      Double
  * true      true        = 0.0     (corresponds to x = y)
  * false     false       = NaN     (x and y cannot be compared)
@@ -40,7 +40,7 @@ trait PartialOrder[@sp A] extends Any with Eq[A] { self =>
    * - negative iff `x < y`
    * - zero     iff `x = y`
    * - positive iff `x > y`
-   */  
+   */
   def tryCompare(x: A, y: A): Option[Int] = {
     val c = partialCompare(x, y)
     if (c.isNaN) None else Some(c.signum)
@@ -143,7 +143,7 @@ object PartialOrder extends PartialOrderFunctions {
   @inline final def apply[A](implicit ev: PartialOrder[A]) = ev
 
   /**
-   * Convert an implicit `PartialOrder[A]` to an `PartialOrder[B]`
+   * Convert an implicit `PartialOrder[B]` to an `PartialOrder[A]`
    * using the given function `f`.
    */
   def by[@sp A, @sp B](f: A => B)(implicit ev: PartialOrder[B]): PartialOrder[A] =

@@ -128,7 +128,7 @@ object Order extends OrderFunctions {
   @inline final def apply[A](implicit ev: Order[A]) = ev
 
   /**
-   * Convert an implicit `Order[A]` to an `Order[B]` using the given
+   * Convert an implicit `Order[B]` to an `Order[A]` using the given
    * function `f`.
    */
   def by[@sp A, @sp B](f: A => B)(implicit ev: Order[B]): Order[A] =
