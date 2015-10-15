@@ -41,6 +41,9 @@ trait LawTestsBase extends FunSuite with Discipline {
   laws[LogicLaws, SimpleHeyting].check(_.heyting)
   laws[LatticePartialOrderLaws, Boolean].check(_.boundedLatticePartialOrder)
 
+  // ensure that Bool[A].asCommutativeRing is valid
+  laws[RingLaws, Boolean].check(_.ring(Bool[Boolean].asCommutativeRing))
+
   laws[OrderLaws, String].check(_.order)
   laws[GroupLaws, String].check(_.monoid)
 
