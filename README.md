@@ -142,7 +142,7 @@ on.
 (For a description of what the terminology in each column means, see
 [§algebraic properties and terminology](#algebraic-properties-and-terminology).)
 
-### lattic-like structures
+### lattice-like structures
 
 The `algebra.lattice` contains more structures that can be somewhat ring-like.
 Rather than `plus` and `times` we have `meet` and `join` both of which are always
