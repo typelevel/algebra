@@ -1,8 +1,6 @@
 package algebra
 package lattice
 
-import ring.CommutativeRing
-
 import scala.{specialized => sp}
 
 /**
@@ -49,15 +47,6 @@ trait Heyting[@sp(Int, Long) A] extends Any with BoundedDistributiveLattice[A] {
   def nand(a: A, b: A): A = complement(and(a, b))
   def nor(a: A, b: A): A = complement(or(a, b))
   def nxor(a: A, b: A): A = complement(xor(a, b))
-
-  def asCommutativeRing: CommutativeRing[A] =
-    new CommutativeRing[A] {
-      def zero: A = self.zero
-      def one: A = self.one
-      def plus(x: A, y: A): A = self.xor(x, y)
-      def negate(x: A): A = self.complement(x)
-      def times(x: A, y: A): A = self.and(x, y)
-    }
 }
 
 trait HeytingFunctions {

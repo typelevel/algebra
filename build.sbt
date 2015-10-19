@@ -58,22 +58,25 @@ lazy val aggregate = project.in(file("."))
   .aggregate(coreJS, lawsJS, macrosJS, stdJS)
   .dependsOn(coreJS, lawsJS, macrosJS, stdJS)
 
-lazy val core = crossProject.crossType(CrossType.Pure)
+lazy val core = crossProject
+  .crossType(CrossType.Pure)
   .settings(moduleName := "algebra")
   .settings(mimaDefaultSettings: _*)
-  .settings(previousArtifact := Some("org.spire-math" %% "algebra" % "0.3.1"))
+  // TODO: update this to a published stable version, e.g. 0.4.0
+  //.settings(previousArtifact := Some("org.spire-math" %% "algebra" % "0.3.1"))
   .settings(algebraSettings: _*)
   .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
 
-lazy val coreJVM = core.jvm 
+lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
 
 lazy val std = crossProject
+  .crossType(CrossType.Pure)
   .dependsOn(core)
   .settings(moduleName := "algebra-std")
   .settings(algebraSettings: _*)
 
-lazy val stdJVM = std.jvm 
+lazy val stdJVM = std.jvm
 lazy val stdJS = std.js
 
 lazy val laws = crossProject
@@ -97,7 +100,7 @@ lazy val macros = crossProject.crossType(CrossType.Pure)
   .settings(crossVersionSharedSources:_*)
   .settings(scalaMacroDependencies:_*)
 
-lazy val macrosJVM = macros.jvm 
+lazy val macrosJVM = macros.jvm
 lazy val macrosJS = macros.js
 
 lazy val publishSettings = Seq(

@@ -76,6 +76,6 @@ class FloatAlgebra extends Field[Float] with NRoot[Float] with Order[Float] with
 
   def ceil(x: Float): Float = Math.ceil(x.toDouble).toFloat
   def floor(x: Float): Float = Math.floor(x.toDouble).toFloat
-  def round(x: Float): Float = Platform.rint(x.toDouble).toFloat
+  def round(x: Float): Float = Math.rint(x.toDouble).toFloat
   def isWhole(x: Float): Boolean = x % 1.0F == 0.0F
 }
