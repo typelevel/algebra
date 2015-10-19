@@ -1,7 +1,7 @@
 package algebra
 package std
 
-import algebra.lattice.Lattice
+import algebra.lattice.DistributiveLattice
 import algebra.number.{IsReal, NRoot, Signed}
 import algebra.ring.Field
 import algebra.std.util.StaticMethods
@@ -15,8 +15,9 @@ import scala.annotation.tailrec
 trait DoubleInstances {
   implicit val doubleAlgebra = new DoubleAlgebra
 
-  val DoubleMinMaxLattice: Lattice[Double] =
-    Lattice.minMax[Double](doubleAlgebra)
+  // This is not Bounded due to the presence of NaN
+  val DoubleMinMaxLattice: DistributiveLattice[Double] =
+    DistributiveLattice.minMax[Double](doubleAlgebra)
 }
 
 /**

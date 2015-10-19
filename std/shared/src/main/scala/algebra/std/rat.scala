@@ -1,7 +1,7 @@
 package algebra
 package std
 
-import algebra.lattice.Lattice
+import algebra.lattice.DistributiveLattice
 import algebra.number._
 import algebra.ring._
 
@@ -95,8 +95,8 @@ object Rat {
   implicit val ratAlgebra =
     new RatAlgebra
 
-  val RatMinMaxLattice: Lattice[Rat] =
-    Lattice.minMax[Rat](ratAlgebra)
+  val RatMinMaxLattice: DistributiveLattice[Rat] =
+    DistributiveLattice.minMax[Rat](ratAlgebra)
 }
 
 class RatAlgebra extends Field[Rat] with Order[Rat] with Signed[Rat] with IsReal[Rat] with Serializable {

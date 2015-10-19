@@ -1,7 +1,7 @@
 package algebra
 package std
 
-import algebra.lattice.Lattice
+import algebra.lattice.DistributiveLattice
 import algebra.number.{IsReal, NRoot, Signed}
 import algebra.ring.Field
 import algebra.std.util.StaticMethods
@@ -11,8 +11,9 @@ import scala.annotation.tailrec
 trait FloatInstances {
   implicit val floatAlgebra = new FloatAlgebra
 
-  val FloatMinMaxLattice: Lattice[Float] =
-    Lattice.minMax[Float](floatAlgebra)
+  // Not bounded due to the presence of NaN (min(x, NaN) == NaN, max(x, NaN) == NaN)
+  val FloatMinMaxLattice: DistributiveLattice[Float] =
+    DistributiveLattice.minMax[Float](floatAlgebra)
 }
 
 /**

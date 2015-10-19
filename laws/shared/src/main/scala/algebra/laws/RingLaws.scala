@@ -52,6 +52,11 @@ trait RingLaws[A] extends GroupLaws[A] {
     Rules.collect0("product", "one", A.one)(A.product)
   )
 
+  def multiplicativeCommutativeMonoid(implicit A: MultiplicativeCommutativeMonoid[A]) = new MultiplicativeProperties(
+    base = _.commutativeMonoid(A.multiplicative),
+    parent = Some(multiplicativeMonoid)
+  )
+
   def multiplicativeGroup(implicit A: MultiplicativeGroup[A]) = new MultiplicativeProperties(
     base = _.group(A.multiplicative),
     parent = Some(multiplicativeMonoid),
@@ -87,6 +92,13 @@ trait RingLaws[A] extends GroupLaws[A] {
     name = "rig",
     al = additiveCommutativeMonoid,
     ml = multiplicativeMonoid,
+    parents = Seq(semiring)
+  )
+
+  def commutativeRig(implicit A: CommutativeRig[A]) = new RingProperties(
+    name = "commutativeRig",
+    al = additiveCommutativeMonoid,
+    ml = multiplicativeCommutativeMonoid,
     parents = Seq(semiring)
   )
 

@@ -12,8 +12,8 @@ package object long extends LongInstances
 trait LongInstances {
   implicit val longAlgebra = new LongAlgebra
 
-  val LongMinMaxLattice: Lattice[Long] =
-    Lattice.minMax[Long](longAlgebra)
+  val LongMinMaxLattice: BoundedDistributiveLattice[Long] =
+    BoundedDistributiveLattice.minMax[Long](Long.MinValue, Long.MaxValue)(longAlgebra)
 }
 
 class LongAlgebra extends EuclideanRing[Long]

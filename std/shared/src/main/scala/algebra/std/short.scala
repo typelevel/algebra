@@ -11,8 +11,8 @@ package object short extends ShortInstances
 trait ShortInstances {
   implicit val shortAlgebra = new ShortAlgebra
 
-  val ShortMinMaxLattice: Lattice[Short] =
-    Lattice.minMax[Short](shortAlgebra)
+  val ShortMinMaxLattice: BoundedDistributiveLattice[Short] =
+    BoundedDistributiveLattice.minMax[Short](Short.MinValue, Short.MaxValue)(shortAlgebra)
 }
 
 class ShortAlgebra extends EuclideanRing[Short]

@@ -7,18 +7,18 @@ import scala.{specialized => sp}
  * Boolean algebras are Heyting algebras with the additional
  * constraint that the law of the excluded middle is true
  * (equivalently, double-negation is true).
- * 
+ *
  * This means that in addition to the laws Heyting algebras obey,
  * boolean algebras also obey the following:
- * 
+ *
  *  - (a ∨ ¬a) = 1
  *  - ¬¬a = a
- * 
+ *
  * Boolean algebras generalize classical logic: one is equivalent to
  * "true" and zero is equivalent to "false". Boolean algebras provide
  * additional logical operators such as `xor`, `nand`, `nor`, and
  * `nxor` which are commonly used.
- * 
+ *
  * Every boolean algebras has a dual algebra, which involves reversing
  * true/false as well as and/or.
  */

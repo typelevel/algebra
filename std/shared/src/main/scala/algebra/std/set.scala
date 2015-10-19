@@ -1,20 +1,20 @@
 package algebra
 package std
 
-import algebra.lattice.Lattice
+import algebra.lattice.{BoundedJoinSemilattice, DistributiveLattice}
 import algebra.ring.Semiring
 
 package object set extends SetInstances
 
 trait SetInstances {
-  implicit def setLattice[A]: Lattice[Set[A]] = new SetLattice[A]
+  implicit def setLattice[A]: DistributiveLattice[Set[A]] with BoundedJoinSemilattice[Set[A]] = new SetLattice[A]
   implicit def setPartialOrder[A]: PartialOrder[Set[A]] = new SetPartialOrder[A]
   implicit def setSemiring[A] = new SetSemiring[A]
 }
 
-class SetLattice[A] extends Lattice[Set[A]] {
+class SetLattice[A] extends DistributiveLattice[Set[A]] with BoundedJoinSemilattice[Set[A]] {
+  def zero: Set[A] = Set.empty[A]
   def join(lhs: Set[A], rhs: Set[A]): Set[A] = lhs.union(rhs)
-
   def meet(lhs: Set[A], rhs: Set[A]): Set[A] = lhs.intersect(rhs)
 }
 
