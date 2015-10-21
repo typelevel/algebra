@@ -17,7 +17,16 @@ import scala.{specialized => sp}
  *
  *   meet(a, join(a, b)) = join(a, meet(a, b)) = a
  */
-trait Lattice[@sp(Int, Long, Float, Double) A] extends Any with JoinSemilattice[A] with MeetSemilattice[A]
+trait Lattice[@sp(Int, Long, Float, Double) A] extends Any with JoinSemilattice[A] with MeetSemilattice[A] { self =>
+  /**
+   * This is the lattice with meet and join swapped
+   */
+  def dual: Lattice[A] = new Lattice[A] {
+    def meet(a: A, b: A) = self.join(a, b)
+    def join(a: A, b: A) = self.meet(a, b)
+    override def dual = self
+  }
+}
 
 trait LatticeFunctions {
   def join[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: JoinSemilattice[A]): A =

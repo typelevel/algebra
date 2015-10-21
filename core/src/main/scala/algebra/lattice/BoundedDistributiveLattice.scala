@@ -19,6 +19,14 @@ trait BoundedDistributiveLattice[@sp(Int, Long, Float, Double) A] extends Any wi
       def plus(x: A, y: A): A = self.join(x, y)
       def times(x: A, y: A): A = self.meet(x, y)
     }
+
+  override def dual: BoundedDistributiveLattice[A] = new BoundedDistributiveLattice[A] {
+    def meet(a: A, b: A) = self.join(a, b)
+    def join(a: A, b: A) = self.meet(a, b)
+    def one = self.zero
+    def zero = self.one
+    override def dual = self
+  }
 }
 
 object BoundedDistributiveLattice extends LatticeFunctions with BoundedLatticeFunctions {

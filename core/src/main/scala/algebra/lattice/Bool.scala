@@ -26,7 +26,7 @@ import scala.{specialized => sp}
 trait Bool[@sp(Int, Long) A] extends Any with Heyting[A] { self =>
   def imp(a: A, b: A): A = or(complement(a), b)
 
-  def dual: Bool[A] = new DualBool(this)
+  override def dual: Bool[A] = new DualBool(this)
   /**
    * Every Boolean algebra is a CommutativeRing, but we don't extend
    * CommutativeRing because, e.g. we might want a Bool[Int] and CommutativeRing[Int] to
