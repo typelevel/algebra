@@ -46,6 +46,17 @@ trait LatticeLaws[A] extends GroupLaws[A] {
     }
   )
 
+  def distributiveLattice(implicit A: DistributiveLattice[A]) = new LatticeProperties(
+    name = "distributiveLattice",
+    parents = Seq(lattice),
+    join = Some(semilattice(A.joinSemilattice)),
+    meet = Some(semilattice(A.meetSemilattice)),
+    "distributive" -> forAll { (x: A, y: A, z: A) =>
+      (A.join(x, A.meet(y, z)) ?== A.meet(A.join(x, y), A.join(x, z))) &&
+        (A.meet(x, A.join(y, z)) ?== A.join(A.meet(x, y), A.meet(x, z)))
+    }
+  )
+
   def boundedJoinSemilattice(implicit A: BoundedJoinSemilattice[A]) = new LatticeProperties(
     name = "boundedJoinSemilattice",
     parents = Seq(joinSemilattice),
@@ -60,15 +71,15 @@ trait LatticeLaws[A] extends GroupLaws[A] {
     meet = Some(boundedSemilattice(A.meetSemilattice))
   )
 
-  def boundedBelowLattice(implicit A: Lattice[A] with BoundedJoinSemilattice[A]) = new LatticeProperties(
-    name = "boundedBelowLattice",
+  def boundedJoinLattice(implicit A: Lattice[A] with BoundedJoinSemilattice[A]) = new LatticeProperties(
+    name = "boundedJoinLattice",
     parents = Seq(boundedJoinSemilattice, lattice),
     join = Some(boundedSemilattice(A.joinSemilattice)),
     meet = Some(semilattice(A.meetSemilattice))
   )
 
-  def boundedAboveLattice(implicit A: Lattice[A] with BoundedMeetSemilattice[A]) = new LatticeProperties(
-    name = "boundedAboveLattice",
+  def boundedMeetLattice(implicit A: Lattice[A] with BoundedMeetSemilattice[A]) = new LatticeProperties(
+    name = "boundedMeetLattice",
     parents = Seq(boundedMeetSemilattice, lattice),
     join = Some(semilattice(A.joinSemilattice)),
     meet = Some(boundedSemilattice(A.meetSemilattice))
@@ -77,6 +88,13 @@ trait LatticeLaws[A] extends GroupLaws[A] {
   def boundedLattice(implicit A: BoundedLattice[A]) = new LatticeProperties(
     name = "boundedLattice",
     parents = Seq(boundedJoinSemilattice, boundedMeetSemilattice, lattice),
+    join = Some(boundedSemilattice(A.joinSemilattice)),
+    meet = Some(boundedSemilattice(A.meetSemilattice))
+  )
+
+  def boundedDistributiveLattice(implicit A: BoundedDistributiveLattice[A]) = new LatticeProperties(
+    name = "boundedLattice",
+    parents = Seq(boundedLattice, distributiveLattice),
     join = Some(boundedSemilattice(A.joinSemilattice)),
     meet = Some(boundedSemilattice(A.meetSemilattice))
   )

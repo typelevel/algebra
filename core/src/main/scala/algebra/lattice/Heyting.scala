@@ -33,7 +33,7 @@ import scala.{specialized => sp}
  * classical logic, see the boolean algebra type class implemented as
  * `Bool`.
  */
-trait Heyting[@sp(Int, Long) A] extends Any with BoundedLattice[A] {
+trait Heyting[@sp(Int, Long) A] extends Any with BoundedDistributiveLattice[A] { self =>
   def and(a: A, b: A): A
   def meet(a: A, b: A): A = and(a, b)
 

@@ -2,6 +2,7 @@ package algebra
 package laws
 
 import algebra.lattice._
+import algebra.ring._
 import algebra.macros._
 import algebra.std.all._
 import algebra.std.Rat
@@ -15,13 +16,12 @@ trait LawTestsBase extends FunSuite with Discipline {
 
   implicit val byteLattice: Lattice[Byte] = ByteMinMaxLattice
   implicit val shortLattice: Lattice[Short] = ShortMinMaxLattice
-  implicit val intLattice: Lattice[Int] = IntMinMaxLattice
-  implicit val longLattice: Lattice[Long] = LongMinMaxLattice
+  implicit val intLattice: BoundedDistributiveLattice[Int] = IntMinMaxLattice
+  implicit val longLattice: BoundedDistributiveLattice[Long] = LongMinMaxLattice
 
   implicit def orderLaws[A: Eq: Arbitrary] = OrderLaws[A]
   implicit def groupLaws[A: Eq: Arbitrary] = GroupLaws[A]
   implicit def logicLaws[A: Eq: Arbitrary] = LogicLaws[A]
-
 
   implicit def latticeLaws[A: Eq: Arbitrary] = LatticeLaws[A]
   implicit def ringLaws[A: Eq: Arbitrary: Predicate] = RingLaws[A]
@@ -61,7 +61,8 @@ trait LawTestsBase extends FunSuite with Discipline {
   laws[OrderLaws, List[String]].check(_.order)
   laws[GroupLaws, List[String]].check(_.monoid)
 
-  laws[LatticeLaws, Set[Int]].check(_.lattice)
+  laws[LatticeLaws, Set[Int]].check(_.distributiveLattice)
+  laws[LatticeLaws, Set[Int]].check(_.boundedJoinLattice)
   laws[OrderLaws, Set[Int]].check(_.partialOrder)
   laws[RingLaws, Set[Int]].check(_.semiring)
   laws[RingLaws, Set[String]].check(_.semiring)
@@ -83,11 +84,16 @@ trait LawTestsBase extends FunSuite with Discipline {
 
   laws[OrderLaws, Int].check(_.order)
   laws[RingLaws, Int].check(_.euclideanRing)
-  laws[LatticeLaws, Int].check(_.lattice)
+  laws[LatticeLaws, Int].check(_.boundedDistributiveLattice)
+
+  {
+    implicit val comrig: CommutativeRig[Int] = IntMinMaxLattice.asCommutativeRig
+    laws[RingLaws, Int].check(_.commutativeRig)
+  }
 
   laws[OrderLaws, Long].check(_.order)
   laws[RingLaws, Long].check(_.euclideanRing)
-  laws[LatticeLaws, Long].check(_.lattice)
+  laws[LatticeLaws, Long].check(_.boundedDistributiveLattice)
 
   laws[BaseLaws, BigInt].check(_.isReal)
   laws[RingLaws, BigInt].check(_.euclideanRing)
@@ -105,5 +111,28 @@ trait LawTestsBase extends FunSuite with Discipline {
   laws[RingLaws, Unit].check(_.ring)
   laws[RingLaws, Unit].check(_.multiplicativeMonoid)
   laws[LatticeLaws, Unit].check(_.boundedSemilattice)
+
+  {
+    /**
+     *  Here is a more complex Semilattice, which is roughly: if one of the first items is bigger
+     *  take that, else combine pairwise.
+     */
+    def lexicographicSemilattice[A: Semilattice: Eq, B: Semilattice]: Semilattice[(A, B)] =
+      new Semilattice[(A, B)] {
+      def combine(left: (A, B), right: (A, B)) =
+        if (Eq.eqv(left._1, right._1)) {
+          (left._1, Semilattice[B].combine(left._2, right._2))
+        }
+        else {
+          val a = Semilattice[A].combine(left._1, right._1)
+          if (Eq.eqv(a, left._1)) left
+          else if (Eq.eqv(a, right._1)) right
+          else (a, Semilattice[B].combine(left._2, right._2))
+        }
+    }
+    implicit val setSemilattice: Semilattice[Set[Int]] = setLattice[Int].joinSemilattice
+    implicit val longSemilattice: Semilattice[Long] = LongMinMaxLattice.joinSemilattice
+    laws[GroupLaws, (Set[Int], Long)](groupLaws, implicitly).check(_.semilattice(lexicographicSemilattice))
+  }
 }
 

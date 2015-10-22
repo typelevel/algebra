@@ -11,8 +11,8 @@ package object int extends IntInstances
 trait IntInstances {
   implicit val intAlgebra = new IntAlgebra
 
-  val IntMinMaxLattice: Lattice[Int] =
-    Lattice.minMax[Int](intAlgebra)
+  val IntMinMaxLattice: BoundedDistributiveLattice[Int] =
+    BoundedDistributiveLattice.minMax[Int](Int.MinValue, Int.MaxValue)(intAlgebra)
 }
 
 class IntAlgebra extends EuclideanRing[Int]

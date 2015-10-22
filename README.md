@@ -141,3 +141,52 @@ on.
 
 (For a description of what the terminology in each column means, see
 [§algebraic properties and terminology](#algebraic-properties-and-terminology).)
+
+### lattice-like structures
+
+The `algebra.lattice` contains more structures that can be somewhat ring-like.
+Rather than `plus` and `times` we have `meet` and `join` both of which are always
+associative, commutative and idempotent, and as such each can be viewed as a
+semilattice. Meet can be thought of as the greatest lower bound of two items while
+join can be thought of as the least upper bound between two items.
+
+When zero is present, join(a, zero) = a. When one is present meet(a, one) = a.
+
+When meet and join are both present, they obey the absorption law:
+
+ -  meet(a, join(a, b)) = join(a, meet(a, b)) = a
+
+Sometimes meet and join distribute, we say it is distributive in this case:
+ - meet(a, join(b, c)) = join(meet(a, b), meet(a, c))
+ - join(a, meet(b, c)) = meet(join(a, b), join(a, c))
+
+Sometimes an additional binary operation `imp` (for impliciation, also
+written as →, meet written as ∧) is present.  Implication obeys the following laws:
+
+ - a → a = 1
+ - a ∧ (a → b) = a ∧ b
+ - b ∧ (a → b) = b
+ - a → (b ∧ c) = (a → b) ∧ (a → c)
+
+The law of the excluded middle can be expressed as:
+
+ - (a ∨ (a → 0)) = 1
+
+|Name                      |Has `join`?|Has `meet`?|Has `zero`?|Has `one`?|Distributive|Has `imp`?|Excludes middle?|
+|--------------------------|-----------|-----------|-----------|----------|------------|----------|----------------|
+|JoinSemilattice           |          ✓|           |           |          |            |          |                |
+|MeetSemilattice           |           |          ✓|           |          |            |          |                |
+|BoundedJoinSemilattice    |          ✓|           |          ✓|          |            |          |                |
+|BoundedMeetSemilattice    |           |          ✓|           |         ✓|            |          |                |
+|Lattice                   |          ✓|          ✓|           |          |            |          |                |
+|DistributiveLattice       |          ✓|          ✓|           |          |           ✓|          |                |
+|BoundedLattice            |          ✓|          ✓|          ✓|         ✓|            |          |                |
+|BoundedDistributiveLattice|          ✓|          ✓|          ✓|         ✓|           ✓|          |                |
+|Heyting                   |          ✓|          ✓|          ✓|         ✓|           ✓|         ✓|                |
+|Bool                      |          ✓|          ✓|          ✓|         ✓|           ✓|         ✓|               ✓|
+
+Note that a BoundedDistributiveLattice gives you a CommutativeRig, but not the other way around
+(since rigs aren't distributive with `a + (b * c) = (a + b) * (a + c)`). Also, a Bool gives rise to
+a CommutativeRing, since each element can be defined as its own negation. Note, Bool's
+asCommutativeRing is not an extension of the asCommutativeRig as the `plus` operations are defined
+differently.

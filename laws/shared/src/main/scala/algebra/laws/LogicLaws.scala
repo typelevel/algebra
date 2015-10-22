@@ -20,7 +20,7 @@ trait LogicLaws[A] extends LatticeLaws[A] {
   def heyting(implicit A: Heyting[A]) = new LogicProperties(
     name = "heyting",
     parent = None,
-    ll = boundedLattice,
+    ll = boundedDistributiveLattice,
 
     Rules.distributive(A.or)(A.and),
 
@@ -59,7 +59,7 @@ trait LogicLaws[A] extends LatticeLaws[A] {
   def bool(implicit A: Bool[A]) = new LogicProperties(
     name = "bool",
     parent = Some(heyting),
-    ll = boundedLattice,
+    ll = boundedDistributiveLattice,
 
     "excluded middle" -> forAll { (x: A) => A.or(x, A.complement(x)) ?== A.one }
   )

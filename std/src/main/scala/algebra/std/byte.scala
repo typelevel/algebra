@@ -11,8 +11,8 @@ package object byte extends ByteInstances
 trait ByteInstances {
   implicit val byteAlgebra = new ByteAlgebra
 
-  val ByteMinMaxLattice: Lattice[Byte] =
-    Lattice.minMax[Byte](byteAlgebra)
+  val ByteMinMaxLattice: BoundedDistributiveLattice[Byte] =
+    BoundedDistributiveLattice.minMax[Byte](Byte.MinValue, Byte.MaxValue)(byteAlgebra)
 }
 
 class ByteAlgebra extends EuclideanRing[Byte]
