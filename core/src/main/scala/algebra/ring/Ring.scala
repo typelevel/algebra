@@ -32,11 +32,11 @@ trait Ring[@sp(Int, Long, Float, Double) A] extends Any with Rig[A] with Rng[A] 
   def fromInt(n: Int): A = sumN(one, n)
 }
 
-trait RingFunctions {
+trait RingFunctions extends AdditiveGroupFunctions with MultiplicativeMonoidFunctions {
   def fromInt[@sp(Int, Long, Float, Double) A](n: Int)(implicit ev: Ring[A]): A =
     ev.fromInt(n)
 }
 
-object Ring extends AdditiveGroupFunctions with MultiplicativeMonoidFunctions {
+object Ring extends RingFunctions {
   @inline final def apply[A](implicit ev: Ring[A]): Ring[A] = ev
 }
