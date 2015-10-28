@@ -42,7 +42,7 @@ trait LawTestsBase extends FunSuite with Discipline {
   laws[LatticePartialOrderLaws, Boolean].check(_.boundedLatticePartialOrder)
 
   // ensure that Bool[A].asCommutativeRing is valid
-  laws[RingLaws, Boolean].check(_.ring(Bool[Boolean].asCommutativeRing))
+  laws[RingLaws, Boolean].check(_.commutativeRing(Bool[Boolean].asCommutativeRing))
 
   laws[OrderLaws, String].check(_.order)
   laws[GroupLaws, String].check(_.monoid)
@@ -108,7 +108,7 @@ trait LawTestsBase extends FunSuite with Discipline {
   }
 
   laws[OrderLaws, Unit].check(_.order)
-  laws[RingLaws, Unit].check(_.ring)
+  laws[RingLaws, Unit].check(_.commutativeRing)
   laws[RingLaws, Unit].check(_.multiplicativeMonoid)
   laws[LatticeLaws, Unit].check(_.boundedSemilattice)
 
