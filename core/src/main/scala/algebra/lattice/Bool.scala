@@ -1,7 +1,7 @@
 package algebra
 package lattice
 
-import ring.CommutativeRing
+import ring.BoolRing
 import scala.{specialized => sp}
 
 /**
@@ -27,18 +27,23 @@ trait Bool[@sp(Int, Long) A] extends Any with Heyting[A] { self =>
   def imp(a: A, b: A): A = or(complement(a), b)
 
   override def dual: Bool[A] = new DualBool(this)
+
   /**
-   * Every Boolean algebra is a CommutativeRing, but we don't extend
-   * CommutativeRing because, e.g. we might want a Bool[Int] and CommutativeRing[Int] to
+   * Every Boolean algebra is a BoolRing, with multiplication defined as
+   * `and` and addition defined as `xor`. Bool does not extend BoolRing
+   * because, e.g. we might want a Bool[Int] and CommutativeRing[Int] to
    * refer to different structures, by default.
+   *
+   * Note that the ring returned by this method is not an extension of
+   * the `Rig` returned from [[BoundedDistributiveLattice.asCommutativeRig]].
    */
-  def asCommutativeRing: CommutativeRing[A] =
-    new CommutativeRing[A] {
+  def asBoolRing: BoolRing[A] =
+    new BoolRing[A] {
       def zero: A = self.zero
       def one: A = self.one
       def plus(x: A, y: A): A = self.xor(x, y)
-      def negate(x: A): A = x
       def times(x: A, y: A): A = self.and(x, y)
+      override def asBool: Bool[A] = self
     }
 }
 
