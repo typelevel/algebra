@@ -27,12 +27,17 @@ trait Bool[@sp(Int, Long) A] extends Any with Heyting[A] { self =>
   def imp(a: A, b: A): A = or(complement(a), b)
 
   override def dual: Bool[A] = new DualBool(this)
+
   /**
-   * Every Boolean algebra is a BoolRing, but we don't extend BoolRing
+   * Every Boolean algebra is a BoolRing, with multiplication defined as
+   * `and` and addition defined as `xor`. Bool does not extend BoolRing
    * because, e.g. we might want a Bool[Int] and CommutativeRing[Int] to
    * refer to different structures, by default.
+   *
+   * Note that the ring returned by this method is not an extension of
+   * the `Rig` returned from [[BoundedDistributiveLattice.asCommutativeRig]].
    */
-  def asCommutativeRing: BoolRing[A] =
+  def asBoolRing: BoolRing[A] =
     new BoolRing[A] {
       def zero: A = self.zero
       def one: A = self.one

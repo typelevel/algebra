@@ -22,9 +22,9 @@ trait BoolRing[A] extends Any with CommutativeRing[A] { self =>
    *  - `a or b` is then defined as `a xor b xor (a and b)`;
    *  - complement (`¬a`) is defined as `a xor 1`.
    *
-   * `BoolRing.asBool.asCommutativeRing` gives back the original `BoolRing`.
+   * `BoolRing.asBool.asBoolRing` gives back the original `BoolRing`.
    *
-   * @see [[algebra.lattice.Bool.asCommutativeRing]]
+   * @see [[algebra.lattice.Bool.asBoolRing]]
    */
   def asBool: Bool[A] = new Bool[A] {
     def zero: A = self.zero
@@ -32,7 +32,7 @@ trait BoolRing[A] extends Any with CommutativeRing[A] { self =>
     def and(a: A, b: A): A = self.times(a, b)
     def complement(a: A): A = self.plus(self.one, a)
     def or(a: A, b: A): A = self.plus(self.plus(a, b), self.times(a, b))
-    override def asCommutativeRing: BoolRing[A] = self
+    override def asBoolRing: BoolRing[A] = self
   }
 }
 

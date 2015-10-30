@@ -45,8 +45,8 @@ trait LawTestsBase extends FunSuite with Discipline {
   laws[LatticePartialOrderLaws, Boolean].check(_.boundedLatticePartialOrder)
   laws[RingLaws, Boolean].check(_.boolRing(BooleanRing))
 
-  // ensure that Bool[A].asCommutativeRing is a valid BoolRing
-  laws[RingLaws, Boolean]("ring-from-bool").check(_.boolRing(Bool[Boolean].asCommutativeRing))
+  // ensure that Bool[A].asBoolRing is a valid BoolRing
+  laws[RingLaws, Boolean]("ring-from-bool").check(_.boolRing(Bool[Boolean].asBoolRing))
 
   // ensure that BoolRing[A].asBool is a valid Bool
   laws[LogicLaws, Boolean]("bool-from-ring").check(_.bool(BooleanRing.asBool))
