@@ -1,21 +1,23 @@
 package algebra
 package std
 
-import algebra.lattice.{BoundedJoinSemilattice, DistributiveLattice}
-import algebra.ring.Semiring
+import algebra.lattice.GenBool
+import algebra.ring.{BoolRng, Semiring}
 
 package object set extends SetInstances
 
 trait SetInstances {
-  implicit def setLattice[A]: DistributiveLattice[Set[A]] with BoundedJoinSemilattice[Set[A]] = new SetLattice[A]
+  implicit def setLattice[A]: GenBool[Set[A]] = new SetLattice[A]
   implicit def setPartialOrder[A]: PartialOrder[Set[A]] = new SetPartialOrder[A]
   implicit def setSemiring[A] = new SetSemiring[A]
+  def setBoolRng[A] = new SetBoolRng[A]
 }
 
-class SetLattice[A] extends DistributiveLattice[Set[A]] with BoundedJoinSemilattice[Set[A]] {
+class SetLattice[A] extends GenBool[Set[A]] {
   def zero: Set[A] = Set.empty[A]
-  def join(lhs: Set[A], rhs: Set[A]): Set[A] = lhs.union(rhs)
-  def meet(lhs: Set[A], rhs: Set[A]): Set[A] = lhs.intersect(rhs)
+  def or(lhs: Set[A], rhs: Set[A]): Set[A] = lhs.union(rhs)
+  def and(lhs: Set[A], rhs: Set[A]): Set[A] = lhs.intersect(rhs)
+  def without(lhs: Set[A], rhs: Set[A]): Set[A] = lhs -- rhs
 }
 
 class SetPartialOrder[A] extends PartialOrder[Set[A]] {
@@ -31,5 +33,11 @@ class SetPartialOrder[A] extends PartialOrder[Set[A]] {
 class SetSemiring[A] extends Semiring[Set[A]] {
   def zero: Set[A] = Set.empty
   def plus(x: Set[A], y: Set[A]): Set[A] = x | y
+  def times(x: Set[A], y: Set[A]): Set[A] = x & y
+}
+
+class SetBoolRng[A] extends BoolRng[Set[A]] {
+  def zero: Set[A] = Set.empty
+  def plus(x: Set[A], y: Set[A]): Set[A] = (x--y) | (y--x)
   def times(x: Set[A], y: Set[A]): Set[A] = x & y
 }

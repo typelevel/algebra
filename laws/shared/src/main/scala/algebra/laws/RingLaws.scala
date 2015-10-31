@@ -117,6 +117,12 @@ trait RingLaws[A] extends GroupLaws[A] {
     parents = Seq(ring, commutativeRig)
   )
 
+  def boolRng(implicit A: BoolRng[A]) = RingProperties.fromParent(
+    name = "boolean rng",
+    parent = rng,
+    Rules.idempotence(A.times)
+  )
+
   def boolRing(implicit A: BoolRing[A]) = RingProperties.fromParent(
     name = "boolean ring",
     parent = commutativeRing,

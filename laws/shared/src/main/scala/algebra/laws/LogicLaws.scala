@@ -1,7 +1,7 @@
 package algebra.laws
 
 import algebra._
-import algebra.lattice.{Heyting, Bool}
+import algebra.lattice.{Heyting, Bool, GenBool}
 
 import org.typelevel.discipline.Laws
 
@@ -19,7 +19,7 @@ trait LogicLaws[A] extends LatticeLaws[A] {
 
   def heyting(implicit A: Heyting[A]) = new LogicProperties(
     name = "heyting",
-    parent = None,
+    parents = Seq(),
     ll = boundedDistributiveLattice,
 
     Rules.distributive(A.or)(A.and),
@@ -56,9 +56,26 @@ trait LogicLaws[A] extends LatticeLaws[A] {
     "(0 → x) = 1" -> forAll { (x: A) => A.imp(A.zero, x) ?== A.one }
   )
 
+  def generalizedBool(implicit A: GenBool[A]) = new LogicProperties(
+    name = "generalized bool",
+    parents = Seq(),
+    ll = new LatticeProperties(
+      name = "lowerBoundedDistributiveLattice",
+      parents = Seq(boundedJoinSemilattice, distributiveLattice),
+      join = Some(boundedSemilattice(A.joinSemilattice)),
+      meet = Some(semilattice(A.meetSemilattice))
+    ),
+
+    "x∖y ∧ y = 0" -> forAll { (x: A, y: A) =>
+      A.and(A.without(x, y), y) ?== A.zero },
+
+    "x∖y ∨ y = x ∨ y" -> forAll { (x: A, y: A) =>
+      A.or(A.without(x, y), y) ?== A.or(x, y) }
+  )
+
   def bool(implicit A: Bool[A]) = new LogicProperties(
     name = "bool",
-    parent = Some(heyting),
+    parents = Seq(heyting, generalizedBool),
     ll = boundedDistributiveLattice,
 
     "excluded middle" -> forAll { (x: A) => A.or(x, A.complement(x)) ?== A.one }
@@ -66,10 +83,10 @@ trait LogicLaws[A] extends LatticeLaws[A] {
 
   class LogicProperties(
     val name: String,
-    val parent: Option[LogicProperties],
+    val parents: Seq[LogicProperties],
     val ll: LatticeProperties,
     val props: (String, Prop)*
-  ) extends RuleSet with HasOneParent {
+  ) extends RuleSet {
     val bases = Seq("lattice" -> ll)
   }
 
