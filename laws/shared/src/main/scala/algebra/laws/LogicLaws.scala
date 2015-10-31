@@ -66,10 +66,10 @@ trait LogicLaws[A] extends LatticeLaws[A] {
       meet = Some(semilattice(A.meetSemilattice))
     ),
 
-    "x∖y ∧ y = 0" -> forAll { (x: A, y: A) =>
+    """x\y ∧ y = 0""" -> forAll { (x: A, y: A) =>
       A.and(A.without(x, y), y) ?== A.zero },
 
-    "x∖y ∨ y = x ∨ y" -> forAll { (x: A, y: A) =>
+    """x\y ∨ y = x ∨ y""" -> forAll { (x: A, y: A) =>
       A.or(A.without(x, y), y) ?== A.or(x, y) }
   )
 
