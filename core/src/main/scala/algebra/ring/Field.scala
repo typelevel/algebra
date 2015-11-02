@@ -41,11 +41,11 @@ trait Field[@sp(Int, Long, Float, Double) A] extends Any with EuclideanRing[A] w
     }
 }
 
-trait FieldFunctions extends EuclideanRingFunctions with MultiplicativeGroupFunctions {
-  def fromDouble[@sp(Int, Long, Float, Double) A](n: Double)(implicit ev: Field[A]): A =
+trait FieldFunctions[F[T] <: Field[T]] extends EuclideanRingFunctions[F] with MultiplicativeGroupFunctions {
+  def fromDouble[@sp(Int, Long, Float, Double) A](n: Double)(implicit ev: F[A]): A =
     ev.fromDouble(n)
 }
 
-object Field extends FieldFunctions {
+object Field extends FieldFunctions[Field] {
   @inline final def apply[A](implicit ev: Field[A]): Field[A] = ev
 }

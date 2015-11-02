@@ -28,15 +28,15 @@ trait EuclideanRing[@sp(Int, Long, Float, Double) A] extends Any with Commutativ
   def quotmod(a: A, b: A): (A, A) = (quot(a, b), mod(a, b))
 }
 
-trait EuclideanRingFunctions extends AdditiveGroupFunctions with MultiplicativeMonoidFunctions {
-  def quot[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: EuclideanRing[A]): A =
+trait EuclideanRingFunctions[R[T] <: EuclideanRing[T]] extends RingFunctions[R] {
+  def quot[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: R[A]): A =
     ev.quot(x, y)
-  def mod[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: EuclideanRing[A]): A =
+  def mod[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: R[A]): A =
     ev.mod(x, y)
-  def quotmod[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: EuclideanRing[A]): (A, A) =
+  def quotmod[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: R[A]): (A, A) =
     ev.quotmod(x, y)
 }
 
-object EuclideanRing extends EuclideanRingFunctions {
+object EuclideanRing extends EuclideanRingFunctions[EuclideanRing] {
   @inline final def apply[A](implicit ev: EuclideanRing[A]): EuclideanRing[A] = ev
 }
