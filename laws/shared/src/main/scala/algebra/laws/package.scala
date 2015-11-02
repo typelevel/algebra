@@ -1,19 +1,10 @@
 package algebra
 
-import algebra.ring.AdditiveMonoid
-
-import org.typelevel.discipline.Predicate
-
 import org.scalacheck._
 import org.scalacheck.util.Pretty
 import Prop.{False, Proof, Result}
 
 package object laws {
-
-  implicit def PredicateFromMonoid[A](implicit ev: Eq[A], A: AdditiveMonoid[A]): Predicate[A] =
-    new Predicate[A] {
-      def apply(a: A) = ev.neqv(a, A.zero)
-    }
 
   lazy val proved = Prop(Result(status = Proof))
 

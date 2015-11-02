@@ -3,37 +3,25 @@ package laws
 
 import algebra.ring._
 
-import org.typelevel.discipline.{Laws, Predicate}
+import org.typelevel.discipline.Laws
 
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Arbitrary._
 import org.scalacheck.Prop._
 
 object RingLaws {
-  def apply[A : Eq : Arbitrary](implicit pred0: Predicate[A]) = new RingLaws[A] {
+  def apply[A : Eq : Arbitrary] = new RingLaws[A] {
     def Arb = implicitly[Arbitrary[A]]
-    def pred = pred0
-    val nonZeroLaws = new GroupLaws[A] {
-      def Arb = Arbitrary(arbitrary[A] filter pred0)
-      def Equ = Eq[A]
-    }
+    def Equ: Eq[A] = Eq[A]
   }
 }
 
 trait RingLaws[A] extends GroupLaws[A] {
 
-  // must be a val (stable identifier)
-  val nonZeroLaws: GroupLaws[A]
-  def pred: Predicate[A]
-
-  def withPred(pred0: Predicate[A], replace: Boolean = true): RingLaws[A] = RingLaws[A](
-    Equ,
-    Arb,
-    if (replace) pred0 else pred && pred0
-  )
-
   implicit def Arb: Arbitrary[A]
-  implicit def Equ: Eq[A] = nonZeroLaws.Equ
+  implicit def Equ: Eq[A]
+
+  private def nonZeroArb(implicit am: AdditiveMonoid[A]): Arbitrary[A] = Arbitrary(arbitrary[A] filter { a: A => Equ.neqv(a, am.zero) })
 
   // multiplicative groups
 
@@ -57,17 +45,19 @@ trait RingLaws[A] extends GroupLaws[A] {
     parent = Some(multiplicativeMonoid)
   )
 
-  def multiplicativeGroup(implicit A: MultiplicativeGroup[A]) = new MultiplicativeProperties(
-    base = _.group(A.multiplicative),
-    parent = Some(multiplicativeMonoid),
-    // pred is used to ensure y is not zero.
-    "consistent division" -> forAll { (x: A, y: A) =>
-      pred(y) ==> (A.div(x, y) ?== A.times(x, A.reciprocal(y)))
-    }
-  )
+  def multiplicativeGroup(implicit A: MultiplicativeGroup[A] with AdditiveMonoid[A]) = {
+    implicit val Arb: Arbitrary[A] = nonZeroArb(A)
+    new MultiplicativeProperties(
+      base = _.group(A.multiplicative, Arb),
+      parent = Some(multiplicativeMonoid),
+      "consistent division" -> forAll{ (x: A, y: A) =>
+        (A.div(x, y) ?== A.times(x, A.reciprocal(y)))
+      }
+    )
+  }
 
-  def multiplicativeCommutativeGroup(implicit A: MultiplicativeCommutativeGroup[A]) = new MultiplicativeProperties(
-    base = _.commutativeGroup(A.multiplicative),
+  def multiplicativeCommutativeGroup(implicit A: MultiplicativeCommutativeGroup[A] with AdditiveMonoid[A]) = new MultiplicativeProperties(
+    base = _.commutativeGroup(A.multiplicative, nonZeroArb),
     parent = Some(multiplicativeGroup)
   )
 
@@ -151,9 +141,7 @@ trait RingLaws[A] extends GroupLaws[A] {
     al = additiveCommutativeGroup,
     ml = multiplicativeCommutativeGroup,
     parents = Seq(euclideanRing)
-  ) {
-    override def nonZero = true
-  }
+  )
 
 
   // property classes
@@ -181,17 +169,6 @@ trait RingLaws[A] extends GroupLaws[A] {
     val parents: Seq[RingProperties],
     val props: (String, Prop)*
   ) extends RuleSet {
-    def nonZero: Boolean = false
-
-    def ml0 = if (!nonZero) ml else {
-      new RuleSet with HasOneParent {
-        val name = ml.name
-        val bases = Seq("base-nonzero" -> ml.base(nonZeroLaws))
-        val parent = ml.parent
-        val props = ml.props
-      }
-    }
-
-    def bases = Seq("additive" -> al, "multiplicative" -> ml0)
+    def bases = Seq("additive" -> al, "multiplicative" -> ml)
   }
 }

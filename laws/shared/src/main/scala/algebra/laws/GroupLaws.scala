@@ -69,7 +69,7 @@ trait GroupLaws[A] extends Laws {
     parents = List(commutativeMonoid, semilattice)
   )
 
-  def group(implicit A: Group[A]) = new GroupProperties(
+  def group(implicit A: Group[A], Arb: Arbitrary[A]) = new GroupProperties(
     name = "group",
     parents = List(monoid),
     Rules.leftInverse(A.empty)(A.combine)(A.inverse),
@@ -77,7 +77,7 @@ trait GroupLaws[A] extends Laws {
     Rules.consistentInverse("remove")(A.remove)(A.combine)(A.inverse)
   )
 
-  def commutativeGroup(implicit A: CommutativeGroup[A]) = new GroupProperties(
+  def commutativeGroup(implicit A: CommutativeGroup[A], Arb: Arbitrary[A]) = new GroupProperties(
     name = "commutative group",
     parents = List(group, commutativeMonoid)
   )
@@ -109,14 +109,14 @@ trait GroupLaws[A] extends Laws {
     parents = List(additiveMonoid)
   )
 
-  def additiveGroup(implicit A: AdditiveGroup[A]) = new AdditiveProperties(
-    base = group(A.additive),
+  def additiveGroup(implicit A: AdditiveGroup[A], Arb: Arbitrary[A]) = new AdditiveProperties(
+    base = group(A.additive, Arb),
     parents = List(additiveMonoid),
     Rules.consistentInverse("subtract")(A.minus)(A.plus)(A.negate)
   )
 
-  def additiveCommutativeGroup(implicit A: AdditiveCommutativeGroup[A]) = new AdditiveProperties(
-    base = commutativeGroup(A.additive),
+  def additiveCommutativeGroup(implicit A: AdditiveCommutativeGroup[A], Arb: Arbitrary[A]) = new AdditiveProperties(
+    base = commutativeGroup(A.additive, Arb),
     parents = List(additiveGroup)
   )
 
