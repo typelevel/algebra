@@ -35,6 +35,6 @@ private[ring] class BoolFromBoolRing[A](orig: BoolRing[A]) extends GenBoolFromBo
   override def asBoolRing: BoolRing[A] = orig
 }
 
-object BoolRing extends RingFunctions {
+object BoolRing extends RingFunctions[BoolRing] {
   @inline final def apply[A](implicit r: BoolRing[A]): BoolRing[A] = r
 }
