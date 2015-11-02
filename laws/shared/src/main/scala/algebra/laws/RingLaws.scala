@@ -110,10 +110,29 @@ trait RingLaws[A] extends GroupLaws[A] {
     parents = Seq(rig, rng)
   )
 
+  def commutativeRing(implicit A: CommutativeRing[A]) = new RingProperties(
+    name = "commutative ring",
+    al = additiveCommutativeGroup,
+    ml = multiplicativeCommutativeMonoid,
+    parents = Seq(ring, commutativeRig)
+  )
+
+  def boolRng(implicit A: BoolRng[A]) = RingProperties.fromParent(
+    name = "boolean rng",
+    parent = rng,
+    Rules.idempotence(A.times)
+  )
+
+  def boolRing(implicit A: BoolRing[A]) = RingProperties.fromParent(
+    name = "boolean ring",
+    parent = commutativeRing,
+    Rules.idempotence(A.times)
+  )
+
   def euclideanRing(implicit A: EuclideanRing[A]) = RingProperties.fromParent(
     // TODO tests?!
     name = "euclidean ring",
-    parent = ring
+    parent = commutativeRing
   )
 
   // Everything below fields (e.g. rings) does not require their multiplication

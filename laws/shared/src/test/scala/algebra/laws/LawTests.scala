@@ -33,16 +33,23 @@ trait LawTestsBase extends FunSuite with Discipline {
   }
 
   private[laws] def laws[L[_] <: Laws, A](implicit
+      lws: L[A], tag: TypeTagM[A]): LawChecker[L[A]] = laws[L, A]("")
+
+  private[laws] def laws[L[_] <: Laws, A](extraTag: String)(implicit
       laws: L[A], tag: TypeTagM[A]): LawChecker[L[A]] =
-    LawChecker("[" + tag.tpe.toString + "]", laws)
+    LawChecker("[" + tag.tpe.toString + (if(extraTag != "") "@@" + extraTag else "") + "]", laws)
 
   laws[OrderLaws, Boolean].check(_.order)
   laws[LogicLaws, Boolean].check(_.bool)
   laws[LogicLaws, SimpleHeyting].check(_.heyting)
   laws[LatticePartialOrderLaws, Boolean].check(_.boundedLatticePartialOrder)
+  laws[RingLaws, Boolean].check(_.boolRing(BooleanRing))
 
-  // ensure that Bool[A].asCommutativeRing is valid
-  laws[RingLaws, Boolean].check(_.ring(Bool[Boolean].asCommutativeRing))
+  // ensure that Bool[A].asBoolRing is a valid BoolRing
+  laws[RingLaws, Boolean]("ring-from-bool").check(_.boolRing(Bool[Boolean].asBoolRing))
+
+  // ensure that BoolRing[A].asBool is a valid Bool
+  laws[LogicLaws, Boolean]("bool-from-ring").check(_.bool(BooleanRing.asBool))
 
   laws[OrderLaws, String].check(_.order)
   laws[GroupLaws, String].check(_.monoid)
@@ -61,8 +68,10 @@ trait LawTestsBase extends FunSuite with Discipline {
   laws[OrderLaws, List[String]].check(_.order)
   laws[GroupLaws, List[String]].check(_.monoid)
 
-  laws[LatticeLaws, Set[Int]].check(_.distributiveLattice)
-  laws[LatticeLaws, Set[Int]].check(_.boundedJoinLattice)
+  laws[LogicLaws, Set[Byte]].check(_.generalizedBool)
+  laws[RingLaws, Set[Byte]].check(_.boolRng(setBoolRng[Byte]))
+  laws[LogicLaws, Set[Byte]]("bool-from-rng").check(_.generalizedBool(setBoolRng.asBool))
+  laws[RingLaws, Set[Byte]]("rng-from-bool").check(_.boolRng(GenBool[Set[Byte]].asBoolRing))
   laws[OrderLaws, Set[Int]].check(_.partialOrder)
   laws[RingLaws, Set[Int]].check(_.semiring)
   laws[RingLaws, Set[String]].check(_.semiring)
@@ -108,7 +117,7 @@ trait LawTestsBase extends FunSuite with Discipline {
   }
 
   laws[OrderLaws, Unit].check(_.order)
-  laws[RingLaws, Unit].check(_.ring)
+  laws[RingLaws, Unit].check(_.commutativeRing)
   laws[RingLaws, Unit].check(_.multiplicativeMonoid)
   laws[LatticeLaws, Unit].check(_.boundedSemilattice)
 
@@ -132,7 +141,7 @@ trait LawTestsBase extends FunSuite with Discipline {
     }
     implicit val setSemilattice: Semilattice[Set[Int]] = setLattice[Int].joinSemilattice
     implicit val longSemilattice: Semilattice[Long] = LongMinMaxLattice.joinSemilattice
-    laws[GroupLaws, (Set[Int], Long)](groupLaws, implicitly).check(_.semilattice(lexicographicSemilattice))
+    laws[LatticeLaws, (Set[Int], Long)].check(_.semilattice(lexicographicSemilattice))
   }
 }
 

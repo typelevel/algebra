@@ -2,6 +2,7 @@ package algebra
 package std
 
 import algebra.lattice.Bool
+import algebra.ring.BoolRing
 import algebra.ring.CommutativeRig
 
 package object boolean extends BooleanInstances
@@ -9,6 +10,13 @@ package object boolean extends BooleanInstances
 trait BooleanInstances {
   implicit val booleanAlgebra: BooleanAlgebra =
     new BooleanAlgebra
+
+  val BooleanRing = new BoolRing[Boolean] {
+    def zero: Boolean = false
+    def one: Boolean = true
+    def plus(x: Boolean, y: Boolean): Boolean = x ^ y
+    def times(x: Boolean, y: Boolean): Boolean = x && y
+  }
 }
 
 /**
