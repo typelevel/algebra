@@ -68,8 +68,10 @@ trait LawTestsBase extends FunSuite with Discipline {
   laws[OrderLaws, List[String]].check(_.order)
   laws[GroupLaws, List[String]].check(_.monoid)
 
-  laws[LatticeLaws, Set[Int]].check(_.distributiveLattice)
-  laws[LatticeLaws, Set[Int]].check(_.boundedJoinLattice)
+  laws[LogicLaws, Set[Byte]].check(_.generalizedBool)
+  laws[RingLaws, Set[Byte]].check(_.boolRng(setBoolRng[Byte]))
+  laws[LogicLaws, Set[Byte]]("bool-from-rng").check(_.generalizedBool(setBoolRng.asBool))
+  laws[RingLaws, Set[Byte]]("rng-from-bool").check(_.boolRng(GenBool[Set[Byte]].asBoolRing))
   laws[OrderLaws, Set[Int]].check(_.partialOrder)
   laws[RingLaws, Set[Int]].check(_.semiring)
   laws[RingLaws, Set[String]].check(_.semiring)

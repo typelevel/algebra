@@ -11,8 +11,7 @@ import lattice.Bool
  * Every Boolean ring is equivalent to a Boolean algebra.
  * See [[BoolRing.asBool]] for details.
  */
-trait BoolRing[A] extends Any with CommutativeRing[A] { self =>
-  override final def negate(x: A): A = x
+trait BoolRing[A] extends Any with BoolRng[A] with CommutativeRing[A] { self =>
 
   /**
    * Every Boolean ring gives rise to a Boolean algebra:
@@ -26,14 +25,14 @@ trait BoolRing[A] extends Any with CommutativeRing[A] { self =>
    *
    * @see [[algebra.lattice.Bool.asBoolRing]]
    */
-  def asBool: Bool[A] = new Bool[A] {
-    def zero: A = self.zero
-    def one: A = self.one
-    def and(a: A, b: A): A = self.times(a, b)
-    def complement(a: A): A = self.plus(self.one, a)
-    def or(a: A, b: A): A = self.plus(self.plus(a, b), self.times(a, b))
-    override def asBoolRing: BoolRing[A] = self
-  }
+  override def asBool: Bool[A] = new BoolFromBoolRing(self)
+}
+
+private[ring] class BoolFromBoolRing[A](orig: BoolRing[A]) extends GenBoolFromBoolRng(orig) with Bool[A] {
+  def one: A = orig.one
+  def complement(a: A): A = orig.plus(orig.one, a)
+  override def without(a: A, b: A): A = super[GenBoolFromBoolRng].without(a, b)
+  override def asBoolRing: BoolRing[A] = orig
 }
 
 object BoolRing extends RingFunctions {
