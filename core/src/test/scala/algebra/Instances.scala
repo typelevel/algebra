@@ -29,47 +29,4 @@ object Instances {
       def combine(x: A => B, y: A => B): A => B =
         a => ev.combine(x(a), y(a))
     }
-
-  val charHasRig =
-    new ring.Rig[Char] {
-      def zero: Char = '\u0000'
-      def one: Char = '\u0001'
-
-      def plus(x: Char, y: Char): Char = (x + y).toChar
-      def times(x: Char, y: Char): Char = (x * y).toChar
-    }
-
-  val longHasEuclideanRing =
-    new ring.EuclideanRing[Long] {
-      def zero: Long = 0L
-      def one: Long = 1L
-
-      def negate(x: Long): Long = -x
-      def plus(x: Long, y: Long): Long = x + y
-      def times(x: Long, y: Long): Long = x * y
-      def quot(x: Long, y: Long): Long = x / y
-      def mod(x: Long, y: Long): Long = x % y
-
-      override def minus(x: Long, y: Long): Long = x - y
-
-      override def fromInt(x: Int): Long = x.toLong
-    }
-
-  val doubleHasField =
-    new ring.Field[Double] {
-      def zero: Double = 0.0
-      def one: Double = 1.0
-
-      def negate(x: Double): Double = -x
-      def plus(x: Double, y: Double): Double = x + y
-      def times(x: Double, y: Double): Double = x * y
-      def div(x: Double, y: Double): Double = x / y
-
-      override def minus(x: Double, y: Double): Double = x - y
-      override def mod(x: Double, y: Double): Double = x % y
-      override def quot(x: Double, y: Double): Double = (x - (x % y)) / y
-
-      override def fromInt(x: Int): Double = x.toDouble
-      override def fromDouble(x: Double): Double = x
-    }
 }

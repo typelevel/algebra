@@ -53,10 +53,10 @@ lazy val aggregate = project.in(file("."))
   .settings(site.settings: _*)
   .settings(ghpages.settings: _*)
   .settings(docSettings: _*)
-  .aggregate(coreJVM, lawsJVM, macrosJVM, stdJVM)
-  .dependsOn(coreJVM, lawsJVM, macrosJVM, stdJVM)
-  .aggregate(coreJS, lawsJS, macrosJS, stdJS)
-  .dependsOn(coreJS, lawsJS, macrosJS, stdJS)
+  .aggregate(coreJVM, ringJVM, latticeJVM, lawsJVM, macrosJVM, stdJVM)
+  .dependsOn(coreJVM, ringJVM, latticeJVM, lawsJVM, macrosJVM, stdJVM)
+  .aggregate(coreJS, ringJS, latticeJS, lawsJS, macrosJS, stdJS)
+  .dependsOn(coreJS, ringJS, latticeJS, lawsJS, macrosJS, stdJS)
 
 lazy val core = crossProject
   .crossType(CrossType.Pure)
@@ -65,22 +65,46 @@ lazy val core = crossProject
   // TODO: update this to a published stable version, e.g. 0.4.0
   //.settings(previousArtifact := Some("org.spire-math" %% "algebra" % "0.3.1"))
   .settings(algebraSettings: _*)
-  .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
 
 lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
 
-lazy val std = crossProject
+lazy val ring = crossProject
   .crossType(CrossType.Pure)
   .dependsOn(core)
+  .settings(moduleName := "algebra-ring")
+  .settings(mimaDefaultSettings: _*)
+  // TODO: update this to a published stable version, e.g. 0.4.0
+  //.settings(previousArtifact := Some("org.spire-math" %% "algebra-ring" % "0.3.1"))
+  .settings(algebraSettings: _*)
+
+lazy val ringJVM = ring.jvm
+lazy val ringJS = ring.js
+
+lazy val lattice = crossProject
+  .crossType(CrossType.Pure)
+  .dependsOn(core, ring)
+  .settings(moduleName := "algebra-lattice")
+  .settings(mimaDefaultSettings: _*)
+  // TODO: update this to a published stable version, e.g. 0.4.0
+  //.settings(previousArtifact := Some("org.spire-math" %% "algebra" % "0.3.1"))
+  .settings(algebraSettings: _*)
+
+lazy val latticeJVM = lattice.jvm
+lazy val latticeJS = lattice.js
+
+lazy val std = crossProject
+  .crossType(CrossType.Pure)
+  .dependsOn(core, ring, lattice)
   .settings(moduleName := "algebra-std")
   .settings(algebraSettings: _*)
+  .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
 
 lazy val stdJVM = std.jvm
 lazy val stdJS = std.js
 
 lazy val laws = crossProject
-  .dependsOn(core, std, macros)
+  .dependsOn(core, ring, lattice, std, macros)
   .settings(moduleName := "algebra-laws")
   .settings(algebraSettings: _*)
   .settings(

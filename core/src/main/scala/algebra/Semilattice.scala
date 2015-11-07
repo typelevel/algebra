@@ -1,9 +1,6 @@
 package algebra
 
-import lattice.{ MeetSemilattice, JoinSemilattice }
-
 import scala.{specialized => sp}
-
 
 /**
  * Semilattices are commutative semigroups whose operation
@@ -53,16 +50,6 @@ trait Semilattice[@sp(Int, Long, Float, Double) A] extends Any
           val z = self.combine(x, y)
           if (ev.eqv(y, z)) -1.0 else if (ev.eqv(x, z)) 1.0 else Double.NaN
         }
-    }
-
-  def asMeetSemilattice: MeetSemilattice[A] =
-    new MeetSemilattice[A] {
-      def meet(x: A, y: A): A = self.combine(x, y)
-    }
-
-  def asJoinSemilattice: JoinSemilattice[A] =
-    new JoinSemilattice[A] {
-      def join(x: A, y: A): A = self.combine(x, y)
     }
 }
 
