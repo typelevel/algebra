@@ -9,7 +9,7 @@ import algebra.std.Rat
 
 import org.typelevel.discipline.{Laws, Predicate}
 import org.typelevel.discipline.scalatest.Discipline
-import org.scalacheck.Arbitrary
+import org.scalacheck.{Arbitrary, Gen}, Arbitrary.arbitrary
 import org.scalatest.FunSuite
 
 trait LawTestsBase extends FunSuite with Discipline {
@@ -142,6 +142,33 @@ trait LawTestsBase extends FunSuite with Discipline {
     implicit val setSemilattice: Semilattice[Set[Int]] = setLattice[Int].joinSemilattice
     implicit val longSemilattice: Semilattice[Long] = LongMinMaxLattice.joinSemilattice
     laws[LatticeLaws, (Set[Int], Long)].check(_.semilattice(lexicographicSemilattice))
+  }
+
+  {
+    // This "arbitrary int order" isn't that arbitrary.
+    // I think this could be improved once we have a version of Scalacheck with Cogen.
+    implicit val arbOrderInt: Arbitrary[Order[Int]] = Arbitrary(
+      Gen.oneOf(
+        Gen.const(Order[Int]),
+        Gen.const(Order[Int].reverse)))
+
+    // This is a hack to fake an `Eq` instance for an `Order`.
+    // We generate 100 pairs of values and check that both `Order` instances
+    // return the same value when comparing a given pair.
+    // Arguably two Order instances don't have to return the same exact value
+    // as long as they agree on lt/gt/eq.
+    implicit def eqOrder[A:Arbitrary:Eq]: Eq[Order[A]] = new Eq[Order[A]] {
+      def eqv(x: Order[A], y: Order[A]): Boolean = {
+        val samples = List.fill(100)(arbitrary[(A, A)].sample).collect{
+          case Some(aa) => aa
+          case None => sys.error("Could not generate arbitrary values to compare two Order instances")
+        }
+        samples.forall { case (a1, a2) =>
+          x.compare(a1, a2) == y.compare(a1, a2)
+        }
+      }
+    }
+    laws[GroupLaws, Order[Int]].check(_.monoid)
   }
 }
 
