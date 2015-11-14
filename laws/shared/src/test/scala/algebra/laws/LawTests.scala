@@ -11,6 +11,7 @@ import org.typelevel.discipline.{Laws, Predicate}
 import org.typelevel.discipline.scalatest.Discipline
 import org.scalacheck.{Arbitrary, Gen}, Arbitrary.arbitrary
 import org.scalatest.FunSuite
+import scala.util.Random
 
 trait LawTestsBase extends FunSuite with Discipline {
 
@@ -145,30 +146,28 @@ trait LawTestsBase extends FunSuite with Discipline {
   }
 
   {
-    // This "arbitrary int order" isn't that arbitrary.
-    // I think this could be improved once we have a version of Scalacheck with Cogen.
-    implicit val arbOrderInt: Arbitrary[Order[Int]] = Arbitrary(
-      Gen.oneOf(
-        Gen.const(Order[Int]),
-        Gen.const(Order[Int].reverse)))
-
-    // This is a hack to fake an `Eq` instance for an `Order`.
-    // We generate 100 pairs of values and check that both `Order` instances
-    // return the same value when comparing a given pair.
-    // Arguably two Order instances don't have to return the same exact value
-    // as long as they agree on lt/gt/eq.
-    implicit def eqOrder[A:Arbitrary:Eq]: Eq[Order[A]] = new Eq[Order[A]] {
-      def eqv(x: Order[A], y: Order[A]): Boolean = {
-        val samples = List.fill(100)(arbitrary[(A, A)].sample).collect{
-          case Some(aa) => aa
-          case None => sys.error("Could not generate arbitrary values to compare two Order instances")
-        }
-        samples.forall { case (a1, a2) =>
-          x.compare(a1, a2) == y.compare(a1, a2)
-        }
-      }
+    // In order to check the monoid laws for `Order[N]`, we need
+    // `Arbitrary[Order[N]]` and `Eq[Order[N]]` instances.
+    // Here we have a bit of a hack to create these instances.
+    val nMax: Int = 100
+    final case class N(n: Int) { require(n >= 0 && n < nMax) }
+    // The arbitrary `Order[N]` values are created by mapping N values to random
+    // integers.
+    implicit val arbNOrder: Arbitrary[Order[N]] = Arbitrary(arbitrary[Int].map { seed =>
+      val order = new Random(seed).shuffle(Vector.range(0, nMax))
+      Order.by { (n: N) => order(n.n) }
+    })
+    // needed because currently we don't have Vector instances
+    implicit val vectorNEq: Eq[Vector[N]] = Eq.fromUniversalEquals
+    // The `Eq[Order[N]]` instance enumerates all possible `N` values in a
+    // `Vector` and considers two `Order[N]` instances to be equal if they
+    // result in the same sorting of that vector.
+    implicit val NOrderEq: Eq[Order[N]] = Eq.by { order: Order[N] =>
+      Vector.tabulate(nMax)(N).sorted(order.toOrdering)
     }
-    laws[GroupLaws, Order[Int]].check(_.monoid)
+
+    implicit val monoidOrderN: Monoid[Order[N]] = Order.whenEqualMonoid[N]
+    laws[GroupLaws, Order[N]].check(_.monoid)
   }
 }
 

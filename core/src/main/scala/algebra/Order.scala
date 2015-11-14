@@ -100,15 +100,23 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
    * Returns a new `Order[A]` instance that first compares by the original
    * `Order` instance and uses the provided `Order` instance to "break ties".
    *
-   * That is, `x.combine(y)` creates an `Order` that first orders by `x` and
+   * That is, `x.whenEqual(y)` creates an `Order` that first orders by `x` and
    * then (if two elements are equal) falls back to `y` for the comparison.
    */
-  def andThen(o: Order[A]): Order[A] = new Order[A] {
+  def whenEqual(o: Order[A]): Order[A] = new Order[A] {
     def compare(x: A, y: A) = {
       val c = self.compare(x, y)
       if (c == 0) o.compare(x, y)
       else c
     }
+  }
+
+  /**
+   * Convert a `Order[A]` to a `scala.math.Ordering[A]`
+   * instance.
+   */
+  def toOrdering: Ordering[A] = new Ordering[A] {
+    def compare(x: A, y: A): Int = self.compare(x, y)
   }
 }
 
@@ -162,9 +170,15 @@ object Order extends OrderFunctions {
    * instance.
    */
   implicit def ordering[A](implicit ev: Order[A]): Ordering[A] =
-    new Ordering[A] {
-      def compare(x: A, y: A): Int = ev.compare(x, y)
-    }
+    ev.toOrdering
+
+  /**
+   * An `Order` instance that considers all `A` instances to be equal.
+   */
+  def allEqual[A]: Order[A] = new Order[A] {
+    def compare(x: A, y: A): Int = 0
+  }
+
 
   /**
    * A `Monoid[Order[A]]` can be generated for all `A` with the following
@@ -176,14 +190,12 @@ object Order extends OrderFunctions {
    * `combine(x: Order[A], y: Order[A])` creates an `Order[A]` that first
    * orders by `x` and then (if two elements are equal) falls back to `y`.
    *
-   * @see [[Order.andThen]]
+   * @see [[Order.whenEqual]]
    */
-  implicit def orderMonoid[A]: Monoid[Order[A]] =
+  def whenEqualMonoid[A]: Monoid[Order[A]] =
     new Monoid[Order[A]] {
-      val empty: Order[A] = new Order[A] {
-        def compare(x: A, y: A): Int = 0
-      }
+      val empty: Order[A] = allEqual[A]
 
-      def combine(x: Order[A], y: Order[A]): Order[A] = x andThen y
+      def combine(x: Order[A], y: Order[A]): Order[A] = x whenEqual y
     }
 }
