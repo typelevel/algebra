@@ -56,6 +56,8 @@ trait Order[@sp A] extends Any with PartialOrder[A] { self =>
   override def reverse: Order[A] =
     new Order[A] {
       def compare(x: A, y: A): Int = self.compare(y, x)
+
+      override def reverse: Order[A] = self
     }
 
   // The following may be overridden for performance:
