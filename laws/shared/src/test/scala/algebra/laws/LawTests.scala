@@ -9,8 +9,9 @@ import algebra.std.Rat
 
 import org.typelevel.discipline.{Laws, Predicate}
 import org.typelevel.discipline.scalatest.Discipline
-import org.scalacheck.Arbitrary
+import org.scalacheck.{Arbitrary, Gen}, Arbitrary.arbitrary
 import org.scalatest.FunSuite
+import scala.util.Random
 
 trait LawTestsBase extends FunSuite with Discipline {
 
@@ -142,6 +143,31 @@ trait LawTestsBase extends FunSuite with Discipline {
     implicit val setSemilattice: Semilattice[Set[Int]] = setLattice[Int].joinSemilattice
     implicit val longSemilattice: Semilattice[Long] = LongMinMaxLattice.joinSemilattice
     laws[LatticeLaws, (Set[Int], Long)].check(_.semilattice(lexicographicSemilattice))
+  }
+
+  {
+    // In order to check the monoid laws for `Order[N]`, we need
+    // `Arbitrary[Order[N]]` and `Eq[Order[N]]` instances.
+    // Here we have a bit of a hack to create these instances.
+    val nMax: Int = 100
+    final case class N(n: Int) { require(n >= 0 && n < nMax) }
+    // The arbitrary `Order[N]` values are created by mapping N values to random
+    // integers.
+    implicit val arbNOrder: Arbitrary[Order[N]] = Arbitrary(arbitrary[Int].map { seed =>
+      val order = new Random(seed).shuffle(Vector.range(0, nMax))
+      Order.by { (n: N) => order(n.n) }
+    })
+    // needed because currently we don't have Vector instances
+    implicit val vectorNEq: Eq[Vector[N]] = Eq.fromUniversalEquals
+    // The `Eq[Order[N]]` instance enumerates all possible `N` values in a
+    // `Vector` and considers two `Order[N]` instances to be equal if they
+    // result in the same sorting of that vector.
+    implicit val NOrderEq: Eq[Order[N]] = Eq.by { order: Order[N] =>
+      Vector.tabulate(nMax)(N).sorted(order.toOrdering)
+    }
+
+    implicit val monoidOrderN: Monoid[Order[N]] = Order.whenEqualMonoid[N]
+    laws[GroupLaws, Order[N]].check(_.monoid)
   }
 }
 
