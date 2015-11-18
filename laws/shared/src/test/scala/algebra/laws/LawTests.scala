@@ -169,5 +169,7 @@ trait LawTestsBase extends FunSuite with Discipline {
     implicit val monoidOrderN: Monoid[Order[N]] = Order.whenEqualMonoid[N]
     laws[GroupLaws, Order[N]].check(_.monoid)
   }
+
+  laws[OrderLaws, Int]("fromOrdering").check(_.order(Order.fromOrdering[Int]))
 }
 
