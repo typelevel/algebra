@@ -99,6 +99,7 @@ trait AdditiveCommutativeGroup[@sp(Int, Long, Float, Double) A] extends Any with
 }
 
 trait AdditiveSemigroupFunctions {
+
   def isCommutative[A](implicit ev: AdditiveSemigroup[A]): Boolean =
     ev.isInstanceOf[AdditiveCommutativeSemigroup[_]]
 
@@ -132,24 +133,78 @@ trait AdditiveGroupFunctions extends AdditiveMonoidFunctions {
 
 object AdditiveSemigroup extends AdditiveSemigroupFunctions {
   @inline final def apply[A](implicit ev: AdditiveSemigroup[A]): AdditiveSemigroup[A] = ev
+  /**
+   * This method converts an additive instance into a generic
+   * instance.
+   *
+   * Given an implicit `AdditiveSemigroup[A]`, this method returns a
+   * `Semigroup[A]`.
+   */
+  @inline final def additive[A](implicit ev: AdditiveSemigroup[A]): Semigroup[A] =
+    ev.additive
 }
 
 object AdditiveCommutativeSemigroup extends AdditiveSemigroupFunctions {
   @inline final def apply[A](implicit ev: AdditiveCommutativeSemigroup[A]): AdditiveCommutativeSemigroup[A] = ev
+  /**
+   * This method converts an additive instance into a generic
+   * instance.
+   *
+   * Given an implicit `AdditiveCommutativeSemigroup[A]`, this method returns a
+   * `CommutativeSemigroup[A]`.
+   */
+  @inline final def additive[A](implicit ev: AdditiveCommutativeSemigroup[A]): CommutativeSemigroup[A] =
+    ev.additive
 }
 
 object AdditiveMonoid extends AdditiveMonoidFunctions {
   @inline final def apply[A](implicit ev: AdditiveMonoid[A]): AdditiveMonoid[A] = ev
+  /**
+   * This method converts an additive instance into a generic
+   * instance.
+   *
+   * Given an implicit `AdditiveMonoid[A]`, this method returns a
+   * `Monoid[A]`.
+   */
+  @inline final def additive[A](implicit ev: AdditiveMonoid[A]): Monoid[A] =
+    ev.additive
 }
 
 object AdditiveCommutativeMonoid extends AdditiveMonoidFunctions {
   @inline final def apply[A](implicit ev: AdditiveCommutativeMonoid[A]): AdditiveCommutativeMonoid[A] = ev
+  /**
+   * This method converts an additive instance into a generic
+   * instance.
+   *
+   * Given an implicit `AdditiveCommutativeMonoid[A]`, this method returns a
+   * `CommutativeMonoid[A]`.
+   */
+  @inline final def additive[A](implicit ev: AdditiveCommutativeMonoid[A]): CommutativeMonoid[A] =
+    ev.additive
 }
 
 object AdditiveGroup extends AdditiveGroupFunctions {
   @inline final def apply[A](implicit ev: AdditiveGroup[A]): AdditiveGroup[A] = ev
+  /**
+   * This method converts an additive instance into a generic
+   * instance.
+   *
+   * Given an implicit `AdditiveGroup[A]`, this method returns a
+   * `Group[A]`.
+   */
+  @inline final def additive[A](implicit ev: AdditiveGroup[A]): Group[A] =
+    ev.additive
 }
 
 object AdditiveCommutativeGroup extends AdditiveGroupFunctions {
   @inline final def apply[A](implicit ev: AdditiveCommutativeGroup[A]): AdditiveCommutativeGroup[A] = ev
+  /**
+   * This method converts an additive instance into a generic
+   * instance.
+   *
+   * Given an implicit `AdditiveCommutativeGroup[A]`, this method returns a
+   * `CommutativeGroup[A]`.
+   */
+  @inline final def additive[A](implicit ev: AdditiveCommutativeGroup[A]): CommutativeGroup[A] =
+    ev.additive
 }

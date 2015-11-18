@@ -132,24 +132,78 @@ trait MultiplicativeGroupFunctions extends MultiplicativeMonoidFunctions {
 
 object MultiplicativeSemigroup extends MultiplicativeSemigroupFunctions {
   @inline final def apply[A](implicit ev: MultiplicativeSemigroup[A]): MultiplicativeSemigroup[A] = ev
+  /**
+   * This method converts a multiplicative instance into a generic
+   * instance.
+   *
+   * Given an implicit `MultiplicativeSemigroup[A]`, this method returns
+   * a `Semigroup[A]`.
+   */
+  @inline final def multiplicative[A](implicit ev: MultiplicativeSemigroup[A]): Semigroup[A] =
+    ev.multiplicative
 }
 
 object MultiplicativeCommutativeSemigroup extends MultiplicativeSemigroupFunctions {
   @inline final def apply[A](implicit ev: MultiplicativeCommutativeSemigroup[A]): MultiplicativeCommutativeSemigroup[A] = ev
+  /**
+   * This method converts a multiplicative instance into a generic
+   * instance.
+   *
+   * Given an implicit `MultiplicativeCommutativeSemigroup[A]`, this method returns
+   * a `CommutativeSemigroup[A]`.
+   */
+  @inline final def multiplicative[A](implicit ev: MultiplicativeCommutativeSemigroup[A]): CommutativeSemigroup[A] =
+    ev.multiplicative
 }
 
 object MultiplicativeMonoid extends MultiplicativeMonoidFunctions {
   @inline final def apply[A](implicit ev: MultiplicativeMonoid[A]): MultiplicativeMonoid[A] = ev
+  /**
+   * This method converts a multiplicative instance into a generic
+   * instance.
+   *
+   * Given an implicit `MultiplicativeMonoid[A]`, this method returns
+   * a `Monoid[A]`.
+   */
+  @inline final def multiplicative[A](implicit ev: MultiplicativeMonoid[A]): Monoid[A] =
+    ev.multiplicative
 }
 
 object MultiplicativeCommutativeMonoid extends MultiplicativeMonoidFunctions {
   @inline final def apply[A](implicit ev: MultiplicativeCommutativeMonoid[A]): MultiplicativeCommutativeMonoid[A] = ev
+  /**
+   * This method converts a multiplicative instance into a generic
+   * instance.
+   *
+   * Given an implicit `MultiplicativeCommutativeMonoid[A]`, this method returns
+   * a `CommutativeMonoid[A]`.
+   */
+  @inline final def multiplicative[A](implicit ev: MultiplicativeCommutativeMonoid[A]): CommutativeMonoid[A] =
+    ev.multiplicative
 }
 
 object MultiplicativeGroup extends MultiplicativeGroupFunctions {
   @inline final def apply[A](implicit ev: MultiplicativeGroup[A]): MultiplicativeGroup[A] = ev
+  /**
+   * This method converts a multiplicative instance into a generic
+   * instance.
+   *
+   * Given an implicit `MultiplicativeGroup[A]`, this method returns
+   * a `Group[A]`.
+   */
+  @inline final def multiplicative[A](implicit ev: MultiplicativeGroup[A]): Group[A] =
+    ev.multiplicative
 }
 
 object MultiplicativeCommutativeGroup extends MultiplicativeGroupFunctions {
   @inline final def apply[A](implicit ev: MultiplicativeCommutativeGroup[A]): MultiplicativeCommutativeGroup[A] = ev
+  /**
+   * This method converts a multiplicative instance into a generic
+   * instance.
+   *
+   * Given an implicit `MultiplicativeCommutativeGroup[A]`, this method returns
+   * a `CommutativeGroup[A]`.
+   */
+  @inline final def multiplicative[A](implicit ev: MultiplicativeCommutativeGroup[A]): CommutativeGroup[A] =
+    ev.multiplicative
 }

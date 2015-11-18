@@ -63,7 +63,21 @@ class DualBool[@sp(Int, Long) A](orig: Bool[A]) extends Bool[A] {
 
 private[lattice] class BoolRingFromBool[A](orig: Bool[A]) extends BoolRngFromGenBool(orig) with BoolRing[A] {
   def one: A = orig.one
-  override def asBool: Bool[A] = orig
+}
+
+/**
+ * Every Boolean ring gives rise to a Boolean algebra:
+ *  - 0 and 1 are preserved;
+ *  - ring multiplication (`times`) corresponds to `and`;
+ *  - ring addition (`plus`) corresponds to `xor`;
+ *  - `a or b` is then defined as `a xor b xor (a and b)`;
+ *  - complement (`¬a`) is defined as `a xor 1`.
+ */
+class BoolFromBoolRing[A](orig: BoolRing[A]) extends GenBoolFromBoolRng(orig) with Bool[A] {
+  def one: A = orig.one
+  def complement(a: A): A = orig.plus(orig.one, a)
+  override def without(a: A, b: A): A = super[GenBoolFromBoolRng].without(a, b)
+  override def asBoolRing: BoolRing[A] = orig
 }
 
 trait BoolFunctions {

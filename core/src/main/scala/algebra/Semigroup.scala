@@ -76,25 +76,4 @@ object Semigroup extends SemigroupFunctions {
    * Access an implicit `Semigroup[A]`.
    */
   @inline final def apply[A](implicit ev: Semigroup[A]) = ev
-
-  /**
-   * This method converts an additive instance into a generic
-   * instance.
-   *
-   * Given an implicit `AdditiveSemigroup[A]`, this method returns a
-   * `Semigroup[A]`.
-   */
-  @inline final def additive[A](implicit ev: ring.AdditiveSemigroup[A]): Semigroup[A] =
-    ev.additive
-
-
-  /**
-   * This method converts a multiplicative instance into a generic
-   * instance.
-   *
-   * Given an implicit `MultiplicativeSemigroup[A]`, this method
-   * returns a `Semigroup[A]`.
-   */
-  @inline final def multiplicative[A](implicit ev: ring.MultiplicativeSemigroup[A]): Semigroup[A] =
-    ev.multiplicative
 }

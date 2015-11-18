@@ -44,20 +44,20 @@ trait LawTestsBase extends FunSuite with Discipline {
   laws[LogicLaws, Boolean].check(_.bool)
   laws[LogicLaws, SimpleHeyting].check(_.heyting)
   laws[LatticePartialOrderLaws, Boolean].check(_.boundedLatticePartialOrder)
-  laws[RingLaws, Boolean].check(_.boolRing(BooleanRing))
+  laws[RingLaws, Boolean].check(_.boolRing(booleanRing))
 
   // ensure that Bool[A].asBoolRing is a valid BoolRing
   laws[RingLaws, Boolean]("ring-from-bool").check(_.boolRing(Bool[Boolean].asBoolRing))
 
   // ensure that BoolRing[A].asBool is a valid Bool
-  laws[LogicLaws, Boolean]("bool-from-ring").check(_.bool(BooleanRing.asBool))
+  laws[LogicLaws, Boolean]("bool-from-ring").check(_.bool(new BoolFromBoolRing(booleanRing)))
 
   laws[OrderLaws, String].check(_.order)
   laws[GroupLaws, String].check(_.monoid)
 
   {
     // TODO: test a type that has Eq but not Order
-    implicit val g: Group[Int] = Group.additive[Int]
+    implicit val g: Group[Int] = AdditiveGroup.additive[Int]
     laws[OrderLaws, Option[Int]].check(_.order)
     laws[GroupLaws, Option[Int]].check(_.monoid)
     laws[OrderLaws, Option[String]].check(_.order)
@@ -71,7 +71,7 @@ trait LawTestsBase extends FunSuite with Discipline {
 
   laws[LogicLaws, Set[Byte]].check(_.generalizedBool)
   laws[RingLaws, Set[Byte]].check(_.boolRng(setBoolRng[Byte]))
-  laws[LogicLaws, Set[Byte]]("bool-from-rng").check(_.generalizedBool(setBoolRng.asBool))
+  laws[LogicLaws, Set[Byte]]("bool-from-rng").check(_.generalizedBool(new GenBoolFromBoolRng(setBoolRng)))
   laws[RingLaws, Set[Byte]]("rng-from-bool").check(_.boolRng(GenBool[Set[Byte]].asBoolRing))
   laws[OrderLaws, Set[Int]].check(_.partialOrder)
   laws[RingLaws, Set[Int]].check(_.semiring)

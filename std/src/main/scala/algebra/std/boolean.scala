@@ -11,7 +11,7 @@ trait BooleanInstances {
   implicit val booleanAlgebra: BooleanAlgebra =
     new BooleanAlgebra
 
-  val BooleanRing = new BoolRing[Boolean] {
+  val booleanRing = new BoolRing[Boolean] {
     def zero: Boolean = false
     def one: Boolean = true
     def plus(x: Boolean, y: Boolean): Boolean = x ^ y

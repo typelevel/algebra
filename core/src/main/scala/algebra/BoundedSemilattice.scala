@@ -1,24 +1,8 @@
 package algebra
 
-import lattice.{ BoundedMeetSemilattice, BoundedJoinSemilattice }
-
 import scala.{specialized => sp}
 
-trait BoundedSemilattice[@sp(Int, Long, Float, Double) A] extends Any with Semilattice[A] with CommutativeMonoid[A] { self =>
-
-  override def asMeetSemilattice: BoundedMeetSemilattice[A] =
-    new BoundedMeetSemilattice[A] {
-      def one: A = self.empty
-      def meet(x: A, y: A): A = self.combine(x, y)
-    }
-
-  override def asJoinSemilattice: BoundedJoinSemilattice[A] =
-    new BoundedJoinSemilattice[A] {
-      def zero: A = self.empty
-      def join(x: A, y: A): A = self.combine(x, y)
-    }
-
-}
+trait BoundedSemilattice[@sp(Int, Long, Float, Double) A] extends Any with Semilattice[A] with CommutativeMonoid[A]
 
 object BoundedSemilattice {
 
