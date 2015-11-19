@@ -200,4 +200,10 @@ object Order extends OrderFunctions {
 
       def combine(x: Order[A], y: Order[A]): Order[A] = x whenEqual y
     }
+
+  def fromOrdering[A](implicit ev: Ordering[A]): Order[A] = new Order[A] {
+    def compare(x: A, y: A): Int = ev.compare(x, y)
+
+    override def toOrdering: Ordering[A] = ev
+  }
 }
