@@ -46,11 +46,12 @@ trait RingLaws[A] extends GroupLaws[A] {
   )
 
   def multiplicativeGroup(implicit A: MultiplicativeGroup[A] with AdditiveMonoid[A]) = {
-    implicit val Arb: Arbitrary[A] = nonZeroArb(A)
+    val arb: Arbitrary[A] = nonZeroArb(A)
+    val gen = arb.arbitrary
     new MultiplicativeProperties(
-      base = _.group(A.multiplicative, Arb),
+      base = _.group(A.multiplicative, arb),
       parent = Some(multiplicativeMonoid),
-      "consistent division" -> forAll{ (x: A, y: A) =>
+      "consistent division" -> forAll(gen, gen) { (x: A, y: A) =>
         (A.div(x, y) ?== A.times(x, A.reciprocal(y)))
       }
     )
