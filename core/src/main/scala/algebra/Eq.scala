@@ -29,6 +29,23 @@ trait Eq[@sp A] extends Any with Serializable { self =>
     new Eq[B] {
       def eqv(x: B, y: B): Boolean = self.eqv(f(x), f(y))
     }
+
+  /**
+   * Return an Eq that gives the result of the and of this and that
+   * note this is idempotent
+   */
+  def and(that: Eq[A]): Eq[A] =
+    new Eq[A] {
+      def eqv(x: A, y: A) = self.eqv(x, y) && that.eqv(x, y)
+    }
+  /**
+   * Return an Eq that gives the result of the or of this and that
+   * Note this is idempotent
+   */
+  def or(that: Eq[A]): Eq[A] =
+    new Eq[A] {
+      def eqv(x: A, y: A) = self.eqv(x, y) || that.eqv(x, y)
+    }
 }
 
 trait EqFunctions {
@@ -79,4 +96,43 @@ object Eq extends EqFunctions {
     new Eq[A] {
       def eqv(x: A, y: A) = x == y
     }
+
+  /**
+   * Everything is the same
+   */
+  def allEqual[A]: Eq[A] = new Eq[A] {
+    def eqv(x: A, y: A) = true
+  }
+
+  /**
+   * This is a monoid that creates an Eq that
+   * checks that all equality checks pass
+   */
+  def allEqualBoundedSemilattice[A]: BoundedSemilattice[Eq[A]] = new BoundedSemilattice[Eq[A]] {
+    def empty = allEqual[A]
+    def combine(e1: Eq[A], e2: Eq[A]): Eq[A] = e1.and(e2)
+    override def combineAllOption(es: TraversableOnce[Eq[A]]): Option[Eq[A]] =
+      if (es.isEmpty) None
+      else {
+        val materialized = es.toVector
+        Some(new Eq[A] {
+          def eqv(x: A, y: A) = materialized.forall(_.eqv(x, y))
+        })
+      }
+  }
+  /**
+   * This is a monoid that creates an Eq that
+   * checks that at least one equality check passes
+   */
+  def anyEqualSemilattice[A]: Semilattice[Eq[A]] = new Semilattice[Eq[A]] {
+    def combine(e1: Eq[A], e2: Eq[A]): Eq[A] = e1.or(e2)
+    override def combineAllOption(es: TraversableOnce[Eq[A]]): Option[Eq[A]] =
+      if (es.isEmpty) None
+      else {
+        val materialized = es.toVector
+        Some(new Eq[A] {
+          def eqv(x: A, y: A) = materialized.exists(_.eqv(x, y))
+        })
+      }
+  }
 }
