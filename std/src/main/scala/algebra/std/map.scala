@@ -1,6 +1,7 @@
 package algebra
 package std
 
+import algebra.lattice._
 import algebra.ring._
 import algebra.std.util.StaticMethods.{addMap, initMutableMap, subtractMap, wrapMutableMap}
 import scala.collection.mutable
@@ -12,6 +13,8 @@ trait MapInstances extends MapInstances3
 trait MapInstances3 extends MapInstances2 {
   implicit def mapRng[K, V: Rng] =
     new MapRng[K, V]
+  implicit def mapGenBool[K, V: Eq: GenBool] =
+    new MapGenBool[K, V]
 }
 
 trait MapInstances2 extends MapInstances1 {
@@ -129,4 +132,26 @@ class MapRng[K, V](implicit V: Rng[V]) extends MapSemiring[K, V] with Rng[Map[K,
 
   override def minus(x: Map[K, V], y: Map[K, V]): Map[K, V] =
     subtractMap(x, y)(V.minus)(V.negate)
+}
+
+class MapGenBool[K, V](implicit GBV: GenBool[V], EqV: Eq[V]) extends GenBool[Map[K, V]] {
+  def zero: Map[K, V] = Map.empty
+  
+  def and(a: Map[K, V], b: Map[K, V]): Map[K, V] = (
+    (a.keySet intersect b.keySet)
+    map { k => (k, GBV.and(a(k), b(k))) }
+    filter { (kv: (K, V)) => EqV.neqv(GBV.zero, kv._2) }
+  ).toMap
+
+  def or(a: Map[K, V], b: Map[K, V]): Map[K, V] = (
+    (a.keySet union b.keySet)
+    map { k => (k, GBV.or(a.getOrElse(k, GBV.zero), b.getOrElse(k, GBV.zero))) }
+  ).toMap
+
+  def without(a: Map[K, V], b: Map[K, V]): Map[K, V] = (
+    a.iterator map { kv => b.get(kv._1) match {
+      case Some(v2) => (kv._1, GBV.without(kv._2, v2))
+      case None => kv
+    }} filter { kv => EqV.neqv(GBV.zero, kv._2) }
+  ).toMap
 }

@@ -71,8 +71,10 @@ trait LawTestsBase extends FunSuite with Discipline {
 
   laws[LogicLaws, Set[Byte]].check(_.generalizedBool)
   laws[RingLaws, Set[Byte]].check(_.boolRng(setBoolRng[Byte]))
+  laws[LogicLaws, Map[Byte, Set[Byte]]].check(_.generalizedBool)
   laws[LogicLaws, Set[Byte]]("bool-from-rng").check(_.generalizedBool(new GenBoolFromBoolRng(setBoolRng)))
   laws[RingLaws, Set[Byte]]("rng-from-bool").check(_.boolRng(GenBool[Set[Byte]].asBoolRing))
+  laws[RingLaws, Map[Byte, Set[Byte]]]("rng-from-bool").check(_.boolRng(GenBool[Map[Byte, Set[Byte]]].asBoolRing))
   laws[OrderLaws, Set[Int]].check(_.partialOrder)
   laws[RingLaws, Set[Int]].check(_.semiring)
   laws[RingLaws, Set[String]].check(_.semiring)
