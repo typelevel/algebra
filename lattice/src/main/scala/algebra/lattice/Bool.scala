@@ -80,20 +80,7 @@ class BoolFromBoolRing[A](orig: BoolRing[A]) extends GenBoolFromBoolRng(orig) wi
   override def asBoolRing: BoolRing[A] = orig
 }
 
-trait BoolFunctions {
-  def dual[@sp(Int, Long) A](implicit ev: Bool[A]): Bool[A] =
-    ev.dual
-  def xor[@sp(Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
-    ev.xor(x, y)
-  def nand[@sp(Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
-    ev.nand(x, y)
-  def nor[@sp(Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
-    ev.nor(x, y)
-  def nxor[@sp(Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
-    ev.nxor(x, y)
-}
-
-object Bool extends HeytingFunctions with BoolFunctions {
+object Bool extends HeytingFunctions[Bool] with GenBoolFunctions[Bool] {
 
   /**
    * Access an implicit `Bool[A]`.

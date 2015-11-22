@@ -29,7 +29,9 @@ trait BoundedDistributiveLattice[@sp(Int, Long, Float, Double) A] extends Any wi
   }
 }
 
-object BoundedDistributiveLattice extends LatticeFunctions with BoundedLatticeFunctions {
+object BoundedDistributiveLattice extends
+  BoundedMeetSemilatticeFunctions[BoundedDistributiveLattice] with
+  BoundedJoinSemilatticeFunctions[BoundedDistributiveLattice] {
 
   /**
    * Access an implicit `BoundedDistributiveLattice[A]`.
@@ -37,10 +39,11 @@ object BoundedDistributiveLattice extends LatticeFunctions with BoundedLatticeFu
   @inline final def apply[@sp(Int, Long, Float, Double) A](implicit ev: BoundedDistributiveLattice[A]): BoundedDistributiveLattice[A] = ev
 
   def minMax[@sp(Int, Long, Float, Double)A](min: A, max: A)(implicit ord: Order[A]): BoundedDistributiveLattice[A] =
-    new BoundedDistributiveLattice[A] {
-      def zero = min
-      def one = max
-      def join(a: A, b: A) = ord.max(a, b)
-      def meet(a: A, b: A) = ord.min(a, b)
-    }
+    new MinMaxBoundedDistributiveLattice(min, max)
+}
+
+class MinMaxBoundedDistributiveLattice[A](min: A, max: A)(implicit o: Order[A]) extends MinMaxLattice[A]
+  with BoundedDistributiveLattice[A] {
+  def zero = min
+  def one = max
 }

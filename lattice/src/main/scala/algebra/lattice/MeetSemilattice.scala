@@ -20,7 +20,12 @@ trait MeetSemilattice[@sp(Int, Long, Float, Double) A] extends Any with Serializ
     meetSemilattice.asMeetPartialOrder
 }
 
-object MeetSemilattice {
+trait MeetSemilatticeFunctions[M[A] <: MeetSemilattice[A]] {
+  def meet[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: M[A]): A =
+    ev.meet(x, y)
+}
+
+object MeetSemilattice extends MeetSemilatticeFunctions[MeetSemilattice] {
 
   /**
    * Access an implicit `MeetSemilattice[A]`.

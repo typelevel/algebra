@@ -11,7 +11,7 @@ import scala.{specialized => sp}
  */
 trait DistributiveLattice[@sp(Int, Long, Float, Double) A] extends Any with Lattice[A]
 
-object DistributiveLattice extends LatticeFunctions {
+object DistributiveLattice extends JoinSemilatticeFunctions[DistributiveLattice] with MeetSemilatticeFunctions[DistributiveLattice] {
 
   /**
    * Access an implicit `Lattice[A]`.

@@ -41,36 +41,36 @@ trait Semigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
     as.reduceOption(combine)
 }
 
-trait SemigroupFunctions {
-  def combine[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: Semigroup[A]): A =
+trait SemigroupFunctions[S[T] <: Semigroup[T]] {
+  def combine[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: S[A]): A =
     ev.combine(x, y)
 
-  def maybeCombine[@sp(Int, Long, Float, Double) A](ox: Option[A], y: A)(implicit ev: Semigroup[A]): A =
+  def maybeCombine[@sp(Int, Long, Float, Double) A](ox: Option[A], y: A)(implicit ev: S[A]): A =
     ox match {
       case Some(x) => ev.combine(x, y)
       case None => y
     }
 
-  def maybeCombine[@sp(Int, Long, Float, Double) A](x: A, oy: Option[A])(implicit ev: Semigroup[A]): A =
+  def maybeCombine[@sp(Int, Long, Float, Double) A](x: A, oy: Option[A])(implicit ev: S[A]): A =
     oy match {
       case Some(y) => ev.combine(x, y)
       case None => x
     }
 
-  def isCommutative[A](implicit ev: Semigroup[A]): Boolean =
+  def isCommutative[A](implicit ev: S[A]): Boolean =
     ev.isInstanceOf[CommutativeSemigroup[_]]
 
-  def isIdempotent[A](implicit ev: Semigroup[A]): Boolean =
+  def isIdempotent[A](implicit ev: S[A]): Boolean =
     ev.isInstanceOf[Band[_]]
 
-  def combineN[@sp(Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: Semigroup[A]): A =
+  def combineN[@sp(Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: S[A]): A =
     ev.combineN(a, n)
 
-  def combineAllOption[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: Semigroup[A]): Option[A] =
+  def combineAllOption[A](as: TraversableOnce[A])(implicit ev: S[A]): Option[A] =
     ev.combineAllOption(as)
 }
 
-object Semigroup extends SemigroupFunctions {
+object Semigroup extends SemigroupFunctions[Semigroup] {
 
   /**
    * Access an implicit `Semigroup[A]`.

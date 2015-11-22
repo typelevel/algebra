@@ -26,15 +26,9 @@ trait BoundedLattice[@sp(Int, Long, Float, Double) A] extends Any with Lattice[A
   }
 }
 
-trait BoundedLatticeFunctions {
-  def zero[@sp(Int, Long, Float, Double) A](implicit ev: BoundedJoinSemilattice[A]): A =
-    ev.zero
-
-  def one[@sp(Int, Long, Float, Double) A](implicit ev: BoundedMeetSemilattice[A]): A =
-    ev.one
-}
-
-object BoundedLattice extends LatticeFunctions with BoundedLatticeFunctions {
+object BoundedLattice extends
+  BoundedMeetSemilatticeFunctions[BoundedLattice] with
+  BoundedJoinSemilatticeFunctions[BoundedLattice] {
 
   /**
    * Access an implicit `BoundedLattice[A]`.

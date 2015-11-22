@@ -32,14 +32,14 @@ trait Group[@sp(Int, Long, Float, Double) A] extends Any with Monoid[A] {
     else repeatedCombineN(inverse(a), -n)
 }
 
-trait GroupFunctions extends MonoidFunctions {
-  def inverse[@sp(Int, Long, Float, Double) A](a: A)(implicit ev: Group[A]): A =
+trait GroupFunctions[G[T] <: Group[T]] extends MonoidFunctions[Group] {
+  def inverse[@sp(Int, Long, Float, Double) A](a: A)(implicit ev: G[A]): A =
     ev.inverse(a)
-  def remove[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: Group[A]): A =
+  def remove[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: G[A]): A =
     ev.remove(x, y)
 }
 
-object Group extends GroupFunctions {
+object Group extends GroupFunctions[Group] {
 
   /**
    * Access an implicit `Group[A]`.

@@ -6,10 +6,10 @@ import scala.{specialized => sp}
 
 /**
  * Semiring consists of:
- * 
+ *
  *  - a commutative monoid for addition (+)
  *  - a semigroup for multiplication (*)
- * 
+ *
  * Alternately, a Semiring can be thought of as a ring without a
  * multiplicative identity or an additive inverse.
  *
@@ -19,6 +19,6 @@ import scala.{specialized => sp}
  */
 trait Semiring[@sp(Int, Long, Float, Double) A] extends Any with AdditiveCommutativeMonoid[A] with MultiplicativeSemigroup[A]
 
-object Semiring extends AdditiveMonoidFunctions with MultiplicativeSemigroupFunctions {
+object Semiring extends AdditiveMonoidFunctions[Semiring] with MultiplicativeSemigroupFunctions[Semiring] {
   @inline final def apply[A](implicit ev: Semiring[A]): Semiring[A] = ev
 }

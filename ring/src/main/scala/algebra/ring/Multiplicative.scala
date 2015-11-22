@@ -99,38 +99,38 @@ trait MultiplicativeCommutativeGroup[@sp(Int, Long, Float, Double) A] extends An
   }
 }
 
-trait MultiplicativeSemigroupFunctions {
-  def isCommutative[A](implicit ev: MultiplicativeSemigroup[A]): Boolean =
+trait MultiplicativeSemigroupFunctions[S[T] <: MultiplicativeSemigroup[T]] {
+  def isMultiplicativeCommutative[A](implicit ev: S[A]): Boolean =
     ev.isInstanceOf[MultiplicativeCommutativeSemigroup[A]]
 
-  def times[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: MultiplicativeSemigroup[A]): A =
+  def times[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: S[A]): A =
     ev.times(x, y)
-  def pow[@sp(Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: MultiplicativeSemigroup[A]): A =
+  def pow[@sp(Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: S[A]): A =
     ev.pow(a, n)
 
-  def tryProduct[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: MultiplicativeSemigroup[A]): Option[A] =
+  def tryProduct[A](as: TraversableOnce[A])(implicit ev: S[A]): Option[A] =
     ev.tryProduct(as)
 }
 
-trait MultiplicativeMonoidFunctions extends MultiplicativeSemigroupFunctions {
-  def one[@sp(Int, Long, Float, Double) A](implicit ev: MultiplicativeMonoid[A]): A =
+trait MultiplicativeMonoidFunctions[M[T] <: MultiplicativeMonoid[T]] extends MultiplicativeSemigroupFunctions[M] {
+  def one[@sp(Int, Long, Float, Double) A](implicit ev: M[A]): A =
     ev.one
 
-  def isOne[@sp(Int, Long, Float, Double) A](a: A)(implicit ev0: MultiplicativeMonoid[A], ev1: Eq[A]): Boolean =
+  def isOne[@sp(Int, Long, Float, Double) A](a: A)(implicit ev0: M[A], ev1: Eq[A]): Boolean =
     ev0.isOne(a)
 
-  def product[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: MultiplicativeMonoid[A]): A =
+  def product[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: M[A]): A =
     ev.product(as)
 }
 
-trait MultiplicativeGroupFunctions extends MultiplicativeMonoidFunctions {
-  def reciprocal[@sp(Int, Long, Float, Double) A](x: A)(implicit ev: MultiplicativeGroup[A]): A =
+trait MultiplicativeGroupFunctions[G[T] <: MultiplicativeGroup[T]] extends MultiplicativeMonoidFunctions[G] {
+  def reciprocal[@sp(Int, Long, Float, Double) A](x: A)(implicit ev: G[A]): A =
     ev.reciprocal(x)
-  def div[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: MultiplicativeGroup[A]): A =
+  def div[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: G[A]): A =
     ev.div(x, y)
 }
 
-object MultiplicativeSemigroup extends MultiplicativeSemigroupFunctions {
+object MultiplicativeSemigroup extends MultiplicativeSemigroupFunctions[MultiplicativeSemigroup] {
   @inline final def apply[A](implicit ev: MultiplicativeSemigroup[A]): MultiplicativeSemigroup[A] = ev
   /**
    * This method converts a multiplicative instance into a generic
@@ -143,7 +143,7 @@ object MultiplicativeSemigroup extends MultiplicativeSemigroupFunctions {
     ev.multiplicative
 }
 
-object MultiplicativeCommutativeSemigroup extends MultiplicativeSemigroupFunctions {
+object MultiplicativeCommutativeSemigroup extends MultiplicativeSemigroupFunctions[MultiplicativeCommutativeSemigroup] {
   @inline final def apply[A](implicit ev: MultiplicativeCommutativeSemigroup[A]): MultiplicativeCommutativeSemigroup[A] = ev
   /**
    * This method converts a multiplicative instance into a generic
@@ -156,7 +156,7 @@ object MultiplicativeCommutativeSemigroup extends MultiplicativeSemigroupFunctio
     ev.multiplicative
 }
 
-object MultiplicativeMonoid extends MultiplicativeMonoidFunctions {
+object MultiplicativeMonoid extends MultiplicativeMonoidFunctions[MultiplicativeMonoid] {
   @inline final def apply[A](implicit ev: MultiplicativeMonoid[A]): MultiplicativeMonoid[A] = ev
   /**
    * This method converts a multiplicative instance into a generic
@@ -169,7 +169,7 @@ object MultiplicativeMonoid extends MultiplicativeMonoidFunctions {
     ev.multiplicative
 }
 
-object MultiplicativeCommutativeMonoid extends MultiplicativeMonoidFunctions {
+object MultiplicativeCommutativeMonoid extends MultiplicativeMonoidFunctions[MultiplicativeCommutativeMonoid] {
   @inline final def apply[A](implicit ev: MultiplicativeCommutativeMonoid[A]): MultiplicativeCommutativeMonoid[A] = ev
   /**
    * This method converts a multiplicative instance into a generic
@@ -182,7 +182,7 @@ object MultiplicativeCommutativeMonoid extends MultiplicativeMonoidFunctions {
     ev.multiplicative
 }
 
-object MultiplicativeGroup extends MultiplicativeGroupFunctions {
+object MultiplicativeGroup extends MultiplicativeGroupFunctions[MultiplicativeGroup] {
   @inline final def apply[A](implicit ev: MultiplicativeGroup[A]): MultiplicativeGroup[A] = ev
   /**
    * This method converts a multiplicative instance into a generic
@@ -195,7 +195,7 @@ object MultiplicativeGroup extends MultiplicativeGroupFunctions {
     ev.multiplicative
 }
 
-object MultiplicativeCommutativeGroup extends MultiplicativeGroupFunctions {
+object MultiplicativeCommutativeGroup extends MultiplicativeGroupFunctions[MultiplicativeCommutativeGroup] {
   @inline final def apply[A](implicit ev: MultiplicativeCommutativeGroup[A]): MultiplicativeCommutativeGroup[A] = ev
   /**
    * This method converts a multiplicative instance into a generic

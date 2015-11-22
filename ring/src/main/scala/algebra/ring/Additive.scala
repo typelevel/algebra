@@ -98,40 +98,40 @@ trait AdditiveCommutativeGroup[@sp(Int, Long, Float, Double) A] extends Any with
   }
 }
 
-trait AdditiveSemigroupFunctions {
+trait AdditiveSemigroupFunctions[S[T] <: AdditiveSemigroup[T]] {
 
-  def isCommutative[A](implicit ev: AdditiveSemigroup[A]): Boolean =
+  def isAdditiveCommutative[A](implicit ev: S[A]): Boolean =
     ev.isInstanceOf[AdditiveCommutativeSemigroup[_]]
 
-  def plus[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: AdditiveSemigroup[A]): A =
+  def plus[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: S[A]): A =
     ev.plus(x, y)
 
-  def sumN[@sp(Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: AdditiveSemigroup[A]): A =
+  def sumN[@sp(Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: S[A]): A =
     ev.sumN(a, n)
 
-  def trySum[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: AdditiveSemigroup[A]): Option[A] =
+  def trySum[A](as: TraversableOnce[A])(implicit ev: S[A]): Option[A] =
     ev.trySum(as)
 }
 
-trait AdditiveMonoidFunctions extends AdditiveSemigroupFunctions {
-  def zero[@sp(Int, Long, Float, Double) A](implicit ev: AdditiveMonoid[A]): A =
+trait AdditiveMonoidFunctions[M[T] <: AdditiveMonoid[T]]  extends AdditiveSemigroupFunctions[M] {
+  def zero[@sp(Int, Long, Float, Double) A](implicit ev: M[A]): A =
     ev.zero
 
-  def isZero[@sp(Int, Long, Float, Double) A](a: A)(implicit ev0: AdditiveMonoid[A], ev1: Eq[A]): Boolean =
+  def isZero[@sp(Int, Long, Float, Double) A](a: A)(implicit ev0: M[A], ev1: Eq[A]): Boolean =
     ev0.isZero(a)
 
-  def sum[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: AdditiveMonoid[A]): A =
+  def sum[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: M[A]): A =
     ev.sum(as)
 }
 
-trait AdditiveGroupFunctions extends AdditiveMonoidFunctions {
-  def negate[@sp(Int, Long, Float, Double) A](x: A)(implicit ev: AdditiveGroup[A]): A =
+trait AdditiveGroupFunctions[G[T] <: AdditiveGroup[T]]  extends AdditiveMonoidFunctions[G] {
+  def negate[@sp(Int, Long, Float, Double) A](x: A)(implicit ev: G[A]): A =
     ev.negate(x)
-  def minus[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: AdditiveGroup[A]): A =
+  def minus[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: G[A]): A =
     ev.minus(x, y)
 }
 
-object AdditiveSemigroup extends AdditiveSemigroupFunctions {
+object AdditiveSemigroup extends AdditiveSemigroupFunctions[AdditiveSemigroup] {
   @inline final def apply[A](implicit ev: AdditiveSemigroup[A]): AdditiveSemigroup[A] = ev
   /**
    * This method converts an additive instance into a generic
@@ -144,7 +144,7 @@ object AdditiveSemigroup extends AdditiveSemigroupFunctions {
     ev.additive
 }
 
-object AdditiveCommutativeSemigroup extends AdditiveSemigroupFunctions {
+object AdditiveCommutativeSemigroup extends AdditiveSemigroupFunctions[AdditiveCommutativeSemigroup] {
   @inline final def apply[A](implicit ev: AdditiveCommutativeSemigroup[A]): AdditiveCommutativeSemigroup[A] = ev
   /**
    * This method converts an additive instance into a generic
@@ -157,7 +157,7 @@ object AdditiveCommutativeSemigroup extends AdditiveSemigroupFunctions {
     ev.additive
 }
 
-object AdditiveMonoid extends AdditiveMonoidFunctions {
+object AdditiveMonoid extends AdditiveMonoidFunctions[AdditiveMonoid] {
   @inline final def apply[A](implicit ev: AdditiveMonoid[A]): AdditiveMonoid[A] = ev
   /**
    * This method converts an additive instance into a generic
@@ -170,7 +170,7 @@ object AdditiveMonoid extends AdditiveMonoidFunctions {
     ev.additive
 }
 
-object AdditiveCommutativeMonoid extends AdditiveMonoidFunctions {
+object AdditiveCommutativeMonoid extends AdditiveMonoidFunctions[AdditiveCommutativeMonoid] {
   @inline final def apply[A](implicit ev: AdditiveCommutativeMonoid[A]): AdditiveCommutativeMonoid[A] = ev
   /**
    * This method converts an additive instance into a generic
@@ -183,7 +183,7 @@ object AdditiveCommutativeMonoid extends AdditiveMonoidFunctions {
     ev.additive
 }
 
-object AdditiveGroup extends AdditiveGroupFunctions {
+object AdditiveGroup extends AdditiveGroupFunctions[AdditiveGroup] {
   @inline final def apply[A](implicit ev: AdditiveGroup[A]): AdditiveGroup[A] = ev
   /**
    * This method converts an additive instance into a generic
@@ -196,7 +196,7 @@ object AdditiveGroup extends AdditiveGroupFunctions {
     ev.additive
 }
 
-object AdditiveCommutativeGroup extends AdditiveGroupFunctions {
+object AdditiveCommutativeGroup extends AdditiveGroupFunctions[AdditiveCommutativeGroup] {
   @inline final def apply[A](implicit ev: AdditiveCommutativeGroup[A]): AdditiveCommutativeGroup[A] = ev
   /**
    * This method converts an additive instance into a generic

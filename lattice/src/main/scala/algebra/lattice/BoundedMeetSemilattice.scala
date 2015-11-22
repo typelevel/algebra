@@ -14,7 +14,12 @@ trait BoundedMeetSemilattice[@sp(Int, Long, Float, Double) A] extends Any with M
     }
 }
 
-object BoundedMeetSemilattice {
+trait BoundedMeetSemilatticeFunctions[B[A] <: BoundedMeetSemilattice[A]] extends MeetSemilatticeFunctions[B] {
+  def one[@sp(Int, Long, Float, Double) A](implicit ev: B[A]): A =
+    ev.one
+}
+
+object BoundedMeetSemilattice extends BoundedMeetSemilatticeFunctions[BoundedMeetSemilattice] {
 
   /**
    * Access an implicit `BoundedMeetSemilattice[A]`.

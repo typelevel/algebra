@@ -8,6 +8,6 @@ import scala.{specialized => sp}
  */
 trait CommutativeRig[@sp(Int, Long, Float, Double) A] extends Any with Rig[A] with MultiplicativeCommutativeMonoid[A]
 
-object CommutativeRig extends AdditiveGroupFunctions with MultiplicativeMonoidFunctions {
+object CommutativeRig extends AdditiveMonoidFunctions[CommutativeRig] with MultiplicativeMonoidFunctions[CommutativeRig] {
   @inline final def apply[A](implicit r: CommutativeRig[A]): CommutativeRig[A] = r
 }
