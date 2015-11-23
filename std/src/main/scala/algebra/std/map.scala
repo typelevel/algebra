@@ -138,20 +138,21 @@ class MapGenBool[K, V](implicit GBV: GenBool[V], EqV: Eq[V]) extends GenBool[Map
   def zero: Map[K, V] = Map.empty
   
   def and(a: Map[K, V], b: Map[K, V]): Map[K, V] = (
-    (a.keySet intersect b.keySet)
+    (a.keySet intersect b.keySet).iterator
     map { k => (k, GBV.and(a(k), b(k))) }
-    filter { (kv: (K, V)) => EqV.neqv(GBV.zero, kv._2) }
+    filter { case (k, v) => EqV.neqv(GBV.zero, v) }
   ).toMap
 
   def or(a: Map[K, V], b: Map[K, V]): Map[K, V] = (
-    (a.keySet union b.keySet)
+    (a.keySet union b.keySet).iterator
     map { k => (k, GBV.or(a.getOrElse(k, GBV.zero), b.getOrElse(k, GBV.zero))) }
   ).toMap
 
   def without(a: Map[K, V], b: Map[K, V]): Map[K, V] = (
-    a.iterator map { kv => b.get(kv._1) match {
-      case Some(v2) => (kv._1, GBV.without(kv._2, v2))
-      case None => kv
-    }} filter { kv => EqV.neqv(GBV.zero, kv._2) }
+    a.iterator map { case (k, v) => b.get(k) match {
+      case Some(v2) => (k, GBV.without(v, v2))
+      case None => (k, v)
+    }}
+    filter { case (k, v) => EqV.neqv(GBV.zero, v) }
   ).toMap
 }
