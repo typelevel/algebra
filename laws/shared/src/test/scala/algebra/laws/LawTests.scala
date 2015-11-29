@@ -149,13 +149,19 @@ trait LawTestsBase extends FunSuite with Discipline {
     // In order to check the monoid laws for `Order[N]`, we need
     // `Arbitrary[Order[N]]` and `Eq[Order[N]]` instances.
     // Here we have a bit of a hack to create these instances.
-    val nMax: Int = 100
+    val nMax: Int = 13
     final case class N(n: Int) { require(n >= 0 && n < nMax) }
     // The arbitrary `Order[N]` values are created by mapping N values to random
     // integers.
     implicit val arbNOrder: Arbitrary[Order[N]] = Arbitrary(arbitrary[Int].map { seed =>
       val order = new Random(seed).shuffle(Vector.range(0, nMax))
       Order.by { (n: N) => order(n.n) }
+    })
+    // The arbitrary `Eq[N]` values are created by mapping N values to random
+    // integers.
+    implicit val arbNEq: Arbitrary[Eq[N]] = Arbitrary(arbitrary[Int].map { seed =>
+      val mapping = new Random(seed).shuffle(Vector.range(0, nMax))
+      Eq.by { (n: N) => mapping(n.n) }
     })
     // needed because currently we don't have Vector instances
     implicit val vectorNEq: Eq[Vector[N]] = Eq.fromUniversalEquals
@@ -165,9 +171,24 @@ trait LawTestsBase extends FunSuite with Discipline {
     implicit val NOrderEq: Eq[Order[N]] = Eq.by { order: Order[N] =>
       Vector.tabulate(nMax)(N).sorted(order.toOrdering)
     }
+    implicit val NEqEq: Eq[Eq[N]] = new Eq[Eq[N]] {
+      def eqv(a: Eq[N], b: Eq[N]) =
+        Iterator.tabulate(nMax)(N)
+          .flatMap { x => Iterator.tabulate(nMax)(N).map((x, _)) }
+          .forall { case (x, y) => a.eqv(x, y) == b.eqv(x, y) }
+    }
 
     implicit val monoidOrderN: Monoid[Order[N]] = Order.whenEqualMonoid[N]
     laws[GroupLaws, Order[N]].check(_.monoid)
+
+    {
+      implicit val bsEqN: BoundedSemilattice[Eq[N]] = Eq.allEqualBoundedSemilattice[N]
+      laws[GroupLaws, Eq[N]].check(_.boundedSemilattice)
+    }
+    {
+      implicit val sEqN: Semilattice[Eq[N]] = Eq.anyEqualSemilattice[N]
+      laws[GroupLaws, Eq[N]].check(_.semilattice)
+    }
   }
 
   laws[OrderLaws, Int]("fromOrdering").check(_.order(Order.fromOrdering[Int]))
