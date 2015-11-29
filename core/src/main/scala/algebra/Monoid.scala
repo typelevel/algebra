@@ -35,15 +35,15 @@ trait Monoid[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A] {
     as.foldLeft(empty)(combine)
 }
 
-trait MonoidFunctions extends SemigroupFunctions {
-  def empty[@sp(Int, Long, Float, Double) A](implicit ev: Monoid[A]): A =
+trait MonoidFunctions[M[T] <: Monoid[T]] extends SemigroupFunctions[M] {
+  def empty[@sp(Int, Long, Float, Double) A](implicit ev: M[A]): A =
     ev.empty
 
-  def combineAll[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: Monoid[A]): A =
+  def combineAll[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: M[A]): A =
     ev.combineAll(as)
 }
 
-object Monoid extends MonoidFunctions {
+object Monoid extends MonoidFunctions[Monoid] {
 
   /**
    * Access an implicit `Monoid[A]`.

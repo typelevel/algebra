@@ -9,7 +9,7 @@ import scala.{ specialized => sp }
  */
 trait CommutativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with Monoid[A] with CommutativeSemigroup[A]
 
-object CommutativeMonoid extends MonoidFunctions {
+object CommutativeMonoid extends MonoidFunctions[CommutativeMonoid] {
   /**
    * Access an implicit `CommutativeMonoid[A]`.
    */

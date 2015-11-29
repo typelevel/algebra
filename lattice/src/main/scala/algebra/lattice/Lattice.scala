@@ -28,16 +28,7 @@ trait Lattice[@sp(Int, Long, Float, Double) A] extends Any with JoinSemilattice[
   }
 }
 
-trait LatticeFunctions {
-  def join[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: JoinSemilattice[A]): A =
-    ev.join(x, y)
-
-  def meet[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: MeetSemilattice[A]): A =
-    ev.meet(x, y)
-}
-
-object Lattice extends LatticeFunctions {
-
+object Lattice extends JoinSemilatticeFunctions[Lattice] with MeetSemilatticeFunctions[Lattice] {
   /**
    * Access an implicit `Lattice[A]`.
    */

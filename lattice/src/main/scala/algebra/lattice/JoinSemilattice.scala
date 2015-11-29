@@ -20,7 +20,12 @@ trait JoinSemilattice[@sp(Int, Long, Float, Double) A] extends Any with Serializ
     joinSemilattice.asJoinPartialOrder
 }
 
-object JoinSemilattice {
+trait JoinSemilatticeFunctions[J[A] <: JoinSemilattice[A]] {
+  def join[@sp(Int, Long, Float, Double) A](x: A, y: A)(implicit ev: J[A]): A =
+    ev.join(x, y)
+}
+
+object JoinSemilattice extends JoinSemilatticeFunctions[JoinSemilattice] {
 
   /**
    * Access an implicit `JoinSemilattice[A]`.

@@ -49,23 +49,34 @@ trait Heyting[@sp(Int, Long) A] extends Any with BoundedDistributiveLattice[A] {
   def nxor(a: A, b: A): A = complement(xor(a, b))
 }
 
-trait HeytingFunctions {
-  def zero[@sp(Int, Long) A](implicit ev: Bool[A]): A = ev.zero
-  def one[@sp(Int, Long) A](implicit ev: Bool[A]): A = ev.one
+trait HeytingGenBoolOverlap[H[A] <: Heyting[A]] {
+  def and[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
+    ev.and(x, y)
+  def or[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
+    ev.or(x, y)
+  def xor[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
+    ev.xor(x, y)
+}
 
-  def complement[@sp(Int, Long) A](x: A)(implicit ev: Bool[A]): A =
+trait HeytingFunctions[H[A] <: Heyting[A]] extends
+  BoundedMeetSemilatticeFunctions[H] with
+  BoundedJoinSemilatticeFunctions[H] {
+
+  def complement[@sp(Int, Long) A](x: A)(implicit ev: H[A]): A =
     ev.complement(x)
 
-  def and[@sp(Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
-    ev.and(x, y)
-  def or[@sp(Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
-    ev.or(x, y)
-  def imp[@sp(Int, Long) A](x: A, y: A)(implicit ev: Bool[A]): A =
+  def imp[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
     ev.imp(x, y)
+  def nor[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
+    ev.nor(x, y)
+  def nxor[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
+    ev.nxor(x, y)
+  def nand[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
+    ev.nand(x, y)
 }
 
 
-object Heyting extends HeytingFunctions {
+object Heyting extends HeytingFunctions[Heyting] with HeytingGenBoolOverlap[Heyting] {
 
   /**
    * Access an implicit `Heyting[A]`.

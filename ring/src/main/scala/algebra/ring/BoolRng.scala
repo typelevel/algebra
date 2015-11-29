@@ -13,6 +13,6 @@ trait BoolRng[A] extends Any with Rng[A] { self =>
   override final def negate(x: A): A = x
 }
 
-object BoolRng extends AdditiveGroupFunctions with MultiplicativeSemigroupFunctions {
+object BoolRng extends AdditiveGroupFunctions[BoolRng] with MultiplicativeSemigroupFunctions[BoolRng] {
   @inline final def apply[A](implicit r: BoolRng[A]): BoolRng[A] = r
 }

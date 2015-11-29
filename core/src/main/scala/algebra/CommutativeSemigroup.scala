@@ -9,7 +9,7 @@ import scala.{ specialized => sp }
  */
 trait CommutativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Semigroup[A]
 
-object CommutativeSemigroup extends SemigroupFunctions {
+object CommutativeSemigroup extends SemigroupFunctions[CommutativeSemigroup] {
 
   /**
    * Access an implicit `CommutativeSemigroup[A]`.

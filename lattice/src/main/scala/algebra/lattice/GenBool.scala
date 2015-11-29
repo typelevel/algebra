@@ -63,14 +63,13 @@ private[lattice] class BoolRngFromGenBool[@sp(Int, Long) A](orig: GenBool[A]) ex
   def times(x: A, y: A): A = orig.and(x, y)
 }
 
-trait GenBoolFunctions {
-  def zero[@sp(Int, Long) A](implicit ev: GenBool[A]): A = ev.zero
-  def and[@sp(Int, Long) A](x: A, y: A)(implicit ev: GenBool[A]): A = ev.and(x, y)
-  def or[@sp(Int, Long) A](x: A, y: A)(implicit ev: GenBool[A]): A = ev.or(x, y)
-  def without[@sp(Int, Long) A](x: A, y: A)(implicit ev: GenBool[A]): A = ev.without(x, y)
-  def xor[@sp(Int, Long) A](x: A, y: A)(implicit ev: GenBool[A]): A = ev.xor(x, y)
+trait GenBoolFunctions[G[A] <: GenBool[A]] extends BoundedJoinSemilatticeFunctions[G] with MeetSemilatticeFunctions[G] {
+  def and[@sp(Int, Long) A](x: A, y: A)(implicit ev: G[A]): A = ev.and(x, y)
+  def or[@sp(Int, Long) A](x: A, y: A)(implicit ev: G[A]): A = ev.or(x, y)
+  def without[@sp(Int, Long) A](x: A, y: A)(implicit ev: G[A]): A = ev.without(x, y)
+  def xor[@sp(Int, Long) A](x: A, y: A)(implicit ev: G[A]): A = ev.xor(x, y)
 }
 
-object GenBool extends BoolFunctions {
+object GenBool extends GenBoolFunctions[GenBool] {
   @inline final def apply[@sp(Int, Long) A](implicit ev: GenBool[A]): GenBool[A] = ev
 }

@@ -14,7 +14,12 @@ trait BoundedJoinSemilattice[@sp(Int, Long, Float, Double) A] extends Any with J
     }
 }
 
-object BoundedJoinSemilattice {
+trait BoundedJoinSemilatticeFunctions[B[A] <: BoundedJoinSemilattice[A]] extends JoinSemilatticeFunctions[B] {
+  def zero[@sp(Int, Long, Float, Double) A](implicit ev: B[A]): A = ev.zero
+}
+
+object BoundedJoinSemilattice extends JoinSemilatticeFunctions[BoundedJoinSemilattice]
+  with BoundedJoinSemilatticeFunctions[BoundedJoinSemilattice] {
 
   /**
    * Access an implicit `BoundedJoinSemilattice[A]`.

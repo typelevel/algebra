@@ -7,10 +7,11 @@ import scala.{ specialized => sp }
  */
 trait CommutativeGroup[@sp(Int, Long, Float, Double) A] extends Any with Group[A] with CommutativeMonoid[A]
 
-object CommutativeGroup extends GroupFunctions {
+object CommutativeGroup extends GroupFunctions[CommutativeGroup] {
 
   /**
    * Access an implicit `CommutativeGroup[A]`.
    */
   @inline final def apply[A](implicit ev: CommutativeGroup[A]): CommutativeGroup[A] = ev
 }
+
