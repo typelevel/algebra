@@ -105,7 +105,6 @@ trait LawTestsBase extends FunSuite with Discipline {
   laws[RingLaws, Long].check(_.euclideanRing)
   laws[LatticeLaws, Long].check(_.boundedDistributiveLattice)
 
-  laws[BaseLaws, BigInt].check(_.isReal)
   laws[RingLaws, BigInt].check(_.euclideanRing)
 
   laws[RingLaws, (Int, Int)].check(_.euclideanRing)

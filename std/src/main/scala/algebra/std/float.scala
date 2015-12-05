@@ -2,7 +2,6 @@ package algebra
 package std
 
 import algebra.lattice.DistributiveLattice
-import algebra.number.{IsReal, NRoot, Signed}
 import algebra.ring.Field
 import algebra.std.util.StaticMethods
 import java.lang.Math
@@ -24,7 +23,7 @@ trait FloatInstances {
  * If you would prefer an absolutely lawful fractional value, you'll
  * need to investigate rational numbers or more exotic types.
  */
-class FloatAlgebra extends Field[Float] with NRoot[Float] with Order[Float] with Signed[Float] with IsReal[Float] with Serializable {
+class FloatAlgebra extends Field[Float] with Order[Float] with Serializable {
 
   def compare(x: Float, y: Float) =
     java.lang.Float.compare(x, y)
@@ -64,18 +63,4 @@ class FloatAlgebra extends Field[Float] with NRoot[Float] with Order[Float] with
 
   override def fromInt(x: Int): Float = x.toFloat
   override def fromDouble(x: Double): Float = x.toFloat
-
-  override def toDouble(x: Float): Double = x.toDouble
-
-  override def sqrt(x: Float): Float = Math.sqrt(x.toDouble).toFloat
-  def nroot(x: Float, k: Int): Float = Math.pow(x.toDouble, 1.0 / k.toDouble).toFloat
-  def fpow(x: Float, y: Float): Float = Math.pow(x.toDouble, y.toDouble).toFloat
-
-  def signum(x: Float): Int = Math.signum(x).toInt
-  def abs(x: Float): Float = Math.abs(x)
-
-  def ceil(x: Float): Float = Math.ceil(x.toDouble).toFloat
-  def floor(x: Float): Float = Math.floor(x.toDouble).toFloat
-  def round(x: Float): Float = Math.rint(x.toDouble).toFloat
-  def isWhole(x: Float): Boolean = x % 1.0F == 0.0F
 }

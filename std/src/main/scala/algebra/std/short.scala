@@ -2,7 +2,6 @@ package algebra
 package std
 
 import algebra.lattice._
-import algebra.number._
 import algebra.ring._
 import algebra.std.util.StaticMethods
 
@@ -16,7 +15,7 @@ trait ShortInstances {
 }
 
 class ShortAlgebra extends EuclideanRing[Short]
-    with Order[Short] with Signed[Short] with IsIntegral[Short] with Serializable {
+    with Order[Short] with Serializable {
 
   def compare(x: Short, y: Short): Int =
     if (x < y) -1 else if (x > y) 1 else 0
@@ -27,12 +26,6 @@ class ShortAlgebra extends EuclideanRing[Short]
   override def gteqv(x: Short, y: Short) = x >= y
   override def lt(x: Short, y: Short) = x < y
   override def lteqv(x: Short, y: Short) = x <= y
-
-  def abs(x: Short): Short =
-    if (x < 0) (-x).toShort else x
-
-  def signum(x: Short): Int =
-    x.toInt
 
   def zero: Short = 0
   def one: Short = 1
@@ -52,5 +45,4 @@ class ShortAlgebra extends EuclideanRing[Short]
     StaticMethods.gcd(x.toLong, y.toLong).toShort
 
   override def fromInt(n: Int): Short = n.toShort
-  override def toDouble(n: Short): Double = n.toDouble
 }

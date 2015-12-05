@@ -1,7 +1,6 @@
 package algebra
 package std
 
-import algebra.number._
 import algebra.ring._
 
 package object bigInt extends BigIntInstances
@@ -11,7 +10,7 @@ trait BigIntInstances {
     new BigIntAlgebra
 }
 
-class BigIntAlgebra extends EuclideanRing[BigInt] with Order[BigInt] with Signed[BigInt] with IsIntegral[BigInt] with Serializable {
+class BigIntAlgebra extends EuclideanRing[BigInt] with Order[BigInt] with Serializable {
 
   val zero: BigInt = BigInt(0)
   val one: BigInt = BigInt(1)
@@ -25,9 +24,6 @@ class BigIntAlgebra extends EuclideanRing[BigInt] with Order[BigInt] with Signed
   override def lteqv(x: BigInt, y: BigInt) = x <= y
   override def min(x: BigInt, y: BigInt) = x min y
   override def max(x: BigInt, y: BigInt) = x max y
-
-  def abs(x: BigInt): BigInt = x.abs
-  def signum(x: BigInt): Int = x.signum
 
   def plus(a: BigInt, b: BigInt): BigInt = a + b
   def negate(a: BigInt): BigInt = -a
@@ -43,5 +39,4 @@ class BigIntAlgebra extends EuclideanRing[BigInt] with Order[BigInt] with Signed
   def gcd(a:BigInt, b:BigInt) = a gcd b
 
   override def fromInt(n: Int): BigInt = BigInt(n)
-  override def toDouble(n: BigInt): Double = n.toDouble
 }
