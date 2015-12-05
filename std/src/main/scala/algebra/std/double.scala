@@ -2,7 +2,6 @@ package algebra
 package std
 
 import algebra.lattice.DistributiveLattice
-import algebra.number.{IsReal, NRoot, Signed}
 import algebra.ring.Field
 import algebra.std.util.StaticMethods
 
@@ -28,7 +27,7 @@ trait DoubleInstances {
  * If you would prefer an absolutely lawful fractional value, you'll
  * need to investigate rational numbers or more exotic types.
  */
-class DoubleAlgebra extends Field[Double] with NRoot[Double] with Order[Double] with Signed[Double] with IsReal[Double] with Serializable {
+class DoubleAlgebra extends Field[Double] with Order[Double] with Serializable {
 
   def compare(x: Double, y: Double) =
     java.lang.Double.compare(x, y)
@@ -66,18 +65,4 @@ class DoubleAlgebra extends Field[Double] with NRoot[Double] with Order[Double] 
 
   override def fromInt(x: Int): Double = x.toDouble
   override def fromDouble(x: Double): Double = x
-
-  override def toDouble(x: Double): Double = x
-
-  override def sqrt(x: Double): Double = Math.sqrt(x)
-  def nroot(x: Double, k: Int): Double = Math.pow(x, 1.0 / k.toDouble)
-  def fpow(x: Double, y: Double): Double = Math.pow(x, y)
-
-  def signum(x: Double): Int = Math.signum(x).toInt
-  def abs(x: Double): Double = Math.abs(x)
-
-  def ceil(x: Double): Double = Math.ceil(x)
-  def floor(x: Double): Double = Math.floor(x)
-  def round(x: Double): Double = Math.rint(x)
-  def isWhole(x: Double): Boolean = x % 1.0 == 0.0
 }

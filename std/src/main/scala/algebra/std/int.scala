@@ -2,7 +2,6 @@ package algebra
 package std
 
 import algebra.lattice._
-import algebra.number._
 import algebra.ring._
 import algebra.std.util.StaticMethods
 
@@ -16,7 +15,7 @@ trait IntInstances {
 }
 
 class IntAlgebra extends EuclideanRing[Int]
-    with Order[Int] with Signed[Int] with IsIntegral[Int] with Serializable {
+    with Order[Int] with Serializable {
 
   def compare(x: Int, y: Int): Int =
     if (x < y) -1 else if (x > y) 1 else 0
@@ -27,12 +26,6 @@ class IntAlgebra extends EuclideanRing[Int]
   override def gteqv(x: Int, y: Int) = x >= y
   override def lt(x: Int, y: Int) = x < y
   override def lteqv(x: Int, y: Int) = x <= y
-
-  def abs(x: Int): Int =
-    if (x < 0) -x else x
-
-  def signum(x: Int): Int =
-    java.lang.Integer.signum(x)
 
   def zero: Int = 0
   def one: Int = 1
@@ -52,5 +45,4 @@ class IntAlgebra extends EuclideanRing[Int]
     StaticMethods.gcd(x.toLong, y.toLong).toInt
 
   override def fromInt(n: Int): Int = n
-  override def toDouble(n: Int): Double = n.toDouble
 }

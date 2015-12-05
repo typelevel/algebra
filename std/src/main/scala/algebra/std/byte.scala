@@ -2,7 +2,6 @@ package algebra
 package std
 
 import algebra.lattice._
-import algebra.number._
 import algebra.ring._
 import algebra.std.util.StaticMethods
 
@@ -16,7 +15,7 @@ trait ByteInstances {
 }
 
 class ByteAlgebra extends EuclideanRing[Byte]
-    with Order[Byte] with Signed[Byte] with IsIntegral[Byte] with Serializable {
+    with Order[Byte] with Serializable {
 
   def compare(x: Byte, y: Byte): Int =
     if (x < y) -1 else if (x > y) 1 else 0
@@ -27,12 +26,6 @@ class ByteAlgebra extends EuclideanRing[Byte]
   override def gteqv(x: Byte, y: Byte) = x >= y
   override def lt(x: Byte, y: Byte) = x < y
   override def lteqv(x: Byte, y: Byte) = x <= y
-
-  def abs(x: Byte): Byte =
-    if (x < 0) (-x).toByte else x
-
-  def signum(x: Byte): Int =
-    x.toInt
 
   def zero: Byte = 0
   def one: Byte = 1
@@ -52,5 +45,4 @@ class ByteAlgebra extends EuclideanRing[Byte]
     StaticMethods.gcd(x.toLong, y.toLong).toByte
 
   override def fromInt(n: Int): Byte = n.toByte
-  override def toDouble(n: Byte): Double = n.toDouble
 }

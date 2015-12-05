@@ -2,7 +2,6 @@ package algebra
 package std
 
 import algebra.lattice.DistributiveLattice
-import algebra.number._
 import algebra.ring._
 
 class Rat(val num: BigInt, val den: BigInt) extends Serializable { lhs =>
@@ -99,11 +98,9 @@ object Rat {
     DistributiveLattice.minMax[Rat](ratAlgebra)
 }
 
-class RatAlgebra extends Field[Rat] with Order[Rat] with Signed[Rat] with IsReal[Rat] with Serializable {
+class RatAlgebra extends Field[Rat] with Order[Rat] with Serializable {
 
   def compare(x: Rat, y: Rat): Int = x compare y
-  def abs(x: Rat): Rat = x.abs
-  def signum(x: Rat): Int = x.signum
 
   val zero: Rat = Rat.Zero
   val one: Rat = Rat.One
@@ -117,7 +114,6 @@ class RatAlgebra extends Field[Rat] with Order[Rat] with Signed[Rat] with IsReal
   def div(a: Rat, b: Rat): Rat = a / b
 
   override def fromInt(n: Int): Rat = Rat(n)
-  override def toDouble(a: Rat): Double = a.toDouble
 
   def isWhole(a: Rat): Boolean = a.isWhole
   def ceil(a: Rat): Rat = a.ceil
