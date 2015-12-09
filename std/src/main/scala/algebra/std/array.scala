@@ -6,6 +6,7 @@ import scala.{specialized ⇒ sp}
 package object array extends ArrayInstances
 
 trait ArrayInstances {
+  implicit def arrayEq[@sp A: Eq]: Eq[Array[A]] = new ArrayEq[A]
   implicit def arrayOrder[@sp A: Order]: Order[Array[A]] = new ArrayOrder[A]
 }
 
@@ -27,6 +28,11 @@ private object ArraySupport {
     }
     x.length - y.length
   }
+}
+
+private final class ArrayEq[@sp(Int,Float,Long,Double) A: Eq]
+  extends Eq[Array[A]] with Serializable {
+  def eqv(x: Array[A], y: Array[A]): Boolean = ArraySupport.eqv(x, y)
 }
 
 private final class ArrayOrder[@sp A: Order]
