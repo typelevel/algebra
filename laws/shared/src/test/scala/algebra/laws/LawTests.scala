@@ -192,5 +192,6 @@ trait LawTestsBase extends FunSuite with Discipline {
 
   laws[OrderLaws, Int]("fromOrdering").check(_.order(Order.fromOrdering[Int]))
   laws[OrderLaws, Array[Int]].check(_.order)
+  laws[OrderLaws, Array[Int]].check(_.partialOrder)
 }
 
