@@ -1,3 +1,7 @@
+[![Build Status](https://api.travis-ci.org/non/algebra.png)](https://travis-ci.org/non/algebra/)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/non/algebra?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.spire-math/algebra_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.spire-math/algebra_2.11)
+
 # algebra
 
 ## the vision
