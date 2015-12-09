@@ -5,7 +5,6 @@ import algebra.lattice._
 import algebra.ring._
 import algebra.macros._
 import algebra.std.all._
-import algebra.std.Rat
 
 import org.typelevel.discipline.{Laws, Predicate}
 import org.typelevel.discipline.scalatest.Discipline

@@ -2,8 +2,6 @@ package algebra
 package laws
 
 import algebra.macros._
-import algebra.std.Rat
-import CheckSupport._
 
 class LawTests extends LawTestsBase {
 
