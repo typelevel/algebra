@@ -39,8 +39,8 @@ private object ArraySupport {
     var i = 0
     while (i < x.length && i < y.length) {
       val cmp = PartialOrder.partialCompare(x(i), y(i))
-      // Double.NaN is also != 0
-      if (cmp != 0) return cmp
+      // Double.NaN is also != 0.0
+      if (cmp != 0.0) return cmp
       i += 1
     }
     signum(x.length - y.length).toDouble
