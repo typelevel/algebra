@@ -9,7 +9,7 @@ trait ArrayInstances {
   implicit def arrayOrder[@sp A: Order]: Order[Array[A]] = new ArrayOrder[A]
 }
 
-object ArraySupport {
+private object ArraySupport {
 
   def eqv[@sp A: Eq](x: Array[A], y: Array[A]): Boolean = {
     var i = 0
