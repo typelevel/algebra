@@ -13,6 +13,11 @@ trait ArrayInstances {
 
 private object ArraySupport {
 
+  private def signum(x: Int): Int =
+    if(x < 0) -1
+    else if(x > 0) 1
+    else 0
+
   def eqv[@sp A: Eq](x: Array[A], y: Array[A]): Boolean = {
     var i = 0
     if (x.length != y.length) return false
@@ -27,7 +32,7 @@ private object ArraySupport {
       if (cmp != 0) return cmp
       i += 1
     }
-    x.length - y.length
+    signum(x.length - y.length)
   }
 
   def partialCompare[@sp A: PartialOrder](x: Array[A], y: Array[A]): Double = {
@@ -38,7 +43,7 @@ private object ArraySupport {
       if (cmp != 0) return cmp
       i += 1
     }
-    (x.length - y.length).toDouble
+    signum(x.length - y.length).toDouble
   }
 }
 
