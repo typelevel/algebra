@@ -9,7 +9,7 @@ private[laws] object Platform {
 
   // Scala-js does not implement the Serializable interface, so we just return true.
   @inline
-  def serializable[M](m: M)(implicit check: SerializationCheck): (String, Prop) =
+  def serializable[M: IsSerializable](m: M): (String, Prop) =
     "serializable" -> Prop { _ =>
       Result(status = Proof)
     }

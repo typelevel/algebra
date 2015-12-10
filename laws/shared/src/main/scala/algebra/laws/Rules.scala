@@ -9,7 +9,7 @@ import algebra.std.boolean._
 
 object Rules {
 
-  def serializable[M](m: M)(implicit check: SerializationCheck): (String, Prop) =
+  def serializable[M: IsSerializable](m: M): (String, Prop) =
     Platform.serializable(m)
 
   // Comparison operators for testing are supplied by CheckEqOps and

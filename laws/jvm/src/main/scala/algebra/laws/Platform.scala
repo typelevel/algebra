@@ -10,11 +10,11 @@ private[laws] object Platform {
   // Scala-js does not implement the Serializable interface, so the
   // real test is for JVM only.
   @inline
-  def serializable[M](m: M)(implicit check: SerializationCheck): (String, Prop) =
-    "serializable" -> (check match {
-      case SkipSerialization =>
+  def serializable[M: IsSerializable](m: M): (String, Prop) =
+    "serializable" -> (implicitly[IsSerializable[M]] match {
+      case Is() =>
         Prop(_ => Result(status = Proof))
-      case RunSerialization =>
+      case IsNot() =>
         Prop { _ =>
           import java.io._
           val baos = new ByteArrayOutputStream()
