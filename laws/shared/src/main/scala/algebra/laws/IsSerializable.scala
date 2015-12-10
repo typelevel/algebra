@@ -13,5 +13,5 @@ case class IsNot[+T]() extends IsSerializable[T]
   * In your test's scope or your class's companion object.
   */
 object IsSerializable {
-  // implicit def default[T]: IsSerializable[T] = Is()
+  implicit def default[T]: IsSerializable[T] = Is()
 }

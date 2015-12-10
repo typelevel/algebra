@@ -20,84 +20,103 @@ trait LatticeLaws[A] extends GroupLaws[A] {
   implicit def Equ: Eq[A]
   implicit def Arb: Arbitrary[A]
 
-  def joinSemilattice(implicit A: JoinSemilattice[A]) = new LatticeProperties(
-    name = "joinSemilattice",
-    parents = Nil,
-    join = Some(semilattice(A.joinSemilattice)),
-    meet = None,
-    Rules.serializable(A)
-  )
+  def joinSemilattice(implicit A: JoinSemilattice[A],
+    check: IsSerializable[Semilattice[A]]) =
+    new LatticeProperties(
+      name = "joinSemilattice",
+      parents = Nil,
+      join = Some(semilattice(A.joinSemilattice, check)),
+      meet = None,
+      Rules.serializable(A)
+    )
 
-  def meetSemilattice(implicit A: MeetSemilattice[A]) = new LatticeProperties(
-    name = "meetSemilattice",
-    parents = Nil,
-    join = None,
-    meet = Some(semilattice(A.meetSemilattice)),
-    Rules.serializable(A)
-  )
+  def meetSemilattice(implicit A: MeetSemilattice[A],
+    check: IsSerializable[Semilattice[A]]) =
+    new LatticeProperties(
+      name = "meetSemilattice",
+      parents = Nil,
+      join = None,
+      meet = Some(semilattice(A.meetSemilattice, check)),
+      Rules.serializable(A)
+    )
 
-  def lattice(implicit A: Lattice[A]) = new LatticeProperties(
-    name = "lattice",
-    parents = Seq(joinSemilattice, meetSemilattice),
-    join = Some(semilattice(A.joinSemilattice)),
-    meet = Some(semilattice(A.meetSemilattice)),
-    "absorption" -> forAll { (x: A, y: A) =>
-      (A.join(x, A.meet(x, y)) ?== x) && (A.meet(x, A.join(x, y)) ?== x)
-    }
-  )
+  def lattice(implicit A: Lattice[A],
+    check: IsSerializable[Semilattice[A]]) =
+    new LatticeProperties(
+      name = "lattice",
+      parents = Seq(joinSemilattice, meetSemilattice),
+      join = Some(semilattice(A.joinSemilattice, check)),
+      meet = Some(semilattice(A.meetSemilattice, check)),
+      "absorption" -> forAll { (x: A, y: A) =>
+        (A.join(x, A.meet(x, y)) ?== x) && (A.meet(x, A.join(x, y)) ?== x)
+      }
+    )
 
-  def distributiveLattice(implicit A: DistributiveLattice[A]) = new LatticeProperties(
-    name = "distributiveLattice",
-    parents = Seq(lattice),
-    join = Some(semilattice(A.joinSemilattice)),
-    meet = Some(semilattice(A.meetSemilattice)),
-    "distributive" -> forAll { (x: A, y: A, z: A) =>
-      (A.join(x, A.meet(y, z)) ?== A.meet(A.join(x, y), A.join(x, z))) &&
+  def distributiveLattice(implicit A: DistributiveLattice[A],
+    check: IsSerializable[Semilattice[A]]) =
+    new LatticeProperties(
+      name = "distributiveLattice",
+      parents = Seq(lattice),
+      join = Some(semilattice(A.joinSemilattice, check)),
+      meet = Some(semilattice(A.meetSemilattice, check)),
+      "distributive" -> forAll { (x: A, y: A, z: A) =>
+        (A.join(x, A.meet(y, z)) ?== A.meet(A.join(x, y), A.join(x, z))) &&
         (A.meet(x, A.join(y, z)) ?== A.join(A.meet(x, y), A.meet(x, z)))
-    }
-  )
+      }
+    )
 
-  def boundedJoinSemilattice(implicit A: BoundedJoinSemilattice[A]) = new LatticeProperties(
-    name = "boundedJoinSemilattice",
-    parents = Seq(joinSemilattice),
-    join = Some(boundedSemilattice(A.joinSemilattice)),
-    meet = None
-  )
+  def boundedJoinSemilattice(implicit A: BoundedJoinSemilattice[A],
+    check: IsSerializable[BoundedSemilattice[A]]) =
+    new LatticeProperties(
+      name = "boundedJoinSemilattice",
+      parents = Seq(joinSemilattice),
+      join = Some(boundedSemilattice(A.joinSemilattice, check)),
+      meet = None
+    )
 
-  def boundedMeetSemilattice(implicit A: BoundedMeetSemilattice[A]) = new LatticeProperties(
-    name = "boundedMeetSemilattice",
-    parents = Seq(meetSemilattice),
-    join = None,
-    meet = Some(boundedSemilattice(A.meetSemilattice))
-  )
+  def boundedMeetSemilattice(implicit A: BoundedMeetSemilattice[A],
+    check: IsSerializable[BoundedSemilattice[A]]) =
+    new LatticeProperties(
+      name = "boundedMeetSemilattice",
+      parents = Seq(meetSemilattice),
+      join = None,
+      meet = Some(boundedSemilattice(A.meetSemilattice, check))
+    )
 
-  def boundedJoinLattice(implicit A: Lattice[A] with BoundedJoinSemilattice[A]) = new LatticeProperties(
-    name = "boundedJoinLattice",
-    parents = Seq(boundedJoinSemilattice, lattice),
-    join = Some(boundedSemilattice(A.joinSemilattice)),
-    meet = Some(semilattice(A.meetSemilattice))
-  )
+  def boundedJoinLattice(implicit A: Lattice[A] with BoundedJoinSemilattice[A],
+    check: IsSerializable[BoundedSemilattice[A]]) =
+    new LatticeProperties(
+      name = "boundedJoinLattice",
+      parents = Seq(boundedJoinSemilattice, lattice),
+      join = Some(boundedSemilattice(A.joinSemilattice, check)),
+      meet = Some(semilattice(A.meetSemilattice, check))
+    )
 
-  def boundedMeetLattice(implicit A: Lattice[A] with BoundedMeetSemilattice[A]) = new LatticeProperties(
-    name = "boundedMeetLattice",
-    parents = Seq(boundedMeetSemilattice, lattice),
-    join = Some(semilattice(A.joinSemilattice)),
-    meet = Some(boundedSemilattice(A.meetSemilattice))
-  )
+  def boundedMeetLattice(implicit A: Lattice[A] with BoundedMeetSemilattice[A],
+    check: IsSerializable[BoundedSemilattice[A]]) =
+    new LatticeProperties(
+      name = "boundedMeetLattice",
+      parents = Seq(boundedMeetSemilattice, lattice),
+      join = Some(semilattice(A.joinSemilattice, check)),
+      meet = Some(boundedSemilattice(A.meetSemilattice, check))
+    )
 
-  def boundedLattice(implicit A: BoundedLattice[A]) = new LatticeProperties(
+  def boundedLattice(implicit A: BoundedLattice[A],
+    check: IsSerializable[BoundedSemilattice[A]]) = new LatticeProperties(
     name = "boundedLattice",
-    parents = Seq(boundedJoinSemilattice, boundedMeetSemilattice, lattice),
-    join = Some(boundedSemilattice(A.joinSemilattice)),
-    meet = Some(boundedSemilattice(A.meetSemilattice))
+      parents = Seq(boundedJoinSemilattice, boundedMeetSemilattice, lattice),
+      join = Some(boundedSemilattice(A.joinSemilattice, check)),
+      meet = Some(boundedSemilattice(A.meetSemilattice, check))
   )
 
-  def boundedDistributiveLattice(implicit A: BoundedDistributiveLattice[A]) = new LatticeProperties(
-    name = "boundedLattice",
-    parents = Seq(boundedLattice, distributiveLattice),
-    join = Some(boundedSemilattice(A.joinSemilattice)),
-    meet = Some(boundedSemilattice(A.meetSemilattice))
-  )
+  def boundedDistributiveLattice(implicit A: BoundedDistributiveLattice[A],
+    check: IsSerializable[BoundedSemilattice[A]]) =
+    new LatticeProperties(
+      name = "boundedLattice",
+      parents = Seq(boundedLattice, distributiveLattice),
+      join = Some(boundedSemilattice(A.joinSemilattice, check)),
+      meet = Some(boundedSemilattice(A.meetSemilattice, check))
+    )
 
   class LatticeProperties(
     val name: String,

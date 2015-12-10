@@ -56,30 +56,32 @@ trait LogicLaws[A] extends LatticeLaws[A] {
     "(0 → x) = 1" -> forAll { (x: A) => A.imp(A.zero, x) ?== A.one }
   )
 
-  def generalizedBool(implicit A: GenBool[A]) = new LogicProperties(
-    name = "generalized bool",
-    parents = Seq(),
-    ll = new LatticeProperties(
-      name = "lowerBoundedDistributiveLattice",
-      parents = Seq(boundedJoinSemilattice, distributiveLattice),
-      join = Some(boundedSemilattice(A.joinSemilattice)),
-      meet = Some(semilattice(A.meetSemilattice))
-    ),
+  def generalizedBool(implicit A: GenBool[A],
+    check: IsSerializable[BoundedSemilattice[A]]) =
+    new LogicProperties(
+      name = "generalized bool",
+      parents = Seq(),
+      ll = new LatticeProperties(
+        name = "lowerBoundedDistributiveLattice",
+        parents = Seq(boundedJoinSemilattice, distributiveLattice),
+        join = Some(boundedSemilattice(A.joinSemilattice, check)),
+        meet = Some(semilattice(A.meetSemilattice, check))
+      ),
 
-    """x\y ∧ y = 0""" -> forAll { (x: A, y: A) =>
-      A.and(A.without(x, y), y) ?== A.zero },
+      """x\y ∧ y = 0""" -> forAll { (x: A, y: A) =>
+        A.and(A.without(x, y), y) ?== A.zero },
 
-    """x\y ∨ y = x ∨ y""" -> forAll { (x: A, y: A) =>
-      A.or(A.without(x, y), y) ?== A.or(x, y) }
-  )
+      """x\y ∨ y = x ∨ y""" -> forAll { (x: A, y: A) =>
+        A.or(A.without(x, y), y) ?== A.or(x, y) }
+    )
 
-  def bool(implicit A: Bool[A]) = new LogicProperties(
-    name = "bool",
-    parents = Seq(heyting, generalizedBool),
-    ll = boundedDistributiveLattice,
-
-    "excluded middle" -> forAll { (x: A) => A.or(x, A.complement(x)) ?== A.one }
-  )
+  def bool(implicit A: Bool[A], check: IsSerializable[BoundedSemilattice[A]]) =
+    new LogicProperties(
+      name = "bool",
+      parents = Seq(heyting, generalizedBool),
+      ll = boundedDistributiveLattice,
+      "excluded middle" -> forAll { (x: A) => A.or(x, A.complement(x)) ?== A.one }
+    )
 
   class LogicProperties(
     val name: String,
