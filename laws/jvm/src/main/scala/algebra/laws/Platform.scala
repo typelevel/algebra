@@ -12,9 +12,9 @@ private[laws] object Platform {
   @inline
   def serializable[M: IsSerializable](m: M): (String, Prop) =
     "serializable" -> (implicitly[IsSerializable[M]] match {
-      case Is() =>
-        Prop(_ => Result(status = Proof))
       case IsNot() =>
+        Prop(_ => Result(status = Proof))
+      case Is() =>
         Prop { _ =>
           import java.io._
           val baos = new ByteArrayOutputStream()
