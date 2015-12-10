@@ -9,8 +9,9 @@ import algebra.std.boolean._
 
 object Rules {
 
-  def serializable[M](m: M): (String, Prop) = Platform.serializable(m)
- 
+  def serializable[M: IsSerializable](m: M): (String, Prop) =
+    Platform.serializable(m)
+
   // Comparison operators for testing are supplied by CheckEqOps and
   // CheckOrderOps in package.scala. They are:
   //
