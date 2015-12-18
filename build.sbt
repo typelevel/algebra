@@ -1,3 +1,4 @@
+import SbtAdditions._
 import sbtrelease.Utilities._
 import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
@@ -24,13 +25,13 @@ lazy val commonSettings = Seq(
     "-Yno-adapted-args",
     "-Ywarn-dead-code",
     "-Ywarn-numeric-widen",
-    //"-Ywarn-value-discard", // fails with @sp on Unit
+    "-Ywarn-unused-import",
+    "-Ywarn-value-discard",
     "-Xfuture"
-  ) ++ (CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, 11)) => Seq("-Ywarn-unused-import")
-    case _             => Seq.empty
-  }),
-  scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
+  ),
+  scalacOptions --= "-Ywarn-unused-import".ifScala210.value.toSeq,
+  scalacOptions --= "-Ywarn-value-discard".ifScala210.value.toSeq, // SI-8632: fails with @sp on Unit
+  scalacOptions in (Compile, console) -= "-Ywarn-unused-import",
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
   scalaJSStage in Test := FastOptStage,
   fork := false,
@@ -210,18 +211,8 @@ def crossVersionSharedSources() =
 
 lazy val scalaMacroDependencies: Seq[Setting[_]] = Seq(
   libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value % "provided",
-  libraryDependencies ++= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      // if scala 2.11+ is used, quasiquotes are merged into scala-reflect
-      case Some((2, scalaMajor)) if scalaMajor >= 11 => Seq()
-      // in Scala 2.10, quasiquotes are provided by macro paradise
-      case Some((2, 10)) =>
-        Seq(
-          compilerPlugin("org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full),
-              "org.scalamacros" %% "quasiquotes" % "2.1.0-M5" cross CrossVersion.binary
-        )
-    }
-  }
+  libraryDependencies ++= paradisePlugin.ifScala210.value.toSeq,
+  libraryDependencies ++= quasiquotesLib.value.toSeq
 )
 
 addCommandAlias("gitSnapshots", ";set version in ThisBuild := git.gitDescribedVersion.value.get + \"-SNAPSHOT\"")
@@ -231,3 +222,6 @@ credentials ++= (for {
   username <- Option(System.getenv().get("SONATYPE_USERNAME"))
   password <- Option(System.getenv().get("SONATYPE_PASSWORD"))
 } yield Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", username, password)).toSeq
+
+val paradisePlugin = ("org.scalamacros"  % "paradise"    % "2.1.0-M5").compilerPlugin cross CrossVersion.full
+val quasiquotesLib = ("org.scalamacros" %% "quasiquotes" % "2.1.0-M5").ifScala210 // in scala-reflect for 2.11+
