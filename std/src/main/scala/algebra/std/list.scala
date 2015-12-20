@@ -30,7 +30,7 @@ class ListOrder[A](implicit ev: Order[A]) extends Order[List[A]] {
 }
 
 class ListMonoid[A] extends Monoid[List[A]] {
-  def empty: List[A] = Nil
+  def neutral: List[A] = Nil
   def combine(x: List[A], y: List[A]): List[A] = x ::: y
 
   override def combineN(x: List[A], n: Int): List[A] = {

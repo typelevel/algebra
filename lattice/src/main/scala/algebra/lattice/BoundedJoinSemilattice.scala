@@ -9,7 +9,7 @@ trait BoundedJoinSemilattice[@sp(Int, Long, Float, Double) A] extends Any with J
 
   override def joinSemilattice: BoundedSemilattice[A] =
     new BoundedSemilattice[A] {
-      def empty: A = self.zero
+      def neutral: A = self.zero
       def combine(x: A, y: A): A = join(x, y)
     }
 }

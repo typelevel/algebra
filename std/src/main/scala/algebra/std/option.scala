@@ -58,7 +58,7 @@ class OptionEq[A](implicit A: Eq[A]) extends Eq[Option[A]] {
 }
 
 class OptionMonoid[A](implicit A: Semigroup[A]) extends Monoid[Option[A]] {
-  def empty: Option[A] = None
+  def neutral: Option[A] = None
   def combine(x: Option[A], y: Option[A]): Option[A] =
     x match {
       case None => y

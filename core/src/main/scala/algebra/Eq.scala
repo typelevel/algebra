@@ -109,7 +109,7 @@ object Eq extends EqFunctions {
    * checks that all equality checks pass
    */
   def allEqualBoundedSemilattice[A]: BoundedSemilattice[Eq[A]] = new BoundedSemilattice[Eq[A]] {
-    def empty = allEqual[A]
+    def neutral = allEqual[A]
     def combine(e1: Eq[A], e2: Eq[A]): Eq[A] = e1.and(e2)
     override def combineAllOption(es: TraversableOnce[Eq[A]]): Option[Eq[A]] =
       if (es.isEmpty) None

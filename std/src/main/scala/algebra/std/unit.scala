@@ -34,7 +34,7 @@ class UnitAlgebra extends Order[Unit] with CommutativeRing[Unit] with BoundedSem
   def times(a: Unit, b: Unit): Unit = ()
   override def pow(a: Unit, b: Int): Unit = ()
 
-  def empty: Unit = ()
+  def neutral: Unit = ()
   def combine(x: Unit, y: Unit): Unit = ()
   override protected[this] def repeatedCombineN(a: Unit, n: Int): Unit = ()
   override def combineAllOption(as: TraversableOnce[Unit]): Option[Unit] =

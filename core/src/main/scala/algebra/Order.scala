@@ -186,7 +186,7 @@ object Order extends OrderFunctions {
    * A `Monoid[Order[A]]` can be generated for all `A` with the following
    * properties:
    *
-   * `empty` returns a trivial `Order[A]` which considers all `A` instances to
+   * `neutral` returns a trivial `Order[A]` which considers all `A` instances to
    * be equal.
    *
    * `combine(x: Order[A], y: Order[A])` creates an `Order[A]` that first
@@ -196,7 +196,7 @@ object Order extends OrderFunctions {
    */
   def whenEqualMonoid[A]: Monoid[Order[A]] =
     new Monoid[Order[A]] {
-      val empty: Order[A] = allEqual[A]
+      val neutral: Order[A] = allEqual[A]
 
       def combine(x: Order[A], y: Order[A]): Order[A] = x whenEqual y
     }

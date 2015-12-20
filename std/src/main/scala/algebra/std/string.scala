@@ -13,7 +13,7 @@ class StringOrder extends Order[String] {
 }
 
 class StringMonoid extends Monoid[String] {
-  def empty: String = ""
+  def neutral: String = ""
   def combine(x: String, y: String): String = x + y
 
   override def combineAll(xs: TraversableOnce[String]): String = {

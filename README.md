@@ -95,7 +95,7 @@ prefix representation of the unary function `g`, and `a` is a value
 
 The most basic structures can be found in the `algebra` package. They
 all implement a method called `combine`, which is associative. The
-identity element (if present) will be called `empty`, and the inverse
+identity element (if present) will be called `neutral`, and the inverse
 method (if present) will be called `inverse`.
 
 |Name                |Associative?|Commutative?|Identity?|Inverse?|Idempotent?|

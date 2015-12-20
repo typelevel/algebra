@@ -52,11 +52,11 @@ trait GroupLaws[A] extends Laws {
   def monoid(implicit A: Monoid[A]) = new GroupProperties(
     name = "monoid",
     parents = List(semigroup),
-    Rules.leftIdentity(A.empty)(A.combine),
-    Rules.rightIdentity(A.empty)(A.combine),
-    Rules.repeat0("combineN", "id", A.empty)(A.combineN),
-    Rules.collect0("combineAll", "id", A.empty)(A.combineAll),
-    Rules.isId("isEmpty", A.empty)(A.isEmpty)
+    Rules.leftIdentity(A.neutral)(A.combine),
+    Rules.rightIdentity(A.neutral)(A.combine),
+    Rules.repeat0("combineN", "id", A.neutral)(A.combineN),
+    Rules.collect0("combineAll", "id", A.neutral)(A.combineAll),
+    Rules.isId("isNeutral", A.neutral)(A.isNeutral)
   )
 
   def commutativeMonoid(implicit A: CommutativeMonoid[A]) = new GroupProperties(
@@ -72,8 +72,8 @@ trait GroupLaws[A] extends Laws {
   def group(implicit A: Group[A]) = new GroupProperties(
     name = "group",
     parents = List(monoid),
-    Rules.leftInverse(A.empty)(A.combine)(A.inverse),
-    Rules.rightInverse(A.empty)(A.combine)(A.inverse),
+    Rules.leftInverse(A.neutral)(A.combine)(A.inverse),
+    Rules.rightInverse(A.neutral)(A.combine)(A.inverse),
     Rules.consistentInverse("remove")(A.remove)(A.combine)(A.inverse)
   )
 
