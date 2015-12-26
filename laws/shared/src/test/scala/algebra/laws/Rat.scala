@@ -1,8 +1,10 @@
 package algebra
-package std
+package laws
 
 import algebra.lattice.DistributiveLattice
 import algebra.ring._
+import org.scalacheck.Arbitrary
+import org.scalacheck.Arbitrary._
 
 class Rat(val num: BigInt, val den: BigInt) extends Serializable { lhs =>
 
@@ -96,6 +98,11 @@ object Rat {
 
   val RatMinMaxLattice: DistributiveLattice[Rat] =
     DistributiveLattice.minMax[Rat](ratAlgebra)
+
+  implicit val ratArbitrary =
+    Arbitrary(for {
+      (n, d) <- arbitrary[(BigInt, BigInt)] if d != 0
+    } yield Rat(n, d))
 }
 
 class RatAlgebra extends Field[Rat] with Order[Rat] with Serializable {

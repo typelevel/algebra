@@ -18,3 +18,4 @@ package object all
     with StringInstances
     with TupleInstances
     with UnitInstances
+    with ArrayInstances

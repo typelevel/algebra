@@ -5,7 +5,6 @@ import algebra.lattice._
 import algebra.ring._
 import algebra.macros._
 import algebra.std.all._
-import algebra.std.Rat
 
 import org.typelevel.discipline.{Laws, Predicate}
 import org.typelevel.discipline.scalatest.Discipline
@@ -196,4 +195,6 @@ trait LawTestsBase extends FunSuite with Discipline {
   }
 
   laws[OrderLaws, Int]("fromOrdering").check(_.order(Order.fromOrdering[Int]))
+  laws[OrderLaws, Array[Int]].check(_.order)
+  laws[OrderLaws, Array[Int]].check(_.partialOrder)
 }
