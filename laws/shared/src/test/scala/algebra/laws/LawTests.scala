@@ -14,6 +14,11 @@ import org.scalatest.FunSuite
 import scala.util.Random
 
 trait LawTestsBase extends FunSuite with Discipline {
+  /**
+    * Runs the supplied thunk without calling the serialization tests.
+    */
+  def withoutSerialization[T](thunk: => T): T =
+    IsSerializable.runTests.withValue(false)(thunk)
 
   implicit val byteLattice: Lattice[Byte] = ByteMinMaxLattice
   implicit val shortLattice: Lattice[Short] = ShortMinMaxLattice
@@ -192,4 +197,3 @@ trait LawTestsBase extends FunSuite with Discipline {
 
   laws[OrderLaws, Int]("fromOrdering").check(_.order(Order.fromOrdering[Int]))
 }
-
