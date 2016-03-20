@@ -6,6 +6,7 @@ package object string extends StringInstances
 trait StringInstances {
   implicit val stringOrder: Order[String] = new StringOrder
   implicit val stringMonoid = new StringMonoid
+  implicit val stringEq: Eq[String] = Eq.fromUniversalEquals
 }
 
 class StringOrder extends Order[String] {
