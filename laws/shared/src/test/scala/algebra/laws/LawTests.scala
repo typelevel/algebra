@@ -53,6 +53,7 @@ trait LawTestsBase extends FunSuite with Discipline {
 
   laws[OrderLaws, String].check(_.order)
   laws[GroupLaws, String].check(_.monoid)
+  laws[OrderLaws, String].check(_.eqv)
 
   {
     // TODO: test a type that has Eq but not Order
