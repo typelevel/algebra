@@ -109,9 +109,9 @@ lazy val laws = crossProject
   .settings(algebraSettings: _*)
   .settings(
     libraryDependencies ++= Seq(
-      "org.scalacheck" %%% "scalacheck" % "1.12.4",
-      "org.typelevel" %%% "discipline" % "0.4",
-      "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test"
+      "org.scalacheck" %%% "scalacheck" % "1.13.0",
+      "org.typelevel" %%% "discipline" % "0.5-SNAPSHOT",
+      "org.scalatest" %%% "scalatest" % "3.0.0-M16-SNAP3" % "test"
     )
   )
 
