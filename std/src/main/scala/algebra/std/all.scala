@@ -1,7 +1,9 @@
 package algebra
 package std
 
-package object all
+package object all extends AllInstances
+
+trait AllInstances
     extends BigIntInstances
     with BooleanInstances
     with ByteInstances
