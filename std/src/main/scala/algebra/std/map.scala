@@ -59,7 +59,7 @@ class MapVectorEq[K, V](implicit V0: Eq[V], V1: AdditiveMonoid[V]) extends Eq[Ma
 }
 
 class MapMonoid[K, V](implicit V: Semigroup[V]) extends Monoid[Map[K, V]]  {
-  def empty: Map[K, V] = Map.empty
+  def neutral: Map[K, V] = Map.empty
 
   def combine(x: Map[K, V], y: Map[K, V]): Map[K, V] =
     addMap(x, y)(V.combine)

@@ -9,7 +9,7 @@ trait BoundedMeetSemilattice[@sp(Int, Long, Float, Double) A] extends Any with M
 
   override def meetSemilattice: BoundedSemilattice[A] =
     new BoundedSemilattice[A] {
-      def empty: A = self.one
+      def neutral: A = self.one
       def combine(x: A, y: A): A = meet(x, y)
     }
 }

@@ -42,7 +42,7 @@ trait MultiplicativeCommutativeSemigroup[@sp(Int, Long, Float, Double) A] extend
 
 trait MultiplicativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeSemigroup[A] {
   override def multiplicative: Monoid[A] = new Monoid[A] {
-    def empty = one
+    def neutral = one
     def combine(x: A, y: A): A = times(x, y)
   }
 
@@ -67,14 +67,14 @@ trait MultiplicativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with Mul
 
 trait MultiplicativeCommutativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeMonoid[A] with MultiplicativeCommutativeSemigroup[A] {
   override def multiplicative: CommutativeMonoid[A] = new CommutativeMonoid[A] {
-    def empty = one
+    def neutral = one
     def combine(x: A, y: A): A = times(x, y)
   }
 }
 
 trait MultiplicativeGroup[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeMonoid[A] {
   override def multiplicative: Group[A] = new Group[A] {
-    def empty = one
+    def neutral = one
     def combine(x: A, y: A): A = times(x, y)
     override def remove(x: A, y: A): A = div(x, y)
     def inverse(x: A): A = reciprocal(x)
@@ -92,7 +92,7 @@ trait MultiplicativeGroup[@sp(Int, Long, Float, Double) A] extends Any with Mult
 
 trait MultiplicativeCommutativeGroup[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeGroup[A] with MultiplicativeCommutativeMonoid[A] {
   override def multiplicative: CommutativeGroup[A] = new CommutativeGroup[A] {
-    def empty = one
+    def neutral = one
     def combine(x: A, y: A): A = times(x, y)
     override def remove(x: A, y: A): A = div(x, y)
     def inverse(x: A): A = reciprocal(x)

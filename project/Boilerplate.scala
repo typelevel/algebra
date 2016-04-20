@@ -131,7 +131,7 @@ object Boilerplate {
         -  implicit def tuple${arity}Group[${`A..N`}](implicit ${constraints("Group")}): Group[${`(A..N)`}] =
         -    new Group[${`(A..N)`}] {
         -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-        -      def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
+        -      def neutral: ${`(A..N)`} = ${nullaryTuple("neutral")}
         -      def inverse(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("inverse")}
         -    }
         -
@@ -154,7 +154,7 @@ object Boilerplate {
         -  implicit def tuple${arity}Monoid[${`A..N`}](implicit ${constraints("Monoid")}): Monoid[${`(A..N)`}] =
         -    new Monoid[${`(A..N)`}] {
         -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-        -      def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
+        -      def neutral: ${`(A..N)`} = ${nullaryTuple("neutral")}
         -    }
         -
         -  implicit def tuple${arity}Order[${`A..N`}](implicit ${constraints("Order")}): Order[${`(A..N)`}] =

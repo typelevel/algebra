@@ -10,7 +10,7 @@ trait Group[@sp(Int, Long, Float, Double) A] extends Any with Monoid[A] {
   /**
    * Find the inverse of `a`.
    *
-   * `combine(a, inverse(a))` = `combine(inverse(a), a)` = `empty`.
+   * `combine(a, inverse(a))` = `combine(inverse(a), a)` = `neutral`.
    */
   def inverse(a: A): A
 
@@ -27,7 +27,7 @@ trait Group[@sp(Int, Long, Float, Double) A] extends Any with Monoid[A] {
    */
   override def combineN(a: A, n: Int): A =
     if (n > 0) repeatedCombineN(a, n)
-    else if (n == 0) empty
+    else if (n == 0) neutral
     else if (n == Int.MinValue) combineN(inverse(combine(a, a)), 1073741824)
     else repeatedCombineN(inverse(a), -n)
 }

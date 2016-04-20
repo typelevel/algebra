@@ -41,7 +41,7 @@ trait AdditiveCommutativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any 
 
 trait AdditiveMonoid[@sp(Int, Long, Float, Double) A] extends Any with AdditiveSemigroup[A] {
   override def additive: Monoid[A] = new Monoid[A] {
-    def empty = zero
+    def neutral = zero
     def combine(x: A, y: A): A = plus(x, y)
   }
 
@@ -66,14 +66,14 @@ trait AdditiveMonoid[@sp(Int, Long, Float, Double) A] extends Any with AdditiveS
 
 trait AdditiveCommutativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with AdditiveMonoid[A] with AdditiveCommutativeSemigroup[A] {
   override def additive: CommutativeMonoid[A] = new CommutativeMonoid[A] {
-    def empty = zero
+    def neutral = zero
     def combine(x: A, y: A): A = plus(x, y)
   }
 }
 
 trait AdditiveGroup[@sp(Int, Long, Float, Double) A] extends Any with AdditiveMonoid[A] {
   override def additive: Group[A] = new Group[A] {
-    def empty = zero
+    def neutral = zero
     def combine(x: A, y: A): A = plus(x, y)
     override def remove(x: A, y: A): A = minus(x, y)
     def inverse(x: A): A = negate(x)
@@ -91,7 +91,7 @@ trait AdditiveGroup[@sp(Int, Long, Float, Double) A] extends Any with AdditiveMo
 
 trait AdditiveCommutativeGroup[@sp(Int, Long, Float, Double) A] extends Any with AdditiveGroup[A] with AdditiveCommutativeMonoid[A] {
   override def additive: CommutativeGroup[A] = new CommutativeGroup[A] {
-    def empty = zero
+    def neutral = zero
     def combine(x: A, y: A): A = plus(x, y)
     override def remove(x: A, y: A): A = minus(x, y)
     def inverse(x: A): A = negate(x)
