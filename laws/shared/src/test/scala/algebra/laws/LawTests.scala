@@ -8,18 +8,20 @@ import algebra.std.all._
 
 import org.typelevel.discipline.{Laws, Predicate}
 import org.typelevel.discipline.scalatest.Discipline
-import org.scalacheck.{Arbitrary, Gen}, Arbitrary.arbitrary
+import org.scalacheck.{Arbitrary, Cogen, Gen}, Arbitrary.arbitrary
 import org.scalatest.FunSuite
 import scala.util.Random
 
 trait LawTestsBase extends FunSuite with Discipline {
+  // Pending https://github.com/rickynils/scalacheck/issues/226
+  implicit val cogenBigInt: Cogen[BigInt] = Cogen[Long].contramap(_.toLong)
 
   implicit val byteLattice: Lattice[Byte] = ByteMinMaxLattice
   implicit val shortLattice: Lattice[Short] = ShortMinMaxLattice
   implicit val intLattice: BoundedDistributiveLattice[Int] = IntMinMaxLattice
   implicit val longLattice: BoundedDistributiveLattice[Long] = LongMinMaxLattice
 
-  implicit def orderLaws[A: Eq: Arbitrary] = OrderLaws[A]
+  implicit def orderLaws[A: Eq: Arbitrary: Cogen] = OrderLaws[A]
   implicit def groupLaws[A: Eq: Arbitrary] = GroupLaws[A]
   implicit def logicLaws[A: Eq: Arbitrary] = LogicLaws[A]
 
