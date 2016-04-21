@@ -6,12 +6,12 @@ import scala.collection.mutable
 
 package object list extends ListInstances 
 
-trait ListInstances {
+trait ListInstances extends ListInstances1 {
   implicit def listOrder[A: Order] = new ListOrder[A]
   implicit def listMonoid[A] = new ListMonoid[A]
 }
 
-trait ListInstances1 {
+trait ListInstances1 extends ListInstances2 {
   implicit def listPartialOrder[A: PartialOrder] = new ListPartialOrder[A]
 }
 

@@ -29,6 +29,24 @@ trait LawTestsBase extends FunSuite with Discipline {
   implicit def baseLaws[A: Eq: Arbitrary] = BaseLaws[A]
   implicit def latticePartialOrderLaws[A: Eq: Arbitrary] = LatticePartialOrderLaws[A]
 
+  case class HasEq[A](a: A)
+
+  object HasEq {
+    implicit def hasEq[A: Eq]: Eq[HasEq[A]] =
+      Eq[A].on(_.a)
+    implicit def hasEqArbitrary[A: Arbitrary]: Arbitrary[HasEq[A]] =
+      Arbitrary(arbitrary[A].map(HasEq(_)))
+  }
+
+  case class HasPartialOrder[A](a: A)
+
+  object HasPartialOrder {
+    implicit def hasPartialOrder[A: PartialOrder]: PartialOrder[HasPartialOrder[A]] =
+      PartialOrder[A].on(_.a)
+    implicit def hasPartialOrderArbitrary[A: Arbitrary]: Arbitrary[HasPartialOrder[A]] =
+      Arbitrary(arbitrary[A].map(HasPartialOrder(_)))
+  }
+
   case class LawChecker[L <: Laws](name: String, laws: L) {
     def check(f: L => L#RuleSet): Unit = checkAll(name, f(laws))
   }
@@ -56,16 +74,23 @@ trait LawTestsBase extends FunSuite with Discipline {
   laws[GroupLaws, String].check(_.monoid)
 
   {
-    // TODO: test a type that has Eq but not Order
     implicit val g: Group[Int] = AdditiveGroup.additive[Int]
+    laws[OrderLaws, Option[HasEq[Int]]].check(_.eqv)
+    laws[OrderLaws, Option[HasPartialOrder[Int]]].check(_.partialOrder)
     laws[OrderLaws, Option[Int]].check(_.order)
     laws[GroupLaws, Option[Int]].check(_.monoid)
+    laws[OrderLaws, Option[HasEq[String]]].check(_.eqv)
+    laws[OrderLaws, Option[HasPartialOrder[String]]].check(_.partialOrder)
     laws[OrderLaws, Option[String]].check(_.order)
     laws[GroupLaws, Option[String]].check(_.monoid)
   }
 
+  laws[OrderLaws, List[HasEq[Int]]].check(_.eqv)
+  laws[OrderLaws, List[HasPartialOrder[Int]]].check(_.partialOrder)
   laws[OrderLaws, List[Int]].check(_.order)
   laws[GroupLaws, List[Int]].check(_.monoid)
+  laws[OrderLaws, List[HasEq[String]]].check(_.eqv)
+  laws[OrderLaws, List[HasPartialOrder[String]]].check(_.partialOrder)
   laws[OrderLaws, List[String]].check(_.order)
   laws[GroupLaws, List[String]].check(_.monoid)
 
