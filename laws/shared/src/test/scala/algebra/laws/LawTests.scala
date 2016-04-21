@@ -6,7 +6,7 @@ import algebra.ring._
 import algebra.macros._
 import algebra.std.all._
 
-import org.typelevel.discipline.{Laws, Predicate}
+import org.typelevel.discipline.Laws
 import org.typelevel.discipline.scalatest.Discipline
 import org.scalacheck.{Arbitrary, Gen}, Arbitrary.arbitrary
 import org.scalatest.FunSuite
@@ -29,7 +29,7 @@ trait LawTestsBase extends FunSuite with Discipline {
   implicit def logicLaws[A: Eq: Arbitrary] = LogicLaws[A]
 
   implicit def latticeLaws[A: Eq: Arbitrary] = LatticeLaws[A]
-  implicit def ringLaws[A: Eq: Arbitrary: Predicate] = RingLaws[A]
+  implicit def ringLaws[A: Eq: Arbitrary] = RingLaws[A]
   implicit def baseLaws[A: Eq: Arbitrary] = BaseLaws[A]
   implicit def latticePartialOrderLaws[A: Eq: Arbitrary] = LatticePartialOrderLaws[A]
 
@@ -57,21 +57,21 @@ trait LawTestsBase extends FunSuite with Discipline {
   laws[LogicLaws, Boolean]("bool-from-ring").check(_.bool(new BoolFromBoolRing(booleanRing)))
 
   laws[OrderLaws, String].check(_.order)
-  laws[GroupLaws, String].check(_.monoid)
+  laws[RingLaws, String].check(_.monoid)
 
   {
     // TODO: test a type that has Eq but not Order
     implicit val g: Group[Int] = AdditiveGroup.additive[Int]
     laws[OrderLaws, Option[Int]].check(_.order)
-    laws[GroupLaws, Option[Int]].check(_.monoid)
+    laws[RingLaws, Option[Int]].check(_.monoid)
     laws[OrderLaws, Option[String]].check(_.order)
-    laws[GroupLaws, Option[String]].check(_.monoid)
+    laws[RingLaws, Option[String]].check(_.monoid)
   }
 
   laws[OrderLaws, List[Int]].check(_.order)
-  laws[GroupLaws, List[Int]].check(_.monoid)
+  laws[RingLaws, List[Int]].check(_.monoid)
   laws[OrderLaws, List[String]].check(_.order)
-  laws[GroupLaws, List[String]].check(_.monoid)
+  laws[RingLaws, List[String]].check(_.monoid)
 
   laws[LogicLaws, Set[Byte]].check(_.generalizedBool)
   laws[RingLaws, Set[Byte]].check(_.boolRng(setBoolRng[Byte]))
