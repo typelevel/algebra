@@ -7,7 +7,7 @@ package ring
  * for all ''a'', and `a⋅b = b⋅a` (commutativity of multiplication).
  *
  * Every Boolean ring is equivalent to a Boolean algebra.
- * See [[BoolFromBoolRing]] for details.
+ * See `algebra.lattice.BoolFromBoolRing` for details.
  */
 trait BoolRing[A] extends Any with BoolRng[A] with CommutativeRing[A]
 
