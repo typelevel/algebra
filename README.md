@@ -22,7 +22,7 @@ snippet in your `build.sbt` file:
 ```scala
 resolvers += Resolver.sonatypeRepo("releases")
 
-libraryDependencies += "org.spire-math" %% "algebra" % "0.3.1"
+libraryDependencies += "org.spire-math" %% "algebra" % "0.4.0"
 ```
 
 As of 0.3.1 algebra also supports scala.js!
