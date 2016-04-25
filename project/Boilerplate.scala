@@ -122,7 +122,7 @@ object Boilerplate {
         |
         |import algebra.ring.{EuclideanRing, Rig, Ring, Rng, Semiring}
         |
-        |private[std] trait TupleInstances {
+        |trait TupleInstances {
         -  implicit def tuple${arity}Band[${`A..N`}](implicit ${constraints("Band")}): Band[${`(A..N)`}] =
         -    new Band[${`(A..N)`}] {
         -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
