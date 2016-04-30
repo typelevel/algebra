@@ -8,7 +8,8 @@ import algebra.std.all._
 
 import org.typelevel.discipline.{Laws, Predicate}
 import org.typelevel.discipline.scalatest.Discipline
-import org.scalacheck.{Arbitrary, Gen}, Arbitrary.arbitrary
+import org.scalacheck.Arbitrary
+import Arbitrary.arbitrary
 import org.scalatest.FunSuite
 import scala.util.Random
 
@@ -107,9 +108,9 @@ trait LawTestsBase extends FunSuite with Discipline {
   laws[RingLaws, Set[String]].check(_.semiring)
 
   laws[OrderLaws, Map[Char, Int]].check(_.eqv)
-  laws[RingLaws, Map[Char, Int]].check(_.rng)
+  laws[RingLaws, Map[Char, Int]].check(_.semiring)
   laws[OrderLaws, Map[Int, BigInt]].check(_.eqv)
-  laws[RingLaws, Map[Int, BigInt]].check(_.rng)
+  laws[RingLaws, Map[Int, BigInt]].check(_.semiring)
 
   laws[OrderLaws, Byte].check(_.order)
   laws[RingLaws, Byte].check(_.euclideanRing)

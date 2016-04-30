@@ -5,14 +5,14 @@ import algebra.lattice.DistributiveLattice
 import algebra.ring.Field
 import algebra.std.util.StaticMethods
 import java.lang.Math
-import scala.annotation.tailrec
 
-trait FloatInstances {
-  implicit val floatAlgebra = new FloatAlgebra
+trait FloatInstances extends cats.kernel.std.FloatInstances {
+  implicit val floatAlgebra: Field[Float] =
+    new FloatAlgebra
 
-  // Not bounded due to the presence of NaN (min(x, NaN) == NaN, max(x, NaN) == NaN)
+  // Not bounded due to the presence of NaN
   val FloatMinMaxLattice: DistributiveLattice[Float] =
-    DistributiveLattice.minMax[Float](floatAlgebra)
+    DistributiveLattice.minMax[Float]
 }
 
 /**
@@ -23,19 +23,7 @@ trait FloatInstances {
  * If you would prefer an absolutely lawful fractional value, you'll
  * need to investigate rational numbers or more exotic types.
  */
-class FloatAlgebra extends Field[Float] with Order[Float] with Serializable {
-
-  def compare(x: Float, y: Float) =
-    java.lang.Float.compare(x, y)
-
-  override def eqv(x:Float, y:Float) = x == y
-  override def neqv(x:Float, y:Float) = x != y
-  override def gt(x: Float, y: Float) = x > y
-  override def gteqv(x: Float, y: Float) = x >= y
-  override def lt(x: Float, y: Float) = x < y
-  override def lteqv(x: Float, y: Float) = x <= y
-  override def min(x: Float, y: Float) = Math.min(x, y)
-  override def max(x: Float, y: Float) = Math.max(x, y)
+class FloatAlgebra extends Field[Float] with Serializable {
 
   def zero: Float = 0.0F
   def one: Float = 1.0F

@@ -1,9 +1,8 @@
 package algebra
 package laws
 
-import org.scalacheck.{Arbitrary, Prop}
+import org.scalacheck.Prop
 import org.scalacheck.Prop._
-import Prop.{False, Proof, Result}
 import scala.util.control.NonFatal
 
 private[laws] object Platform {

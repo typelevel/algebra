@@ -3,8 +3,6 @@ package algebra.laws
 import algebra._
 import algebra.lattice._
 
-import org.typelevel.discipline.Laws
-
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop._
 

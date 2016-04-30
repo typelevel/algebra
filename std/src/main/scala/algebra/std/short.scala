@@ -7,25 +7,15 @@ import algebra.std.util.StaticMethods
 
 package object short extends ShortInstances
 
-trait ShortInstances {
-  implicit val shortAlgebra = new ShortAlgebra
+trait ShortInstances extends cats.kernel.std.ShortInstances {
+  implicit val shortAlgebra: EuclideanRing[Short] =
+    new ShortAlgebra
 
   val ShortMinMaxLattice: BoundedDistributiveLattice[Short] =
-    BoundedDistributiveLattice.minMax[Short](Short.MinValue, Short.MaxValue)(shortAlgebra)
+    BoundedDistributiveLattice.minMax[Short](Short.MinValue, Short.MaxValue)
 }
 
-class ShortAlgebra extends EuclideanRing[Short]
-    with Order[Short] with Serializable {
-
-  def compare(x: Short, y: Short): Int =
-    if (x < y) -1 else if (x > y) 1 else 0
-
-  override def eqv(x: Short, y: Short) = x == y
-  override def neqv(x: Short, y: Short) = x != y
-  override def gt(x: Short, y: Short) = x > y
-  override def gteqv(x: Short, y: Short) = x >= y
-  override def lt(x: Short, y: Short) = x < y
-  override def lteqv(x: Short, y: Short) = x <= y
+class ShortAlgebra extends EuclideanRing[Short] with Serializable {
 
   def zero: Short = 0
   def one: Short = 1

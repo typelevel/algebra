@@ -7,25 +7,15 @@ import algebra.std.util.StaticMethods
 
 package object int extends IntInstances
 
-trait IntInstances {
-  implicit val intAlgebra = new IntAlgebra
+trait IntInstances extends cats.kernel.std.IntInstances {
+  implicit val intAlgebra: EuclideanRing[Int] =
+    new IntAlgebra
 
   val IntMinMaxLattice: BoundedDistributiveLattice[Int] =
-    BoundedDistributiveLattice.minMax[Int](Int.MinValue, Int.MaxValue)(intAlgebra)
+    BoundedDistributiveLattice.minMax[Int](Int.MinValue, Int.MaxValue)
 }
 
-class IntAlgebra extends EuclideanRing[Int]
-    with Order[Int] with Serializable {
-
-  def compare(x: Int, y: Int): Int =
-    if (x < y) -1 else if (x > y) 1 else 0
-
-  override def eqv(x: Int, y: Int) = x == y
-  override def neqv(x: Int, y: Int) = x != y
-  override def gt(x: Int, y: Int) = x > y
-  override def gteqv(x: Int, y: Int) = x >= y
-  override def lt(x: Int, y: Int) = x < y
-  override def lteqv(x: Int, y: Int) = x <= y
+class IntAlgebra extends EuclideanRing[Int] with Serializable {
 
   def zero: Int = 0
   def one: Int = 1
