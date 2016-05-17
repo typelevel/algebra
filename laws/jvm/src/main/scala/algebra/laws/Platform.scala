@@ -6,6 +6,10 @@ import org.scalacheck.Prop._
 import scala.util.control.NonFatal
 
 private[laws] object Platform {
+
+  final val isJvm = true
+  final val isJs = false
+
   // Scala-js does not implement the Serializable interface, so the
   // real test is for JVM only.
   @inline
