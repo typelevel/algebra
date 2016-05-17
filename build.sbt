@@ -33,7 +33,10 @@ lazy val commonSettings = Seq(
   resolvers += Resolver.sonatypeRepo("public"),
   scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
-  scalaJSStage in Test := FastOptStage,
+  scalaJSStage in Global := FastOptStage,
+  scalaJSUseRhino := false,
+  requiresDOM := false,
+  jsEnv := NodeJSEnv().value,
   fork := false,
   parallelExecution in Test := false
 )
