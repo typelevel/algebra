@@ -30,6 +30,7 @@ lazy val commonSettings = Seq(
     case Some((2, 11)) => Seq("-Ywarn-unused-import")
     case _             => Seq.empty
   }),
+  resolvers += Resolver.sonatypeRepo("public"),
   scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
   scalaJSStage in Test := FastOptStage,
@@ -64,7 +65,7 @@ lazy val core = crossProject
   .settings(mimaDefaultSettings: _*)
   // TODO: update this to a published stable version, e.g. 0.4.0
   //.settings(previousArtifact := Some("org.spire-math" %% "algebra" % "0.3.1"))
-  .settings(libraryDependencies += "org.typelevel" %%% "cats-kernel" % "0.6.0-SNAPSHOT")
+  .settings(libraryDependencies += "org.typelevel" %%% "cats-kernel" % "0.6.0-M2")
   .settings(algebraSettings: _*)
 
 lazy val coreJVM = core.jvm
@@ -109,7 +110,7 @@ lazy val laws = crossProject
   .settings(moduleName := "algebra-laws")
   .settings(algebraSettings: _*)
   .settings(libraryDependencies ++= Seq(
-    "org.typelevel" %%% "cats-kernel-laws" % "0.6.0-SNAPSHOT",
+    "org.typelevel" %%% "cats-kernel-laws" % "0.6.0-M2",
     "org.scalacheck" %%% "scalacheck" % "1.12.4",
     "org.typelevel" %%% "discipline" % "0.4",
     "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test"))
