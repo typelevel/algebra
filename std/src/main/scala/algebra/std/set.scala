@@ -7,9 +7,13 @@ import algebra.ring.{BoolRng, Semiring}
 package object set extends SetInstances
 
 trait SetInstances extends cats.kernel.std.SetInstances {
+
   implicit def setLattice[A]: GenBool[Set[A]] = new SetLattice[A]
-  implicit def setSemiring[A] = new SetSemiring[A]
-  def setBoolRng[A] = new SetBoolRng[A]
+  implicit def setSemiring[A]: Semiring[Set[A]] = new SetSemiring[A]
+
+  // this instance is not compatible with setSemiring, so it is not
+  // marked as implicit to avoid an ambiguity.
+  def setBoolRng[A]: BoolRng[Set[A]] = new SetBoolRng[A]
 }
 
 class SetLattice[A] extends GenBool[Set[A]] {
