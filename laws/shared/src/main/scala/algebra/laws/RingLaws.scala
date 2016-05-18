@@ -3,7 +3,7 @@ package laws
 
 import algebra.ring._
 
-import org.typelevel.discipline.{Laws, Predicate}
+import org.typelevel.discipline.Predicate
 
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Arbitrary._

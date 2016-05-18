@@ -7,7 +7,7 @@ import algebra.ring.CommutativeRig
 
 package object boolean extends BooleanInstances
 
-trait BooleanInstances {
+trait BooleanInstances extends cats.kernel.std.BooleanInstances {
   implicit val booleanAlgebra: BooleanAlgebra =
     new BooleanAlgebra
 
@@ -24,19 +24,7 @@ trait BooleanInstances {
  *
  * It uses || for plus, and && for times.
  */
-class BooleanAlgebra extends Bool[Boolean] with Order[Boolean] with CommutativeRig[Boolean] {
-  def compare(x: Boolean, y: Boolean): Int =
-    if (x == y) 0 else if (x) 1 else -1
-
-  override def eqv(x:Boolean, y:Boolean): Boolean = x == y
-  override def neqv(x:Boolean, y:Boolean): Boolean = x != y
-  override def gt(x: Boolean, y: Boolean): Boolean = x && !y
-  override def lt(x: Boolean, y: Boolean): Boolean = !x && y
-  override def gteqv(x: Boolean, y: Boolean): Boolean = x == y || x
-  override def lteqv(x: Boolean, y: Boolean): Boolean = x == y || y
-
-  override def min(x: Boolean, y: Boolean): Boolean = x && y
-  override def max(x: Boolean, y: Boolean): Boolean = x || y
+class BooleanAlgebra extends Bool[Boolean] with CommutativeRig[Boolean] {
 
   def zero: Boolean = false
   def one: Boolean = true

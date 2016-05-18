@@ -122,23 +122,7 @@ object Boilerplate {
         |
         |import algebra.ring.{EuclideanRing, Rig, Ring, Rng, Semiring}
         |
-        |trait TupleInstances {
-        -  implicit def tuple${arity}Band[${`A..N`}](implicit ${constraints("Band")}): Band[${`(A..N)`}] =
-        -    new Band[${`(A..N)`}] {
-        -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-        -    }
-        -
-        -  implicit def tuple${arity}Group[${`A..N`}](implicit ${constraints("Group")}): Group[${`(A..N)`}] =
-        -    new Group[${`(A..N)`}] {
-        -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-        -      def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
-        -      def inverse(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("inverse")}
-        -    }
-        -
-        -  implicit def tuple${arity}Eq[${`A..N`}](implicit ${constraints("Eq")}): Eq[${`(A..N)`}] =
-        -    new Eq[${`(A..N)`}] {
-        -      def eqv(x: ${`(A..N)`}, y: ${`(A..N)`}): Boolean = ${binMethod("eqv").mkString(" && ")}
-        -    }
+        |trait TupleInstances extends cats.kernel.std.TupleInstances {
         -
         -  implicit def tuple${arity}EuclideanRing[${`A..N`}](implicit ${constraints("EuclideanRing")}): EuclideanRing[${`(A..N)`}] =
         -    new EuclideanRing[${`(A..N)`}] {
@@ -149,24 +133,6 @@ object Boilerplate {
         -      def quot(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("quot")}
         -      def times(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("times")}
         -      def zero: ${`(A..N)`} = ${nullaryTuple("zero")}
-        -    }
-        -
-        -  implicit def tuple${arity}Monoid[${`A..N`}](implicit ${constraints("Monoid")}): Monoid[${`(A..N)`}] =
-        -    new Monoid[${`(A..N)`}] {
-        -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-        -      def empty: ${`(A..N)`} = ${nullaryTuple("empty")}
-        -    }
-        -
-        -  implicit def tuple${arity}Order[${`A..N`}](implicit ${constraints("Order")}): Order[${`(A..N)`}] =
-        -    new Order[${`(A..N)`}] {
-        -      def compare(x: ${`(A..N)`}, y: ${`(A..N)`}): Int =
-        -        ${binMethod("compare").find(_ != 0).getOrElse(0)}
-        -    }
-        -
-        -  implicit def tuple${arity}PartialOrder[${`A..N`}](implicit ${constraints("PartialOrder")}): PartialOrder[${`(A..N)`}] =
-        -    new PartialOrder[${`(A..N)`}] {
-        -      def partialCompare(x: ${`(A..N)`}, y: ${`(A..N)`}): Double =
-        -        ${binMethod("partialCompare").find(_ != 0.0).getOrElse(0.0)}
         -    }
         -
         -  implicit def tuple${arity}Rig[${`A..N`}](implicit ${constraints("Rig")}): Rig[${`(A..N)`}] =
@@ -192,16 +158,6 @@ object Boilerplate {
         -      def times(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("times")}
         -      def zero: ${`(A..N)`} = ${nullaryTuple("zero")}
         -      def negate(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("negate")}
-        -    }
-        -
-        -  implicit def tuple${arity}Semigroup[${`A..N`}](implicit ${constraints("Semigroup")}): Semigroup[${`(A..N)`}] =
-        -    new Semigroup[${`(A..N)`}] {
-        -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
-        -    }
-        -
-        -  implicit def tuple${arity}Semilattice[${`A..N`}](implicit ${constraints("Semilattice")}): Semilattice[${`(A..N)`}] =
-        -    new Semilattice[${`(A..N)`}] {
-        -      def combine(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("combine")}
         -    }
         -
         -  implicit def tuple${arity}Semiring[${`A..N`}](implicit ${constraints("Semiring")}): Semiring[${`(A..N)`}] =

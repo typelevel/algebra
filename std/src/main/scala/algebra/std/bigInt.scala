@@ -5,25 +5,15 @@ import algebra.ring._
 
 package object bigInt extends BigIntInstances
 
-trait BigIntInstances {
+trait BigIntInstances extends cats.kernel.std.BigIntInstances {
   implicit val bigIntAlgebra: BigIntAlgebra =
     new BigIntAlgebra
 }
 
-class BigIntAlgebra extends EuclideanRing[BigInt] with Order[BigInt] with Serializable {
+class BigIntAlgebra extends EuclideanRing[BigInt] with Serializable {
 
   val zero: BigInt = BigInt(0)
   val one: BigInt = BigInt(1)
-
-  def compare(x: BigInt, y: BigInt): Int = x compare y
-  override def eqv(x:BigInt, y:BigInt) = x == y
-  override def neqv(x:BigInt, y:BigInt) = x != y
-  override def gt(x: BigInt, y: BigInt) = x > y
-  override def gteqv(x: BigInt, y: BigInt) = x >= y
-  override def lt(x: BigInt, y: BigInt) = x < y
-  override def lteqv(x: BigInt, y: BigInt) = x <= y
-  override def min(x: BigInt, y: BigInt) = x min y
-  override def max(x: BigInt, y: BigInt) = x max y
 
   def plus(a: BigInt, b: BigInt): BigInt = a + b
   def negate(a: BigInt): BigInt = -a

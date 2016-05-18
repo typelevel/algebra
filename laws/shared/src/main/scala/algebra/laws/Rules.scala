@@ -3,7 +3,6 @@ package laws
 
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop._
-import Prop.{False, Proof, Result}
 
 import algebra.std.boolean._
 

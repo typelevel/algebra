@@ -7,25 +7,14 @@ import algebra.std.util.StaticMethods
 
 package object byte extends ByteInstances
 
-trait ByteInstances {
+trait ByteInstances extends cats.kernel.std.ByteInstances {
   implicit val byteAlgebra = new ByteAlgebra
 
   val ByteMinMaxLattice: BoundedDistributiveLattice[Byte] =
-    BoundedDistributiveLattice.minMax[Byte](Byte.MinValue, Byte.MaxValue)(byteAlgebra)
+    BoundedDistributiveLattice.minMax[Byte](Byte.MinValue, Byte.MaxValue)
 }
 
-class ByteAlgebra extends EuclideanRing[Byte]
-    with Order[Byte] with Serializable {
-
-  def compare(x: Byte, y: Byte): Int =
-    if (x < y) -1 else if (x > y) 1 else 0
-
-  override def eqv(x: Byte, y: Byte) = x == y
-  override def neqv(x: Byte, y: Byte) = x != y
-  override def gt(x: Byte, y: Byte) = x > y
-  override def gteqv(x: Byte, y: Byte) = x >= y
-  override def lt(x: Byte, y: Byte) = x < y
-  override def lteqv(x: Byte, y: Byte) = x <= y
+class ByteAlgebra extends EuclideanRing[Byte] with Serializable {
 
   def zero: Byte = 0
   def one: Byte = 1

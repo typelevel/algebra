@@ -5,18 +5,15 @@ import algebra.lattice.DistributiveLattice
 import algebra.ring.Field
 import algebra.std.util.StaticMethods
 
-import java.lang.Double.{ longBitsToDouble, doubleToLongBits }
-import java.lang.Long.{ numberOfTrailingZeros, numberOfLeadingZeros }
 import java.lang.Math
 
-import scala.annotation.tailrec
-
-trait DoubleInstances {
-  implicit val doubleAlgebra = new DoubleAlgebra
+trait DoubleInstances extends cats.kernel.std.DoubleInstances {
+  implicit val doubleAlgebra: Field[Double] =
+    new DoubleAlgebra
 
   // This is not Bounded due to the presence of NaN
   val DoubleMinMaxLattice: DistributiveLattice[Double] =
-    DistributiveLattice.minMax[Double](doubleAlgebra)
+    DistributiveLattice.minMax[Double]
 }
 
 /**
@@ -27,19 +24,7 @@ trait DoubleInstances {
  * If you would prefer an absolutely lawful fractional value, you'll
  * need to investigate rational numbers or more exotic types.
  */
-class DoubleAlgebra extends Field[Double] with Order[Double] with Serializable {
-
-  def compare(x: Double, y: Double) =
-    java.lang.Double.compare(x, y)
-
-  override def eqv(x:Double, y:Double) = x == y
-  override def neqv(x:Double, y:Double) = x != y
-  override def gt(x: Double, y: Double) = x > y
-  override def gteqv(x: Double, y: Double) = x >= y
-  override def lt(x: Double, y: Double) = x < y
-  override def lteqv(x: Double, y: Double) = x <= y
-  override def min(x: Double, y: Double) = Math.min(x, y)
-  override def max(x: Double, y: Double) = Math.max(x, y)
+class DoubleAlgebra extends Field[Double] with Serializable {
 
   def zero: Double = 0.0
   def one: Double = 1.0

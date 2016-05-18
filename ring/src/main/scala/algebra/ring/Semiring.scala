@@ -1,7 +1,6 @@
 package algebra
 package ring
 
-import annotation.tailrec
 import scala.{specialized => sp}
 
 /**

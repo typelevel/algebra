@@ -8,25 +8,15 @@ import algebra.ring._
 
 package object long extends LongInstances
 
-trait LongInstances {
-  implicit val longAlgebra = new LongAlgebra
+trait LongInstances extends cats.kernel.std.LongInstances {
+  implicit val longAlgebra: EuclideanRing[Long] =
+    new LongAlgebra
 
   val LongMinMaxLattice: BoundedDistributiveLattice[Long] =
-    BoundedDistributiveLattice.minMax[Long](Long.MinValue, Long.MaxValue)(longAlgebra)
+    BoundedDistributiveLattice.minMax[Long](Long.MinValue, Long.MaxValue)
 }
 
-class LongAlgebra extends EuclideanRing[Long]
-    with Order[Long] with Serializable {
-
-  def compare(x: Long, y: Long): Int =
-    if (x < y) -1 else if (x > y) 1 else 0
-
-  override def eqv(x: Long, y: Long) = x == y
-  override def neqv(x: Long, y: Long) = x != y
-  override def gt(x: Long, y: Long) = x > y
-  override def gteqv(x: Long, y: Long) = x >= y
-  override def lt(x: Long, y: Long) = x < y
-  override def lteqv(x: Long, y: Long) = x <= y
+class LongAlgebra extends EuclideanRing[Long] with Serializable {
 
   def zero: Long = 0
   def one: Long = 1
