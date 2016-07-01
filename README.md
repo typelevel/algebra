@@ -194,3 +194,9 @@ Note that a BoundedDistributiveLattice gives you a CommutativeRig, but not the o
 a BoolRing, since each element can be defined as its own negation. Note, Bool's
 asBoolRing is not an extension of the asCommutativeRig as the `plus` operations are defined
 differently.
+
+### Copyright and License
+
+All code is available to you under the MIT license, available at http://opensource.org/licenses/mit-license.php and also in the [COPYING](COPYING) file.
+
+Copyright the maintainers, 2015.
