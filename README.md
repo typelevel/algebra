@@ -132,7 +132,7 @@ commutative `+`, and have a `zero` element (an identity for `+`).
 |Semiring            |             |        |                 |           |                |
 |Rng                 |            ✓|        |                 |           |                |
 |Rig                 |             |       ✓|                 |           |                |
-|CommutativeRig      |             |       ✓|                 |           |               ✓|
+|CommutativeRing     |             |       ✓|                 |           |               ✓|
 |Ring                |            ✓|       ✓|                 |           |                |
 |CommutativeRing     |            ✓|       ✓|                 |           |               ✓|
 |EuclideanRing       |            ✓|       ✓|                 |          ✓|               ✓|
