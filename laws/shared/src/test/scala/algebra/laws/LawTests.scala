@@ -163,29 +163,6 @@ trait LawTestsBase extends FunSuite with Configuration with Discipline {
   laws[LatticeLaws, Unit].check(_.boundedSemilattice)
 
   {
-    /**
-     *  Here is a more complex Semilattice, which is roughly: if one of the first items is bigger
-     *  take that, else combine pairwise.
-     */
-    def lexicographicSemilattice[A: Semilattice: Eq, B: Semilattice]: Semilattice[(A, B)] =
-      new Semilattice[(A, B)] {
-      def combine(left: (A, B), right: (A, B)) =
-        if (Eq.eqv(left._1, right._1)) {
-          (left._1, Semilattice[B].combine(left._2, right._2))
-        }
-        else {
-          val a = Semilattice[A].combine(left._1, right._1)
-          if (Eq.eqv(a, left._1)) left
-          else if (Eq.eqv(a, right._1)) right
-          else (a, Semilattice[B].combine(left._2, right._2))
-        }
-    }
-    implicit val setSemilattice: Semilattice[Set[Int]] = setLattice[Int].joinSemilattice
-    implicit val longSemilattice: Semilattice[Long] = LongMinMaxLattice.joinSemilattice
-    laws[LatticeLaws, (Set[Int], Long)].check(_.semilattice(lexicographicSemilattice))
-  }
-
-  {
     // In order to check the monoid laws for `Order[N]`, we need
     // `Arbitrary[Order[N]]` and `Eq[Order[N]]` instances.
     // Here we have a bit of a hack to create these instances.

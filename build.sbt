@@ -68,7 +68,7 @@ lazy val core = crossProject
   .settings(mimaDefaultSettings: _*)
   // TODO: update this to a published stable version, e.g. 0.4.0
   //.settings(previousArtifact := Some("org.spire-math" %% "algebra" % "0.3.1"))
-  .settings(libraryDependencies += "org.typelevel" %%% "cats-kernel" % "0.6.0-M2")
+  .settings(libraryDependencies += "org.typelevel" %%% "cats-kernel" % "0.6.1")
   .settings(algebraSettings: _*)
 
 lazy val coreJVM = core.jvm
