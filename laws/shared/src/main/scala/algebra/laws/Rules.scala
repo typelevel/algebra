@@ -4,12 +4,12 @@ package laws
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop._
 
-import algebra.std.boolean._
+import algebra.instances.boolean._
 
 object Rules {
 
   def serializable[M](m: M): (String, Prop) = Platform.serializable(m)
- 
+
   // Comparison operators for testing are supplied by CheckEqOps and
   // CheckOrderOps in package.scala. They are:
   //

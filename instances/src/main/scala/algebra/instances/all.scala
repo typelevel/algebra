@@ -1,5 +1,5 @@
 package algebra
-package std
+package instances
 
 package object all extends AllInstances
 

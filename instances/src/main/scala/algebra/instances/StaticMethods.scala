@@ -1,13 +1,10 @@
-package algebra.std.util
+package algebra.instances
 
 import java.lang.Double.{ longBitsToDouble, doubleToLongBits }
 import java.lang.Float.{ intBitsToFloat, floatToIntBits }
 import java.lang.Long.{ numberOfTrailingZeros, numberOfLeadingZeros }
 import java.lang.Math
 import scala.annotation.tailrec
-import scala.collection.mutable
-
-import cats.kernel.std.util.StaticMethods.wrapMutableMap
 
 object StaticMethods {
 
@@ -134,16 +131,5 @@ object StaticMethods {
       else if (base == -1L) if ((exponent & 1L) == 0L) -1L else 1L
       else 0L
     }
-  }
-
-  def timesMap[K, V](small: Map[K, V], big: Map[K, V])(f: (V, V) => V): Map[K, V] = {
-    val m = mutable.Map.empty[K, V]
-    small.foreach { case (k, v1) =>
-      big.get(k) match {
-        case Some(v2) => m(k) = f(v1, v2)
-        case None => ()
-      }
-    }
-    wrapMutableMap(m)
   }
 }

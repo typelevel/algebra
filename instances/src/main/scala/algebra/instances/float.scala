@@ -1,12 +1,11 @@
 package algebra
-package std
+package instances
 
 import algebra.lattice.DistributiveLattice
 import algebra.ring.Field
-import algebra.std.util.StaticMethods
 import java.lang.Math
 
-trait FloatInstances extends cats.kernel.std.FloatInstances {
+trait FloatInstances extends cats.kernel.instances.FloatInstances {
   implicit val floatAlgebra: Field[Float] =
     new FloatAlgebra
 

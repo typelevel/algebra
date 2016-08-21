@@ -1,13 +1,12 @@
 package algebra
-package std
+package instances
 
 import algebra.lattice._
 import algebra.ring._
-import algebra.std.util.StaticMethods
 
 package object byte extends ByteInstances
 
-trait ByteInstances extends cats.kernel.std.ByteInstances {
+trait ByteInstances extends cats.kernel.instances.ByteInstances {
   implicit val byteAlgebra = new ByteAlgebra
 
   val ByteMinMaxLattice: BoundedDistributiveLattice[Byte] =

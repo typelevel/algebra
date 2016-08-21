@@ -1,13 +1,12 @@
 package algebra
-package std
+package instances
 
 import algebra.lattice._
 import algebra.ring._
-import algebra.std.util.StaticMethods
 
 package object int extends IntInstances
 
-trait IntInstances extends cats.kernel.std.IntInstances {
+trait IntInstances extends cats.kernel.instances.IntInstances {
   implicit val intAlgebra: EuclideanRing[Int] =
     new IntAlgebra
 

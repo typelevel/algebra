@@ -1,12 +1,12 @@
 package algebra
-package std
+package instances
 
 import algebra.lattice.GenBool
 import algebra.ring.{BoolRng, Semiring}
 
 package object set extends SetInstances
 
-trait SetInstances extends cats.kernel.std.SetInstances {
+trait SetInstances extends cats.kernel.instances.SetInstances {
 
   implicit def setLattice[A]: GenBool[Set[A]] = new SetLattice[A]
   implicit def setSemiring[A]: Semiring[Set[A]] = new SetSemiring[A]

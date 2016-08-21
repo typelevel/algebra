@@ -1,14 +1,12 @@
 package algebra
-package std
-
-import util.StaticMethods
+package instances
 
 import algebra.lattice._
 import algebra.ring._
 
 package object long extends LongInstances
 
-trait LongInstances extends cats.kernel.std.LongInstances {
+trait LongInstances extends cats.kernel.instances.LongInstances {
   implicit val longAlgebra: EuclideanRing[Long] =
     new LongAlgebra
 

@@ -1,5 +1,5 @@
 package algebra
-package std
+package instances
 
 import scala.{ specialized ⇒ sp }
 

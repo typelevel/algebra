@@ -1,11 +1,11 @@
 package algebra
-package std
+package instances
 
 import algebra.ring.CommutativeRing
 
 package object unit extends UnitInstances
 
-trait UnitInstances extends cats.kernel.std.UnitInstances {
+trait UnitInstances extends cats.kernel.instances.UnitInstances {
   implicit val unitRing: CommutativeRing[Unit] =
     new UnitAlgebra
 }

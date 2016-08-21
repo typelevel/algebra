@@ -6,7 +6,7 @@ import org.typelevel.discipline.Laws
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop._
 
-import algebra.std.boolean._
+import algebra.instances.boolean._
 
 object OrderLaws {
   def apply[A: Eq: Arbitrary] = new OrderLaws[A] {
