@@ -1,5 +1,5 @@
 package algebra
-package std
+package instances
 
 import algebra.lattice.Bool
 import algebra.ring.BoolRing
@@ -7,7 +7,7 @@ import algebra.ring.CommutativeRig
 
 package object boolean extends BooleanInstances
 
-trait BooleanInstances extends cats.kernel.std.BooleanInstances {
+trait BooleanInstances extends cats.kernel.instances.BooleanInstances {
   implicit val booleanAlgebra: BooleanAlgebra =
     new BooleanAlgebra
 

@@ -80,7 +80,7 @@ object Boilerplate {
   object GenTupleInstances extends Template {
     override def range: IndexedSeq[Int] = 1 to maxArity
 
-    def filename(root: File): File = root / "algebra" / "std" / "TupleAlgebra.scala"
+    def filename(root: File): File = root / "algebra" / "instances" / "TupleAlgebra.scala"
 
     def content(tv: TemplateVals): String = {
       import tv._
@@ -118,11 +118,11 @@ object Boilerplate {
 
       block"""
         |package algebra
-        |package std
+        |package instances
         |
         |import algebra.ring.{EuclideanRing, Rig, Ring, Rng, Semiring}
         |
-        |trait TupleInstances extends cats.kernel.std.TupleInstances {
+        |trait TupleInstances extends cats.kernel.instances.TupleInstances {
         -
         -  implicit def tuple${arity}EuclideanRing[${`A..N`}](implicit ${constraints("EuclideanRing")}): EuclideanRing[${`(A..N)`}] =
         -    new EuclideanRing[${`(A..N)`}] {

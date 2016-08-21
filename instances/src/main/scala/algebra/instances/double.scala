@@ -1,13 +1,12 @@
 package algebra
-package std
+package instances
 
 import algebra.lattice.DistributiveLattice
 import algebra.ring.Field
-import algebra.std.util.StaticMethods
 
 import java.lang.Math
 
-trait DoubleInstances extends cats.kernel.std.DoubleInstances {
+trait DoubleInstances extends cats.kernel.instances.DoubleInstances {
   implicit val doubleAlgebra: Field[Double] =
     new DoubleAlgebra
 

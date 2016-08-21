@@ -1,13 +1,12 @@
 package algebra
-package std
+package instances
 
 import algebra.lattice._
 import algebra.ring._
-import algebra.std.util.StaticMethods
 
 package object short extends ShortInstances
 
-trait ShortInstances extends cats.kernel.std.ShortInstances {
+trait ShortInstances extends cats.kernel.instances.ShortInstances {
   implicit val shortAlgebra: EuclideanRing[Short] =
     new ShortAlgebra
 

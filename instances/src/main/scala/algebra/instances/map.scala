@@ -1,15 +1,13 @@
 package algebra
-package std
+package instances
 
 import scala.collection.mutable
-
-import cats.kernel.std.util.StaticMethods
 
 import algebra.ring._
 
 package object map extends MapInstances
 
-trait MapInstances extends cats.kernel.std.MapInstances with MapInstances3
+trait MapInstances extends cats.kernel.instances.MapInstances with MapInstances3
 
 trait MapInstances3 extends MapInstances2 {
 }
@@ -64,7 +62,7 @@ class MapAdditiveMonoid[K, V](implicit V: AdditiveSemigroup[V]) extends Additive
         }
       }
     }
-    StaticMethods.wrapMutableMap(acc)
+    cats.kernel.instances.StaticMethods.wrapMutableMap(acc)
   }
 }
 
@@ -124,6 +122,6 @@ class MapSemiring[K, V](implicit V: Semiring[V]) extends MapAdditiveMonoid[K, V]
           ready = true
         }
       }
-      Some(StaticMethods.wrapMutableMap(acc))
+      Some(cats.kernel.instances.StaticMethods.wrapMutableMap(acc))
     }
 }

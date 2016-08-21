@@ -1,11 +1,11 @@
 package algebra
-package std
+package instances
 
 import algebra.ring._
 
 package object bigInt extends BigIntInstances
 
-trait BigIntInstances extends cats.kernel.std.BigIntInstances {
+trait BigIntInstances extends cats.kernel.instances.BigIntInstances {
   implicit val bigIntAlgebra: BigIntAlgebra =
     new BigIntAlgebra
 }

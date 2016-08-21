@@ -1,4 +1,4 @@
 package algebra
-package std
+package instances
 
 package object tuple extends TupleInstances
