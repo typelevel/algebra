@@ -62,6 +62,9 @@ trait AdditiveMonoid[@sp(Int, Long, Float, Double) A] extends Any with AdditiveS
    */
   def sum(as: TraversableOnce[A]): A =
     as.foldLeft(zero)(plus)
+
+  override def trySum(as: TraversableOnce[A]): Option[A] =
+    if (as.isEmpty) None else Some(sum(as))
 }
 
 trait AdditiveCommutativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with AdditiveMonoid[A] with AdditiveCommutativeSemigroup[A] {

@@ -63,6 +63,9 @@ trait MultiplicativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with Mul
    */
   def product(as: TraversableOnce[A]): A =
     as.foldLeft(one)(times)
+
+  override def tryProduct(as: TraversableOnce[A]): Option[A] =
+    if (as.isEmpty) None else Some(product(as))
 }
 
 trait MultiplicativeCommutativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeMonoid[A] with MultiplicativeCommutativeSemigroup[A] {
