@@ -57,10 +57,10 @@ lazy val aggregate = project.in(file("."))
   .settings(site.settings: _*)
   .settings(ghpages.settings: _*)
   .settings(docSettings: _*)
-  .aggregate(coreJVM, lawsJVM, macrosJVM)
-  .dependsOn(coreJVM, lawsJVM, macrosJVM)
-  .aggregate(coreJS, lawsJS, macrosJS)
-  .dependsOn(coreJS, lawsJS, macrosJS)
+  .aggregate(coreJVM, lawsJVM)
+  .dependsOn(coreJVM, lawsJVM)
+  .aggregate(coreJS, lawsJS)
+  .dependsOn(coreJS, lawsJS)
 
 lazy val core = crossProject
   .crossType(CrossType.Pure)
@@ -76,26 +76,20 @@ lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
 
 lazy val laws = crossProject
-  .dependsOn(core, macros)
+  .crossType(CrossType.Pure)
+  .dependsOn(core)
   .settings(moduleName := "algebra-laws")
   .settings(algebraSettings: _*)
   .settings(libraryDependencies ++= Seq(
-    "org.typelevel" %%% "cats-kernel-laws" % "0.6.0-M2",
+    "org.typelevel" %%% "cats-kernel-laws" % "0.7.0",
     "org.scalacheck" %%% "scalacheck" % "1.12.4",
     "org.typelevel" %%% "discipline" % "0.4",
+    "org.typelevel" %%% "catalysts-platform" % "0.0.2" % "test",
+    "org.typelevel" %%% "catalysts-macros" % "0.0.2" % "test",
     "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test"))
 
 lazy val lawsJVM = laws.jvm
 lazy val lawsJS = laws.js
-
-lazy val macros = crossProject.crossType(CrossType.Pure)
-  .settings(moduleName := "algebra-macros")
-  .settings(algebraSettings: _*)
-  .settings(crossVersionSharedSources:_*)
-  .settings(scalaMacroDependencies:_*)
-
-lazy val macrosJVM = macros.jvm
-lazy val macrosJS = macros.js
 
 lazy val publishSettings = Seq(
   homepage := Some(url("http://spire-math.org")),
