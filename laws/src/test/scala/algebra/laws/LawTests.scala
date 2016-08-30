@@ -3,8 +3,10 @@ package laws
 
 import algebra.lattice._
 import algebra.ring._
-import algebra.macros._
 import algebra.instances.all._
+
+import catalysts.Platform
+import catalysts.macros.TypeTagM // need this import for implicit macros
 
 import org.typelevel.discipline.{Laws, Predicate}
 import org.typelevel.discipline.scalatest.Discipline
@@ -15,7 +17,7 @@ import org.scalatest.FunSuite
 import org.scalatest.prop.Configuration
 import scala.util.Random
 
-trait LawTestsBase extends FunSuite with Configuration with Discipline {
+class LawTests extends FunSuite with Configuration with Discipline {
 
   lazy val checkConfiguration: PropertyCheckConfiguration =
     PropertyCheckConfiguration(
@@ -24,6 +26,11 @@ trait LawTestsBase extends FunSuite with Configuration with Discipline {
       minSize = PosZInt(0),
       sizeRange = if (Platform.isJvm) PosZInt(10) else PosZInt(5),
       workers = PosInt(1))
+
+  // The scalacheck defaults (100,100) are too high for Scala-js, so we reduce to 10/100.
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+    if (Platform.isJvm) PropertyCheckConfig(maxSize = 100, minSuccessful = 100)
+    else PropertyCheckConfig(maxSize = 10, minSuccessful = 100)
 
   /**
     * Runs the supplied thunk without calling the serialization tests.
@@ -72,7 +79,7 @@ trait LawTestsBase extends FunSuite with Configuration with Discipline {
 
   private[laws] def laws[L[_] <: Laws, A](extraTag: String)(implicit
       laws: L[A], tag: TypeTagM[A]): LawChecker[L[A]] =
-    LawChecker("[" + tag.tpe.toString + (if(extraTag != "") "@@" + extraTag else "") + "]", laws)
+    LawChecker("[" + tag.name.toString + (if(extraTag != "") "@@" + extraTag else "") + "]", laws)
 
   laws[OrderLaws, Boolean].check(_.order)
   laws[LogicLaws, Boolean].check(_.bool)
@@ -211,4 +218,8 @@ trait LawTestsBase extends FunSuite with Configuration with Discipline {
   laws[OrderLaws, Int]("fromOrdering").check(_.order(Order.fromOrdering[Int]))
   laws[OrderLaws, Array[Int]].check(_.order)
   laws[OrderLaws, Array[Int]].check(_.partialOrder)
+
+  // Rational tests do not return on Scala-js, so we make them JVM only.
+  if (Platform.isJvm) laws[RingLaws, Rat].check(_.field)
+  else ()
 }

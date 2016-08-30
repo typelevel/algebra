@@ -45,7 +45,7 @@ lazy val algebraSettings = buildSettings ++ commonSettings ++ publishSettings
 
 lazy val docSettings = Seq(
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(coreJVM, instancesJVM, lawsJVM),
+  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(coreJVM, lawsJVM),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
   git.remoteRepo := "git@github.com:non/algebra.git"
 )
@@ -57,10 +57,10 @@ lazy val aggregate = project.in(file("."))
   .settings(site.settings: _*)
   .settings(ghpages.settings: _*)
   .settings(docSettings: _*)
-  .aggregate(coreJVM, ringJVM, latticeJVM, lawsJVM, macrosJVM, instancesJVM)
-  .dependsOn(coreJVM, ringJVM, latticeJVM, lawsJVM, macrosJVM, instancesJVM)
-  .aggregate(coreJS, ringJS, latticeJS, lawsJS, macrosJS, instancesJS)
-  .dependsOn(coreJS, ringJS, latticeJS, lawsJS, macrosJS, instancesJS)
+  .aggregate(coreJVM, lawsJVM)
+  .dependsOn(coreJVM, lawsJVM)
+  .aggregate(coreJS, lawsJS)
+  .dependsOn(coreJS, lawsJS)
 
 lazy val core = crossProject
   .crossType(CrossType.Pure)
@@ -70,65 +70,26 @@ lazy val core = crossProject
   //.settings(previousArtifact := Some("org.spire-math" %% "algebra" % "0.3.1"))
   .settings(libraryDependencies += "org.typelevel" %%% "cats-kernel" % "0.7.0")
   .settings(algebraSettings: _*)
+  .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
 
 lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
 
-lazy val ring = crossProject
+lazy val laws = crossProject
   .crossType(CrossType.Pure)
   .dependsOn(core)
-  .settings(moduleName := "algebra-ring")
-  .settings(mimaDefaultSettings: _*)
-  // TODO: update this to a published stable version, e.g. 0.4.0
-  //.settings(previousArtifact := Some("org.spire-math" %% "algebra-ring" % "0.3.1"))
-  .settings(algebraSettings: _*)
-
-lazy val ringJVM = ring.jvm
-lazy val ringJS = ring.js
-
-lazy val lattice = crossProject
-  .crossType(CrossType.Pure)
-  .dependsOn(core, ring)
-  .settings(moduleName := "algebra-lattice")
-  .settings(mimaDefaultSettings: _*)
-  // TODO: update this to a published stable version, e.g. 0.4.0
-  //.settings(previousArtifact := Some("org.spire-math" %% "algebra" % "0.3.1"))
-  .settings(algebraSettings: _*)
-
-lazy val latticeJVM = lattice.jvm
-lazy val latticeJS = lattice.js
-
-lazy val instances = crossProject
-  .crossType(CrossType.Pure)
-  .dependsOn(core, ring, lattice)
-  .settings(moduleName := "algebra-instances")
-  .settings(algebraSettings: _*)
-  .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
-
-lazy val instancesJVM = instances.jvm
-lazy val instancesJS = instances.js
-
-lazy val laws = crossProject
-  .dependsOn(core, ring, lattice, instances, macros)
   .settings(moduleName := "algebra-laws")
   .settings(algebraSettings: _*)
   .settings(libraryDependencies ++= Seq(
-    "org.typelevel" %%% "cats-kernel-laws" % "0.6.0-M2",
+    "org.typelevel" %%% "cats-kernel-laws" % "0.7.0",
     "org.scalacheck" %%% "scalacheck" % "1.12.4",
     "org.typelevel" %%% "discipline" % "0.4",
+    "org.typelevel" %%% "catalysts-platform" % "0.0.2" % "test",
+    "org.typelevel" %%% "catalysts-macros" % "0.0.2" % "test",
     "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test"))
 
-lazy val lawsJVM = laws.jvm 
+lazy val lawsJVM = laws.jvm
 lazy val lawsJS = laws.js
-
-lazy val macros = crossProject.crossType(CrossType.Pure)
-  .settings(moduleName := "algebra-macros")
-  .settings(algebraSettings: _*)
-  .settings(crossVersionSharedSources:_*)
-  .settings(scalaMacroDependencies:_*)
-
-lazy val macrosJVM = macros.jvm
-lazy val macrosJS = macros.js
 
 lazy val publishSettings = Seq(
   homepage := Some(url("http://spire-math.org")),

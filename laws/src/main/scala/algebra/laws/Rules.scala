@@ -8,7 +8,8 @@ import algebra.instances.boolean._
 
 object Rules {
 
-  def serializable[M](m: M): (String, Prop) = Platform.serializable(m)
+  def serializable[M](m: M): (String, Prop) =
+    cats.kernel.laws.Rules.serializable(m)
 
   // Comparison operators for testing are supplied by CheckEqOps and
   // CheckOrderOps in package.scala. They are:

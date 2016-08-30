@@ -2,12 +2,12 @@ package algebra
 
 /**
  * Priority is a type class for prioritized implicit search.
- * 
+ *
  * This type class will attempt to provide an implicit instance of `P`
  * (the preferred type). If that type is not available it will
  * fallback to `F` (the fallback type). If neither type is available
  * then a `Priority[P, F]` instance will not be available.
- * 
+ *
  * This type can be useful for problems where multiple algorithms can
  * be used, depending on the type classes available.
  */
