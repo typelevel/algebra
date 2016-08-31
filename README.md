@@ -13,19 +13,28 @@ these type classes, we will distribute an `algebra` package with no
 dependencies that works with Scala 2.10 and 2.11, and which can be
 shared by all Scala libraries interested in abstract algebra.
 
+Since the creation of Algebra, we have also decided to interoperate
+with the [Cats](http://github.com/typelevel/cats) project. Algebra and
+Cats interoperate using the *cats-kernel* module.
+
 ## getting algebra
 
 Algebra supports Scala 2.10 and 2.11, and is available from Sonatype
-(and Maven Central). To use algebra in your own projects, include this
-snippet in your `build.sbt` file:
+(and Maven Central). Algebra is also available for Scala.js.
+
+To use algebra in your own projects, include this snippet in your
+`build.sbt` file:
 
 ```scala
-resolvers += Resolver.sonatypeRepo("releases")
-
-libraryDependencies += "org.spire-math" %% "algebra" % "0.4.0"
+libraryDependencies += "org.spire-math" %% "algebra" % "0.5.0"
 ```
 
-As of 0.3.1 algebra also supports scala.js!
+If you want to use Algebra's laws, you can include those as well with
+this snippet:
+
+```scala
+libraryDependencies += "org.spire-math" %% "algebra-laws" % "0.5.0"
+```
 
 ## what we have so far
 
@@ -40,11 +49,11 @@ tracker or on relevant pull requests.
 Anyone who wants to participate should feel free to send pull requests
 to this repo. The following people have push access:
 
-* Oscar Boykin
-* Avi Bryant
-* Lars Hupel
-* Erik Osheim
-* Tom Switzer
+* [Oscar Boykin](https://github.com/johnynek)
+* [Avi Bryant](https://github.com/avibryant)
+* [Lars Hupel](https://github.com/larsrh)
+* [Erik Osheim](https://github.com/non)
+* [Tom Switzer](https://github.com/tixxit)
 
 ## development process
 
@@ -115,11 +124,12 @@ properties and terminology](#algebraic-properties-and-terminology).)
 
 ### ring-like structures
 
-The `algebra.ring` contains more sophisticated structures which
-combine an *additive* operation (called `plus`) and a *multiplicative*
-operation (called `times`). Additive identity and inverses will be
-called `zero` and `negate` (respectively); multiplicative identity and
-inverses will be called `one` and `reciprocal` (respectively).
+The `algebra.ring` package contains more sophisticated structures
+which combine an *additive* operation (called `plus`) and a
+*multiplicative* operation (called `times`). Additive identity and
+inverses will be called `zero` and `negate` (respectively);
+multiplicative identity and inverses will be called `one` and
+`reciprocal` (respectively).
 
 Additionally some structures support a quotient operation, called
 `quot`.
@@ -148,33 +158,37 @@ on.
 
 ### lattice-like structures
 
-The `algebra.lattice` contains more structures that can be somewhat ring-like.
-Rather than `plus` and `times` we have `meet` and `join` both of which are always
-associative, commutative and idempotent, and as such each can be viewed as a
-semilattice. Meet can be thought of as the greatest lower bound of two items while
-join can be thought of as the least upper bound between two items.
+The `algebra.lattice` package contains more structures that can be
+somewhat ring-like. Rather than `plus` and `times` we have `meet` and
+`join` both of which are always associative, commutative and
+idempotent, and as such each can be viewed as a semilattice. Meet can
+be thought of as the greatest lower bound of two items while join can
+be thought of as the least upper bound between two items.
 
-When zero is present, join(a, zero) = a. When one is present meet(a, one) = a.
+When `zero` is present, `join(a, zero)` = `a`. When `one` is present
+`meet(a, one)` = `a`.
 
-When meet and join are both present, they obey the absorption law:
+When `meet` and `join` are both present, they obey the absorption law:
 
- -  meet(a, join(a, b)) = join(a, meet(a, b)) = a
+ - `meet(a, join(a, b))` = `join(a, meet(a, b)) = a`
 
 Sometimes meet and join distribute, we say it is distributive in this case:
- - meet(a, join(b, c)) = join(meet(a, b), meet(a, c))
- - join(a, meet(b, c)) = meet(join(a, b), join(a, c))
+
+ - `meet(a, join(b, c))` = `join(meet(a, b), meet(a, c))`
+ - `join(a, meet(b, c))` = `meet(join(a, b), join(a, c))`
 
 Sometimes an additional binary operation `imp` (for impliciation, also
-written as →, meet written as ∧) is present.  Implication obeys the following laws:
+written as →, meet written as ∧) is present. Implication obeys the
+following laws:
 
- - a → a = 1
- - a ∧ (a → b) = a ∧ b
- - b ∧ (a → b) = b
- - a → (b ∧ c) = (a → b) ∧ (a → c)
+ - `a → a` = `1`
+ - `a ∧ (a → b)` = `a ∧ b`
+ - `b ∧ (a → b)` = `b`
+ - `a → (b ∧ c)` = `(a → b) ∧ (a → c)`
 
 The law of the excluded middle can be expressed as:
 
- - (a ∨ (a → 0)) = 1
+ - `(a ∨ (a → 0))` = `1`
 
 |Name                      |Has `join`?|Has `meet`?|Has `zero`?|Has `one`?|Distributive|Has `imp`?|Excludes middle?|
 |--------------------------|-----------|-----------|-----------|----------|------------|----------|----------------|
@@ -189,14 +203,19 @@ The law of the excluded middle can be expressed as:
 |Heyting                   |          ✓|          ✓|          ✓|         ✓|           ✓|         ✓|                |
 |Bool                      |          ✓|          ✓|          ✓|         ✓|           ✓|         ✓|               ✓|
 
-Note that a BoundedDistributiveLattice gives you a CommutativeRig, but not the other way around
-(since rigs aren't distributive with `a + (b * c) = (a + b) * (a + c)`). Also, a Bool gives rise to
-a BoolRing, since each element can be defined as its own negation. Note, Bool's
-asBoolRing is not an extension of the asCommutativeRig as the `plus` operations are defined
-differently.
+Note that a `BoundedDistributiveLattice` gives you a `CommutativeRig`,
+but not the other way around: rigs aren't distributive with `a + (b
+* c) = (a + b) * (a + c)`.
+
+Also, a `Bool` gives rise to a `BoolRing`, since each element can be
+defined as its own negation. Note, Bool's `.asBoolRing` is not an
+extension of the `.asCommutativeRig` method as the `plus` operations
+are defined differently.
 
 ### Copyright and License
 
-All code is available to you under the MIT license, available at http://opensource.org/licenses/mit-license.php and also in the [COPYING](COPYING) file.
+All code is available to you under the MIT license, available at
+http://opensource.org/licenses/mit-license.php and also in the
+[COPYING](COPYING) file.
 
-Copyright the maintainers, 2015.
+Copyright the maintainers, 2015-2016.
