@@ -40,7 +40,7 @@ trait Bool[@sp(Int, Long) A] extends Any with Heyting[A] with GenBool[A] { self 
    * refer to different structures, by default.
    *
    * Note that the ring returned by this method is not an extension of
-   * the `Rig` returned from [[BoundedDistributiveLattice.asCommutativeRig]].
+   * the `Rig` returned from `BoundedDistributiveLattice.asCommutativeRig`.
    */
   override def asBoolRing: BoolRing[A] = new BoolRingFromBool(self)
 }
