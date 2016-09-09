@@ -156,7 +156,9 @@ class LawTests extends FunSuite with Configuration with Discipline {
 
   laws[RingLaws, BigInt].check(_.euclideanRing)
 
-  {
+  // let's limit our BigDecimal-related tests to the JVM for now.
+  if (Platform.isJvm) {
+
     // we need a less intense arbitrary big decimal implementation.
     // this keeps the values relatively small/simple and avoids some
     // of the numerical errors we might hit.
@@ -165,8 +167,8 @@ class LawTests extends FunSuite with Configuration with Discipline {
 
     // BigDecimal does have numerical errors, so we can't pass all of
     // the field laws.
-    laws[RingLaws, BigDecimal].check(_.ring)
-  }
+    laws[RingLaws, BigDecimal].check(_.euclideanRing)
+  } else ()
 
   {
     implicit val arbBitSet: Arbitrary[BitSet] =
