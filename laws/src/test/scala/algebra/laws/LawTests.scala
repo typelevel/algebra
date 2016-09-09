@@ -15,6 +15,7 @@ import Arbitrary.arbitrary
 import org.scalactic.anyvals.{PosZDouble, PosInt, PosZInt}
 import org.scalatest.FunSuite
 import org.scalatest.prop.Configuration
+import scala.collection.immutable.BitSet
 import scala.util.Random
 
 class LawTests extends FunSuite with Configuration with Discipline {
@@ -154,6 +155,24 @@ class LawTests extends FunSuite with Configuration with Discipline {
   laws[LatticeLaws, Long].check(_.boundedDistributiveLattice)
 
   laws[RingLaws, BigInt].check(_.euclideanRing)
+
+  {
+    // we need a less intense arbitrary big decimal implementation.
+    // this keeps the values relatively small/simple and avoids some
+    // of the numerical errors we might hit.
+    implicit val arbBigDecimal: Arbitrary[BigDecimal] =
+      Arbitrary(arbitrary[Int].map(x => BigDecimal(x)))
+
+    // BigDecimal does have numerical errors, so we can't pass all of
+    // the field laws.
+    laws[RingLaws, BigDecimal].check(_.euclideanRing)
+  }
+
+  {
+    implicit val arbBitSet: Arbitrary[BitSet] =
+      Arbitrary(arbitrary[List[Byte]].map(s => BitSet(s.map(_ & 0xff): _*)))
+    laws[LogicLaws, BitSet].check(_.generalizedBool)
+  }
 
   laws[RingLaws, (Int, Int)].check(_.ring)
 
