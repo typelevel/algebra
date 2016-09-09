@@ -2,10 +2,10 @@ sudo: false
 language: scala
 matrix:
   include:
-    - scala: 2.10.5
+    - scala: 2.10.6
       script: ./sbt ++$TRAVIS_SCALA_VERSION clean compile test && ./sbt ++$TRAVIS_SCALA_VERSION core:mima-report-binary-issues
 
-    - scala: 2.11.7
+    - scala: 2.11.8
       script: ./sbt ++$TRAVIS_SCALA_VERSION clean compile test && ./sbt ++$TRAVIS_SCALA_VERSION core:mima-report-binary-issues
 notifications:
   irc:
