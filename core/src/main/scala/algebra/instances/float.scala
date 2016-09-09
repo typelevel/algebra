@@ -46,8 +46,6 @@ class FloatAlgebra extends Field[Float] with Serializable {
     ((x - m) / y, m)
   }
 
-  def gcd(x: Float, y: Float): Float = StaticMethods.gcd(x, y)
-
   override def fromInt(x: Int): Float = x.toFloat
   override def fromDouble(x: Double): Float = x.toFloat
 }

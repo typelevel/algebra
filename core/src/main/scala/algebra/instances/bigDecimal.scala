@@ -31,7 +31,5 @@ class BigDecimalAlgebra extends Field[BigDecimal] with Serializable {
 
   override def pow(a: BigDecimal, k: Int): BigDecimal = a pow k
 
-  def gcd(a: BigDecimal, b: BigDecimal) = StaticMethods.gcd(a, b)
-
   override def fromInt(n: Int): BigDecimal = BigDecimal(n)
 }

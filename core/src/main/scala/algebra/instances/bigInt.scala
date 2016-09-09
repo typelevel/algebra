@@ -26,7 +26,5 @@ class BigIntAlgebra extends EuclideanRing[BigInt] with Serializable {
 
   override def pow(a: BigInt, k: Int): BigInt = a pow k
 
-  def gcd(a:BigInt, b:BigInt) = a gcd b
-
   override def fromInt(n: Int): BigInt = BigInt(n)
 }

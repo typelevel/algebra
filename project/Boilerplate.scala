@@ -120,20 +120,9 @@ object Boilerplate {
         |package algebra
         |package instances
         |
-        |import algebra.ring.{EuclideanRing, Rig, Ring, Rng, Semiring}
+        |import algebra.ring.{Rig, Ring, Rng, Semiring}
         |
         |trait TupleInstances extends cats.kernel.instances.TupleInstances {
-        -
-        -  implicit def tuple${arity}EuclideanRing[${`A..N`}](implicit ${constraints("EuclideanRing")}): EuclideanRing[${`(A..N)`}] =
-        -    new EuclideanRing[${`(A..N)`}] {
-        -      def mod(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("mod")}
-        -      def negate(x: ${`(A..N)`}): ${`(A..N)`} = ${unaryTuple("negate")}
-        -      def one: ${`(A..N)`} = ${nullaryTuple("one")}
-        -      def plus(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("plus")}
-        -      def quot(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("quot")}
-        -      def times(x: ${`(A..N)`}, y: ${`(A..N)`}): ${`(A..N)`} = ${binTuple("times")}
-        -      def zero: ${`(A..N)`} = ${nullaryTuple("zero")}
-        -    }
         -
         -  implicit def tuple${arity}Rig[${`A..N`}](implicit ${constraints("Rig")}): Rig[${`(A..N)`}] =
         -    new Rig[${`(A..N)`}] {

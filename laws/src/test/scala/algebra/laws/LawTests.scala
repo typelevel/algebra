@@ -155,7 +155,7 @@ class LawTests extends FunSuite with Configuration with Discipline {
 
   laws[RingLaws, BigInt].check(_.euclideanRing)
 
-  laws[RingLaws, (Int, Int)].check(_.euclideanRing)
+  laws[RingLaws, (Int, Int)].check(_.ring)
 
   {
     implicit val band = new Band[(Int, Int)] {
