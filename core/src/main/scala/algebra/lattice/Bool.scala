@@ -29,7 +29,8 @@ trait Bool[@sp(Int, Long) A] extends Any with Heyting[A] with GenBool[A] { self 
 
   // xor is already defined in both Heyting and GenBool.
   // In Bool, the definitions coincide, so we just use one of them.
-  override def xor(a: A, b: A): A = super.xor(a, b)
+  override def xor(a: A, b: A): A =
+    or(without(a, b), without(b, a))
 
   override def dual: Bool[A] = new DualBool(this)
 
