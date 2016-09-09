@@ -5,7 +5,9 @@ package object all extends AllInstances
 
 trait AllInstances
     extends ArrayInstances
+    with BigDecimalInstances
     with BigIntInstances
+    with BitSetInstances
     with BooleanInstances
     with ByteInstances
     with CharInstances

@@ -29,8 +29,5 @@ class ByteAlgebra extends EuclideanRing[Byte] with Serializable {
   override def pow(x: Byte, y: Int): Byte =
     Math.pow(x.toDouble, y.toDouble).toByte
 
-  def gcd(x: Byte, y: Byte): Byte =
-    StaticMethods.gcd(x.toLong, y.toLong).toByte
-
   override def fromInt(n: Int): Byte = n.toByte
 }

@@ -45,8 +45,6 @@ class DoubleAlgebra extends Field[Double] with Serializable {
     ((x - m) / y, m)
   }
 
-  def gcd(x: Double, y: Double): Double = StaticMethods.gcd(x, y)
-
   override def fromInt(x: Int): Double = x.toDouble
   override def fromDouble(x: Double): Double = x
 }

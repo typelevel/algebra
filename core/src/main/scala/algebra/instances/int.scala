@@ -30,8 +30,5 @@ class IntAlgebra extends EuclideanRing[Int] with Serializable {
   override def pow(x: Int, y: Int): Int =
     StaticMethods.pow(x.toLong, y.toLong).toInt
 
-  def gcd(x: Int, y: Int): Int =
-    StaticMethods.gcd(x.toLong, y.toLong).toInt
-
   override def fromInt(n: Int): Int = n
 }
