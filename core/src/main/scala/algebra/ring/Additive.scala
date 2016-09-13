@@ -7,6 +7,7 @@ import scala.annotation.tailrec
 trait AdditiveSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
   def additive: Semigroup[A] = new Semigroup[A] {
     def combine(x: A, y: A): A = plus(x, y)
+    override def combineAllOption(as: TraversableOnce[A]): Option[A] = trySum(as)
   }
 
   def plus(x: A, y: A): A
@@ -36,6 +37,7 @@ trait AdditiveSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Serial
 trait AdditiveCommutativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with AdditiveSemigroup[A] {
   override def additive: CommutativeSemigroup[A] = new CommutativeSemigroup[A] {
     def combine(x: A, y: A): A = plus(x, y)
+    override def combineAllOption(as: TraversableOnce[A]): Option[A] = trySum(as)
   }
 }
 
@@ -43,6 +45,8 @@ trait AdditiveMonoid[@sp(Int, Long, Float, Double) A] extends Any with AdditiveS
   override def additive: Monoid[A] = new Monoid[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
+    override def combineAllOption(as: TraversableOnce[A]): Option[A] = trySum(as)
+    override def combineAll(as: TraversableOnce[A]): A = sum(as)
   }
 
   def zero: A
@@ -71,6 +75,8 @@ trait AdditiveCommutativeMonoid[@sp(Int, Long, Float, Double) A] extends Any wit
   override def additive: CommutativeMonoid[A] = new CommutativeMonoid[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
+    override def combineAllOption(as: TraversableOnce[A]): Option[A] = trySum(as)
+    override def combineAll(as: TraversableOnce[A]): A = sum(as)
   }
 }
 
@@ -80,6 +86,8 @@ trait AdditiveGroup[@sp(Int, Long, Float, Double) A] extends Any with AdditiveMo
     def combine(x: A, y: A): A = plus(x, y)
     override def remove(x: A, y: A): A = minus(x, y)
     def inverse(x: A): A = negate(x)
+    override def combineAllOption(as: TraversableOnce[A]): Option[A] = trySum(as)
+    override def combineAll(as: TraversableOnce[A]): A = sum(as)
   }
 
   def negate(x: A): A
@@ -98,6 +106,8 @@ trait AdditiveCommutativeGroup[@sp(Int, Long, Float, Double) A] extends Any with
     def combine(x: A, y: A): A = plus(x, y)
     override def remove(x: A, y: A): A = minus(x, y)
     def inverse(x: A): A = negate(x)
+    override def combineAllOption(as: TraversableOnce[A]): Option[A] = trySum(as)
+    override def combineAll(as: TraversableOnce[A]): A = sum(as)
   }
 }
 
