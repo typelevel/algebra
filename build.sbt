@@ -47,7 +47,7 @@ lazy val docSettings = Seq(
   autoAPIMappings := true,
   unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(coreJVM, lawsJVM),
   site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
-  git.remoteRepo := "git@github.com:non/algebra.git"
+  git.remoteRepo := "git@github.com:typelevel/algebra.git"
 )
 
 lazy val aggregate = project.in(file("."))
@@ -112,8 +112,8 @@ lazy val publishSettings = Seq(
   },
   pomExtra := (
     <scm>
-      <url>git@github.com:non/algebra.git</url>
-      <connection>scm:git:git@github.com:non/algebra.git</connection>
+      <url>git@github.com:typelevel/algebra.git</url>
+      <connection>scm:git:git@github.com:typelevel/algebra.git</connection>
     </scm>
     <developers>
       <developer>

@@ -1,6 +1,7 @@
-[![Build Status](https://api.travis-ci.org/non/algebra.png)](https://travis-ci.org/non/algebra/)
+[![Build Status](https://api.travis-ci.org/typelevel/algebra.png)](https://travis-ci.org/typelevel/algebra/)
+[![Coverage status](https://img.shields.io/codecov/c/github/typelevel/algebra/master.svg)](https://codecov.io/github/typelevel/algebra)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/non/algebra?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.spire-math/algebra_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.spire-math/algebra_2.11)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.typelevel/algebra_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.spire-math/algebra_2.11)
 
 # algebra
 
