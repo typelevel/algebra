@@ -3,7 +3,7 @@ language: scala
 scala: 
   - 2.11.8
   - 2.10.6
-script: ./sbt ++$TRAVIS_SCALA_VERSION clean coverage test && ./sbt ++$TRAVIS_SCALA_VERSION core:mima-report-binary-issues
+script: ./sbt ++$TRAVIS_SCALA_VERSION clean coreJS/test lawsJS/test && ./sbt ++$TRAVIS_SCALA_VERSION clean coverage coreJVM/test lawsJVM/test coverageReport && ./sbt ++$TRAVIS_SCALA_VERSION core:mima-report-binary-issues
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 notifications:
