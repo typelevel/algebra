@@ -47,27 +47,31 @@ tracker or on relevant pull requests.
 
 ## participants
 
-Anyone who wants to participate should feel free to send pull requests
-to this repo. The following people have push access:
+Anyone who wants to participate should feel free to open issues or
+send pull requests to this repo.
+
+The following people are Algebra maintainers (i.e. have push access):
 
 * [Oscar Boykin](https://github.com/johnynek)
 * [Avi Bryant](https://github.com/avibryant)
 * [Lars Hupel](https://github.com/larsrh)
+* [Rüdiger Klaehn](https://github.com/rklaehn)
+* [Tomas Mikula](https://github.com/tomasmikula)
 * [Erik Osheim](https://github.com/non)
 * [Tom Switzer](https://github.com/tixxit)
 
 ## development process
 
-Please make a pull request against the master branch. For those that
-have merge access to the repo, we follow these rules:
+Please make a pull request against the `master` branch. For those who
+can merge pull requests, we follow these rules:
 
 1. Do not merge your own PR unless *N* people have signed-off on the
    PR (e.g. given a thumbs-up, +1, shipit, etc) and Travis is green.
 
-2. If you are not the author, and you see *N-1* sign-offs and Travis
-   is green, just click merge and delete the branch.
+2. If you are not the author, and you see *(N - 1)* sign-offs and
+   Travis is green, just click merge and delete the branch.
 
-3. Currently, *N = 1*.
+3. Currently, *N* = *2*.
 
 ## algebra overview
 
