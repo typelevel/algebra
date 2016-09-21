@@ -7,7 +7,10 @@ import scala.{specialized => sp}
 trait OrderedRing[@sp(Int, Long, Float, Double) A] extends Any with Ring[A] with Order[A] {
   def isWhole(x: A): Boolean 
   def abs(x: A): A = if (lt(x, zero)) negate(x) else x
-  def sign(x: A): Int = compare(x, zero).signum
+  def sign(x: A): Int = {
+    val c = compare(x, zero)
+    c.signum
+  }
 }
 
 /**
