@@ -20,6 +20,8 @@ import scala.{specialized => sp}
  * 
  * This type does not provide access to the Euclidean function, but
  * only provides the quot, mod, and quotmod operators.
+ * 
+ * The Euclidean function is available in the `EuclideanFunction` type.
  */
 trait EuclideanRing[@sp(Int, Long, Float, Double) A] extends Any with CommutativeRing[A] {
   def mod(a: A, b: A): A
@@ -38,4 +40,25 @@ trait EuclideanRingFunctions[R[T] <: EuclideanRing[T]] extends RingFunctions[R] 
 
 object EuclideanRing extends EuclideanRingFunctions[EuclideanRing] {
   @inline final def apply[A](implicit ev: EuclideanRing[A]): EuclideanRing[A] = ev
+}
+
+/**
+  * Extends EuclideanRing with a (submultiplicative) Euclidean function.
+  * 
+  * On an EuclideanRing, we can require the Euclidean function to be submultiplicative
+  * without loss of generality:
+  * 
+  *   if x, y are not zero, then f(a) <= f(ab)
+  */
+trait EuclideanFunction[@sp(Int, Long, Float, Double) A] extends Any with EuclideanRing[A] {
+  def euclideanFunction(a: A): BigInt
+}
+
+trait EuclideanFunctionFunctions[R[T] <: EuclideanFunction[T]] extends EuclideanRingFunctions[R] {
+  def euclideanFunction[@sp(Int, Long, Float, Double) A](a: A)(implicit ev: R[A]): BigInt =
+    ev.euclideanFunction(a)
+}
+
+object EuclideanFunction extends EuclideanFunctionFunctions[EuclideanFunction] {
+  @inline final def apply[A](implicit ev: EuclideanFunction[A]): EuclideanFunction[A] = ev
 }

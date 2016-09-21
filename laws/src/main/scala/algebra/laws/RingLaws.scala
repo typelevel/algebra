@@ -146,6 +146,68 @@ trait RingLaws[A] extends GroupLaws[A] {
     }
   )
 
+  def tDivMod(implicit A: TDivMod[A]) = RingProperties.fromParent(
+    name = "tDivMod",
+    parent = ring,
+    "quotient is integer" -> forAll { (x: A, y: A) =>
+      pred(y) ==> A.isWhole(A.tdiv(x, y))
+    },
+    "remainder smaller that divisor" -> forAll { (x: A, y: A) =>
+      pred(y) ==> A.lt(A.abs(A.tmod(x, y)), A.abs(y))
+    },
+    "division rule" -> forAll { (x: A, y: A) =>
+      pred(y) ==> {
+        val (q, r) = A.tdivmod(x, y)
+        x ?== A.plus(A.times(y, q), r)
+      }
+    },
+    "sign of remainder" -> forAll { (x: A, y: A) =>
+      pred(y) ==> {
+        val signr = A.sign(A.tmod(x, y))
+        (signr == 0) || (signr == A.sign(x))
+      }
+    }
+  )
+
+  def fDivMod(implicit A: FDivMod[A]) = RingProperties.fromParent(
+    name = "fDivMod",
+    parent = ring,
+    "quotient is integer" -> forAll { (x: A, y: A) =>
+      pred(y) ==> A.isWhole(A.fdiv(x, y))
+    },
+    "remainder smaller that divisor" -> forAll { (x: A, y: A) =>
+      pred(y) ==> A.lt(A.abs(A.fmod(x, y)), A.abs(y))
+    },
+    "division rule" -> forAll { (x: A, y: A) =>
+      pred(y) ==> {
+        val (q, r) = A.fdivmod(x, y)
+        x ?== A.plus(A.times(y, q), r)
+      }
+    },
+    "sign of remainder" -> forAll { (x: A, y: A) =>
+      pred(y) ==> {
+        val signr = A.sign(A.fmod(x, y))
+        (signr == 0) || (signr == A.sign(y))
+      }
+    }
+  )
+
+  def euclideanFunction(implicit A: EuclideanFunction[A]) = RingProperties.fromParent(
+    name = "euclidean function",
+    parent = euclideanRing,
+    "euclideanFunction" -> forAll { (x: A, y: A) =>
+      pred(y) ==> {
+        val (q, r) = A.quotmod(x, y)
+        A.isZero(r) || (A.euclideanFunction(r) < A.euclideanFunction(y))
+      }
+    },
+    "submultiplicative function" -> forAll { (x: A, y: A) =>
+      (pred(x) && pred(y)) ==> {
+        A.euclideanFunction(x) <= A.euclideanFunction(A.times(x, y))
+      }
+    }
+  )
+
   // Everything below fields (e.g. rings) does not require their multiplication
   // operation to be a group. Hence, we do not check for the existence of an
   // inverse. On the other hand, fields require their multiplication to be an

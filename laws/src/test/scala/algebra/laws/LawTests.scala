@@ -154,7 +154,8 @@ class LawTests extends FunSuite with Configuration with Discipline {
   laws[RingLaws, Long].check(_.euclideanRing)
   laws[LatticeLaws, Long].check(_.boundedDistributiveLattice)
 
-  laws[RingLaws, BigInt].check(_.euclideanRing)
+  laws[RingLaws, BigInt].check(_.euclideanFunction)
+  laws[RingLaws, BigInt].check(_.tDivMod)
 
   // let's limit our BigDecimal-related tests to the JVM for now.
   if (Platform.isJvm) {
@@ -241,6 +242,9 @@ class LawTests extends FunSuite with Configuration with Discipline {
   laws[OrderLaws, Array[Int]].check(_.partialOrder)
 
   // Rational tests do not return on Scala-js, so we make them JVM only.
-  if (Platform.isJvm) laws[RingLaws, Rat].check(_.field)
-  else ()
+  if (Platform.isJvm) {
+    laws[RingLaws, Rat].check(_.field)
+    laws[RingLaws, Rat].check(_.euclideanFunction)
+    laws[RingLaws, Rat].check(_.tDivMod)
+  } else ()
 }
