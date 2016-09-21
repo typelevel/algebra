@@ -105,7 +105,7 @@ object Rat {
     } yield Rat(n, d))
 }
 
-class RatAlgebra extends Field[Rat] with Order[Rat] with Serializable {
+class RatAlgebra extends Field[Rat] with EuclideanFunction[Rat] with Order[Rat] with TDivMod[Rat] with Serializable {
 
   def compare(x: Rat, y: Rat): Int = x compare y
 
@@ -115,15 +115,23 @@ class RatAlgebra extends Field[Rat] with Order[Rat] with Serializable {
   def plus(a: Rat, b: Rat): Rat = a + b
   def negate(a: Rat): Rat = -a
   def times(a: Rat, b: Rat): Rat = a * b
+  def euclideanFunction(a: Rat) = if (isZero(a)) 0 else 1
   def quot(a: Rat, b: Rat) = a /~ b
   def mod(a: Rat, b: Rat) = a % b
   override def reciprocal(a: Rat): Rat = a.reciprocal
   def div(a: Rat, b: Rat): Rat = a / b
 
+  def tdiv(a: Rat, b: Rat): Rat = {
+    val toRound = a / b
+    Rat(toRound.num / toRound.den, 1)
+  }
+  def tmod(a: Rat, b: Rat): Rat = a + (-tdiv(a, b) * b)
+  override def abs(a: Rat): Rat = a.abs
+  def isWhole(a: Rat): Boolean = a.isWhole
+
   override def fromInt(n: Int): Rat = Rat(n)
 
-  def isWhole(a: Rat): Boolean = a.isWhole
   def ceil(a: Rat): Rat = a.ceil
-  def floor(a: Rat): Rat = a .floor
-  def round(a: Rat): Rat = a. round
+  def floor(a: Rat): Rat = a.floor
+  def round(a: Rat): Rat = a.round
 }
