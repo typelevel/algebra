@@ -68,7 +68,10 @@ lazy val core = crossProject
   .settings(mimaDefaultSettings: _*)
   // TODO: update this to a published stable version, e.g. 0.4.0
   //.settings(previousArtifact := Some("org.spire-math" %% "algebra" % "0.3.1"))
-  .settings(libraryDependencies += "org.typelevel" %%% "cats-kernel" % "0.7.2")
+  .settings(libraryDependencies ++= Seq(
+    "org.typelevel" %%% "cats-kernel" % "0.7.2",
+    "org.scalacheck" %%% "scalacheck" % "1.12.4" % "test",
+    "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test"))
   .settings(algebraSettings: _*)
   .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
 

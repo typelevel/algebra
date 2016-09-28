@@ -47,5 +47,6 @@ class FloatAlgebra extends Field[Float] with Serializable {
   }
 
   override def fromInt(x: Int): Float = x.toFloat
+  override def fromBigInt(n: BigInt): Float = n.toFloat
   override def fromDouble(x: Double): Float = x.toFloat
 }

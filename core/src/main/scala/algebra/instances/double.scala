@@ -46,5 +46,6 @@ class DoubleAlgebra extends Field[Double] with Serializable {
   }
 
   override def fromInt(x: Int): Double = x.toDouble
+  override def fromBigInt(n: BigInt): Double = n.toDouble
   override def fromDouble(x: Double): Double = x
 }
