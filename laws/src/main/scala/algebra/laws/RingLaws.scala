@@ -107,7 +107,15 @@ trait RingLaws[A] extends GroupLaws[A] {
     name = "ring",
     al = additiveCommutativeGroup,
     ml = multiplicativeMonoid,
-    parents = Seq(rig, rng)
+    parents = Seq(rig, rng),
+    "fromInt" -> forAll { (n: Int) =>
+      A.fromInt(n) ?== A.sumN(A.one, n)
+    },
+    "fromBigInt" -> forAll { (ns: List[Int]) =>
+      val actual = A.fromBigInt(ns.map(BigInt(_)).foldLeft(BigInt(1))(_ * _))
+      val expected = ns.map(A.fromInt).foldLeft(A.one)(A.times)
+      actual ?== expected
+    }
   )
 
   def commutativeRing(implicit A: CommutativeRing[A]) = new RingProperties(
