@@ -48,7 +48,7 @@ trait RingFunctions[R[T] <: Ring[T]] extends AdditiveGroupFunctions[R] with Mult
   def fromInt[@sp(Int, Long, Float, Double) A](n: Int)(implicit ev: R[A]): A =
     ev.fromInt(n)
 
-  def fromBigInt[@sp(Int, Long, Float, Double) A](n: Int)(implicit ev: R[A]): A =
+  def fromBigInt[@sp(Int, Long, Float, Double) A](n: BigInt)(implicit ev: R[A]): A =
     ev.fromBigInt(n)
 
   final def defaultFromBigInt[@sp(Int, Long, Float, Double) A](n: BigInt)(implicit ev: R[A]): A = {
