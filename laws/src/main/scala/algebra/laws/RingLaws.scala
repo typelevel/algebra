@@ -109,10 +109,10 @@ trait RingLaws[A] extends GroupLaws[A] {
     ml = multiplicativeMonoid,
     parents = Seq(rig, rng),
     "fromInt" -> forAll { (n: Int) =>
-      A.fromInt(n) ?== A.sumN(A.one, n)
+      Ring.fromInt[A](n) ?== A.sumN(A.one, n)
     },
     "fromBigInt" -> forAll { (ns: List[Int]) =>
-      val actual = A.fromBigInt(ns.map(BigInt(_)).foldLeft(BigInt(1))(_ * _))
+      val actual = Ring.fromBigInt[A](ns.map(BigInt(_)).foldLeft(BigInt(1))(_ * _))
       val expected = ns.map(A.fromInt).foldLeft(A.one)(A.times)
       actual ?== expected
     }
