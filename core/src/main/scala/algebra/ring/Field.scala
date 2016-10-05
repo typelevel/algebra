@@ -39,6 +39,13 @@ trait Field[@sp(Int, Long, Float, Double) A] extends Any with EuclideanRing[A] w
 
       if (a < 0) negate(unsigned) else unsigned
     }
+
+  /* On a field, all nonzero elements are invertible, so the remainder of the division
+     is always 0. */
+  def mod(a: A, b: A): A = zero
+  def quot(a: A, b: A): A = div(a, b)
+  override def quotmod(a: A, b: A): (A, A) = (div(a, b), zero)
+
 }
 
 trait FieldFunctions[F[T] <: Field[T]] extends EuclideanRingFunctions[F] with MultiplicativeGroupFunctions[F] {

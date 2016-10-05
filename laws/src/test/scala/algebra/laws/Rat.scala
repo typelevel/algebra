@@ -115,8 +115,6 @@ class RatAlgebra extends Field[Rat] with Order[Rat] with Serializable {
   def plus(a: Rat, b: Rat): Rat = a + b
   def negate(a: Rat): Rat = -a
   def times(a: Rat, b: Rat): Rat = a * b
-  def quot(a: Rat, b: Rat) = a /~ b
-  def mod(a: Rat, b: Rat) = a % b
   override def reciprocal(a: Rat): Rat = a.reciprocal
   def div(a: Rat, b: Rat): Rat = a / b
 

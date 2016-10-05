@@ -21,13 +21,6 @@ class BigDecimalAlgebra extends Field[BigDecimal] with Serializable {
 
   def times(a: BigDecimal, b: BigDecimal): BigDecimal = a * b
   def div(a: BigDecimal, b: BigDecimal): BigDecimal = a / b
-  def quot(a: BigDecimal, b: BigDecimal) = a.quot(b)
-  def mod(a: BigDecimal, b: BigDecimal) = a.remainder(b)
-
-  override def quotmod(a: BigDecimal, b: BigDecimal) = {
-    val arr = a.bigDecimal.divideAndRemainder(b.bigDecimal)
-    (BigDecimal(arr(0)), BigDecimal(arr(1)))
-  }
 
   override def pow(a: BigDecimal, k: Int): BigDecimal = a pow k
 

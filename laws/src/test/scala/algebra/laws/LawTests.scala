@@ -167,7 +167,7 @@ class LawTests extends FunSuite with Configuration with Discipline {
 
     // BigDecimal does have numerical errors, so we can't pass all of
     // the field laws.
-    laws[RingLaws, BigDecimal].check(_.euclideanRing)
+    laws[RingLaws, BigDecimal].check(_.ring)
   } else ()
 
   {
