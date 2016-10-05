@@ -30,4 +30,5 @@ class LongAlgebra extends EuclideanRing[Long] with Serializable {
   override def pow(x: Long, y: Int): Long = StaticMethods.pow(x, y.toLong)
 
   override def fromInt(n: Int): Long = n.toLong
+  override def fromBigInt(n: BigInt): Long = n.toLong
 }

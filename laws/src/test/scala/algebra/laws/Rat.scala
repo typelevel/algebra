@@ -119,6 +119,7 @@ class RatAlgebra extends Field[Rat] with Order[Rat] with Serializable {
   def div(a: Rat, b: Rat): Rat = a / b
 
   override def fromInt(n: Int): Rat = Rat(n)
+  override def fromBigInt(n: BigInt): Rat = Rat(n)
 
   def isWhole(a: Rat): Boolean = a.isWhole
   def ceil(a: Rat): Rat = a.ceil

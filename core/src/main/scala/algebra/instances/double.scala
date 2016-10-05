@@ -38,5 +38,6 @@ class DoubleAlgebra extends Field[Double] with Serializable {
   override def pow(x: Double, y: Int): Double = Math.pow(x, y.toDouble)
 
   override def fromInt(x: Int): Double = x.toDouble
+  override def fromBigInt(n: BigInt): Double = n.toDouble
   override def fromDouble(x: Double): Double = x
 }

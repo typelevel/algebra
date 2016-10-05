@@ -31,4 +31,5 @@ class ShortAlgebra extends EuclideanRing[Short] with Serializable {
     Math.pow(x.toDouble, y.toDouble).toShort
 
   override def fromInt(n: Int): Short = n.toShort
+  override def fromBigInt(n: BigInt): Short = n.toShort
 }
