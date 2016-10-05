@@ -38,14 +38,6 @@ class FloatAlgebra extends Field[Float] with Serializable {
   override def pow(x: Float, y: Int): Float =
     Math.pow(x.toDouble, y.toDouble).toFloat
 
-  def quot(x: Float, y: Float): Float = (x - (x % y)) / y
-  def mod(x: Float, y: Float): Float = x % y
-
-  override def quotmod(x: Float, y: Float): (Float, Float) = {
-    val m = x % y
-    ((x - m) / y, m)
-  }
-
   override def fromInt(x: Int): Float = x.toFloat
   override def fromDouble(x: Double): Float = x.toFloat
 }

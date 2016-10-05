@@ -37,14 +37,6 @@ class DoubleAlgebra extends Field[Double] with Serializable {
   override def reciprocal(x: Double): Double = 1.0 / x
   override def pow(x: Double, y: Int): Double = Math.pow(x, y.toDouble)
 
-  def quot(x: Double, y: Double): Double = (x - (x % y)) / y
-  def mod(x: Double, y: Double): Double = x % y
-
-  override def quotmod(x: Double, y: Double): (Double, Double) = {
-    val m = x % y
-    ((x - m) / y, m)
-  }
-
   override def fromInt(x: Int): Double = x.toDouble
   override def fromDouble(x: Double): Double = x
 }
