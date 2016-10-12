@@ -209,8 +209,7 @@ The law of the excluded middle can be expressed as:
 |Bool                      |          ✓|          ✓|          ✓|         ✓|           ✓|         ✓|               ✓|
 
 Note that a `BoundedDistributiveLattice` gives you a `CommutativeRig`,
-but not the other way around: rigs aren't distributive with `a + (b
-* c) = (a + b) * (a + c)`.
+but not the other way around: rigs aren't distributive with `a + (b * c) = (a + b) * (a + c)`.
 
 Also, a `Bool` gives rise to a `BoolRing`, since each element can be
 defined as its own negation. Note, Bool's `.asBoolRing` is not an
