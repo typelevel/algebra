@@ -13,7 +13,7 @@ trait ByteInstances extends cats.kernel.instances.ByteInstances {
     BoundedDistributiveLattice.minMax[Byte](Byte.MinValue, Byte.MaxValue)
 }
 
-class ByteAlgebra extends EuclideanRing[Byte] with Serializable {
+class ByteAlgebra extends CommutativeRing[Byte] with Serializable {
 
   def zero: Byte = 0
   def one: Byte = 1
@@ -23,8 +23,6 @@ class ByteAlgebra extends EuclideanRing[Byte] with Serializable {
   override def minus(x: Byte, y: Byte): Byte = (x - y).toByte
 
   def times(x: Byte, y: Byte): Byte = (x * y).toByte
-  def quot(x: Byte, y: Byte) = (x / y).toByte
-  def mod(x: Byte, y: Byte) = (x % y).toByte
 
   override def pow(x: Byte, y: Int): Byte =
     Math.pow(x.toDouble, y.toDouble).toByte

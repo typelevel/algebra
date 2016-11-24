@@ -132,17 +132,17 @@ class LawTests extends FunSuite with Configuration with Discipline {
   laws[RingLaws, Map[Int, BigInt]].check(_.semiring)
 
   laws[OrderLaws, Byte].check(_.order)
-  laws[RingLaws, Byte].check(_.euclideanRing)
+  laws[RingLaws, Byte].check(_.commutativeRing)
   laws[LatticeLaws, Byte].check(_.lattice)
 
   laws[OrderLaws, Short].check(_.order)
-  laws[RingLaws, Short].check(_.euclideanRing)
+  laws[RingLaws, Short].check(_.commutativeRing)
   laws[LatticeLaws, Short].check(_.lattice)
 
   laws[OrderLaws, Char].check(_.order)
 
   laws[OrderLaws, Int].check(_.order)
-  laws[RingLaws, Int].check(_.euclideanRing)
+  laws[RingLaws, Int].check(_.commutativeRing)
   laws[LatticeLaws, Int].check(_.boundedDistributiveLattice)
 
   {
@@ -151,10 +151,10 @@ class LawTests extends FunSuite with Configuration with Discipline {
   }
 
   laws[OrderLaws, Long].check(_.order)
-  laws[RingLaws, Long].check(_.euclideanRing)
+  laws[RingLaws, Long].check(_.commutativeRing)
   laws[LatticeLaws, Long].check(_.boundedDistributiveLattice)
 
-  laws[RingLaws, BigInt].check(_.euclideanRing)
+  laws[RingLaws, BigInt].check(_.commutativeRing)
 
   // let's limit our BigDecimal-related tests to the JVM for now.
   if (Platform.isJvm) {
