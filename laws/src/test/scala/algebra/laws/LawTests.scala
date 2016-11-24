@@ -159,7 +159,7 @@ class LawTests extends FunSuite with Configuration with Discipline {
     // this keeps the values relatively small/simple and avoids some
     // of the numerical errors we might hit.
     implicit val arbBigDecimal: Arbitrary[BigDecimal] =
-      Arbitrary(arbitrary[Int].map(x => BigDecimal(x)))
+      Arbitrary(arbitrary[Int].map(x => BigDecimal(x, java.math.MathContext.UNLIMITED)))
 
     // BigDecimal does have numerical errors, so we can't pass all of
     // the field laws.
