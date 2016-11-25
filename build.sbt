@@ -4,10 +4,16 @@ import ReleaseTransformations._
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
 
+lazy val scalaCheckVersion = "1.13.4"
+lazy val scalaTestVersion = "3.0.0"
+lazy val disciplineVersion = "0.7.2"
+lazy val catsVersion = "0.8.1"
+lazy val catalystsVersion = "0.0.5"
+
 lazy val buildSettings = Seq(
   organization := "org.typelevel",
-  scalaVersion := "2.11.8",
-  crossScalaVersions := Seq("2.10.6", "2.11.8")
+  scalaVersion := "2.12.0",
+  crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0")
 )
 
 lazy val commonSettings = Seq(
@@ -69,9 +75,9 @@ lazy val core = crossProject
   // TODO: update this to a published stable version, e.g. 0.4.0
   //.settings(previousArtifact := Some("org.spire-math" %% "algebra" % "0.3.1"))
   .settings(libraryDependencies ++= Seq(
-    "org.typelevel" %%% "cats-kernel" % "0.7.2",
-    "org.scalacheck" %%% "scalacheck" % "1.12.4" % "test",
-    "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test"))
+    "org.typelevel" %%% "cats-kernel" % catsVersion,
+    "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test",
+    "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"))
   .settings(algebraSettings: _*)
   .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
 
@@ -84,12 +90,12 @@ lazy val laws = crossProject
   .settings(moduleName := "algebra-laws")
   .settings(algebraSettings: _*)
   .settings(libraryDependencies ++= Seq(
-    "org.typelevel" %%% "cats-kernel-laws" % "0.7.2",
-    "org.scalacheck" %%% "scalacheck" % "1.12.4",
-    "org.typelevel" %%% "discipline" % "0.4",
-    "org.typelevel" %%% "catalysts-platform" % "0.0.2" % "test",
-    "org.typelevel" %%% "catalysts-macros" % "0.0.2" % "test",
-    "org.scalatest" %%% "scalatest" % "3.0.0-M7" % "test"))
+    "org.typelevel" %%% "cats-kernel-laws" % catsVersion,
+    "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
+    "org.typelevel" %%% "discipline" % disciplineVersion,
+    "org.typelevel" %%% "catalysts-platform" % catalystsVersion % "test",
+    "org.typelevel" %%% "catalysts-macros" % catalystsVersion % "test",
+    "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"))
 
 lazy val lawsJVM = laws.jvm
 lazy val lawsJS = laws.js
