@@ -45,6 +45,11 @@ trait RingLaws[A] extends GroupLaws[A] {
     Rules.repeat2("pow", "*")(A.pow)(A.times)
   )
 
+  def multiplicativeCommutativeSemigroup(implicit A: MultiplicativeCommutativeSemigroup[A]) = new MultiplicativeProperties(
+    base = _.semigroup(A.multiplicative),
+    parent = Some(multiplicativeSemigroup)
+  )
+
   def multiplicativeMonoid(implicit A: MultiplicativeMonoid[A]) = new MultiplicativeProperties(
     base = _.monoid(A.multiplicative),
     parent = Some(multiplicativeSemigroup),
@@ -95,13 +100,6 @@ trait RingLaws[A] extends GroupLaws[A] {
     parents = Seq(semiring)
   )
 
-  def commutativeRig(implicit A: CommutativeRig[A]) = new RingProperties(
-    name = "commutativeRig",
-    al = additiveCommutativeMonoid,
-    ml = multiplicativeCommutativeMonoid,
-    parents = Seq(semiring)
-  )
-
   def ring(implicit A: Ring[A]) = new RingProperties(
     // TODO fromParents
     name = "ring",
@@ -118,16 +116,41 @@ trait RingLaws[A] extends GroupLaws[A] {
     }
   )
 
+  // commutative rings
+
+  def commutativeSemiring(implicit A: CommutativeSemiring[A]) = new RingProperties(
+    name = "commutativeSemiring",
+    al = additiveCommutativeMonoid,
+    ml = multiplicativeCommutativeSemigroup,
+    parents = Seq(semiring)
+  )
+
+  def commutativeRng(implicit A: CommutativeRng[A]) = new RingProperties(
+    name = "commutativeRng",
+    al = additiveCommutativeMonoid,
+    ml = multiplicativeCommutativeSemigroup,
+    parents = Seq(rng, commutativeSemiring)
+  )
+
+  def commutativeRig(implicit A: CommutativeRig[A]) = new RingProperties(
+    name = "commutativeRig",
+    al = additiveCommutativeMonoid,
+    ml = multiplicativeCommutativeMonoid,
+    parents = Seq(rig, commutativeSemiring)
+  )
+
   def commutativeRing(implicit A: CommutativeRing[A]) = new RingProperties(
     name = "commutative ring",
     al = additiveCommutativeGroup,
     ml = multiplicativeCommutativeMonoid,
-    parents = Seq(ring, commutativeRig)
+    parents = Seq(ring, commutativeRig, commutativeRng)
   )
+
+  // boolean rings
 
   def boolRng(implicit A: BoolRng[A]) = RingProperties.fromParent(
     name = "boolean rng",
-    parent = rng,
+    parent = commutativeRng,
     Rules.idempotence(A.times)
   )
 

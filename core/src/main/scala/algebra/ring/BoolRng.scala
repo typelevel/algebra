@@ -9,7 +9,7 @@ package ring
  * Every `BoolRng` is equivalent to `algebra.lattice.GenBool`.
  * See `algebra.lattice.GenBoolFromBoolRng` for details.
  */
-trait BoolRng[A] extends Any with Rng[A] { self =>
+trait BoolRng[A] extends Any with CommutativeRng[A] { self =>
   override final def negate(x: A): A = x
 }
 
