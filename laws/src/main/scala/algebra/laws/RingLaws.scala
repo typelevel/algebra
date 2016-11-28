@@ -96,7 +96,8 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
   )
 
   def multiplicativeCommutativeSemigroup(implicit A: MultiplicativeCommutativeSemigroup[A]) = new MultiplicativeProperties(
-    base = _.semigroup(A.multiplicative),
+    base = semigroup(A.multiplicative),
+    nonZeroBase = None,
     parent = Some(multiplicativeSemigroup)
   )
 
