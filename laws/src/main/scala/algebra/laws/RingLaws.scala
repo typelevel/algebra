@@ -215,23 +215,6 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
     Rules.idempotence(A.times)
   )
 
-  def euclideanRing(implicit A: EuclideanRing[A]) = RingProperties.fromParent(
-    name = "euclidean ring",
-    parent = commutativeRing,
-    "quotmod" -> forAll { (x: A, y: A) =>
-      pred(y) ==> {
-        val (q, r) = A.quotmod(x, y)
-        A.plus(A.times(y, q), r) ?== x
-      }
-    },
-    "quot" -> forAll { (x: A, y: A) =>
-      pred(y) ==> (A.quot(x, y) ?== A.quotmod(x, y)._1)
-    },
-    "mod" -> forAll { (x: A, y: A) =>
-      pred(y) ==> (A.mod(x, y) ?== A.quotmod(x, y)._2)
-    }
-  )
-
   // Everything below fields (e.g. rings) does not require their multiplication
   // operation to be a group. Hence, we do not check for the existence of an
   // inverse. On the other hand, fields require their multiplication to be an
@@ -247,7 +230,7 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
     name = "field",
     al = additiveCommutativeGroup,
     ml = multiplicativeCommutativeGroup,
-    parents = Seq(euclideanRing)
+    parents = Seq(commutativeRing)
   )
 
   // property classes

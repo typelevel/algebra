@@ -10,7 +10,7 @@ trait BigIntInstances extends cats.kernel.instances.BigIntInstances {
     new BigIntAlgebra
 }
 
-class BigIntAlgebra extends EuclideanRing[BigInt] with Serializable {
+class BigIntAlgebra extends CommutativeRing[BigInt] with Serializable {
 
   val zero: BigInt = BigInt(0)
   val one: BigInt = BigInt(1)
@@ -20,9 +20,6 @@ class BigIntAlgebra extends EuclideanRing[BigInt] with Serializable {
   override def minus(a: BigInt, b: BigInt): BigInt = a - b
 
   def times(a: BigInt, b: BigInt): BigInt = a * b
-  def quot(a: BigInt, b: BigInt) = a / b
-  def mod(a: BigInt, b: BigInt) = a % b
-  override def quotmod(a:BigInt, b:BigInt) = a /% b
 
   override def pow(a: BigInt, k: Int): BigInt = a pow k
 
