@@ -41,7 +41,7 @@ trait Field[@sp(Int, Long, Float, Double) A] extends Any with CommutativeRing[A]
     }
 }
 
-trait FieldFunctions[F[T] <: Field[T]] extends MultiplicativeGroupFunctions[F] {
+trait FieldFunctions[F[T] <: Field[T]] extends RingFunctions[F] with MultiplicativeGroupFunctions[F] {
   def fromDouble[@sp(Int, Long, Float, Double) A](n: Double)(implicit ev: F[A]): A =
     ev.fromDouble(n)
 }
