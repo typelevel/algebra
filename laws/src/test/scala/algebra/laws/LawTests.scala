@@ -12,7 +12,7 @@ import cats.kernel.laws._
 
 import org.typelevel.discipline.Laws
 import org.typelevel.discipline.scalatest.Discipline
-import org.scalacheck.Arbitrary
+import org.scalacheck.{Arbitrary, Cogen}
 import Arbitrary.arbitrary
 import org.scalactic.anyvals.{PosZDouble, PosInt, PosZInt}
 import org.scalatest.FunSuite
@@ -32,15 +32,15 @@ class LawTests extends FunSuite with Configuration with Discipline {
 
   // The scalacheck defaults (100,100) are too high for Scala-js, so we reduce to 10/100.
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    if (Platform.isJvm) PropertyCheckConfig(maxSize = 100, minSuccessful = 100)
-    else PropertyCheckConfig(maxSize = 10, minSuccessful = 100)
+    if (Platform.isJvm) PropertyCheckConfiguration(sizeRange = 100, minSuccessful = 100)
+    else PropertyCheckConfiguration(sizeRange = 10, minSuccessful = 100)
 
   implicit val byteLattice: Lattice[Byte] = ByteMinMaxLattice
   implicit val shortLattice: Lattice[Short] = ShortMinMaxLattice
   implicit val intLattice: BoundedDistributiveLattice[Int] = IntMinMaxLattice
   implicit val longLattice: BoundedDistributiveLattice[Long] = LongMinMaxLattice
 
-  implicit def orderLaws[A: Eq: Arbitrary] = OrderLaws[A]
+  implicit def orderLaws[A: Cogen: Eq: Arbitrary] = OrderLaws[A]
   implicit def groupLaws[A: Eq: Arbitrary] = GroupLaws[A]
   implicit def logicLaws[A: Eq: Arbitrary] = LogicLaws[A]
 
@@ -56,6 +56,8 @@ class LawTests extends FunSuite with Configuration with Discipline {
       Eq[A].on(_.a)
     implicit def hasEqArbitrary[A: Arbitrary]: Arbitrary[HasEq[A]] =
       Arbitrary(arbitrary[A].map(HasEq(_)))
+    implicit def hasEqCogen[A: Cogen]: Cogen[HasEq[A]] =
+      Cogen[A].contramap[HasEq[A]](_.a)
   }
 
   case class HasPartialOrder[A](a: A)
@@ -65,6 +67,8 @@ class LawTests extends FunSuite with Configuration with Discipline {
       PartialOrder[A].on(_.a)
     implicit def hasPartialOrderArbitrary[A: Arbitrary]: Arbitrary[HasPartialOrder[A]] =
       Arbitrary(arbitrary[A].map(HasPartialOrder(_)))
+    implicit def hasPartialOrderCogen[A: Cogen]: Cogen[HasPartialOrder[A]] =
+      Cogen[A].contramap[HasPartialOrder[A]](_.a)
   }
 
   case class LawChecker[L <: Laws](name: String, laws: L) {

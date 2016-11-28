@@ -33,8 +33,8 @@ lazy val commonSettings = Seq(
     //"-Ywarn-value-discard", // fails with @sp on Unit
     "-Xfuture"
   ) ++ (CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, 11)) => Seq("-Ywarn-unused-import")
-    case _             => Seq.empty
+    case Some((2, 10)) => Seq.empty
+    case _ => Seq("-Ywarn-unused-import")
   }),
   resolvers += Resolver.sonatypeRepo("public"),
   scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
