@@ -11,7 +11,7 @@ This repo represents an attempt to unify the basic algebraic type
 classes from [Spire](http://github.com/non/spire) and
 [Algebird](http://github.com/twitter/algebird). By targeting just
 these type classes, we will distribute an `algebra` package with no
-dependencies that works with Scala 2.10 and 2.11, and which can be
+dependencies that works with Scala 2.10, 2.11, and 2.12, which can be
 shared by all Scala libraries interested in abstract algebra.
 
 Since the creation of Algebra, we have also decided to interoperate
@@ -20,21 +20,22 @@ Cats interoperate using the *cats-kernel* module.
 
 ## getting algebra
 
-Algebra supports Scala 2.10 and 2.11, and is available from Sonatype
-(and Maven Central). Algebra is also available for Scala.js.
+Algebra supports Scala 2.10, 2.11, and 2.12, and is available from
+Sonatype (and Maven Central). In addition to the JVM, Algebra also
+supports Scala.js.
 
 To use algebra in your own projects, include this snippet in your
 `build.sbt` file:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "algebra" % "0.5.1"
+libraryDependencies += "org.typelevel" %% "algebra" % "0.6.0"
 ```
 
 If you want to use Algebra's laws, you can include those as well with
 this snippet:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "algebra-laws" % "0.5.1"
+libraryDependencies += "org.typelevel" %% "algebra-laws" % "0.6.0"
 ```
 
 ## what we have so far
