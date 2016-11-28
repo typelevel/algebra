@@ -7,14 +7,14 @@ import algebra.ring._
 package object int extends IntInstances
 
 trait IntInstances extends cats.kernel.instances.IntInstances {
-  implicit val intAlgebra: EuclideanRing[Int] =
+  implicit val intAlgebra: IntAlgebra =
     new IntAlgebra
 
   val IntMinMaxLattice: BoundedDistributiveLattice[Int] =
     BoundedDistributiveLattice.minMax[Int](Int.MinValue, Int.MaxValue)
 }
 
-class IntAlgebra extends EuclideanRing[Int] with Serializable {
+class IntAlgebra extends CommutativeRing[Int] with Serializable {
 
   def zero: Int = 0
   def one: Int = 1
@@ -24,8 +24,6 @@ class IntAlgebra extends EuclideanRing[Int] with Serializable {
   override def minus(x: Int, y: Int): Int = x - y
 
   def times(x: Int, y: Int): Int = x * y
-  def quot(x: Int, y: Int) = x / y
-  def mod(x: Int, y: Int) = x % y
 
   override def pow(x: Int, y: Int): Int =
     StaticMethods.pow(x.toLong, y.toLong).toInt

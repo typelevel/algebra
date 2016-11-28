@@ -3,6 +3,8 @@ package laws
 
 import algebra.ring._
 
+import cats.kernel.laws._
+
 import org.typelevel.discipline.Predicate
 
 import org.scalacheck.{Arbitrary, Prop}
@@ -10,55 +12,112 @@ import org.scalacheck.Arbitrary._
 import org.scalacheck.Prop._
 
 object RingLaws {
-  def apply[A : Eq : Arbitrary](implicit pred0: Predicate[A]) = new RingLaws[A] {
+  def apply[A : Eq : Arbitrary: AdditiveMonoid]: RingLaws[A] =
+    withPred[A](new Predicate[A] {
+      def apply(a: A): Boolean = Eq[A].neqv(a, AdditiveMonoid[A].zero)
+    })
+
+  def withPred[A: Eq: Arbitrary](pred0: Predicate[A]): RingLaws[A] = new RingLaws[A] {
     def Arb = implicitly[Arbitrary[A]]
     def pred = pred0
     val nonZeroLaws = new GroupLaws[A] {
-      def Arb = Arbitrary(arbitrary[A] filter pred0)
+      def Arb = Arbitrary(arbitrary[A] filter pred)
       def Equ = Eq[A]
     }
   }
 }
 
-trait RingLaws[A] extends GroupLaws[A] {
+trait RingLaws[A] extends GroupLaws[A] { self =>
 
   // must be a val (stable identifier)
   val nonZeroLaws: GroupLaws[A]
   def pred: Predicate[A]
 
-  def withPred(pred0: Predicate[A], replace: Boolean = true): RingLaws[A] = RingLaws[A](
-    Equ,
-    Arb,
-    if (replace) pred0 else pred && pred0
-  )
+  def withPred(pred0: Predicate[A], replace: Boolean = true): RingLaws[A] =
+    RingLaws.withPred(if (replace) pred0 else pred && pred0)(Equ, Arb)
+
+  def setNonZeroParents(props: nonZeroLaws.GroupProperties, parents: Seq[nonZeroLaws.GroupProperties]): nonZeroLaws.GroupProperties =
+    new nonZeroLaws.GroupProperties(
+      name = props.name,
+      parents = parents,
+      props = props.props: _*
+    )
 
   implicit def Arb: Arbitrary[A]
   implicit def Equ: Eq[A] = nonZeroLaws.Equ
 
+  // additive groups
+
+  def additiveSemigroup(implicit A: AdditiveSemigroup[A]) = new AdditiveProperties(
+    base = semigroup(A.additive),
+    parents = Nil,
+    Rules.serializable(A),
+    Rules.repeat1("sumN")(A.sumN),
+    Rules.repeat2("sumN", "+")(A.sumN)(A.plus)
+  )
+
+  def additiveCommutativeSemigroup(implicit A: AdditiveCommutativeSemigroup[A]) = new AdditiveProperties(
+    base = commutativeSemigroup(A.additive),
+    parents = List(additiveSemigroup)
+  )
+
+  def additiveMonoid(implicit A: AdditiveMonoid[A]) = new AdditiveProperties(
+    base = monoid(A.additive),
+    parents = List(additiveSemigroup),
+    Rules.repeat0("sumN", "zero", A.zero)(A.sumN),
+    Rules.collect0("sum", "zero", A.zero)(A.sum)
+  )
+
+  def additiveCommutativeMonoid(implicit A: AdditiveCommutativeMonoid[A]) = new AdditiveProperties(
+    base = commutativeMonoid(A.additive),
+    parents = List(additiveMonoid)
+  )
+
+  def additiveGroup(implicit A: AdditiveGroup[A]) = new AdditiveProperties(
+    base = group(A.additive),
+    parents = List(additiveMonoid),
+    Rules.consistentInverse("subtract")(A.minus)(A.plus)(A.negate)
+  )
+
+  def additiveCommutativeGroup(implicit A: AdditiveCommutativeGroup[A]) = new AdditiveProperties(
+    base = commutativeGroup(A.additive),
+    parents = List(additiveGroup)
+  )
+
   // multiplicative groups
 
   def multiplicativeSemigroup(implicit A: MultiplicativeSemigroup[A]) = new MultiplicativeProperties(
-    base = _.semigroup(A.multiplicative),
+    base = semigroup(A.multiplicative),
+    nonZeroBase = None,
     parent = None,
     Rules.serializable(A),
     Rules.repeat1("pow")(A.pow),
     Rules.repeat2("pow", "*")(A.pow)(A.times)
   )
 
+  def multiplicativeCommutativeSemigroup(implicit A: MultiplicativeCommutativeSemigroup[A]) = new MultiplicativeProperties(
+    base = semigroup(A.multiplicative),
+    nonZeroBase = None,
+    parent = Some(multiplicativeSemigroup)
+  )
+
   def multiplicativeMonoid(implicit A: MultiplicativeMonoid[A]) = new MultiplicativeProperties(
-    base = _.monoid(A.multiplicative),
+    base = monoid(A.multiplicative),
+    nonZeroBase = None,
     parent = Some(multiplicativeSemigroup),
     Rules.repeat0("pow", "one", A.one)(A.pow),
     Rules.collect0("product", "one", A.one)(A.product)
   )
 
   def multiplicativeCommutativeMonoid(implicit A: MultiplicativeCommutativeMonoid[A]) = new MultiplicativeProperties(
-    base = _.commutativeMonoid(A.multiplicative),
+    base = commutativeMonoid(A.multiplicative),
+    nonZeroBase = None,
     parent = Some(multiplicativeMonoid)
   )
 
   def multiplicativeGroup(implicit A: MultiplicativeGroup[A]) = new MultiplicativeProperties(
-    base = _.group(A.multiplicative),
+    base = monoid(A.multiplicative),
+    nonZeroBase = Some(setNonZeroParents(nonZeroLaws.group(A.multiplicative), Nil)),
     parent = Some(multiplicativeMonoid),
     // pred is used to ensure y is not zero.
     "consistent division" -> forAll { (x: A, y: A) =>
@@ -67,7 +126,8 @@ trait RingLaws[A] extends GroupLaws[A] {
   )
 
   def multiplicativeCommutativeGroup(implicit A: MultiplicativeCommutativeGroup[A]) = new MultiplicativeProperties(
-    base = _.commutativeGroup(A.multiplicative),
+    base = commutativeMonoid(A.multiplicative),
+    nonZeroBase = Some(setNonZeroParents(nonZeroLaws.commutativeGroup(A.multiplicative), multiplicativeGroup.nonZeroBase.toSeq)),
     parent = Some(multiplicativeGroup)
   )
 
@@ -95,13 +155,6 @@ trait RingLaws[A] extends GroupLaws[A] {
     parents = Seq(semiring)
   )
 
-  def commutativeRig(implicit A: CommutativeRig[A]) = new RingProperties(
-    name = "commutativeRig",
-    al = additiveCommutativeMonoid,
-    ml = multiplicativeCommutativeMonoid,
-    parents = Seq(semiring)
-  )
-
   def ring(implicit A: Ring[A]) = new RingProperties(
     // TODO fromParents
     name = "ring",
@@ -118,16 +171,41 @@ trait RingLaws[A] extends GroupLaws[A] {
     }
   )
 
+  // commutative rings
+
+  def commutativeSemiring(implicit A: CommutativeSemiring[A]) = new RingProperties(
+    name = "commutativeSemiring",
+    al = additiveCommutativeMonoid,
+    ml = multiplicativeCommutativeSemigroup,
+    parents = Seq(semiring)
+  )
+
+  def commutativeRng(implicit A: CommutativeRng[A]) = new RingProperties(
+    name = "commutativeRng",
+    al = additiveCommutativeMonoid,
+    ml = multiplicativeCommutativeSemigroup,
+    parents = Seq(rng, commutativeSemiring)
+  )
+
+  def commutativeRig(implicit A: CommutativeRig[A]) = new RingProperties(
+    name = "commutativeRig",
+    al = additiveCommutativeMonoid,
+    ml = multiplicativeCommutativeMonoid,
+    parents = Seq(rig, commutativeSemiring)
+  )
+
   def commutativeRing(implicit A: CommutativeRing[A]) = new RingProperties(
     name = "commutative ring",
     al = additiveCommutativeGroup,
     ml = multiplicativeCommutativeMonoid,
-    parents = Seq(ring, commutativeRig)
+    parents = Seq(ring, commutativeRig, commutativeRng)
   )
+
+  // boolean rings
 
   def boolRng(implicit A: BoolRng[A]) = RingProperties.fromParent(
     name = "boolean rng",
-    parent = rng,
+    parent = commutativeRng,
     Rules.idempotence(A.times)
   )
 
@@ -135,23 +213,6 @@ trait RingLaws[A] extends GroupLaws[A] {
     name = "boolean ring",
     parent = commutativeRing,
     Rules.idempotence(A.times)
-  )
-
-  def euclideanRing(implicit A: EuclideanRing[A]) = RingProperties.fromParent(
-    name = "euclidean ring",
-    parent = commutativeRing,
-    "quotmod" -> forAll { (x: A, y: A) =>
-      pred(y) ==> {
-        val (q, r) = A.quotmod(x, y)
-        A.plus(A.times(y, q), r) ?== x
-      }
-    },
-    "quot" -> forAll { (x: A, y: A) =>
-      pred(y) ==> (A.quot(x, y) ?== A.quotmod(x, y)._1)
-    },
-    "mod" -> forAll { (x: A, y: A) =>
-      pred(y) ==> (A.mod(x, y) ?== A.quotmod(x, y)._2)
-    }
   )
 
   // Everything below fields (e.g. rings) does not require their multiplication
@@ -169,23 +230,28 @@ trait RingLaws[A] extends GroupLaws[A] {
     name = "field",
     al = additiveCommutativeGroup,
     ml = multiplicativeCommutativeGroup,
-    parents = Seq(euclideanRing)
-  ) {
-    override def nonZero = true
-  }
-
+    parents = Seq(commutativeRing)
+  )
 
   // property classes
 
+  class AdditiveProperties(
+    val base: GroupLaws[A]#GroupProperties,
+    val parents: Seq[AdditiveProperties],
+    val props: (String, Prop)*
+  ) extends RuleSet {
+    val name = "additive " + base.name
+    val bases = List("base" -> base)
+  }
+
   class MultiplicativeProperties(
-    val base: GroupLaws[A] => GroupLaws[A]#GroupProperties,
+    val base: GroupLaws[A]#GroupProperties,
+    val nonZeroBase: Option[nonZeroLaws.GroupProperties],
     val parent: Option[MultiplicativeProperties],
     val props: (String, Prop)*
   ) extends RuleSet with HasOneParent {
-    private val base0 = base(RingLaws.this)
-
-    val name = base0.name
-    val bases = Seq("base" -> base0)
+    val name = "multiplicative " + base.name
+    val bases = Seq("base" -> base) ++ nonZeroBase.map("non-zero base" -> _)
   }
 
   object RingProperties {
@@ -200,17 +266,6 @@ trait RingLaws[A] extends GroupLaws[A] {
     val parents: Seq[RingProperties],
     val props: (String, Prop)*
   ) extends RuleSet {
-    def nonZero: Boolean = false
-
-    def ml0 = if (!nonZero) ml else {
-      new RuleSet with HasOneParent {
-        val name = ml.name
-        val bases = Seq("base-nonzero" -> ml.base(nonZeroLaws))
-        val parent = ml.parent
-        val props = ml.props
-      }
-    }
-
-    def bases = Seq("additive" -> al, "multiplicative" -> ml0)
+    def bases = Seq("additive" -> al, "multiplicative" -> ml)
   }
 }
