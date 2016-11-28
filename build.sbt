@@ -40,7 +40,6 @@ lazy val commonSettings = Seq(
   scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
   scalaJSStage in Global := FastOptStage,
-  scalaJSUseRhino := false,
   requiresDOM := false,
   jsEnv := NodeJSEnv().value,
   fork := false,
@@ -79,7 +78,7 @@ lazy val core = crossProject
     "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test",
     "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"))
   .settings(algebraSettings: _*)
-  .settings(sourceGenerators in Compile <+= (sourceManaged in Compile).map(Boilerplate.gen))
+  .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
 
 lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
@@ -111,13 +110,12 @@ lazy val publishSettings = Seq(
   publishMavenStyle := true,
   publishArtifact in Test := false,
   pomIncludeRepository := Function.const(false),
-  publishTo <<= (version).apply { v =>
+  publishTo := {
     val nexus = "https://oss.sonatype.org/"
-
-    if (v.trim.endsWith("SNAPSHOT"))
-      Some("snapshots" at nexus + "content/repositories/snapshots")
+    if (isSnapshot.value)
+      Some("Snapshots" at nexus + "content/repositories/snapshots")
     else
-      Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+      Some("Releases" at nexus + "service/local/staging/deploy/maven2")
   },
   pomExtra := (
     <scm>
