@@ -3,8 +3,8 @@ package laws
 
 import algebra.lattice.DistributiveLattice
 import algebra.ring._
-import org.scalacheck.Arbitrary
-import org.scalacheck.Arbitrary._
+import org.scalacheck.{Gen, Arbitrary}
+import org.scalacheck.Arbitrary.arbitrary
 
 class Rat(val num: BigInt, val den: BigInt) extends Serializable { lhs =>
 
@@ -99,9 +99,17 @@ object Rat {
   val RatMinMaxLattice: DistributiveLattice[Rat] =
     DistributiveLattice.minMax[Rat](ratAlgebra)
 
-  implicit val ratArbitrary =
+  // Is this horrible? Yes. Am I ashamed? Yes.
+  private[this] def genNonZero: Gen[BigInt] =
+    arbitrary[BigInt].flatMap { x =>
+      if (x != 0) Gen.const(x)
+      else genNonZero
+    }
+
+  implicit val ratArbitrary: Arbitrary[Rat] =
     Arbitrary(for {
-      (n, d) <- arbitrary[(BigInt, BigInt)] if d != 0
+      n <- arbitrary[BigInt]
+      d <- genNonZero
     } yield Rat(n, d))
 }
 

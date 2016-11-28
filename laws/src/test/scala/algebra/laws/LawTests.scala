@@ -8,7 +8,9 @@ import algebra.instances.all._
 import catalysts.Platform
 import catalysts.macros.TypeTagM // need this import for implicit macros
 
-import org.typelevel.discipline.{Laws, Predicate}
+import cats.kernel.laws._
+
+import org.typelevel.discipline.Laws
 import org.typelevel.discipline.scalatest.Discipline
 import org.scalacheck.Arbitrary
 import Arbitrary.arbitrary
@@ -33,12 +35,6 @@ class LawTests extends FunSuite with Configuration with Discipline {
     if (Platform.isJvm) PropertyCheckConfig(maxSize = 100, minSuccessful = 100)
     else PropertyCheckConfig(maxSize = 10, minSuccessful = 100)
 
-  /**
-    * Runs the supplied thunk without calling the serialization tests.
-    */
-  def withoutSerialization[T](thunk: => T): T =
-    IsSerializable.runTests.withValue(false)(thunk)
-
   implicit val byteLattice: Lattice[Byte] = ByteMinMaxLattice
   implicit val shortLattice: Lattice[Short] = ShortMinMaxLattice
   implicit val intLattice: BoundedDistributiveLattice[Int] = IntMinMaxLattice
@@ -49,7 +45,7 @@ class LawTests extends FunSuite with Configuration with Discipline {
   implicit def logicLaws[A: Eq: Arbitrary] = LogicLaws[A]
 
   implicit def latticeLaws[A: Eq: Arbitrary] = LatticeLaws[A]
-  implicit def ringLaws[A: Eq: Arbitrary: Predicate] = RingLaws[A]
+  implicit def ringLaws[A: Eq: Arbitrary: AdditiveMonoid] = RingLaws[A]
   implicit def baseLaws[A: Eq: Arbitrary] = BaseLaws[A]
   implicit def latticePartialOrderLaws[A: Eq: Arbitrary] = LatticePartialOrderLaws[A]
 
@@ -163,7 +159,7 @@ class LawTests extends FunSuite with Configuration with Discipline {
     // this keeps the values relatively small/simple and avoids some
     // of the numerical errors we might hit.
     implicit val arbBigDecimal: Arbitrary[BigDecimal] =
-      Arbitrary(arbitrary[Int].map(x => BigDecimal(x)))
+      Arbitrary(arbitrary[Int].map(x => BigDecimal(x, java.math.MathContext.UNLIMITED)))
 
     // BigDecimal does have numerical errors, so we can't pass all of
     // the field laws.
