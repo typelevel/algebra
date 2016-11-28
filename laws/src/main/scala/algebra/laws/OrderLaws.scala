@@ -3,14 +3,15 @@ package laws
 
 import org.typelevel.discipline.Laws
 
-import org.scalacheck.{Arbitrary, Prop}
+import org.scalacheck.{Arbitrary, Cogen, Prop}
 import org.scalacheck.Prop._
 
 import algebra.instances.boolean._
 
 object OrderLaws {
-  def apply[A: Eq: Arbitrary] = new OrderLaws[A] {
+  def apply[A: Cogen: Eq: Arbitrary] = new OrderLaws[A] {
     def Equ = Eq[A]
+    def Cog = Cogen[A]
     def Arb = implicitly[Arbitrary[A]]
   }
 }
@@ -18,6 +19,7 @@ object OrderLaws {
 trait OrderLaws[A] extends Laws {
 
   implicit def Equ: Eq[A]
+  implicit def Cog: Cogen[A]
   implicit def Arb: Arbitrary[A]
 
   def eqv = new OrderProperties(

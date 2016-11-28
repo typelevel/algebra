@@ -10,7 +10,7 @@ import catalysts.macros.TypeTagM // need this import for implicit macros
 
 import org.typelevel.discipline.{Laws, Predicate}
 import org.typelevel.discipline.scalatest.Discipline
-import org.scalacheck.Arbitrary
+import org.scalacheck.{Arbitrary, Cogen}
 import Arbitrary.arbitrary
 import org.scalactic.anyvals.{PosZDouble, PosInt, PosZInt}
 import org.scalatest.FunSuite
@@ -28,10 +28,11 @@ class LawTests extends FunSuite with Configuration with Discipline {
       sizeRange = if (Platform.isJvm) PosZInt(10) else PosZInt(5),
       workers = PosInt(1))
 
-  // The scalacheck defaults (100,100) are too high for Scala-js, so we reduce to 10/100.
+  // The scalacheck defaults 'sizeRange' (100) is too high for Scala-js, so we reduce to 10.
+  // We also set `minSuccessful` to 100 unconditionally.
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    if (Platform.isJvm) PropertyCheckConfig(maxSize = 100, minSuccessful = 100)
-    else PropertyCheckConfig(maxSize = 10, minSuccessful = 100)
+    if (Platform.isJvm) PropertyCheckConfiguration(sizeRange = 100, minSuccessful = 100)
+    else PropertyCheckConfiguration(sizeRange = 10, minSuccessful = 100)
 
   /**
     * Runs the supplied thunk without calling the serialization tests.
@@ -44,20 +45,22 @@ class LawTests extends FunSuite with Configuration with Discipline {
   implicit val intLattice: BoundedDistributiveLattice[Int] = IntMinMaxLattice
   implicit val longLattice: BoundedDistributiveLattice[Long] = LongMinMaxLattice
 
-  implicit def orderLaws[A: Eq: Arbitrary] = OrderLaws[A]
+  implicit def orderLaws[A: Eq: Cogen: Arbitrary] = OrderLaws[A]
   implicit def groupLaws[A: Eq: Arbitrary] = GroupLaws[A]
   implicit def logicLaws[A: Eq: Arbitrary] = LogicLaws[A]
 
   implicit def latticeLaws[A: Eq: Arbitrary] = LatticeLaws[A]
   implicit def ringLaws[A: Eq: Arbitrary: Predicate] = RingLaws[A]
   implicit def baseLaws[A: Eq: Arbitrary] = BaseLaws[A]
-  implicit def latticePartialOrderLaws[A: Eq: Arbitrary] = LatticePartialOrderLaws[A]
+  implicit def latticePartialOrderLaws[A: Eq: Cogen: Arbitrary] = LatticePartialOrderLaws[A]
 
   case class HasEq[A](a: A)
 
   object HasEq {
     implicit def hasEq[A: Eq]: Eq[HasEq[A]] =
       Eq[A].on(_.a)
+    implicit def hasEqCogen[A: Cogen]: Cogen[HasEq[A]] =
+      Cogen[A].contramap(_.a)
     implicit def hasEqArbitrary[A: Arbitrary]: Arbitrary[HasEq[A]] =
       Arbitrary(arbitrary[A].map(HasEq(_)))
   }
@@ -67,6 +70,8 @@ class LawTests extends FunSuite with Configuration with Discipline {
   object HasPartialOrder {
     implicit def hasPartialOrder[A: PartialOrder]: PartialOrder[HasPartialOrder[A]] =
       PartialOrder[A].on(_.a)
+    implicit def hasPartialOrderCogen[A: Cogen]: Cogen[HasPartialOrder[A]] =
+      Cogen[A].contramap(_.a)
     implicit def hasPartialOrderArbitrary[A: Arbitrary]: Arbitrary[HasPartialOrder[A]] =
       Arbitrary(arbitrary[A].map(HasPartialOrder(_)))
   }
