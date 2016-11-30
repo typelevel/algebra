@@ -230,7 +230,16 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
     name = "field",
     al = additiveCommutativeGroup,
     ml = multiplicativeCommutativeGroup,
-    parents = Seq(commutativeRing)
+    parents = Seq(commutativeRing),
+    "fromDouble" -> forAll { (n: Double) =>
+      val bd = new java.math.BigDecimal(n)
+      val unscaledValue = new BigInt(bd.unscaledValue)
+      val (num, den) =
+        if (bd.scale > 0) (unscaledValue, BigInt(10).pow(bd.scale))
+        else (unscaledValue * BigInt(10).pow(-bd.scale), BigInt(1))
+      val expected = A.div(Ring.fromBigInt[A](num), Ring.fromBigInt[A](den))
+      Field.fromDouble[A](n) ?== expected
+    }
   )
 
   // property classes
