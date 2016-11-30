@@ -13,7 +13,7 @@ trait Field[@sp(Int, Long, Float, Double) A] extends Any with CommutativeRing[A]
    *
    * This is possible because a Double is a rational number.
    */
-  def fromDouble(a: Double): A = Ring.fromDouble(a)(self, self)
+  def fromDouble(a: Double): A = Field.defaultFromDouble(a)(self, self)
 
 }
 

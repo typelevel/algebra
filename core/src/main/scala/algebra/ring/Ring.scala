@@ -70,21 +70,17 @@ trait RingFunctions[R[T] <: Ring[T]] extends AdditiveGroupFunctions[R] with Mult
       if (n.signum < 0) ev.negate(absValue) else absValue
     }
   }
-}
-
-object Ring extends RingFunctions[Ring] {
-  @inline final def apply[A](implicit ev: Ring[A]): Ring[A] = ev
 
   /** Returns the given Double, understood as a rational number, in the provided
     * (division) ring.
-    * 
+    *
     * This is implemented in terms of basic ops. However, this is
     * probably significantly less efficient than can be done with a specific
     * type. So, it is recommended to specialize this general method.
     */
-  def fromDouble[A](a: Double)(implicit ringA: Ring[A], mgA: MultiplicativeGroup[A]): A =
+  final def defaultFromDouble[A](a: Double)(implicit ringA: Ring[A], mgA: MultiplicativeGroup[A]): A =
     if (a == 0.0) ringA.zero
-    else if (a.isValidInt) fromInt(a.toInt)
+    else if (a.isValidInt) ringA.fromInt(a.toInt)
     else {
       import java.lang.Double.{ isInfinite, isNaN, doubleToLongBits }
       import java.lang.Long.numberOfTrailingZeros
@@ -109,4 +105,8 @@ object Ring extends RingFunctions[Ring] {
       if (a < 0) ringA.negate(unsigned) else unsigned
     }
 
+}
+
+object Ring extends RingFunctions[Ring] {
+  @inline final def apply[A](implicit ev: Ring[A]): Ring[A] = ev
 }
