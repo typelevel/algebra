@@ -70,6 +70,41 @@ trait RingFunctions[R[T] <: Ring[T]] extends AdditiveGroupFunctions[R] with Mult
       if (n.signum < 0) ev.negate(absValue) else absValue
     }
   }
+
+  /** Returns the given Double, understood as a rational number, in the provided
+    * (division) ring.
+    *
+    * This is implemented in terms of basic ops. However, this is
+    * probably significantly less efficient than can be done with a specific
+    * type. So, it is recommended to specialize this general method.
+    */
+  final def defaultFromDouble[A](a: Double)(implicit ringA: Ring[A], mgA: MultiplicativeGroup[A]): A =
+    if (a == 0.0) ringA.zero
+    else if (a.isValidInt) ringA.fromInt(a.toInt)
+    else {
+      import java.lang.Double.{ isInfinite, isNaN, doubleToLongBits }
+      import java.lang.Long.numberOfTrailingZeros
+      require(!isInfinite(a) && !isNaN(a), "Double must be representable as a fraction.")
+      val bits = doubleToLongBits(a)
+      val m = bits & 0x000FFFFFFFFFFFFFL | 0x0010000000000000L
+      val zeros = numberOfTrailingZeros(m)
+      val value = m >>> zeros
+      val exp = ((bits >> 52) & 0x7FF).toInt - 1075 + zeros // 1023 + 52
+
+      val high = ringA.times(ringA.fromInt((value >>> 30).toInt), ringA.fromInt(1 << 30))
+      val low = ringA.fromInt((value & 0x3FFFFFFF).toInt)
+      val num = ringA.plus(high, low)
+      val unsigned = if (exp > 0) {
+        ringA.times(num, ringA.pow(ringA.fromInt(2), exp))
+      } else if (exp < 0) {
+        mgA.div(num, ringA.pow(ringA.fromInt(2), -exp))
+      } else {
+        num
+      }
+
+      if (a < 0) ringA.negate(unsigned) else unsigned
+    }
+
 }
 
 object Ring extends RingFunctions[Ring] {
