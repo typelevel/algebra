@@ -234,10 +234,12 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
     "fromDouble" -> forAll { (n: Double) =>
       val bd = new java.math.BigDecimal(n)
       val unscaledValue = new BigInt(bd.unscaledValue)
-      val (num, den) =
-        if (bd.scale > 0) (unscaledValue, BigInt(10).pow(bd.scale))
-        else (unscaledValue * BigInt(10).pow(-bd.scale), BigInt(1))
-      val expected = A.div(Ring.fromBigInt[A](num), Ring.fromBigInt[A](den))
+      val expected =
+        if (bd.scale > 0) {
+          A.div(A.fromBigInt(unscaledValue), A.fromBigInt(BigInt(10).pow(bd.scale)))
+        } else {
+          A.fromBigInt(unscaledValue * BigInt(10).pow(-bd.scale))
+        }
       Field.fromDouble[A](n) ?== expected
     }
   )
