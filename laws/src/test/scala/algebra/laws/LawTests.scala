@@ -157,11 +157,8 @@ class LawTests extends FunSuite with Configuration with Discipline {
 
   laws[RingLaws, BigInt].check(_.commutativeRing)
 
-  // For reasons that escape me, the fromDouble test fails on JS.
-  if (Platform.isJvm) {
-    laws[RingLaws, FPApprox[Float]].check(_.field)
-    laws[RingLaws, FPApprox[Double]].check(_.field)
-  } else ()
+  laws[RingLaws, FPApprox[Float]].check(_.field)
+  laws[RingLaws, FPApprox[Double]].check(_.field)
 
   // let's limit our BigDecimal-related tests to the JVM for now.
   if (Platform.isJvm) {
