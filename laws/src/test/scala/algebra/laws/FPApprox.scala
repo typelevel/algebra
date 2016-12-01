@@ -44,6 +44,12 @@ case class FPApprox[A](approx: A, mes: A, ind: BigInt) {
     FPApprox(ev.div(approx, that.approx), mes0, ind0)
   }
 
+  def reciprocal(implicit ev: Field[A], ord: Order[A], eps: Epsilon[A]): FPApprox[A] = {
+    val tmp = abs(approx)
+    val mes0 = ev.div(ev.plus(ev.div(ev.one, tmp), ev.div(ev.one, mes)), ev.minus(ev.div(tmp, mes), eps.epsilon))
+    FPApprox(ev.reciprocal(approx), mes0, ind.max(1) + 1)
+  }
+
   def pow(k: Int)(implicit ev: Field[A]): FPApprox[A] = {
     val k0 = if (k >= 0) BigInt(k) else -BigInt(k)
     FPApprox(ev.pow(approx, k), ev.pow(mes, k), (ind + 1) * k0 - 1)
@@ -130,7 +136,7 @@ class FPApproxAlgebra[A: Order: FPApprox.Epsilon](implicit ev: Field[A]) extends
 
   def times(x: FPApprox[A], y: FPApprox[A]): FPApprox[A] = x * y
   def div(x: FPApprox[A], y: FPApprox[A]): FPApprox[A] = x / y
-  override def reciprocal(x: FPApprox[A]): FPApprox[A] = one / x
+  override def reciprocal(x: FPApprox[A]): FPApprox[A] = x.reciprocal // one / x
   override def pow(x: FPApprox[A], y: Int): FPApprox[A] = x.pow(y)
 
   override def fromInt(x: Int): FPApprox[A] = FPApprox.approx(ev.fromInt(x))
