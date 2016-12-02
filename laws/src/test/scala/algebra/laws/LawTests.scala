@@ -4,6 +4,7 @@ package laws
 import algebra.lattice._
 import algebra.ring._
 import algebra.instances.all._
+import algebra.instances.BigDecimalAlgebra
 
 import catalysts.Platform
 import catalysts.macros.TypeTagM // need this import for implicit macros
@@ -156,18 +157,33 @@ class LawTests extends FunSuite with Configuration with Discipline {
 
   laws[RingLaws, BigInt].check(_.commutativeRing)
 
+  laws[RingLaws, FPApprox[Float]].check(_.field)
+  laws[RingLaws, FPApprox[Double]].check(_.field)
+
   // let's limit our BigDecimal-related tests to the JVM for now.
   if (Platform.isJvm) {
 
-    // we need a less intense arbitrary big decimal implementation.
-    // this keeps the values relatively small/simple and avoids some
-    // of the numerical errors we might hit.
-    implicit val arbBigDecimal: Arbitrary[BigDecimal] =
-      Arbitrary(arbitrary[Int].map(x => BigDecimal(x, java.math.MathContext.UNLIMITED)))
+    {
+      // we need a less intense arbitrary big decimal implementation.
+      // this keeps the values relatively small/simple and avoids some
+      // of the numerical errors we might hit.
+      implicit val arbBigDecimal: Arbitrary[BigDecimal] =
+        Arbitrary(arbitrary[Int].map(x => BigDecimal(x, java.math.MathContext.UNLIMITED)))
 
-    // BigDecimal does have numerical errors, so we can't pass all of
-    // the field laws.
-    laws[RingLaws, BigDecimal].check(_.ring)
+      // BigDecimal does have numerical errors, so we can't pass all of
+      // the field laws.
+      laws[RingLaws, BigDecimal].check(_.ring)
+    }
+
+    {
+      // We check the full field laws using a FPApprox.
+      val mc = java.math.MathContext.DECIMAL32
+      implicit val arbBigDecimal: Arbitrary[BigDecimal] =
+        Arbitrary(arbitrary[Double].map(x => BigDecimal(x, mc)))
+      implicit val epsBigDecimal = FPApprox.Epsilon.bigDecimalEpsilon(mc)
+      implicit val algebra = FPApprox.fpApproxAlgebra(new BigDecimalAlgebra(mc), Order[BigDecimal], epsBigDecimal)
+      laws[RingLaws, FPApprox[BigDecimal]].check(_.field(algebra))
+    }
   } else ()
 
   {
