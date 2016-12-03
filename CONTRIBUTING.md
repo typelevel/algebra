@@ -19,6 +19,40 @@ Algebra's documentation is powered by [sbt-microsites](https://47deg.github.io/s
 
 We also gladly accept patches for documentation. Each page has a link that will allow you to edit and submit a PR for a documentation change, right from the Github UI. Anything from fixing a typo to writing a full tutorial is a great way to help the project.
 
+### Generating the Site
+
+run `sbt docs/makeMicrosite` to generate a local copy of the microsite.
+
+### Previewing the site
+
+1. Install jekyll locally, depending on your platform, you might do this with any of the following commands:
+
+```
+yum install jekyll
+apt-get install jekyll
+gem install jekyll
+```
+
+2. In a shell, navigate to the generated site directory in `docs/target/site`
+3. Start jekyll with `jekyll serve --incremental`
+4. Navigate to http://127.0.0.1:4000/algebird/ in your browser
+5. Make changes to your site, and run `sbt docs/makeMicrosite` to regenerate the site. The changes should be reflected as soon as `sbt docs/makeMicrosite` completes.
+
+## Post-release
+
+After the release occurs, you will need to update the documentation. Here is a list of the places that will definitely need to be updated:
+
+ * `README.md`: update version numbers
+ * `CHANGES.md`: summarize changes since last release
+
+(Other changes may be necessary, especially for large releases.)
+
+You can get a list of changes between release tags `v0.6.0` and `v0.6.1` via `git log v0.6.0..v0.6.1`. Scanning this list of commit messages is a good way to get a summary of what happened, although it does not account for conversations that occured on Github. (You can see the same view on the Github UI by navigating to <https://github.com/twitter/algebird/compare/v0.6.0...v0.6.1>.)
+
+Once the relevant documentation changes have been committed, you should add new [release notes](https://github.com/typelevel/algebra/releases). You can add a release by clicking the "Draft a new release" button on that page, or if the relevant release already exists, you can click "Edit release".
+
+Finally, update the website via `sbt docs/publishMicrosite`.
+
 ## Reporting bugs, issues, or unexpected behavior
 
 If you encounter anything that is broken, confusing, or could be better, you should [open an issue](https://github.com/typelevel/algebra/issues). You don't have to know *why* the error is occuring, or even that an error happens at all.
