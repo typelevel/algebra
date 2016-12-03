@@ -62,17 +62,19 @@ lazy val aggregate = project.in(file("."))
   .settings(site.settings: _*)
   .settings(ghpages.settings: _*)
   .settings(docSettings: _*)
-  .aggregate(coreJVM, lawsJVM)
+  .aggregate(coreJVM, lawsJVM, benchmark)
   .dependsOn(coreJVM, lawsJVM)
   .aggregate(coreJS, lawsJS)
   .dependsOn(coreJS, lawsJS)
+
+val binaryCompatibleVersion = "0.6.0"
 
 lazy val core = crossProject
   .crossType(CrossType.Pure)
   .settings(moduleName := "algebra")
   .settings(mimaDefaultSettings: _*)
-  // TODO: update this to a published stable version, e.g. 0.4.0
-  //.settings(previousArtifact := Some("org.spire-math" %% "algebra" % "0.3.1"))
+  .settings(mimaPreviousArtifacts :=
+    Set("org.typelevel" %% "algebra" % binaryCompatibleVersion))
   .settings(libraryDependencies ++= Seq(
     "org.typelevel" %%% "cats-kernel" % catsVersion,
     "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test",
@@ -87,6 +89,9 @@ lazy val laws = crossProject
   .crossType(CrossType.Pure)
   .dependsOn(core)
   .settings(moduleName := "algebra-laws")
+  .settings(mimaDefaultSettings: _*)
+  .settings(mimaPreviousArtifacts :=
+    Set("org.typelevel" %% "algebra-laws" % binaryCompatibleVersion))
   .settings(algebraSettings: _*)
   .settings(libraryDependencies ++= Seq(
     "org.typelevel" %%% "cats-kernel-laws" % catsVersion,
@@ -99,11 +104,21 @@ lazy val laws = crossProject
 lazy val lawsJVM = laws.jvm
 lazy val lawsJS = laws.js
 
+lazy val benchmark = project.in(file("benchmark"))
+  .settings(
+    moduleName := "algebra-benchmark",
+    coverageExcludedPackages := "com\\.twitter\\.algebird\\.benchmark.*")
+  .enablePlugins(JmhPlugin)
+  .settings(JmhPlugin.projectSettings:_*)
+  .settings(noPublishSettings: _*)
+  .settings(algebraSettings: _*)
+  .dependsOn(coreJVM)
+
 lazy val publishSettings = Seq(
-  homepage := Some(url("http://spire-math.org")),
+  homepage := Some(url("http://typelevel.org/algebra")),
   licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
   autoAPIMappings := true,
-  apiURL := Some(url("https://non.github.io/algebra/api/")),
+  apiURL := Some(url("https://typelevel.org/algebra/api/")),
 
   releaseCrossBuild := true,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
