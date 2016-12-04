@@ -2,7 +2,6 @@ import sbtrelease.Utilities._
 import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
-import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
 
 lazy val scalaCheckVersion = "1.13.4"
 lazy val scalaTestVersion = "3.0.0"
