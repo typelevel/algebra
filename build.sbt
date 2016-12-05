@@ -2,7 +2,6 @@ import sbtrelease.Utilities._
 import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
-import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
 
 lazy val scalaCheckVersion = "1.13.4"
 lazy val scalaTestVersion = "3.0.0"
@@ -67,12 +66,14 @@ lazy val aggregate = project.in(file("."))
   .aggregate(coreJS, lawsJS)
   .dependsOn(coreJS, lawsJS)
 
+val binaryCompatibleVersion = "0.6.0"
+
 lazy val core = crossProject
   .crossType(CrossType.Pure)
   .settings(moduleName := "algebra")
   .settings(mimaDefaultSettings: _*)
-  // TODO: update this to a published stable version, e.g. 0.4.0
-  //.settings(previousArtifact := Some("org.spire-math" %% "algebra" % "0.3.1"))
+  .settings(mimaPreviousArtifacts :=
+    Set("org.typelevel" %% "algebra" % binaryCompatibleVersion))
   .settings(libraryDependencies ++= Seq(
     "org.typelevel" %%% "cats-kernel" % catsVersion,
     "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test",
@@ -87,6 +88,9 @@ lazy val laws = crossProject
   .crossType(CrossType.Pure)
   .dependsOn(core)
   .settings(moduleName := "algebra-laws")
+  .settings(mimaDefaultSettings: _*)
+  .settings(mimaPreviousArtifacts :=
+    Set("org.typelevel" %% "algebra-laws" % binaryCompatibleVersion))
   .settings(algebraSettings: _*)
   .settings(libraryDependencies ++= Seq(
     "org.typelevel" %%% "cats-kernel-laws" % catsVersion,
@@ -100,10 +104,10 @@ lazy val lawsJVM = laws.jvm
 lazy val lawsJS = laws.js
 
 lazy val publishSettings = Seq(
-  homepage := Some(url("http://spire-math.org")),
+  homepage := Some(url("http://typelevel.org/algebra")),
   licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
   autoAPIMappings := true,
-  apiURL := Some(url("https://non.github.io/algebra/api/")),
+  apiURL := Some(url("https://typelevel.org/algebra/api/")),
 
   releaseCrossBuild := true,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
