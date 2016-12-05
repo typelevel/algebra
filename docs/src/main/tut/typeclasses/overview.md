@@ -49,20 +49,17 @@ The most basic structures can be found in the `algebra` package. They all implem
 
 The `algebra.ring` package contains more sophisticated structures which combine an *additive* operation (called `plus`) and a *multiplicative* operation (called `times`). Additive identity and inverses will be called `zero` and `negate` (respectively); multiplicative identity and inverses will be called `one` and `reciprocal` (respectively).
 
-Additionally some structures support a quotient operation, called `quot`.
-
 All ring-like structures are associative for both `+` and `*`, have commutative `+`, and have a `zero` element (an identity for `+`).
 
-|Name                |Has `negate`?|Has `1`?|Has `reciprocal`?|Has `quot`?|Commutative `*`?|
-|--------------------|-------------|--------|-----------------|-----------|----------------|
-|Semiring            |             |        |                 |           |                |
-|Rng                 |            ✓|        |                 |           |                |
-|Rig                 |             |       ✓|                 |           |                |
-|CommutativeRig      |             |       ✓|                 |           |               ✓|
-|Ring                |            ✓|       ✓|                 |           |                |
-|CommutativeRing     |            ✓|       ✓|                 |           |               ✓|
-|EuclideanRing       |            ✓|       ✓|                 |          ✓|               ✓|
-|Field               |            ✓|       ✓|                ✓|          ✓|               ✓|
+|Name                |Has `negate`?|Has `1`?|Has `reciprocal`?|Commutative `*`?|
+|--------------------|-------------|--------|-----------------|----------------|
+|Semiring            |             |        |                 |                |
+|Rng                 |            ✓|        |                 |                |
+|Rig                 |             |       ✓|                 |                |
+|CommutativeRig      |             |       ✓|                 |               ✓|
+|Ring                |            ✓|       ✓|                 |                |
+|CommutativeRing     |            ✓|       ✓|                 |               ✓|
+|Field               |            ✓|       ✓|                ✓|               ✓|
 
 With the exception of `CommutativeRig` and `Rng`, every lower structure is also an instance of the structures above it. For example, every `Ring` is a `Rig`, every `Field` is a `CommutativeRing`, and so on.
 
