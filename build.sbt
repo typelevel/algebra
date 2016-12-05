@@ -2,6 +2,7 @@ import sbtrelease.Utilities._
 import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
+import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
 
 lazy val scalaCheckVersion = "1.13.4"
 lazy val scalaTestVersion = "3.0.0"
@@ -66,14 +67,12 @@ lazy val aggregate = project.in(file("."))
   .aggregate(coreJS, lawsJS)
   .dependsOn(coreJS, lawsJS)
 
-val binaryCompatibleVersion = "0.6.0"
-
 lazy val core = crossProject
   .crossType(CrossType.Pure)
   .settings(moduleName := "algebra")
   .settings(mimaDefaultSettings: _*)
-  .settings(mimaPreviousArtifacts :=
-    Set("org.typelevel" %% "algebra" % binaryCompatibleVersion))
+  // TODO: update this to a published stable version, e.g. 0.4.0
+  //.settings(previousArtifact := Some("org.spire-math" %% "algebra" % "0.3.1"))
   .settings(libraryDependencies ++= Seq(
     "org.typelevel" %%% "cats-kernel" % catsVersion,
     "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test",
@@ -88,9 +87,6 @@ lazy val laws = crossProject
   .crossType(CrossType.Pure)
   .dependsOn(core)
   .settings(moduleName := "algebra-laws")
-  .settings(mimaDefaultSettings: _*)
-  .settings(mimaPreviousArtifacts :=
-    Set("org.typelevel" %% "algebra-laws" % binaryCompatibleVersion))
   .settings(algebraSettings: _*)
   .settings(libraryDependencies ++= Seq(
     "org.typelevel" %%% "cats-kernel-laws" % catsVersion,

@@ -2,7 +2,7 @@ sudo: false
 
 language: scala
 
-scala:
+scala: 
   - 2.11.8
   - 2.10.6
 
@@ -14,8 +14,7 @@ matrix:
   - scala: 2.12.0
     jdk: oraclejdk8
 
-script: ./sbt ++$TRAVIS_SCALA_VERSION clean coreJS/test lawsJS/test && ./sbt ++$TRAVIS_SCALA_VERSION clean coverage coreJVM/test lawsJVM/test coverageReport mimaReportBinaryIssues
-
+script: ./sbt ++$TRAVIS_SCALA_VERSION clean coreJS/test lawsJS/test && ./sbt ++$TRAVIS_SCALA_VERSION clean coverage coreJVM/test lawsJVM/test coverageReport && ./sbt ++$TRAVIS_SCALA_VERSION core:mimaReportBinaryIssues
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 notifications:
