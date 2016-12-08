@@ -7,7 +7,7 @@ import org.openjdk.jmh.infra.Blackhole
 
 object ExampleBenchmark {
   @State(Scope.Benchmark)
-  class AVState {
+  class ExampleState {
     @Param(Array("10000"))
     var numElements: Int = 0
 
@@ -24,10 +24,10 @@ class ExampleBenchmark {
   import ExampleBenchmark._
 
   @Benchmark
-  def timeReduce(state: AVState, bh: Blackhole) =
+  def timeReduce(state: ExampleState, bh: Blackhole) =
     bh.consume(state.inputData.reduce(_ + _))
 
   @Benchmark
-  def timeFoldLeft(state: AVState, bh: Blackhole) =
+  def timeFoldLeft(state: ExampleState, bh: Blackhole) =
     bh.consume(state.inputData.foldLeft(0L)(_ + _))
 }
