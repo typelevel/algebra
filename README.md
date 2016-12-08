@@ -151,7 +151,6 @@ commutative `+`, and have a `zero` element (an identity for `+`).
 |CommutativeRig      |             |       ✓|                 |           |               ✓|
 |Ring                |            ✓|       ✓|                 |           |                |
 |CommutativeRing     |            ✓|       ✓|                 |           |               ✓|
-|EuclideanRing       |            ✓|       ✓|                 |          ✓|               ✓|
 |Field               |            ✓|       ✓|                ✓|          ✓|               ✓|
 
 With the exception of `CommutativeRig` and `Rng`, every lower
