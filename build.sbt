@@ -62,7 +62,7 @@ lazy val aggregate = project.in(file("."))
   .settings(site.settings: _*)
   .settings(ghpages.settings: _*)
   .settings(docSettings: _*)
-  .aggregate(coreJVM, lawsJVM)
+  .aggregate(coreJVM, lawsJVM, benchmark)
   .dependsOn(coreJVM, lawsJVM)
   .aggregate(coreJS, lawsJS)
   .dependsOn(coreJS, lawsJS)
@@ -99,11 +99,21 @@ lazy val laws = crossProject
 lazy val lawsJVM = laws.jvm
 lazy val lawsJS = laws.js
 
+lazy val benchmark = project.in(file("benchmark"))
+  .settings(
+    moduleName := "algebra-benchmark",
+    coverageExcludedPackages := "com\\.twitter\\.algebird\\.benchmark.*")
+  .enablePlugins(JmhPlugin)
+  .settings(JmhPlugin.projectSettings:_*)
+  .settings(noPublishSettings: _*)
+  .settings(algebraSettings: _*)
+  .dependsOn(coreJVM)
+
 lazy val publishSettings = Seq(
-  homepage := Some(url("http://spire-math.org")),
+  homepage := Some(url("http://typelevel.org/algebra")),
   licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
   autoAPIMappings := true,
-  apiURL := Some(url("https://non.github.io/algebra/api/")),
+  apiURL := Some(url("https://typelevel.org/algebra/api/")),
 
   releaseCrossBuild := true,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
