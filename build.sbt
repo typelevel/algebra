@@ -1,6 +1,7 @@
 import sbtrelease.Utilities._
 import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
+import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
 
@@ -48,18 +49,51 @@ lazy val commonSettings = Seq(
 
 lazy val algebraSettings = buildSettings ++ commonSettings ++ publishSettings
 
+lazy val docsMappingsAPIDir =
+  settingKey[String]("Name of subdirectory in site target directory for api docs")
+
 lazy val docSettings = Seq(
+  micrositeName := "Algebra",
+  micrositeDescription := "Algebraic Typeclasses for Scala.",
+  micrositeAuthor := "Algebra's contributors",
+  micrositeHighlightTheme := "atom-one-light",
+  micrositeHomepage := "https://typelevel.org/algebra",
+  micrositeBaseUrl := "algebra",
+  micrositeDocumentationUrl := "api",
+  micrositeGithubOwner := "typelevel",
+  micrositeExtraMdFiles := Map(file("CONTRIBUTING.md") -> "contributing.md"),
+  micrositeGithubRepo := "algebra",
   autoAPIMappings := true,
   unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(coreJVM, lawsJVM),
-  site.addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), "api"),
-  git.remoteRepo := "git@github.com:typelevel/algebra.git"
+  docsMappingsAPIDir := "api",
+  addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), docsMappingsAPIDir),
+  git.remoteRepo := "git@github.com:typelevel/algebra.git",
+  ghpagesNoJekyll := false,
+  fork in tut := true,
+  fork in (ScalaUnidoc, unidoc) := true,
+  scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
+      "-doc-source-url", "https://github.com/typelevel/algebra/tree/master€{FILE_PATH}.scala",
+      "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath,
+      "-diagrams"
+    ),
+  includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
 )
+
+lazy val docs = project.in(file("docs"))
+  .enablePlugins(MicrositesPlugin)
+  .settings(moduleName := "algebra-docs")
+  .settings(algebraSettings: _*)
+  .settings(noPublishSettings: _*)
+  .settings(unidocSettings)
+  .settings(ghpages.settings)
+  .settings(docSettings)
+  .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
+  .dependsOn(coreJVM, lawsJVM)
 
 lazy val aggregate = project.in(file("."))
   .settings(algebraSettings: _*)
   .settings(noPublishSettings: _*)
   .settings(unidocSettings: _*)
-  .settings(site.settings: _*)
   .settings(ghpages.settings: _*)
   .settings(docSettings: _*)
   .aggregate(coreJVM, lawsJVM, benchmark)
