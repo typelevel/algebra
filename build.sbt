@@ -5,15 +5,15 @@ import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 
 lazy val scalaCheckVersion = "1.13.4"
-lazy val scalaTestVersion = "3.0.0"
+lazy val scalaTestVersion = "3.0.1"
 lazy val disciplineVersion = "0.7.2"
 lazy val catsVersion = "0.8.1"
 lazy val catalystsVersion = "0.0.5"
 
 lazy val buildSettings = Seq(
   organization := "org.typelevel",
-  scalaVersion := "2.12.0",
-  crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0")
+  scalaVersion := "2.12.1",
+  crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.1")
 )
 
 lazy val commonSettings = Seq(
@@ -102,12 +102,25 @@ lazy val aggregate = project.in(file("."))
 
 val binaryCompatibleVersion = "0.6.0"
 
+/**
+  * Empty this each time we publish a new version (and bump the minor number)
+  */
+val ignoredABIProblems = {
+  import com.typesafe.tools.mima.core._
+  import com.typesafe.tools.mima.core.ProblemFilters._
+  Seq(
+    exclude[ReversedMissingMethodProblem]("algebra.ring.RingFunctions.defaultFromDouble")
+  )
+}
+
 lazy val core = crossProject
   .crossType(CrossType.Pure)
   .settings(moduleName := "algebra")
   .settings(mimaDefaultSettings: _*)
-  .settings(mimaPreviousArtifacts :=
-    Set("org.typelevel" %% "algebra" % binaryCompatibleVersion))
+  .settings(
+    mimaPreviousArtifacts := Set("org.typelevel" %% "algebra" % binaryCompatibleVersion),
+    mimaBinaryIssueFilters ++= ignoredABIProblems
+  )
   .settings(libraryDependencies ++= Seq(
     "org.typelevel" %%% "cats-kernel" % catsVersion,
     "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test",
