@@ -8,11 +8,12 @@ import algebra.ring._
 package object bigDecimal extends BigDecimalInstances
 
 trait BigDecimalInstances extends cats.kernel.instances.BigDecimalInstances {
-  implicit val bigDecimalAlgebra: BigDecimalAlgebra =
-    new BigDecimalAlgebra(MathContext.UNLIMITED)
+  implicit val bigDecimalAlgebra: BigDecimalAlgebra = new BigDecimalAlgebra()
 }
 
 class BigDecimalAlgebra(mc: MathContext) extends Field[BigDecimal] with Serializable {
+  def this() = this(MathContext.UNLIMITED)
+
   val zero: BigDecimal = BigDecimal(0, mc)
   val one: BigDecimal = BigDecimal(1, mc)
 
