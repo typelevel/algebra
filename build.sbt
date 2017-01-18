@@ -7,7 +7,7 @@ import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 lazy val scalaCheckVersion = "1.13.4"
 lazy val scalaTestVersion = "3.0.1"
 lazy val disciplineVersion = "0.7.2"
-lazy val catsVersion = "0.8.1"
+lazy val catsVersion = "0.9.0"
 lazy val catalystsVersion = "0.0.5"
 
 lazy val buildSettings = Seq(
