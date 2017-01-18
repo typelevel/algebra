@@ -259,4 +259,17 @@ class LawTests extends FunSuite with Configuration with Discipline {
   // Rational tests do not return on Scala-js, so we make them JVM only.
   if (Platform.isJvm) laws[RingLaws, Rat].check(_.field)
   else ()
+
+  test("Field.fromDouble with subnormal") {
+    val n = 1.9726888167225064E-308
+    val bd = new java.math.BigDecimal(n)
+    val unscaledValue = new BigInt(bd.unscaledValue)
+    val expected =
+      if (bd.scale > 0) {
+        Ring[Rat].fromBigInt(unscaledValue) / Ring[Rat].fromBigInt(BigInt(10).pow(bd.scale))
+      } else {
+        Ring[Rat].fromBigInt(unscaledValue * BigInt(10).pow(-bd.scale))
+      }
+    assert(Field.fromDouble[Rat](n) == expected)
+  }
 }
