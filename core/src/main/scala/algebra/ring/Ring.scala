@@ -86,10 +86,15 @@ trait RingFunctions[R[T] <: Ring[T]] extends AdditiveGroupFunctions[R] with Mult
       import java.lang.Long.numberOfTrailingZeros
       require(!isInfinite(a) && !isNaN(a), "Double must be representable as a fraction.")
       val bits = doubleToLongBits(a)
-      val m = bits & 0x000FFFFFFFFFFFFFL | 0x0010000000000000L
+      val expBits = ((bits >> 52) & 0x7FF).toInt
+      val mBits = bits & 0x000FFFFFFFFFFFFFL
+      // If expBits is 0, then this is a subnormal and we drop the implicit
+      // 1 bit.
+      val m = if (expBits > 0) mBits | 0x0010000000000000L else mBits
       val zeros = numberOfTrailingZeros(m)
       val value = m >>> zeros
-      val exp = ((bits >> 52) & 0x7FF).toInt - 1075 + zeros // 1023 + 52
+      // If expBits is 0, then this is a subnormal with expBits = 1.
+      val exp = math.max(1, expBits) - 1075 + zeros // 1023 + 52
 
       val high = ringA.times(ringA.fromInt((value >>> 30).toInt), ringA.fromInt(1 << 30))
       val low = ringA.fromInt((value & 0x3FFFFFFF).toInt)
