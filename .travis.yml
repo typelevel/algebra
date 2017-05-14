@@ -6,6 +6,9 @@ scala:
   - 2.11.8
   - 2.10.6
 
+env:
+  - DEPLOY=false
+
 jdk:
   - oraclejdk7
 
@@ -13,10 +16,11 @@ matrix:
   include:
   - scala: 2.12.0
     jdk: oraclejdk8
+    env: DEPLOY=true
 
 before_install:
   - export PATH=${PATH}:./vendor/bundle
-  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then bash scripts/decrypt-keys.sh; fi
+  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" -a "$DEPLOY" = "true" ]; then bash scripts/decrypt-keys.sh; fi
 
 install:
   - rvm use 2.2.3 --install --fuzzy
@@ -38,7 +42,7 @@ script:
   - ./sbt ++$TRAVIS_SCALA_VERSION docs/makeMicrosite
 
 after_success:
-  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then bash scripts/publish.sh; fi
+  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" -a "$DEPLOY" = "true" ]; then bash scripts/publish.sh; fi
   - bash <(curl -s https://codecov.io/bash)
 
 notifications:
