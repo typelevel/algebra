@@ -9,6 +9,7 @@ TAGS
 .lib
 .history
 .*.swp
+.idea/
 
 # Auto-copied by sbt-microsites
 docs/src/main/tut/contributing.md
