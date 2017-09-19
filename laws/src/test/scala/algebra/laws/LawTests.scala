@@ -99,7 +99,6 @@ class LawTests extends FunSuite with Configuration with Discipline {
   laws[GroupLaws, String].check(_.monoid)
 
   {
-    implicit val g: Group[Int] = AdditiveGroup.additive[Int]
     laws[OrderLaws, Option[HasEq[Int]]].check(_.eqv)
     laws[OrderLaws, Option[HasPartialOrder[Int]]].check(_.partialOrder)
     laws[OrderLaws, Option[Int]].check(_.order)
@@ -147,7 +146,6 @@ class LawTests extends FunSuite with Configuration with Discipline {
   laws[LatticeLaws, Int].check(_.boundedDistributiveLattice)
 
   {
-    implicit val comrig: CommutativeRig[Int] = IntMinMaxLattice.asCommutativeRig
     laws[RingLaws, Int].check(_.commutativeRig)
   }
 
