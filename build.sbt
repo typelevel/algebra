@@ -40,7 +40,7 @@ lazy val commonSettings = Seq(
   scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
   scalaJSStage in Global := FastOptStage,
-  jsEnv := new org.scalajs.jsenv.jsdomnodejs.JSDOMNodeJSEnv,
+  jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
   fork := false,
   parallelExecution in Test := false
 )
