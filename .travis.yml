@@ -3,7 +3,7 @@ sudo: false
 language: scala
 
 scala:
-  - 2.11.8
+  - 2.11.11
   - 2.10.6
 
 env:
@@ -14,7 +14,7 @@ jdk:
 
 matrix:
   include:
-  - scala: 2.12.0
+  - scala: 2.12.1
     jdk: oraclejdk8
     env: DEPLOY=true
 
