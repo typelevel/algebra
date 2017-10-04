@@ -7,13 +7,13 @@ import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 lazy val scalaCheckVersion = "1.13.4"
 lazy val scalaTestVersion = "3.0.1"
 lazy val disciplineVersion = "0.7.2"
-lazy val catsVersion = "0.9.0"
+lazy val catsVersion = "1.0.0-MF"
 lazy val catalystsVersion = "0.0.5"
 
 lazy val buildSettings = Seq(
   organization := "org.typelevel",
-  scalaVersion := "2.12.1",
-  crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.1")
+  scalaVersion := "2.12.3",
+  crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.3")
 )
 
 lazy val commonSettings = Seq(
@@ -40,8 +40,7 @@ lazy val commonSettings = Seq(
   scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
   scalaJSStage in Global := FastOptStage,
-  requiresDOM := false,
-  jsEnv := NodeJSEnv().value,
+  jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
   fork := false,
   parallelExecution in Test := false
 )
