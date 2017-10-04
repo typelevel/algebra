@@ -248,6 +248,10 @@ body.abstract.type div.big-circle {
   background: url("abstract_type.svg") no-repeat center;
 }
 
+body.alias.type div.big-circle {
+  background: url("abstract_type.svg") no-repeat center;
+}
+
 #template {
   margin: 0.9em 0.75em 0.75em;
   padding-bottom: 0.5em;
@@ -562,7 +566,7 @@ div#definition > h4#signature > span.modifier_kind > i.unfold-arrow,
   font-weight: bold;
 }
 
-/* Comments text formating */
+/* Comments text formatting */
 
 .cmt {
   color: #103a51;
