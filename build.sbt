@@ -7,13 +7,13 @@ import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 lazy val scalaCheckVersion = "1.13.4"
 lazy val scalaTestVersion = "3.0.1"
 lazy val disciplineVersion = "0.7.2"
-lazy val catsVersion = "1.0.0-MF"
+lazy val catsVersion = "1.0.0-RC1"
 lazy val catalystsVersion = "0.0.5"
 
 lazy val buildSettings = Seq(
   organization := "org.typelevel",
-  scalaVersion := "2.12.3",
-  crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.3")
+  scalaVersion := "2.12.4",
+  crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.4")
 )
 
 lazy val commonSettings = Seq(
