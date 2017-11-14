@@ -4,7 +4,6 @@ package laws
 import algebra.ring._
 
 import catalysts.Platform
-import cats.kernel.laws._
 
 import org.typelevel.discipline.Predicate
 
