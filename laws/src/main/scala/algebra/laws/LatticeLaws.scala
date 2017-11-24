@@ -9,8 +9,8 @@ import cats.kernel.laws._
 trait LatticeLaws[A] extends JoinSemilatticeLaws[A] with MeetSemilatticeLaws[A] {
   override implicit def S: Lattice[A]
 
-  def absorption(x: A, y: A)(implicit A: Eq[A]): IsEq[Boolean] =
-    (S.join(x, S.meet(x, y)) === x) && (S.meet(x, S.join(x, y)) === x) <-> true
+  def absorption(x: A, y: A)(implicit E: Eq[A]): IsEq[Boolean] =
+    (E.eqv(S.join(x, S.meet(x, y)), x) && E.eqv(S.meet(x, S.join(x, y)), x)) <-> true
 }
 
 object LatticeLaws {

@@ -1,6 +1,6 @@
 package algebra.laws
 
-import algebra.lattice.{BoundedMeetSemilattice, Lattice}
+import algebra.lattice._
 
 trait BoundedMeetLatticeLaws[A] extends LatticeLaws[A] with BoundedMeetSemilatticeLaws[A] {
   override implicit def S: Lattice[A] with BoundedMeetSemilattice[A]

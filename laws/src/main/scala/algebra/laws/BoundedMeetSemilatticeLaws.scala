@@ -1,5 +1,8 @@
 package algebra.laws
 
+import cats.kernel.laws.BoundedSemilatticeLaws
+import algebra.lattice._
+
 trait BoundedMeetSemilatticeLaws[A] extends MeetSemilatticeLaws[A] with BoundedSemilatticeLaws[A] {
   override implicit def S: BoundedMeetSemilattice[A]
 }

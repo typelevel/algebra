@@ -1,7 +1,7 @@
 package algebra.laws
 
-import algebra.lattice.JoinSemilattice
-import cats.kernel.laws.SemilatticeLaws
+import algebra.lattice._
+import cats.kernel.laws.BoundedSemilatticeLaws
 
 trait BoundedJoinSemilatticeLaws[A] extends JoinSemilatticeLaws[A] with BoundedSemilatticeLaws[A] {
   override implicit def S: BoundedJoinSemilattice[A]

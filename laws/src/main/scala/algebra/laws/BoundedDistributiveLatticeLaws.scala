@@ -1,4 +1,7 @@
-package algebra.laws
+package algebra
+package laws
+
+import algebra.lattice._
 
 trait BoundedDistributiveLatticeLaws[A] extends BoundedLatticeLaws[A] with DistributiveLatticeLaws[A] {
   override implicit def S: BoundedDistributiveLattice[A]

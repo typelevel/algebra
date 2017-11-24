@@ -1,6 +1,7 @@
-package algebra.laws
+package algebra
+package laws
 
-import algebra.lattice.{BoundedMeetSemilattice, Lattice}
+import algebra.lattice._
 
 trait BoundedLatticeLaws[A] extends LatticeLaws[A] with BoundedMeetLatticeLaws[A] with BoundedJoinLatticeLaws[A] {
   override implicit def S: BoundedLattice[A]
