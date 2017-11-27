@@ -3,6 +3,16 @@ package laws
 
 import algebra.ring._
 
+trait RingLaws[A] extends RigLaws[A] with RngLaws[A] {
+  override implicit def S: Ring[A]
+}
+
+object RingLaws {
+  def apply[A](implicit ev: Ring[A]): RingLaws[A] =
+    new RingLaws[A] { def S: Ring[A] = ev }
+}
+/*
+
 import catalysts.Platform
 import cats.kernel.laws._
 
@@ -286,3 +296,4 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
     def bases = Seq("additive" -> al, "multiplicative" -> ml)
   }
 }
+*/
