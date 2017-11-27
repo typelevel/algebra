@@ -38,8 +38,8 @@ class LawTests extends FunSuite with Configuration with Discipline {
 
   implicit val byteLattice: Lattice[Byte] = ByteMinMaxLattice
   implicit val shortLattice: Lattice[Short] = ShortMinMaxLattice
-  implicit val intLattice: BoundedDistributiveLattice[Int] = IntMinMaxLattice
-  implicit val longLattice: BoundedDistributiveLattice[Long] = LongMinMaxLattice
+  implicit val intLattice: BoundedDistributiveLatticeLaws[Int] = IntMinMaxLattice
+  implicit val longLattice: BoundedDistributiveLatticeLaws[Long] = LongMinMaxLattice
 
   implicit def orderLaws[A: Cogen: Eq: Arbitrary] = OrderLaws[A]
   implicit def groupLaws[A: Eq: Arbitrary] = GroupLaws[A]
