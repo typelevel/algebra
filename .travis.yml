@@ -38,7 +38,7 @@ cache:
 
 script:
   - ./sbt ++$TRAVIS_SCALA_VERSION clean coreJS/test lawsJS/test
-  - ./sbt ++$TRAVIS_SCALA_VERSION clean coverage coreJVM/test lawsJVM/test coverageReport mimaReportBinaryIssues
+  - ./sbt ++$TRAVIS_SCALA_VERSION clean coverage coreJVM/test lawsJVM/test coverageReport
   - ./sbt ++$TRAVIS_SCALA_VERSION docs/makeMicrosite
 
 after_success:

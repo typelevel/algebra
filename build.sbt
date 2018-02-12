@@ -4,9 +4,9 @@ import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 import microsites.ExtraMdFileConfig
 
 lazy val scalaCheckVersion = "1.13.5"
-lazy val scalaTestVersion = "3.0.3"
+lazy val scalaTestVersion = "3.0.4"
 lazy val disciplineVersion = "0.8"
-lazy val catsVersion = "1.0.0-RC1"
+lazy val catsVersion = "1.0.1"
 lazy val catalystsVersion = "0.0.5"
 
 lazy val buildSettings = Seq(
