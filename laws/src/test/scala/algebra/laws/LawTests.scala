@@ -9,8 +9,6 @@ import algebra.instances.BigDecimalAlgebra
 import catalysts.Platform
 import catalysts.macros.TypeTagM // need this import for implicit macros
 
-import cats.kernel.laws._
-
 import org.typelevel.discipline.Laws
 import org.typelevel.discipline.scalatest.Discipline
 import org.scalacheck.{Arbitrary, Cogen}
@@ -53,8 +51,7 @@ class LawTests extends FunSuite with Configuration with Discipline {
   case class HasEq[A](a: A)
 
   object HasEq {
-    implicit def hasEq[A: Eq]: Eq[HasEq[A]] =
-      Eq[A].on(_.a)
+    implicit def hasEq[A: Eq]: Eq[HasEq[A]] = Eq.by(_.a)
     implicit def hasEqArbitrary[A: Arbitrary]: Arbitrary[HasEq[A]] =
       Arbitrary(arbitrary[A].map(HasEq(_)))
     implicit def hasEqCogen[A: Cogen]: Cogen[HasEq[A]] =
@@ -64,8 +61,7 @@ class LawTests extends FunSuite with Configuration with Discipline {
   case class HasPartialOrder[A](a: A)
 
   object HasPartialOrder {
-    implicit def hasPartialOrder[A: PartialOrder]: PartialOrder[HasPartialOrder[A]] =
-      PartialOrder[A].on(_.a)
+    implicit def hasPartialOrder[A: PartialOrder]: PartialOrder[HasPartialOrder[A]] = PartialOrder.by(_.a)
     implicit def hasPartialOrderArbitrary[A: Arbitrary]: Arbitrary[HasPartialOrder[A]] =
       Arbitrary(arbitrary[A].map(HasPartialOrder(_)))
     implicit def hasPartialOrderCogen[A: Cogen]: Cogen[HasPartialOrder[A]] =

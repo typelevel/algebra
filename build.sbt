@@ -1,19 +1,18 @@
 import sbtrelease.Utilities._
-import sbtunidoc.Plugin.UnidocKeys._
 import ReleaseTransformations._
-import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
+import microsites.ExtraMdFileConfig
 
-lazy val scalaCheckVersion = "1.13.4"
-lazy val scalaTestVersion = "3.0.1"
-lazy val disciplineVersion = "0.7.2"
-lazy val catsVersion = "1.0.0-MF"
+lazy val scalaCheckVersion = "1.13.5"
+lazy val scalaTestVersion = "3.0.4"
+lazy val disciplineVersion = "0.8"
+lazy val catsVersion = "1.0.1"
 lazy val catalystsVersion = "0.0.5"
 
 lazy val buildSettings = Seq(
   organization := "org.typelevel",
-  scalaVersion := "2.12.3",
-  crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.3")
+  scalaVersion := "2.12.4",
+  crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.4")
 )
 
 lazy val commonSettings = Seq(
@@ -59,7 +58,7 @@ lazy val docSettings = Seq(
   micrositeBaseUrl := "algebra",
   micrositeDocumentationUrl := "api/",
   micrositeGithubOwner := "typelevel",
-  micrositeExtraMdFiles := Map(file("CONTRIBUTING.md") -> "contributing.md"),
+  micrositeExtraMdFiles := Map(file("CONTRIBUTING.md") -> ExtraMdFileConfig("contributing.md", "page")), // TODO check layout
   micrositeGithubRepo := "algebra",
   autoAPIMappings := true,
   unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(coreJVM, lawsJVM),
@@ -78,21 +77,22 @@ lazy val docSettings = Seq(
 )
 
 lazy val docs = project.in(file("docs"))
+  .enablePlugins(TutPlugin)
+  .enablePlugins(GhpagesPlugin)
   .enablePlugins(MicrositesPlugin)
+  .enablePlugins(ScalaUnidocPlugin)
   .settings(moduleName := "algebra-docs")
   .settings(algebraSettings: _*)
   .settings(noPublishSettings: _*)
-  .settings(unidocSettings)
-  .settings(ghpages.settings)
   .settings(docSettings)
-  .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
+  .settings((scalacOptions in Tut) ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .dependsOn(coreJVM, lawsJVM)
 
 lazy val aggregate = project.in(file("."))
+  .enablePlugins(GhpagesPlugin)
+  .enablePlugins(ScalaUnidocPlugin)
   .settings(algebraSettings: _*)
   .settings(noPublishSettings: _*)
-  .settings(unidocSettings: _*)
-  .settings(ghpages.settings: _*)
   .settings(docSettings: _*)
   .aggregate(coreJVM, lawsJVM, benchmark)
   .dependsOn(coreJVM, lawsJVM)
