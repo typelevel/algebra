@@ -178,10 +178,6 @@ lazy val publishSettings = Seq(
       Some("Releases" at nexus + "service/local/staging/deploy/maven2")
   },
   pomExtra := (
-    <scm>
-      <url>git@github.com:typelevel/algebra.git</url>
-      <connection>scm:git:git@github.com:typelevel/algebra.git</connection>
-    </scm>
     <developers>
       <developer>
         <id>johnynek</id>
