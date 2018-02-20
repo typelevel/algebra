@@ -30,14 +30,14 @@ To use algebra in your own projects, include this snippet in your
 `build.sbt` file:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "algebra" % "0.6.0"
+libraryDependencies += "org.typelevel" %% "algebra" % "0.7.0"
 ```
 
 If you want to use Algebra's laws, you can include those as well with
 this snippet:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "algebra-laws" % "0.6.0"
+libraryDependencies += "org.typelevel" %% "algebra-laws" % "0.7.0"
 ```
 
 ## what we have so far
