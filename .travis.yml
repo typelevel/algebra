@@ -10,7 +10,7 @@ env:
   - DEPLOY=false
 
 jdk:
-  - oraclejdk7
+  - oraclejdk8
 
 matrix:
   include:
@@ -30,16 +30,15 @@ install:
 
 cache:
   directories:
-  - $HOME/.sbt/0.13/dependency
   - $HOME/.sbt/boot/scala*
   - $HOME/.sbt/launchers
   - $HOME/.ivy2/cache
   - $HOME/.nvm
 
 script:
-  - ./sbt ++$TRAVIS_SCALA_VERSION clean coreJS/test lawsJS/test
-  - ./sbt ++$TRAVIS_SCALA_VERSION clean coverage coreJVM/test lawsJVM/test coverageReport
-  - ./sbt ++$TRAVIS_SCALA_VERSION docs/makeMicrosite
+  - ./sbt "++${TRAVIS_SCALA_VERSION}!" clean coreJS/test lawsJS/test
+  - ./sbt "++${TRAVIS_SCALA_VERSION}!" clean coverage coreJVM/test lawsJVM/test coverageReport
+  - ./sbt "++${TRAVIS_SCALA_VERSION}!" docs/makeMicrosite
 
 after_success:
   - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" -a "$DEPLOY" = "true" ]; then bash scripts/publish.sh; fi

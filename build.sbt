@@ -1,6 +1,5 @@
 import sbtrelease.Utilities._
 import ReleaseTransformations._
-import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 import microsites.ExtraMdFileConfig
 
 lazy val scalaCheckVersion = "1.13.5"
@@ -114,8 +113,8 @@ val ignoredABIProblems = {
 
 lazy val core = crossProject
   .crossType(CrossType.Pure)
+  .enablePlugins(MimaPlugin)
   .settings(moduleName := "algebra")
-  .settings(mimaDefaultSettings: _*)
   .settings(
     mimaPreviousArtifacts := Set("org.typelevel" %% "algebra" % binaryCompatibleVersion),
     mimaBinaryIssueFilters ++= ignoredABIProblems
@@ -132,9 +131,9 @@ lazy val coreJS = core.js
 
 lazy val laws = crossProject
   .crossType(CrossType.Pure)
+  .enablePlugins(MimaPlugin)
   .dependsOn(core)
   .settings(moduleName := "algebra-laws")
-  .settings(mimaDefaultSettings: _*)
   .settings(mimaPreviousArtifacts :=
     Set("org.typelevel" %% "algebra-laws" % binaryCompatibleVersion))
   .settings(algebraSettings: _*)
@@ -211,7 +210,7 @@ lazy val publishSettings = Seq(
     publishArtifacts,
     setNextVersion,
     commitNextVersion,
-    ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
+    releaseStepCommand("sonatypeReleaseAll"),
     pushChanges
   )
 )
@@ -221,8 +220,8 @@ addCommandAlias("validate", ";compile;test;unidoc")
 // Base Build Settings
 
 lazy val noPublishSettings = Seq(
-  publish := (),
-  publishLocal := (),
+  publish := {},
+  publishLocal := {},
   publishArtifact := false
 )
 
