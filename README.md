@@ -18,7 +18,7 @@ Since the creation of Algebra, we have also decided to interoperate
 with the [Cats](http://github.com/typelevel/cats) project. Algebra and
 Cats interoperate using the *cats-kernel* module.
 
-See the [Algebra website](https://typelevel.org/algebra) for more information. The latest API docs are hosted at Algebra's [ScalaDoc index](https://typelevel.org/algebra/api/).
+See the [Algebra website](https://typelevel.github.io/algebra) for more information. The latest API docs are hosted at Algebra's [ScalaDoc index](https://typelevel.github.io/algebra/api/).
 
 ## getting algebra
 
@@ -89,7 +89,7 @@ requirements) you want generic parameters to possess.
 
 For a tour of the Algebraic structures that `algebra` offers, see the
 extensive
-[overview on the Algebra website](https://typelevel.org/algebra/typeclasses/overview.html).
+[overview on the Algebra website](https://typelevel.github.com/algebra/typeclasses/overview.html).
 
 ### Copyright and License
 
