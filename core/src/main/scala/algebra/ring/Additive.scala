@@ -31,7 +31,7 @@ trait AdditiveSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Serial
    * If the sequence is empty, returns None. Otherwise, returns Some(total).
    */
   def trySum(as: TraversableOnce[A]): Option[A] =
-    as.reduceOption(plus)
+    as.toIterator.reduceOption(plus)
 }
 
 trait AdditiveCommutativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with AdditiveSemigroup[A] {

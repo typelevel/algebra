@@ -31,7 +31,7 @@ trait MultiplicativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with 
    * If the sequence is empty, returns None. Otherwise, returns Some(total).
    */
   def tryProduct(as: TraversableOnce[A]): Option[A] =
-    as.reduceOption(times)
+    as.toIterator.reduceOption(times)
 }
 
 trait MultiplicativeCommutativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeSemigroup[A] {

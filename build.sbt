@@ -1,17 +1,18 @@
 import sbtrelease.Utilities._
 import ReleaseTransformations._
 import microsites.ExtraMdFileConfig
+import sbtcrossproject.{crossProject, CrossType}
 
-lazy val scalaCheckVersion = "1.13.5"
-lazy val scalaTestVersion = "3.0.4"
+lazy val scalaCheckVersion = "1.14.0"
+lazy val scalaTestVersion = "3.0.6-SNAP1"
 lazy val disciplineVersion = "0.8"
-lazy val catsVersion = "1.0.1"
+lazy val catsVersion = "1.2.0"
 lazy val catalystsVersion = "0.0.5"
 
 lazy val buildSettings = Seq(
   organization := "org.typelevel",
   scalaVersion := "2.12.4",
-  crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.4")
+  crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.4", "2.13.0-M4")
 )
 
 lazy val commonSettings = Seq(
@@ -23,9 +24,7 @@ lazy val commonSettings = Seq(
     "-language:higherKinds",
     "-language:implicitConversions",
     "-unchecked",
-    "-Xfatal-warnings",
     "-Xlint",
-    "-Yno-adapted-args",
     "-Ywarn-dead-code",
     "-Ywarn-numeric-widen",
     //"-Ywarn-value-discard", // fails with @sp on Unit
@@ -34,6 +33,17 @@ lazy val commonSettings = Seq(
     case Some((2, 10)) => Seq.empty
     case _ => Seq("-Ywarn-unused-import")
   }),
+  scalacOptions ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, v)) if v <= 12 =>
+        Seq(
+          "-Xfatal-warnings",
+          "-Yno-adapted-args"
+        )
+      case _ =>
+        Nil
+    }
+  },
   resolvers += Resolver.sonatypeRepo("public"),
   scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
@@ -111,7 +121,7 @@ val ignoredABIProblems = {
   )
 }
 
-lazy val core = crossProject
+lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .enablePlugins(MimaPlugin)
   .settings(moduleName := "algebra")
@@ -129,7 +139,7 @@ lazy val core = crossProject
 lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
 
-lazy val laws = crossProject
+lazy val laws = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .enablePlugins(MimaPlugin)
   .dependsOn(core)

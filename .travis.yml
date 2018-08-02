@@ -17,6 +17,10 @@ matrix:
   - scala: 2.12.3
     jdk: oraclejdk8
     env: DEPLOY=true
+  - scala: 2.13.0-M4
+    script:
+    # TODO https://github.com/scoverage/scalac-scoverage-plugin/issues/225
+    - ./sbt "++${TRAVIS_SCALA_VERSION}!" coreJS/test lawsJS/test coreJVM/test lawsJVM/test
 
 before_install:
   - export PATH=${PATH}:./vendor/bundle
