@@ -2,16 +2,25 @@ import sbtrelease.Utilities._
 import ReleaseTransformations._
 import microsites.ExtraMdFileConfig
 
-lazy val scalaCheckVersion = "1.13.5"
-lazy val scalaTestVersion = "3.0.4"
-lazy val disciplineVersion = "0.8"
-lazy val catsVersion = "1.0.1"
+def preScala2_13(scalaVersion: String): Boolean =
+  CrossVersion.partialVersion(scalaVersion) match {
+    case Some((major, _)) if major < 2  => true
+    case Some((2, minor)) if minor < 13 => true
+    case _                              => false
+  }
+
+lazy val scalaCheckVersion = "1.14.0"
+lazy val scalaTestVersion = "3.0.6-SNAP5"
+lazy val catsVersion = "1.5.0-RC0"
 lazy val catalystsVersion = "0.0.5"
+
+def disciplineVersion(scalaVersion: String): String
+  = if (preScala2_13(scalaVersion)) "0.9" else "0.10"
 
 lazy val buildSettings = Seq(
   organization := "org.typelevel",
   scalaVersion := "2.12.4",
-  crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.4")
+  crossScalaVersions := Seq("2.11.12", "2.12.4", "2.13.0-M5")
 )
 
 lazy val commonSettings = Seq(
@@ -25,15 +34,11 @@ lazy val commonSettings = Seq(
     "-unchecked",
     "-Xfatal-warnings",
     "-Xlint",
-    "-Yno-adapted-args",
     "-Ywarn-dead-code",
     "-Ywarn-numeric-widen",
     //"-Ywarn-value-discard", // fails with @sp on Unit
     "-Xfuture"
-  ) ++ (CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, 10)) => Seq.empty
-    case _ => Seq("-Ywarn-unused-import")
-  }),
+  ) ++ (if (preScala2_13(scalaVersion.value)) Seq("-Yno-adapted-args") else Seq.empty),
   resolvers += Resolver.sonatypeRepo("public"),
   scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
@@ -140,7 +145,7 @@ lazy val laws = crossProject
   .settings(libraryDependencies ++= Seq(
     "org.typelevel" %%% "cats-kernel-laws" % catsVersion,
     "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
-    "org.typelevel" %%% "discipline" % disciplineVersion,
+    "org.typelevel" %%% "discipline" % disciplineVersion(scalaVersion.value),
     "org.typelevel" %%% "catalysts-platform" % catalystsVersion % "test",
     "org.typelevel" %%% "catalysts-macros" % catalystsVersion % "test",
     "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"))

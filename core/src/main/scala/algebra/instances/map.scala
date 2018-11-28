@@ -50,7 +50,7 @@ class MapAdditiveMonoid[K, V](implicit V: AdditiveSemigroup[V]) extends Additive
     else if (n == 0) zero
     else throw new IllegalArgumentException("Illegal negative exponent to sumN: %s" format n)
 
-  override def sum(as: TraversableOnce[Map[K, V]]): Map[K, V] = {
+  override def sum(as: Iterator[Map[K, V]]): Map[K, V] = {
     val acc = mutable.Map.empty[K, V]
     as.foreach { m =>
       val it = m.iterator
@@ -93,7 +93,7 @@ class MapSemiring[K, V](implicit V: Semiring[V]) extends MapAdditiveMonoid[K, V]
     else if (n == 1) x
     else x.map { case (k, v) => (k, V.pow(v, n)) }
 
-  override def tryProduct(as: TraversableOnce[Map[K, V]]): Option[Map[K, V]] =
+  override def tryProduct(as: Iterator[Map[K, V]]): Option[Map[K, V]] =
     if (as.isEmpty) {
       None
     } else {
