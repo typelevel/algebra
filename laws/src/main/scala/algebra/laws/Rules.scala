@@ -82,6 +82,16 @@ object Rules {
       c(Nil) ?== id
     }
 
+  def semigroupTryOp[A: Arbitrary: Eq](name: String, op: String)(s: Seq[A] => Option[A])(p: (A, A) => A): (String, Prop) =
+    s"$name(Seq(a, a)) == a $op a" -> forAll { (a: A) =>
+      s(Vector(a, a)).get ?== p(a, a)
+    }
+
+  def monoidOp[A: Arbitrary: Eq](name: String, op: String)(s: Seq[A] => A)(p: (A, A) => A): (String, Prop) =
+    s"$name(Seq(a, a)) == a $op a" -> forAll { (a: A) =>
+      s(Vector(a, a)) ?== p(a, a)
+    }
+
   def isId[A: Arbitrary: Eq](name: String, id: A)(p: A => Boolean): (String, Prop) =
     name -> forAll { (x: A) =>
       Eq.eqv(x, id) ?== p(x)

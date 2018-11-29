@@ -53,7 +53,8 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
     parents = Nil,
     Rules.serializable(A),
     Rules.repeat1("sumN")(A.sumN),
-    Rules.repeat2("sumN", "+")(A.sumN)(A.plus)
+    Rules.repeat2("sumN", "+")(A.sumN)(A.plus),
+    Rules.semigroupTryOp("trySum", "+")(A.trySum)(A.plus)
   )
 
   def additiveCommutativeSemigroup(implicit A: AdditiveCommutativeSemigroup[A]) = new AdditiveProperties(
@@ -65,7 +66,8 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
     base = monoid(A.additive),
     parents = List(additiveSemigroup),
     Rules.repeat0("sumN", "zero", A.zero)(A.sumN),
-    Rules.collect0("sum", "zero", A.zero)(A.sum)
+    Rules.collect0("sum", "zero", A.zero)(A.sum),
+    Rules.monoidOp("sum", "+")(A.sum)(A.plus)
   )
 
   def additiveCommutativeMonoid(implicit A: AdditiveCommutativeMonoid[A]) = new AdditiveProperties(
@@ -92,7 +94,8 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
     parent = None,
     Rules.serializable(A),
     Rules.repeat1("pow")(A.pow),
-    Rules.repeat2("pow", "*")(A.pow)(A.times)
+    Rules.repeat2("pow", "*")(A.pow)(A.times),
+    Rules.semigroupTryOp("tryProduct", "*")(A.tryProduct)(A.times)
   )
 
   def multiplicativeCommutativeSemigroup(implicit A: MultiplicativeCommutativeSemigroup[A]) = new MultiplicativeProperties(
@@ -106,7 +109,8 @@ trait RingLaws[A] extends GroupLaws[A] { self =>
     nonZeroBase = None,
     parent = Some(multiplicativeSemigroup),
     Rules.repeat0("pow", "one", A.one)(A.pow),
-    Rules.collect0("product", "one", A.one)(A.product)
+    Rules.collect0("product", "one", A.one)(A.product),
+    Rules.monoidOp("product", "*")(A.product)(A.times)
   )
 
   def multiplicativeCommutativeMonoid(implicit A: MultiplicativeCommutativeMonoid[A]) = new MultiplicativeProperties(
