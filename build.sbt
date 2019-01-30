@@ -60,7 +60,7 @@ lazy val docSettings = Seq(
   micrositeDescription := "Algebraic Typeclasses for Scala.",
   micrositeAuthor := "Algebra's contributors",
   micrositeHighlightTheme := "atom-one-light",
-  micrositeHomepage := "https://typelevel.github.io/algebra/",
+  micrositeHomepage := "https://typelevel.org/algebra/",
   micrositeBaseUrl := "algebra",
   micrositeDocumentationUrl := "api/",
   micrositeGithubOwner := "typelevel",
@@ -161,10 +161,10 @@ lazy val benchmark = project.in(file("benchmark"))
   .dependsOn(coreJVM)
 
 lazy val publishSettings = Seq(
-  homepage := Some(url("http://typelevel.github.io/algebra")),
+  homepage := Some(url("http://typelevel.org/algebra")),
   licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
   autoAPIMappings := true,
-  apiURL := Some(url("http://typelevel.github.io/algebra")),
+  apiURL := Some(url("https://typelevel.org/algebra/api/")),
 
   releaseCrossBuild := true,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
