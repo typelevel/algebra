@@ -2,24 +2,17 @@ sudo: false
 
 language: scala
 
-scala:
-  - 2.11.11
-
-env:
-  - DEPLOY=false
-
 jdk:
   - oraclejdk8
 
 matrix:
   include:
   - scala: 2.12.3
-    jdk: oraclejdk8
     env: DEPLOY=true
+  - scala: 2.11.11
+    env: DEPLOY=false
   - scala: 2.13.0-M5
-    script:
-    # TODO https://github.com/scoverage/scalac-scoverage-plugin/issues/225
-    - ./sbt "++${TRAVIS_SCALA_VERSION}!" coreJS/test lawsJS/test coreJVM/test lawsJVM/test
+    env: DEPLOY=false
 
 before_install:
   - export PATH=${PATH}:./vendor/bundle
