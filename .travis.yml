@@ -4,7 +4,6 @@ language: scala
 
 scala:
   - 2.11.11
-  - 2.10.6
 
 env:
   - DEPLOY=false
@@ -17,7 +16,7 @@ matrix:
   - scala: 2.12.3
     jdk: oraclejdk8
     env: DEPLOY=true
-  - scala: 2.13.0-M4
+  - scala: 2.13.0-M5
     script:
     # TODO https://github.com/scoverage/scalac-scoverage-plugin/issues/225
     - ./sbt "++${TRAVIS_SCALA_VERSION}!" coreJS/test lawsJS/test coreJVM/test lawsJVM/test
