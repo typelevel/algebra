@@ -1,18 +1,14 @@
 import sbtrelease.Utilities._
 import ReleaseTransformations._
 import microsites.ExtraMdFileConfig
-import sbtcrossproject.{crossProject, CrossType}
+import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
-lazy val scalaCheckVersion = "1.14.0"
-lazy val scalaTestVersion = "3.0.6-SNAP1"
-lazy val disciplineVersion = "0.8"
-lazy val catsVersion = "1.2.0"
-lazy val catalystsVersion = "0.0.5"
+lazy val catsVersion = "1.5.0"
 
 lazy val buildSettings = Seq(
   organization := "org.typelevel",
   scalaVersion := "2.12.4",
-  crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.4", "2.13.0-M4")
+  crossScalaVersions := Seq("2.11.12", "2.12.4", "2.13.0-M5")
 )
 
 lazy val commonSettings = Seq(
@@ -31,7 +27,8 @@ lazy val commonSettings = Seq(
     "-Xfuture"
   ) ++ (CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((2, 10)) => Seq.empty
-    case _ => Seq("-Ywarn-unused-import")
+    case Some((2, v)) if v <= 12 => Seq("-Ywarn-unused-import")
+    case _ => Seq.empty
   }),
   scalacOptions ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
@@ -108,7 +105,7 @@ lazy val aggregate = project.in(file("."))
   .aggregate(coreJS, lawsJS)
   .dependsOn(coreJS, lawsJS)
 
-val binaryCompatibleVersion = "0.6.0"
+val binaryCompatibleVersion = "1.0.0"
 
 /**
   * Empty this each time we publish a new version (and bump the minor number)
@@ -131,8 +128,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   )
   .settings(libraryDependencies ++= Seq(
     "org.typelevel" %%% "cats-kernel" % catsVersion,
-    "org.scalacheck" %%% "scalacheck" % scalaCheckVersion % "test",
-    "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"))
+    "org.typelevel" %%% "cats-testkit" % catsVersion % "test"))
   .settings(algebraSettings: _*)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
 
@@ -149,11 +145,7 @@ lazy val laws = crossProject(JSPlatform, JVMPlatform)
   .settings(algebraSettings: _*)
   .settings(libraryDependencies ++= Seq(
     "org.typelevel" %%% "cats-kernel-laws" % catsVersion,
-    "org.scalacheck" %%% "scalacheck" % scalaCheckVersion,
-    "org.typelevel" %%% "discipline" % disciplineVersion,
-    "org.typelevel" %%% "catalysts-platform" % catalystsVersion % "test",
-    "org.typelevel" %%% "catalysts-macros" % catalystsVersion % "test",
-    "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"))
+    "org.typelevel" %%% "cats-testkit" % catsVersion % "test"))
 
 lazy val lawsJVM = laws.jvm
 lazy val lawsJS = laws.js
