@@ -82,6 +82,7 @@ class LawTests extends FunSuite with Configuration with Discipline {
   laws[OrderLaws, Boolean].check(_.order)
   laws[LogicLaws, Boolean].check(_.bool)
   laws[LogicLaws, SimpleHeyting].check(_.heyting)
+  laws[LogicLaws, SimpleDeMorgan].check(_.deMorgan)
   laws[LatticePartialOrderLaws, Boolean].check(_.boundedLatticePartialOrder)
   laws[RingLaws, Boolean].check(_.boolRing(booleanRing))
 

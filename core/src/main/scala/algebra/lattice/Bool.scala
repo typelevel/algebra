@@ -23,8 +23,7 @@ import scala.{specialized => sp}
  * Every boolean algebras has a dual algebra, which involves reversing
  * true/false as well as and/or.
  */
-trait Bool[@sp(Int, Long) A] extends Any with Heyting[A] with GenBool[A] { self =>
-  def imp(a: A, b: A): A = or(complement(a), b)
+trait Bool[@sp(Int, Long) A] extends Any with DeMorgan[A] with Heyting[A] with GenBool[A] { self =>
   def without(a: A, b: A): A = and(a, complement(b))
 
   // xor is already defined in both Heyting and GenBool.

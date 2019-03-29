@@ -1,8 +1,7 @@
 package algebra.laws
 
 import algebra._
-import algebra.lattice.{Heyting, Bool, GenBool}
-
+import algebra.lattice.{Bool, DeMorgan, GenBool, Heyting}
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop._
 
@@ -14,6 +13,17 @@ object LogicLaws {
 }
 
 trait LogicLaws[A] extends LatticeLaws[A] {
+
+  def deMorgan(implicit A: DeMorgan[A]) = new LogicProperties(
+    name = "deMorgan",
+    parents = Seq(),
+    ll = boundedDistributiveLattice,
+
+    Rules.distributive(A.or)(A.and),
+
+    "involutive" -> forAll { (x: A) => A.complement(A.complement(x)) ?== x },
+    "¬(x∧y) = ¬x∨¬y" -> forAll { (x: A, y: A) => A.complement(A.and(x, y)) ?== A.or(A.complement(x), A.complement(y)) }
+  )
 
   def heyting(implicit A: Heyting[A]) = new LogicProperties(
     name = "heyting",
@@ -73,7 +83,7 @@ trait LogicLaws[A] extends LatticeLaws[A] {
 
   def bool(implicit A: Bool[A]) = new LogicProperties(
     name = "bool",
-    parents = Seq(heyting, generalizedBool),
+    parents = Seq(heyting, deMorgan, generalizedBool),
     ll = boundedDistributiveLattice,
 
     "excluded middle" -> forAll { (x: A) => A.or(x, A.complement(x)) ?== A.one }

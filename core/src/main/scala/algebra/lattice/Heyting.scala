@@ -33,20 +33,10 @@ import scala.{specialized => sp}
  * classical logic, see the boolean algebra type class implemented as
  * `Bool`.
  */
-trait Heyting[@sp(Int, Long) A] extends Any with BoundedDistributiveLattice[A] { self =>
-  def and(a: A, b: A): A
+trait Heyting[@sp(Int, Long) A] extends Any with BoundedDistributiveLattice[A] with Logic[A] { self =>
   def meet(a: A, b: A): A = and(a, b)
 
-  def or(a: A, b: A): A
   def join(a: A, b: A): A = or(a, b)
-
-  def imp(a: A, b: A): A
-  def complement(a: A): A
-
-  def xor(a: A, b: A): A = or(and(a, complement(b)), and(complement(a), b))
-  def nand(a: A, b: A): A = complement(and(a, b))
-  def nor(a: A, b: A): A = complement(or(a, b))
-  def nxor(a: A, b: A): A = complement(xor(a, b))
 }
 
 trait HeytingGenBoolOverlap[H[A] <: Heyting[A]] {
@@ -60,20 +50,8 @@ trait HeytingGenBoolOverlap[H[A] <: Heyting[A]] {
 
 trait HeytingFunctions[H[A] <: Heyting[A]] extends
   BoundedMeetSemilatticeFunctions[H] with
-  BoundedJoinSemilatticeFunctions[H] {
-
-  def complement[@sp(Int, Long) A](x: A)(implicit ev: H[A]): A =
-    ev.complement(x)
-
-  def imp[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
-    ev.imp(x, y)
-  def nor[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
-    ev.nor(x, y)
-  def nxor[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
-    ev.nxor(x, y)
-  def nand[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
-    ev.nand(x, y)
-}
+  BoundedJoinSemilatticeFunctions[H] with
+  LogicFunctions[H]
 
 
 object Heyting extends HeytingFunctions[Heyting] with HeytingGenBoolOverlap[Heyting] {
