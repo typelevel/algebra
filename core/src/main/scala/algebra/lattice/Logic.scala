@@ -52,4 +52,19 @@ object Logic extends LogicFunctions[Logic] with LogicGenBoolOverlap[Logic] {
     * Access an implicit `Logic[A]`.
     */
   @inline final def apply[@sp(Int, Long) A](implicit ev: Logic[A]): Logic[A] = ev
+
+  /**
+    * Turn a [[Heyting]] into a `Logic`.
+    * Used for binary compatibility.
+    */
+  final def fromHeyting[@sp(Int, Long) A](h: Heyting[A]): Logic[A] =
+    new Logic[A] {
+      override def and(a: A, b: A): A = h.and(a, b)
+
+      override def or(a: A, b: A): A = h.or(a, b)
+
+      override def imp(a: A, b: A): A = h.imp(a, b)
+
+      override def complement(a: A): A = h.complement(a)
+    }
 }

@@ -83,7 +83,7 @@ trait LogicLaws[A] extends LatticeLaws[A] {
 
   def bool(implicit A: Bool[A]) = new LogicProperties(
     name = "bool",
-    parents = Seq(heyting, deMorgan, generalizedBool),
+    parents = Seq(heyting, generalizedBool),
     ll = boundedDistributiveLattice,
 
     "excluded middle" -> forAll { (x: A) => A.or(x, A.complement(x)) ?== A.one }

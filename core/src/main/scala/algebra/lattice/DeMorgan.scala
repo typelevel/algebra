@@ -51,4 +51,22 @@ object DeMorgan extends DeMorganFunctions[DeMorgan] with DeMorganGenBoolOverlap[
     * Access an implicit `DeMorgan[A]`.
     */
   @inline final def apply[@sp(Int, Long) A](implicit ev: DeMorgan[A]): DeMorgan[A] = ev
+
+
+  /**
+    * Turn a [[Bool]] into a `DeMorgan`
+    * Used for binary compatibility.
+    */
+  final def fromBool[@sp(Int, Long) A](bool: Bool[A]): DeMorgan[A] =
+    new DeMorgan[A] {
+      def and(a: A, b: A): A = bool.and(a, b)
+
+      def or(a: A, b: A): A = bool.or(a, b)
+
+      def complement(a: A): A = bool.complement(a)
+
+      def one: A = bool.one
+
+      def zero: A = bool.zero
+    }
 }
