@@ -5,15 +5,14 @@ import scala.{specialized => sp}
 
 /**
   * De Morgan algebras are bounded lattices that are also equipped with
-  * an involutive `complement` operation.
+  * a De Morgan involution.
   *
-  * Complementation obeys the following law:
+  * De Morgan involution obeys the following laws:
   *
   *  - ¬¬a = a
   *  - ¬(x∧y) = ¬x∨¬y
   *
-  * However, in De Morgan algebras this operation is only a
-  * pseudo-complement, since De Morgan algebras do not necessarily
+  * However, in De Morgan algebras this involution does not necessarily
   * provide the law of the excluded middle. This means that there is no
   * guarantee that (a ∨ ¬a) = 1. De Morgan algebra do not not necessarily
   * provide the law of non contradiction either. This means that there is
@@ -21,7 +20,7 @@ import scala.{specialized => sp}
   *
   * De Morgan algebras are useful to model fuzzy logic. For a model of
   * classical logic, see the boolean algebra type class implemented as
-  * `Bool`.
+  * [[Bool]].
   */
 trait DeMorgan[@sp(Int, Long) A] extends Any with BoundedDistributiveLattice[A] with Logic[A] { self =>
   def meet(a: A, b: A): A = and(a, b)
