@@ -27,7 +27,7 @@ trait DeMorgan[@sp(Int, Long) A] extends Any with BoundedDistributiveLattice[A] 
 
   def join(a: A, b: A): A = or(a, b)
 
-  def imp(a: A, b: A): A = or(complement(a), b)
+  def imp(a: A, b: A): A = or(not(a), b)
 }
 
 trait DeMorganGenBoolOverlap[H[A] <: DeMorgan[A]] {
@@ -63,7 +63,7 @@ object DeMorgan extends DeMorganFunctions[DeMorgan] with DeMorganGenBoolOverlap[
 
       def or(a: A, b: A): A = bool.or(a, b)
 
-      def complement(a: A): A = bool.complement(a)
+      def not(a: A): A = bool.complement(a)
 
       def one: A = bool.one
 

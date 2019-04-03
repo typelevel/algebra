@@ -38,7 +38,7 @@ object SimpleDeMorgan {
       case _         => True
     }
 
-    def complement(a: SimpleDeMorgan): SimpleDeMorgan = a match {
+    def not(a: SimpleDeMorgan): SimpleDeMorgan = a match {
       case False => True
       case Unknown => Unknown
       case True  => False

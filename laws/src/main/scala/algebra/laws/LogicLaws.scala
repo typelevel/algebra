@@ -1,7 +1,7 @@
 package algebra.laws
 
 import algebra._
-import algebra.lattice.{Bool, DeMorgan, GenBool, Heyting}
+import algebra.lattice._
 import org.scalacheck.{Arbitrary, Prop}
 import org.scalacheck.Prop._
 
@@ -14,15 +14,25 @@ object LogicLaws {
 
 trait LogicLaws[A] extends LatticeLaws[A] {
 
-  def deMorgan(implicit A: DeMorgan[A]) = new LogicProperties(
-    name = "deMorgan",
+  def logic(implicit A: Logic[A]) = new LogicProperties(
+    name = "logic",
     parents = Seq(),
     ll = boundedDistributiveLattice,
 
     Rules.distributive(A.or)(A.and),
 
-    "involutive" -> forAll { (x: A) => A.complement(A.complement(x)) ?== x },
-    "¬(x∧y) = ¬x∨¬y" -> forAll { (x: A, y: A) => A.complement(A.and(x, y)) ?== A.or(A.complement(x), A.complement(y)) }
+    "¬(x∨y) = ¬x∧¬y" -> forAll { (x: A, y: A) => A.not(A.or(x, y)) ?== A.and(A.not(x), A.not(y)) },
+    "¬(x∧y) = ¬¬(¬x∨¬y)" -> forAll { (x: A, y: A) => A.not(A.and(x, y)) ?== A.not(A.not(A.or(A.not(x), A.not(y)))) }
+  )
+
+  def deMorgan(implicit A: DeMorgan[A]) = new LogicProperties(
+    name = "deMorgan",
+    parents = Seq(logic),
+    ll = boundedDistributiveLattice,
+
+    Rules.distributive(A.or)(A.and),
+
+    "involutive" -> forAll { (x: A) => A.not(A.not(x)) ?== x },
   )
 
   def heyting(implicit A: Heyting[A]) = new LogicProperties(

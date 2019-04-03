@@ -4,22 +4,27 @@ package lattice
 import scala.{specialized => sp}
 
 /**
-  * Logic models a logic generally.
-  * For intuitionistic logic see `Heyting`
-  * For fuzzy logic see `DeMorgan`
+  * Logic models a logic generally. It is a bounded distributive
+  * lattice with an extra negation operator.
+  *
+  * The negation operator obeys the weak De Morgan laws:
+  *  - ¬(x∨y) = ¬x∧¬y
+  *  - ¬(x∧y) = ¬¬(¬x∨¬y)
+  *
+  * For intuitionistic logic see [[Heyting]]
+  * For fuzzy logic see [[DeMorgan]]
   */
-trait Logic[@sp(Int, Long) A] extends Any { self =>
+trait Logic[@sp(Int, Long) A] extends Any with BoundedDistributiveLattice[A] { self =>
   def and(a: A, b: A): A
 
   def or(a: A, b: A): A
 
-  def imp(a: A, b: A): A
-  def complement(a: A): A
+  def not(a: A): A
 
-  def xor(a: A, b: A): A = or(and(a, complement(b)), and(complement(a), b))
-  def nand(a: A, b: A): A = complement(and(a, b))
-  def nor(a: A, b: A): A = complement(or(a, b))
-  def nxor(a: A, b: A): A = complement(xor(a, b))
+  def xor(a: A, b: A): A = or(and(a, not(b)), and(not(a), b))
+  def nand(a: A, b: A): A = not(and(a, b))
+  def nor(a: A, b: A): A = not(or(a, b))
+  def nxor(a: A, b: A): A = not(xor(a, b))
 }
 
 trait LogicGenBoolOverlap[H[A] <: Logic[A]] {
@@ -33,10 +38,8 @@ trait LogicGenBoolOverlap[H[A] <: Logic[A]] {
 
 trait LogicFunctions[H[A] <: Logic[A]] {
   def complement[@sp(Int, Long) A](x: A)(implicit ev: H[A]): A =
-    ev.complement(x)
+    ev.not(x)
 
-  def imp[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
-    ev.imp(x, y)
   def nor[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
     ev.nor(x, y)
   def nxor[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
@@ -59,12 +62,18 @@ object Logic extends LogicFunctions[Logic] with LogicGenBoolOverlap[Logic] {
     */
   final def fromHeyting[@sp(Int, Long) A](h: Heyting[A]): Logic[A] =
     new Logic[A] {
-      override def and(a: A, b: A): A = h.and(a, b)
+      def and(a: A, b: A): A = h.and(a, b)
 
-      override def or(a: A, b: A): A = h.or(a, b)
+      def or(a: A, b: A): A = h.or(a, b)
 
-      override def imp(a: A, b: A): A = h.imp(a, b)
+      def not(a: A): A = h.complement(a)
 
-      override def complement(a: A): A = h.complement(a)
+      def zero: A = h.zero
+
+      def one: A = h.one
+
+      def meet(lhs: A, rhs: A): A = h.meet(lhs, rhs)
+
+      def join(lhs: A, rhs: A): A = h.join(lhs, rhs)
     }
 }
