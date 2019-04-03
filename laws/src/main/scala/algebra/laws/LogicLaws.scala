@@ -32,7 +32,7 @@ trait LogicLaws[A] extends LatticeLaws[A] {
 
     Rules.distributive(A.or)(A.and),
 
-    "involutive" -> forAll { (x: A) => A.not(A.not(x)) ?== x },
+    "involutive" -> forAll { (x: A) => A.not(A.not(x)) ?== x }
   )
 
   def heyting(implicit A: Heyting[A]) = new LogicProperties(
