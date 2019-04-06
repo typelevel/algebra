@@ -105,7 +105,7 @@ lazy val aggregate = project.in(file("."))
   .aggregate(coreJS, lawsJS)
   .dependsOn(coreJS, lawsJS)
 
-val binaryCompatibleVersion = "1.0.0"
+val binaryCompatibleVersion = "1.0.1"
 
 /**
   * Empty this each time we publish a new version (and bump the minor number)
