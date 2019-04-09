@@ -22,21 +22,12 @@ import scala.{specialized => sp}
   * classical logic, see the boolean algebra type class implemented as
   * [[Bool]].
   */
-trait DeMorgan[@sp(Int, Long) A] extends Any with BoundedDistributiveLattice[A] with Logic[A] { self =>
+trait DeMorgan[@sp(Int, Long) A] extends Any with Logic[A] { self =>
   def meet(a: A, b: A): A = and(a, b)
 
   def join(a: A, b: A): A = or(a, b)
 
   def imp(a: A, b: A): A = or(not(a), b)
-}
-
-trait DeMorganGenBoolOverlap[H[A] <: DeMorgan[A]] {
-  def and[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
-    ev.and(x, y)
-  def or[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
-    ev.or(x, y)
-  def xor[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
-    ev.xor(x, y)
 }
 
 trait DeMorganFunctions[H[A] <: DeMorgan[A]] extends
@@ -45,7 +36,7 @@ trait DeMorganFunctions[H[A] <: DeMorgan[A]] extends
   LogicFunctions[H]
 
 
-object DeMorgan extends DeMorganFunctions[DeMorgan] with DeMorganGenBoolOverlap[DeMorgan] {
+object DeMorgan extends DeMorganFunctions[DeMorgan] {
 
   /**
     * Access an implicit `DeMorgan[A]`.

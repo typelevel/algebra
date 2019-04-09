@@ -27,15 +27,6 @@ trait Logic[@sp(Int, Long) A] extends Any with BoundedDistributiveLattice[A] { s
   def nxor(a: A, b: A): A = not(xor(a, b))
 }
 
-trait LogicGenBoolOverlap[H[A] <: Logic[A]] {
-  def and[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
-    ev.and(x, y)
-  def or[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
-    ev.or(x, y)
-  def xor[@sp(Int, Long) A](x: A, y: A)(implicit ev: H[A]): A =
-    ev.xor(x, y)
-}
-
 trait LogicFunctions[H[A] <: Logic[A]] {
   def complement[@sp(Int, Long) A](x: A)(implicit ev: H[A]): A =
     ev.not(x)
@@ -49,7 +40,7 @@ trait LogicFunctions[H[A] <: Logic[A]] {
 }
 
 
-object Logic extends LogicFunctions[Logic] with LogicGenBoolOverlap[Logic] {
+object Logic extends LogicFunctions[Logic] {
 
   /**
     * Access an implicit `Logic[A]`.
