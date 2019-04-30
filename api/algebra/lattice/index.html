@@ -182,6 +182,20 @@ is the top (one, also written as ⊤).">
                           BoundedMeetSemilatticeFunctions
                         </a>
                       </li><li class="current-entities indented2">
+                        <a class="object" href="DeMorgan$.html" title=""></a>
+                        <a class="trait" href="DeMorgan.html" title="De Morgan algebras are bounded lattices that are also equipped with
+a De Morgan involution."></a>
+                        <a href="DeMorgan.html" title="De Morgan algebras are bounded lattices that are also equipped with
+a De Morgan involution.">
+                          DeMorgan
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="DeMorganFunctions.html" title=""></a>
+                        <a href="DeMorganFunctions.html" title="">
+                          DeMorganFunctions
+                        </a>
+                      </li><li class="current-entities indented2">
                         <a class="object" href="DistributiveLattice$.html" title=""></a>
                         <a class="trait" href="DistributiveLattice.html" title="A distributive lattice a lattice where join and meet distribute:"></a>
                         <a href="DistributiveLattice.html" title="A distributive lattice a lattice where join and meet distribute:">
@@ -216,10 +230,10 @@ the top element.">
                       </li><li class="current-entities indented2">
                         <a class="object" href="Heyting$.html" title=""></a>
                         <a class="trait" href="Heyting.html" title="Heyting algebras are bounded lattices that are also equipped with
-an additional binary operation imp (for impliciation, also
+an additional binary operation imp (for implication, also
 written as →)."></a>
                         <a href="Heyting.html" title="Heyting algebras are bounded lattices that are also equipped with
-an additional binary operation imp (for impliciation, also
+an additional binary operation imp (for implication, also
 written as →).">
                           Heyting
                         </a>
@@ -258,6 +272,18 @@ join)."></a>
                         <a href="Lattice.html" title="A lattice is a set A together with two operations (meet and
 join).">
                           Lattice
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <a class="object" href="Logic$.html" title=""></a>
+                        <a class="trait" href="Logic.html" title="Logic models a logic generally."></a>
+                        <a href="Logic.html" title="Logic models a logic generally.">
+                          Logic
+                        </a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="trait" href="LogicFunctions.html" title=""></a>
+                        <a href="LogicFunctions.html" title="">
+                          LogicFunctions
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="MeetSemilattice$.html" title=""></a>
@@ -552,6 +578,52 @@ is the top (one, also written as ⊤).</p><p>This means that for any a in A:</p>
       </span>
       
       
+    </li><li name="algebra.lattice.DeMorgan" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="DeMorgan[A]extendsAnywithLogic[A]"></a><a id="DeMorgan[A]:DeMorgan[A]"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/index.html#DeMorgan[A]extendsAnywithLogic[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="De Morgan algebras are bounded lattices that are also equipped with
+a De Morgan involution." href="DeMorgan.html">
+              <span class="name">DeMorgan</span>
+            </a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Logic.html" class="extype" name="algebra.lattice.Logic">Logic</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">De Morgan algebras are bounded lattices that are also equipped with
+a De Morgan involution.</p><div class="fullcomment"><div class="comment cmt"><p>De Morgan algebras are bounded lattices that are also equipped with
+a De Morgan involution.</p><p>De Morgan involution obeys the following laws:</p><ul><li>¬¬a = a</li><li>¬(x∧y) = ¬x∨¬y</li></ul><p>However, in De Morgan algebras this involution does not necessarily
+provide the law of the excluded middle. This means that there is no
+guarantee that (a ∨ ¬a) = 1. De Morgan algebra do not not necessarily
+provide the law of non contradiction either. This means that there is
+no guarantee that (a ∧ ¬a) = 0.</p><p>De Morgan algebras are useful to model fuzzy logic. For a model of
+classical logic, see the boolean algebra type class implemented as
+<a href="Bool.html" class="extype" name="algebra.lattice.Bool">Bool</a>.
+</p></div></div>
+    </li><li name="algebra.lattice.DeMorganFunctions" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DeMorganFunctions[H[A]&lt;:algebra.lattice.DeMorgan[A]]extendsBoundedMeetSemilatticeFunctions[H]withBoundedJoinSemilatticeFunctions[H]withLogicFunctions[H]"></a><a id="DeMorganFunctions[H[A]&lt;:DeMorgan[A]]:DeMorganFunctions[H]"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/index.html#DeMorganFunctions[H[A]&lt;:algebra.lattice.DeMorgan[A]]extendsBoundedMeetSemilatticeFunctions[H]withBoundedJoinSemilatticeFunctions[H]withLogicFunctions[H]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="DeMorganFunctions.html">
+              <span class="name">DeMorganFunctions</span>
+            </a><span class="tparams">[<span name="H">H<span class="tparams">[<span name="A">A</span>]</span> &lt;: <a href="DeMorgan.html" class="extype" name="algebra.lattice.DeMorgan">DeMorgan</a>[<span class="extype" name="algebra.lattice.DeMorganFunctions.H.A">A</span>]</span>]</span><span class="result"> extends <a href="BoundedMeetSemilatticeFunctions.html" class="extype" name="algebra.lattice.BoundedMeetSemilatticeFunctions">BoundedMeetSemilatticeFunctions</a>[<span class="extype" name="algebra.lattice.DeMorganFunctions.H">H</span>] with <a href="BoundedJoinSemilatticeFunctions.html" class="extype" name="algebra.lattice.BoundedJoinSemilatticeFunctions">BoundedJoinSemilatticeFunctions</a>[<span class="extype" name="algebra.lattice.DeMorganFunctions.H">H</span>] with <a href="LogicFunctions.html" class="extype" name="algebra.lattice.LogicFunctions">LogicFunctions</a>[<span class="extype" name="algebra.lattice.DeMorganFunctions.H">H</span>]</span>
+      </span>
+      
+      
     </li><li name="algebra.lattice.DistributiveLattice" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="DistributiveLattice[A]extendsAnywithLattice[A]"></a><a id="DistributiveLattice[A]:DistributiveLattice[A]"></a>
       <span class="permalink">
@@ -663,16 +735,16 @@ have (absolute) complements, but they have <i>relative complements</i>
       </span>
       <span class="symbol">
         <a title="Heyting algebras are bounded lattices that are also equipped with
-an additional binary operation imp (for impliciation, also
+an additional binary operation imp (for implication, also
 written as →)." href="Heyting.html">
               <span class="name">Heyting</span>
             </a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="BoundedDistributiveLattice.html" class="extype" name="algebra.lattice.BoundedDistributiveLattice">BoundedDistributiveLattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Heyting algebras are bounded lattices that are also equipped with
-an additional binary operation <code>imp</code> (for impliciation, also
+an additional binary operation <code>imp</code> (for implication, also
 written as →).</p><div class="fullcomment"><div class="comment cmt"><p>Heyting algebras are bounded lattices that are also equipped with
-an additional binary operation <code>imp</code> (for impliciation, also
+an additional binary operation <code>imp</code> (for implication, also
 written as →).</p><p>Implication obeys the following laws:</p><ul><li>a → a = 1</li><li>a ∧ (a → b) = a ∧ b</li><li>b ∧ (a → b) = b</li><li>a → (b ∧ c) = (a → b) ∧ (a → c)</li></ul><p>In heyting algebras, <code>and</code> is equivalent to <code>meet</code> and <code>or</code> is
 equivalent to <code>join</code>; both methods are available.</p><p>Heyting algebra also define <code>complement</code> operation (sometimes
 written as ¬a). The complement of <code>a</code> is equivalent to <code>(a → 0)</code>,
@@ -785,6 +857,45 @@ associative, and idempotent.</p><p>Join can be thought of as finding a least upp
 and meet can be thought of as finding a greatest lower bound
 (infimum).</p><p>The join and meet operations are also linked by absorption laws:</p><p>  meet(a, join(a, b)) = join(a, meet(a, b)) = a
 </p></div></div>
+    </li><li name="algebra.lattice.Logic" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Logic[A]extendsAnywithBoundedDistributiveLattice[A]"></a><a id="Logic[A]:Logic[A]"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/index.html#Logic[A]extendsAnywithBoundedDistributiveLattice[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="Logic models a logic generally." href="Logic.html">
+              <span class="name">Logic</span>
+            </a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="BoundedDistributiveLattice.html" class="extype" name="algebra.lattice.BoundedDistributiveLattice">BoundedDistributiveLattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Logic models a logic generally.</p><div class="fullcomment"><div class="comment cmt"><p>Logic models a logic generally. It is a bounded distributive
+lattice with an extra negation operator.</p><p>The negation operator obeys the weak De Morgan laws:</p><ul><li>¬(x∨y) = ¬x∧¬y</li><li>¬(x∧y) = ¬¬(¬x∨¬y)</li></ul><p>For intuitionistic logic see <a href="Heyting.html" class="extype" name="algebra.lattice.Heyting">Heyting</a>
+For fuzzy logic see <a href="DeMorgan.html" class="extype" name="algebra.lattice.DeMorgan">DeMorgan</a>
+</p></div></div>
+    </li><li name="algebra.lattice.LogicFunctions" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LogicFunctions[H[A]&lt;:algebra.lattice.Logic[A]]extendsAnyRef"></a><a id="LogicFunctions[H[A]&lt;:Logic[A]]:LogicFunctions[H]"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/index.html#LogicFunctions[H[A]&lt;:algebra.lattice.Logic[A]]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="LogicFunctions.html">
+              <span class="name">LogicFunctions</span>
+            </a><span class="tparams">[<span name="H">H<span class="tparams">[<span name="A">A</span>]</span> &lt;: <a href="Logic.html" class="extype" name="algebra.lattice.Logic">Logic</a>[<span class="extype" name="algebra.lattice.LogicFunctions.H.A">A</span>]</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></span>
+      </span>
+      
+      
     </li><li name="algebra.lattice.MeetSemilattice" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="MeetSemilattice[A]extendsAnywithSerializable"></a><a id="MeetSemilattice[A]:MeetSemilattice[A]"></a>
       <span class="permalink">
@@ -959,6 +1070,24 @@ greatest lower bound.</p>
       </span>
       
       
+    </li><li name="algebra.lattice.DeMorgan" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DeMorgan"></a><a id="DeMorgan:DeMorgan"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/index.html#DeMorgan" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="DeMorgan$.html">
+              <span class="name">DeMorgan</span>
+            </a><span class="result"> extends <a href="DeMorganFunctions.html" class="extype" name="algebra.lattice.DeMorganFunctions">DeMorganFunctions</a>[<a href="DeMorgan.html" class="extype" name="algebra.lattice.DeMorgan">DeMorgan</a>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
     </li><li name="algebra.lattice.DistributiveLattice" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="DistributiveLattice"></a><a id="DistributiveLattice:DistributiveLattice"></a>
       <span class="permalink">
@@ -1046,6 +1175,24 @@ greatest lower bound.</p>
         <a title="" href="Lattice$.html">
               <span class="name">Lattice</span>
             </a><span class="result"> extends <a href="JoinSemilatticeFunctions.html" class="extype" name="algebra.lattice.JoinSemilatticeFunctions">JoinSemilatticeFunctions</a>[<a href="Lattice.html" class="extype" name="algebra.lattice.Lattice">Lattice</a>] with <a href="MeetSemilatticeFunctions.html" class="extype" name="algebra.lattice.MeetSemilatticeFunctions">MeetSemilatticeFunctions</a>[<a href="Lattice.html" class="extype" name="algebra.lattice.Lattice">Lattice</a>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
+    </li><li name="algebra.lattice.Logic" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Logic"></a><a id="Logic:Logic"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/index.html#Logic" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="Logic$.html">
+              <span class="name">Logic</span>
+            </a><span class="result"> extends <a href="LogicFunctions.html" class="extype" name="algebra.lattice.LogicFunctions">LogicFunctions</a>[<a href="Logic.html" class="extype" name="algebra.lattice.Logic">Logic</a>] with <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       

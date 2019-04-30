@@ -259,8 +259,8 @@ join).">
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Logic$.html" title=""></a>
-                        <a class="trait" href="Logic.html" title="Logic models a logic generally."></a>
-                        <a href="Logic.html" title="Logic models a logic generally.">
+                        <a class="trait" href="" title="Logic models a logic generally."></a>
+                        <a href="" title="Logic models a logic generally.">
                           Logic
                         </a>
                       </li><li class="current-entities indented2">
@@ -271,10 +271,10 @@ join).">
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="MeetSemilattice$.html" title=""></a>
-                        <a class="trait" href="" title="A meet-semilattice (or lower semilattice) is a semilattice whose
+                        <a class="trait" href="MeetSemilattice.html" title="A meet-semilattice (or lower semilattice) is a semilattice whose
 operation is called &quot;meet&quot;, and which can be thought of as a
 greatest lower bound."></a>
-                        <a href="" title="A meet-semilattice (or lower semilattice) is a semilattice whose
+                        <a href="MeetSemilattice.html" title="A meet-semilattice (or lower semilattice) is a semilattice whose
 operation is called &quot;meet&quot;, and which can be thought of as a
 greatest lower bound.">
                           MeetSemilattice
@@ -304,15 +304,15 @@ greatest lower bound.">
           <div id="content">
             <body class="trait type">
       <div id="definition">
-        <a href="MeetSemilattice$.html" title="See companion object"><div class="big-circle trait-companion-object">t</div></a>
+        <a href="Logic$.html" title="See companion object"><div class="big-circle trait-companion-object">t</div></a>
         <p id="owner"><a href="../index.html" class="extype" name="algebra">algebra</a>.<a href="index.html" class="extype" name="algebra.lattice">lattice</a></p>
-        <h1><a href="MeetSemilattice$.html" title="See companion object">MeetSemilattice</a><span class="permalink">
-      <a href="../../algebra/lattice/MeetSemilattice.html" title="Permalink">
+        <h1><a href="Logic$.html" title="See companion object">Logic</a><span class="permalink">
+      <a href="../../algebra/lattice/Logic.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
         <h3><span class="morelinks"><div>
-            Companion <a href="MeetSemilattice$.html" title="See companion object">object MeetSemilattice</a>
+            Companion <a href="Logic$.html" title="See companion object">object Logic</a>
           </div></span></h3>
       </div>
 
@@ -322,24 +322,24 @@ greatest lower bound.">
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">MeetSemilattice</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">Logic</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="BoundedDistributiveLattice.html" class="extype" name="algebra.lattice.BoundedDistributiveLattice">BoundedDistributiveLattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A meet-semilattice (or lower semilattice) is a semilattice whose
-operation is called &quot;meet&quot;, and which can be thought of as a
-greatest lower bound.
-</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="algebra.lattice.MeetSemilattice">MeetSemilattice</a>[<span class="extype" name="algebra.lattice.MeetSemilattice.A">A</span>]</dd><dt>Source</dt><dd><a href="https://github.com/typelevel/algebra/tree/master/core/src/main/scala/algebra/lattice/MeetSemilattice.scala" target="_blank">MeetSemilattice.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Logic models a logic generally. It is a bounded distributive
+lattice with an extra negation operator.</p><p>The negation operator obeys the weak De Morgan laws:</p><ul><li>¬(x∨y) = ¬x∧¬y</li><li>¬(x∧y) = ¬¬(¬x∨¬y)</li></ul><p>For intuitionistic logic see <a href="Heyting.html" class="extype" name="algebra.lattice.Heyting">Heyting</a>
+For fuzzy logic see <a href="DeMorgan.html" class="extype" name="algebra.lattice.DeMorgan">DeMorgan</a>
+</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="algebra.lattice.Logic">Logic</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</dd><dt>Source</dt><dd><a href="https://github.com/typelevel/algebra/tree/master/core/src/main/scala/algebra/lattice/Logic.scala" target="_blank">Logic.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.12.3/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="BoundedDistributiveLattice.html" class="extype" name="algebra.lattice.BoundedDistributiveLattice">BoundedDistributiveLattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>], <a href="DistributiveLattice.html" class="extype" name="algebra.lattice.DistributiveLattice">DistributiveLattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>], <a href="BoundedLattice.html" class="extype" name="algebra.lattice.BoundedLattice">BoundedLattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>], <a href="BoundedJoinSemilattice.html" class="extype" name="algebra.lattice.BoundedJoinSemilattice">BoundedJoinSemilattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>], <a href="BoundedMeetSemilattice.html" class="extype" name="algebra.lattice.BoundedMeetSemilattice">BoundedMeetSemilattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>], <a href="Lattice.html" class="extype" name="algebra.lattice.Lattice">Lattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>], <a href="MeetSemilattice.html" class="extype" name="algebra.lattice.MeetSemilattice">MeetSemilattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>], <a href="JoinSemilattice.html" class="extype" name="algebra.lattice.JoinSemilattice">JoinSemilattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>], <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.12.3/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">
               Known Subclasses
             </span>
-            <div class="subClasses hiddenContent"><a href="../instances/BitSetAlgebra.html" class="extype" name="algebra.instances.BitSetAlgebra">BitSetAlgebra</a>, <a href="../instances/BooleanAlgebra.html" class="extype" name="algebra.instances.BooleanAlgebra">BooleanAlgebra</a>, <a href="../instances/SetLattice.html" class="extype" name="algebra.instances.SetLattice">SetLattice</a>, <a href="Bool.html" class="extype" name="algebra.lattice.Bool">Bool</a>, <a href="BoolFromBoolRing.html" class="extype" name="algebra.lattice.BoolFromBoolRing">BoolFromBoolRing</a>, <a href="BoundedDistributiveLattice.html" class="extype" name="algebra.lattice.BoundedDistributiveLattice">BoundedDistributiveLattice</a>, <a href="BoundedLattice.html" class="extype" name="algebra.lattice.BoundedLattice">BoundedLattice</a>, <a href="BoundedMeetSemilattice.html" class="extype" name="algebra.lattice.BoundedMeetSemilattice">BoundedMeetSemilattice</a>, <a href="DeMorgan.html" class="extype" name="algebra.lattice.DeMorgan">DeMorgan</a>, <a href="DistributiveLattice.html" class="extype" name="algebra.lattice.DistributiveLattice">DistributiveLattice</a>, <a href="DualBool.html" class="extype" name="algebra.lattice.DualBool">DualBool</a>, <a href="GenBool.html" class="extype" name="algebra.lattice.GenBool">GenBool</a>, <a href="GenBoolFromBoolRng.html" class="extype" name="algebra.lattice.GenBoolFromBoolRng">GenBoolFromBoolRng</a>, <a href="Heyting.html" class="extype" name="algebra.lattice.Heyting">Heyting</a>, <a href="Lattice.html" class="extype" name="algebra.lattice.Lattice">Lattice</a>, <a href="Logic.html" class="extype" name="algebra.lattice.Logic">Logic</a>, <a href="MinMaxBoundedDistributiveLattice.html" class="extype" name="algebra.lattice.MinMaxBoundedDistributiveLattice">MinMaxBoundedDistributiveLattice</a>, <a href="MinMaxLattice.html" class="extype" name="algebra.lattice.MinMaxLattice">MinMaxLattice</a></div>
+            <div class="subClasses hiddenContent"><a href="DeMorgan.html" class="extype" name="algebra.lattice.DeMorgan">DeMorgan</a></div>
           </div></div>
         
 
@@ -365,7 +365,7 @@ greatest lower bound.
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="algebra.lattice.MeetSemilattice"><span>MeetSemilattice</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="algebra.lattice.Logic"><span>Logic</span></li><li class="in" name="algebra.lattice.BoundedDistributiveLattice"><span>BoundedDistributiveLattice</span></li><li class="in" name="algebra.lattice.DistributiveLattice"><span>DistributiveLattice</span></li><li class="in" name="algebra.lattice.BoundedLattice"><span>BoundedLattice</span></li><li class="in" name="algebra.lattice.BoundedJoinSemilattice"><span>BoundedJoinSemilattice</span></li><li class="in" name="algebra.lattice.BoundedMeetSemilattice"><span>BoundedMeetSemilattice</span></li><li class="in" name="algebra.lattice.Lattice"><span>Lattice</span></li><li class="in" name="algebra.lattice.MeetSemilattice"><span>MeetSemilattice</span></li><li class="in" name="algebra.lattice.JoinSemilattice"><span>JoinSemilattice</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -389,10 +389,26 @@ greatest lower bound.
 
         <div class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="scala.Any#getClass" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="algebra.lattice.Logic#and" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="and(a:A,b:A):A"></a><a id="and(A,A):A"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/Logic.html#and(a:A,b:A):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">and</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>
+      </span>
+      
+      
+    </li><li name="scala.Any#getClass" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/MeetSemilattice.html#getClass():Class[_]" title="Permalink">
+      <a href="../../algebra/lattice/Logic.html#getClass():Class[_]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -405,10 +421,10 @@ greatest lower bound.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="algebra.lattice.MeetSemilattice#meet" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="meet(lhs:A,rhs:A):A"></a><a id="meet(A,A):A"></a>
+    </li><li name="algebra.lattice.JoinSemilattice#join" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="join(lhs:A,rhs:A):A"></a><a id="join(A,A):A"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/MeetSemilattice.html#meet(lhs:A,rhs:A):A" title="Permalink">
+      <a href="../../algebra/lattice/Logic.html#join(lhs:A,rhs:A):A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -417,10 +433,90 @@ greatest lower bound.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">meet</span><span class="params">(<span name="lhs">lhs: <span class="extype" name="algebra.lattice.MeetSemilattice.A">A</span></span>, <span name="rhs">rhs: <span class="extype" name="algebra.lattice.MeetSemilattice.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.MeetSemilattice.A">A</span></span>
+        <span class="name">join</span><span class="params">(<span name="lhs">lhs: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>, <span name="rhs">rhs: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="JoinSemilattice.html" class="extype" name="algebra.lattice.JoinSemilattice">JoinSemilattice</a></dd></dl></div>
+    </li><li name="algebra.lattice.MeetSemilattice#meet" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="meet(lhs:A,rhs:A):A"></a><a id="meet(A,A):A"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/Logic.html#meet(lhs:A,rhs:A):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">meet</span><span class="params">(<span name="lhs">lhs: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>, <span name="rhs">rhs: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MeetSemilattice.html" class="extype" name="algebra.lattice.MeetSemilattice">MeetSemilattice</a></dd></dl></div>
+    </li><li name="algebra.lattice.Logic#not" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="not(a:A):A"></a><a id="not(A):A"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/Logic.html#not(a:A):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">not</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>
       </span>
       
       
+    </li><li name="algebra.lattice.BoundedMeetSemilattice#one" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="one:A"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/Logic.html#one:A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">one</span><span class="result">: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BoundedMeetSemilattice.html" class="extype" name="algebra.lattice.BoundedMeetSemilattice">BoundedMeetSemilattice</a></dd></dl></div>
+    </li><li name="algebra.lattice.Logic#or" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="or(a:A,b:A):A"></a><a id="or(A,A):A"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/Logic.html#or(a:A,b:A):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">or</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>
+      </span>
+      
+      
+    </li><li name="algebra.lattice.BoundedJoinSemilattice#zero" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="zero:A"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/Logic.html#zero:A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">zero</span><span class="result">: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BoundedJoinSemilattice.html" class="extype" name="algebra.lattice.BoundedJoinSemilattice">BoundedJoinSemilattice</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -430,7 +526,7 @@ greatest lower bound.
                 <li name="scala.Any#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/MeetSemilattice.html#!=(x$1:Any):Boolean" title="Permalink">
+      <a href="../../algebra/lattice/Logic.html#!=(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -446,7 +542,7 @@ greatest lower bound.
     </li><li name="scala.Any###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/MeetSemilattice.html###():Int" title="Permalink">
+      <a href="../../algebra/lattice/Logic.html###():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -462,7 +558,7 @@ greatest lower bound.
     </li><li name="scala.Any#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/MeetSemilattice.html#==(x$1:Any):Boolean" title="Permalink">
+      <a href="../../algebra/lattice/Logic.html#==(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -475,10 +571,28 @@ greatest lower bound.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="algebra.lattice.BoundedDistributiveLattice#asCommutativeRig" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asCommutativeRig:algebra.ring.CommutativeRig[A]"></a><a id="asCommutativeRig:CommutativeRig[A]"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/Logic.html#asCommutativeRig:algebra.ring.CommutativeRig[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asCommutativeRig</span><span class="result">: <a href="../ring/CommutativeRig.html" class="extype" name="algebra.ring.CommutativeRig">CommutativeRig</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Return a CommutativeRig using join and meet.</p><div class="fullcomment"><div class="comment cmt"><p>Return a CommutativeRig using join and meet. Note this must obey the commutative rig laws since
+meet(a, one) = a, and meet and join are associative, commutative and distributive.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BoundedDistributiveLattice.html" class="extype" name="algebra.lattice.BoundedDistributiveLattice">BoundedDistributiveLattice</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/MeetSemilattice.html#asInstanceOf[T0]:T0" title="Permalink">
+      <a href="../../algebra/lattice/Logic.html#asInstanceOf[T0]:T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -491,10 +605,28 @@ greatest lower bound.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="algebra.lattice.BoundedDistributiveLattice#dual" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dual:algebra.lattice.BoundedDistributiveLattice[A]"></a><a id="dual:BoundedDistributiveLattice[A]"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/Logic.html#dual:algebra.lattice.BoundedDistributiveLattice[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dual</span><span class="result">: <a href="BoundedDistributiveLattice.html" class="extype" name="algebra.lattice.BoundedDistributiveLattice">BoundedDistributiveLattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">This is the lattice with meet and join swapped
+</p><div class="fullcomment"><div class="comment cmt"><p>This is the lattice with meet and join swapped
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BoundedDistributiveLattice.html" class="extype" name="algebra.lattice.BoundedDistributiveLattice">BoundedDistributiveLattice</a> → <a href="BoundedLattice.html" class="extype" name="algebra.lattice.BoundedLattice">BoundedLattice</a> → <a href="Lattice.html" class="extype" name="algebra.lattice.Lattice">Lattice</a></dd></dl></div>
     </li><li name="scala.Any#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/MeetSemilattice.html#equals(x$1:Any):Boolean" title="Permalink">
+      <a href="../../algebra/lattice/Logic.html#equals(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -510,7 +642,7 @@ greatest lower bound.
     </li><li name="scala.Any#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/MeetSemilattice.html#hashCode():Int" title="Permalink">
+      <a href="../../algebra/lattice/Logic.html#hashCode():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -526,7 +658,7 @@ greatest lower bound.
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/MeetSemilattice.html#isInstanceOf[T0]:Boolean" title="Permalink">
+      <a href="../../algebra/lattice/Logic.html#isInstanceOf[T0]:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -539,10 +671,74 @@ greatest lower bound.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="algebra.lattice.MeetSemilattice#meetPartialOrder" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="algebra.lattice.BoundedMeetSemilattice#isOne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isOne(a:A)(implicitev:algebra.Eq[A]):Boolean"></a><a id="isOne(A)(Eq[A]):Boolean"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/Logic.html#isOne(a:A)(implicitev:algebra.Eq[A]):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isOne</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="algebra.Eq">Eq</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.3/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BoundedMeetSemilattice.html" class="extype" name="algebra.lattice.BoundedMeetSemilattice">BoundedMeetSemilattice</a></dd></dl></div>
+    </li><li name="algebra.lattice.BoundedJoinSemilattice#isZero" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isZero(a:A)(implicitev:algebra.Eq[A]):Boolean"></a><a id="isZero(A)(Eq[A]):Boolean"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/Logic.html#isZero(a:A)(implicitev:algebra.Eq[A]):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isZero</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="algebra.Eq">Eq</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.3/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BoundedJoinSemilattice.html" class="extype" name="algebra.lattice.BoundedJoinSemilattice">BoundedJoinSemilattice</a></dd></dl></div>
+    </li><li name="algebra.lattice.JoinSemilattice#joinPartialOrder" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="joinPartialOrder(implicitev:algebra.Eq[A]):algebra.PartialOrder[A]"></a><a id="joinPartialOrder(Eq[A]):PartialOrder[A]"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/Logic.html#joinPartialOrder(implicitev:algebra.Eq[A]):algebra.PartialOrder[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">joinPartialOrder</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="algebra.Eq">Eq</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</span>)</span><span class="result">: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="algebra.PartialOrder">PartialOrder</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="JoinSemilattice.html" class="extype" name="algebra.lattice.JoinSemilattice">JoinSemilattice</a></dd></dl></div>
+    </li><li name="algebra.lattice.BoundedJoinSemilattice#joinSemilattice" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="joinSemilattice:algebra.BoundedSemilattice[A]"></a><a id="joinSemilattice:BoundedSemilattice[A]"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/Logic.html#joinSemilattice:algebra.BoundedSemilattice[A]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">joinSemilattice</span><span class="result">: <a href="../index.html#BoundedSemilattice[A]=cats.kernel.BoundedSemilattice[A]" class="extmbr" name="algebra.BoundedSemilattice">BoundedSemilattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BoundedJoinSemilattice.html" class="extype" name="algebra.lattice.BoundedJoinSemilattice">BoundedJoinSemilattice</a> → <a href="JoinSemilattice.html" class="extype" name="algebra.lattice.JoinSemilattice">JoinSemilattice</a></dd></dl></div>
+    </li><li name="algebra.lattice.MeetSemilattice#meetPartialOrder" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="meetPartialOrder(implicitev:algebra.Eq[A]):algebra.PartialOrder[A]"></a><a id="meetPartialOrder(Eq[A]):PartialOrder[A]"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/MeetSemilattice.html#meetPartialOrder(implicitev:algebra.Eq[A]):algebra.PartialOrder[A]" title="Permalink">
+      <a href="../../algebra/lattice/Logic.html#meetPartialOrder(implicitev:algebra.Eq[A]):algebra.PartialOrder[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -551,14 +747,14 @@ greatest lower bound.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">meetPartialOrder</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="algebra.Eq">Eq</a>[<span class="extype" name="algebra.lattice.MeetSemilattice.A">A</span>]</span>)</span><span class="result">: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="algebra.PartialOrder">PartialOrder</a>[<span class="extype" name="algebra.lattice.MeetSemilattice.A">A</span>]</span>
+        <span class="name">meetPartialOrder</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="algebra.Eq">Eq</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</span>)</span><span class="result">: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="algebra.PartialOrder">PartialOrder</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</span>
       </span>
       
-      
-    </li><li name="algebra.lattice.MeetSemilattice#meetSemilattice" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="meetSemilattice:algebra.Semilattice[A]"></a><a id="meetSemilattice:Semilattice[A]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MeetSemilattice.html" class="extype" name="algebra.lattice.MeetSemilattice">MeetSemilattice</a></dd></dl></div>
+    </li><li name="algebra.lattice.BoundedMeetSemilattice#meetSemilattice" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="meetSemilattice:algebra.BoundedSemilattice[A]"></a><a id="meetSemilattice:BoundedSemilattice[A]"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/MeetSemilattice.html#meetSemilattice:algebra.Semilattice[A]" title="Permalink">
+      <a href="../../algebra/lattice/Logic.html#meetSemilattice:algebra.BoundedSemilattice[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -567,14 +763,62 @@ greatest lower bound.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">meetSemilattice</span><span class="result">: <a href="../index.html#Semilattice[A]=cats.kernel.Semilattice[A]" class="extmbr" name="algebra.Semilattice">Semilattice</a>[<span class="extype" name="algebra.lattice.MeetSemilattice.A">A</span>]</span>
+        <span class="name">meetSemilattice</span><span class="result">: <a href="../index.html#BoundedSemilattice[A]=cats.kernel.BoundedSemilattice[A]" class="extmbr" name="algebra.BoundedSemilattice">BoundedSemilattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BoundedMeetSemilattice.html" class="extype" name="algebra.lattice.BoundedMeetSemilattice">BoundedMeetSemilattice</a> → <a href="MeetSemilattice.html" class="extype" name="algebra.lattice.MeetSemilattice">MeetSemilattice</a></dd></dl></div>
+    </li><li name="algebra.lattice.Logic#nand" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="nand(a:A,b:A):A"></a><a id="nand(A,A):A"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/Logic.html#nand(a:A,b:A):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nand</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>
+      </span>
+      
+      
+    </li><li name="algebra.lattice.Logic#nor" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="nor(a:A,b:A):A"></a><a id="nor(A,A):A"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/Logic.html#nor(a:A,b:A):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nor</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>
+      </span>
+      
+      
+    </li><li name="algebra.lattice.Logic#nxor" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="nxor(a:A,b:A):A"></a><a id="nxor(A,A):A"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/Logic.html#nxor(a:A,b:A):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nxor</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>
       </span>
       
       
     </li><li name="scala.Any#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/MeetSemilattice.html#toString():String" title="Permalink">
+      <a href="../../algebra/lattice/Logic.html#toString():String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -587,6 +831,22 @@ greatest lower bound.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="algebra.lattice.Logic#xor" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="xor(a:A,b:A):A"></a><a id="xor(A,A):A"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/Logic.html#xor(a:A,b:A):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">xor</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Logic.A">A</span></span>
+      </span>
+      
+      
     </li>
               </ol>
             </div>
@@ -597,7 +857,23 @@ greatest lower bound.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Serializable">
+        <div class="parent" name="algebra.lattice.BoundedDistributiveLattice">
+              <h3>Inherited from <a href="BoundedDistributiveLattice.html" class="extype" name="algebra.lattice.BoundedDistributiveLattice">BoundedDistributiveLattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</h3>
+            </div><div class="parent" name="algebra.lattice.DistributiveLattice">
+              <h3>Inherited from <a href="DistributiveLattice.html" class="extype" name="algebra.lattice.DistributiveLattice">DistributiveLattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</h3>
+            </div><div class="parent" name="algebra.lattice.BoundedLattice">
+              <h3>Inherited from <a href="BoundedLattice.html" class="extype" name="algebra.lattice.BoundedLattice">BoundedLattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</h3>
+            </div><div class="parent" name="algebra.lattice.BoundedJoinSemilattice">
+              <h3>Inherited from <a href="BoundedJoinSemilattice.html" class="extype" name="algebra.lattice.BoundedJoinSemilattice">BoundedJoinSemilattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</h3>
+            </div><div class="parent" name="algebra.lattice.BoundedMeetSemilattice">
+              <h3>Inherited from <a href="BoundedMeetSemilattice.html" class="extype" name="algebra.lattice.BoundedMeetSemilattice">BoundedMeetSemilattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</h3>
+            </div><div class="parent" name="algebra.lattice.Lattice">
+              <h3>Inherited from <a href="Lattice.html" class="extype" name="algebra.lattice.Lattice">Lattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</h3>
+            </div><div class="parent" name="algebra.lattice.MeetSemilattice">
+              <h3>Inherited from <a href="MeetSemilattice.html" class="extype" name="algebra.lattice.MeetSemilattice">MeetSemilattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</h3>
+            </div><div class="parent" name="algebra.lattice.JoinSemilattice">
+              <h3>Inherited from <a href="JoinSemilattice.html" class="extype" name="algebra.lattice.JoinSemilattice">JoinSemilattice</a>[<span class="extype" name="algebra.lattice.Logic.A">A</span>]</h3>
+            </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>

@@ -167,9 +167,9 @@ is the top (one, also written as ⊤).">
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="DeMorgan$.html" title=""></a>
-                        <a class="trait" href="DeMorgan.html" title="De Morgan algebras are bounded lattices that are also equipped with
+                        <a class="trait" href="" title="De Morgan algebras are bounded lattices that are also equipped with
 a De Morgan involution."></a>
-                        <a href="DeMorgan.html" title="De Morgan algebras are bounded lattices that are also equipped with
+                        <a href="" title="De Morgan algebras are bounded lattices that are also equipped with
 a De Morgan involution.">
                           DeMorgan
                         </a>
@@ -213,10 +213,10 @@ the top element.">
                         </a>
                       </li><li class="current-entities indented2">
                         <a class="object" href="Heyting$.html" title=""></a>
-                        <a class="trait" href="" title="Heyting algebras are bounded lattices that are also equipped with
+                        <a class="trait" href="Heyting.html" title="Heyting algebras are bounded lattices that are also equipped with
 an additional binary operation imp (for implication, also
 written as →)."></a>
-                        <a href="" title="Heyting algebras are bounded lattices that are also equipped with
+                        <a href="Heyting.html" title="Heyting algebras are bounded lattices that are also equipped with
 an additional binary operation imp (for implication, also
 written as →).">
                           Heyting
@@ -304,15 +304,15 @@ greatest lower bound.">
           <div id="content">
             <body class="trait type">
       <div id="definition">
-        <a href="Heyting$.html" title="See companion object"><div class="big-circle trait-companion-object">t</div></a>
+        <a href="DeMorgan$.html" title="See companion object"><div class="big-circle trait-companion-object">t</div></a>
         <p id="owner"><a href="../index.html" class="extype" name="algebra">algebra</a>.<a href="index.html" class="extype" name="algebra.lattice">lattice</a></p>
-        <h1><a href="Heyting$.html" title="See companion object">Heyting</a><span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html" title="Permalink">
+        <h1><a href="DeMorgan$.html" title="See companion object">DeMorgan</a><span class="permalink">
+      <a href="../../algebra/lattice/DeMorgan.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
         <h3><span class="morelinks"><div>
-            Companion <a href="Heyting$.html" title="See companion object">object Heyting</a>
+            Companion <a href="DeMorgan$.html" title="See companion object">object DeMorgan</a>
           </div></span></h3>
       </div>
 
@@ -322,33 +322,25 @@ greatest lower bound.">
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Heyting</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="BoundedDistributiveLattice.html" class="extype" name="algebra.lattice.BoundedDistributiveLattice">BoundedDistributiveLattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</span>
+        <span class="name">DeMorgan</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Logic.html" class="extype" name="algebra.lattice.Logic">Logic</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Heyting algebras are bounded lattices that are also equipped with
-an additional binary operation <code>imp</code> (for implication, also
-written as →).</p><p>Implication obeys the following laws:</p><ul><li>a → a = 1</li><li>a ∧ (a → b) = a ∧ b</li><li>b ∧ (a → b) = b</li><li>a → (b ∧ c) = (a → b) ∧ (a → c)</li></ul><p>In heyting algebras, <code>and</code> is equivalent to <code>meet</code> and <code>or</code> is
-equivalent to <code>join</code>; both methods are available.</p><p>Heyting algebra also define <code>complement</code> operation (sometimes
-written as ¬a). The complement of <code>a</code> is equivalent to <code>(a → 0)</code>,
-and the following laws hold:</p><ul><li>a ∧ ¬a = 0</li></ul><p>However, in Heyting algebras this operation is only a
-pseudo-complement, since Heyting algebras do not necessarily
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>De Morgan algebras are bounded lattices that are also equipped with
+a De Morgan involution.</p><p>De Morgan involution obeys the following laws:</p><ul><li>¬¬a = a</li><li>¬(x∧y) = ¬x∨¬y</li></ul><p>However, in De Morgan algebras this involution does not necessarily
 provide the law of the excluded middle. This means that there is no
-guarantee that (a ∨ ¬a) = 1.</p><p>Heyting algebras model intuitionistic logic. For a model of
+guarantee that (a ∨ ¬a) = 1. De Morgan algebra do not not necessarily
+provide the law of non contradiction either. This means that there is
+no guarantee that (a ∧ ¬a) = 0.</p><p>De Morgan algebras are useful to model fuzzy logic. For a model of
 classical logic, see the boolean algebra type class implemented as
-<code>Bool</code>.
-</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="algebra.lattice.Heyting">Heyting</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</dd><dt>Source</dt><dd><a href="https://github.com/typelevel/algebra/tree/master/core/src/main/scala/algebra/lattice/Heyting.scala" target="_blank">Heyting.scala</a></dd></dl><div class="toggleContainer block">
+<a href="Bool.html" class="extype" name="algebra.lattice.Bool">Bool</a>.
+</p></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="algebra.lattice.DeMorgan">DeMorgan</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</dd><dt>Source</dt><dd><a href="https://github.com/typelevel/algebra/tree/master/core/src/main/scala/algebra/lattice/DeMorgan.scala" target="_blank">DeMorgan.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="BoundedDistributiveLattice.html" class="extype" name="algebra.lattice.BoundedDistributiveLattice">BoundedDistributiveLattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>], <a href="DistributiveLattice.html" class="extype" name="algebra.lattice.DistributiveLattice">DistributiveLattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>], <a href="BoundedLattice.html" class="extype" name="algebra.lattice.BoundedLattice">BoundedLattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>], <a href="BoundedJoinSemilattice.html" class="extype" name="algebra.lattice.BoundedJoinSemilattice">BoundedJoinSemilattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>], <a href="BoundedMeetSemilattice.html" class="extype" name="algebra.lattice.BoundedMeetSemilattice">BoundedMeetSemilattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>], <a href="Lattice.html" class="extype" name="algebra.lattice.Lattice">Lattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>], <a href="MeetSemilattice.html" class="extype" name="algebra.lattice.MeetSemilattice">MeetSemilattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>], <a href="JoinSemilattice.html" class="extype" name="algebra.lattice.JoinSemilattice">JoinSemilattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>], <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.12.3/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></div>
-        </div><div class="toggleContainer block">
-            <span class="toggle">
-              Known Subclasses
-            </span>
-            <div class="subClasses hiddenContent"><a href="../instances/BooleanAlgebra.html" class="extype" name="algebra.instances.BooleanAlgebra">BooleanAlgebra</a>, <a href="Bool.html" class="extype" name="algebra.lattice.Bool">Bool</a>, <a href="BoolFromBoolRing.html" class="extype" name="algebra.lattice.BoolFromBoolRing">BoolFromBoolRing</a>, <a href="DualBool.html" class="extype" name="algebra.lattice.DualBool">DualBool</a></div>
-          </div></div>
+          <div class="superTypes hiddenContent"><a href="Logic.html" class="extype" name="algebra.lattice.Logic">Logic</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>], <a href="BoundedDistributiveLattice.html" class="extype" name="algebra.lattice.BoundedDistributiveLattice">BoundedDistributiveLattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>], <a href="DistributiveLattice.html" class="extype" name="algebra.lattice.DistributiveLattice">DistributiveLattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>], <a href="BoundedLattice.html" class="extype" name="algebra.lattice.BoundedLattice">BoundedLattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>], <a href="BoundedJoinSemilattice.html" class="extype" name="algebra.lattice.BoundedJoinSemilattice">BoundedJoinSemilattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>], <a href="BoundedMeetSemilattice.html" class="extype" name="algebra.lattice.BoundedMeetSemilattice">BoundedMeetSemilattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>], <a href="Lattice.html" class="extype" name="algebra.lattice.Lattice">Lattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>], <a href="MeetSemilattice.html" class="extype" name="algebra.lattice.MeetSemilattice">MeetSemilattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>], <a href="JoinSemilattice.html" class="extype" name="algebra.lattice.JoinSemilattice">JoinSemilattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>], <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.12.3/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></div>
+        </div></div>
         
 
       <div id="mbrsel">
@@ -373,7 +365,7 @@ classical logic, see the boolean algebra type class implemented as
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="algebra.lattice.Heyting"><span>Heyting</span></li><li class="in" name="algebra.lattice.BoundedDistributiveLattice"><span>BoundedDistributiveLattice</span></li><li class="in" name="algebra.lattice.DistributiveLattice"><span>DistributiveLattice</span></li><li class="in" name="algebra.lattice.BoundedLattice"><span>BoundedLattice</span></li><li class="in" name="algebra.lattice.BoundedJoinSemilattice"><span>BoundedJoinSemilattice</span></li><li class="in" name="algebra.lattice.BoundedMeetSemilattice"><span>BoundedMeetSemilattice</span></li><li class="in" name="algebra.lattice.Lattice"><span>Lattice</span></li><li class="in" name="algebra.lattice.MeetSemilattice"><span>MeetSemilattice</span></li><li class="in" name="algebra.lattice.JoinSemilattice"><span>JoinSemilattice</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="algebra.lattice.DeMorgan"><span>DeMorgan</span></li><li class="in" name="algebra.lattice.Logic"><span>Logic</span></li><li class="in" name="algebra.lattice.BoundedDistributiveLattice"><span>BoundedDistributiveLattice</span></li><li class="in" name="algebra.lattice.DistributiveLattice"><span>DistributiveLattice</span></li><li class="in" name="algebra.lattice.BoundedLattice"><span>BoundedLattice</span></li><li class="in" name="algebra.lattice.BoundedJoinSemilattice"><span>BoundedJoinSemilattice</span></li><li class="in" name="algebra.lattice.BoundedMeetSemilattice"><span>BoundedMeetSemilattice</span></li><li class="in" name="algebra.lattice.Lattice"><span>Lattice</span></li><li class="in" name="algebra.lattice.MeetSemilattice"><span>MeetSemilattice</span></li><li class="in" name="algebra.lattice.JoinSemilattice"><span>JoinSemilattice</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -397,10 +389,10 @@ classical logic, see the boolean algebra type class implemented as
 
         <div class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="algebra.lattice.Heyting#and" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="algebra.lattice.Logic#and" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="and(a:A,b:A):A"></a><a id="and(A,A):A"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#and(a:A,b:A):A" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#and(a:A,b:A):A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -409,30 +401,14 @@ classical logic, see the boolean algebra type class implemented as
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">and</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>
+        <span class="name">and</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>
       </span>
       
-      
-    </li><li name="algebra.lattice.Heyting#complement" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="complement(a:A):A"></a><a id="complement(A):A"></a>
-      <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#complement(a:A):A" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">complement</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>
-      </span>
-      
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Logic.html" class="extype" name="algebra.lattice.Logic">Logic</a></dd></dl></div>
     </li><li name="scala.Any#getClass" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#getClass():Class[_]" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#getClass():Class[_]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -445,10 +421,10 @@ classical logic, see the boolean algebra type class implemented as
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="algebra.lattice.Heyting#imp" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="imp(a:A,b:A):A"></a><a id="imp(A,A):A"></a>
+    </li><li name="algebra.lattice.Logic#not" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="not(a:A):A"></a><a id="not(A):A"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#imp(a:A,b:A):A" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#not(a:A):A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -457,14 +433,14 @@ classical logic, see the boolean algebra type class implemented as
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">imp</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>
+        <span class="name">not</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>
       </span>
       
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Logic.html" class="extype" name="algebra.lattice.Logic">Logic</a></dd></dl></div>
     </li><li name="algebra.lattice.BoundedMeetSemilattice#one" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="one:A"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#one:A" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#one:A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -473,14 +449,14 @@ classical logic, see the boolean algebra type class implemented as
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">one</span><span class="result">: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>
+        <span class="name">one</span><span class="result">: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BoundedMeetSemilattice.html" class="extype" name="algebra.lattice.BoundedMeetSemilattice">BoundedMeetSemilattice</a></dd></dl></div>
-    </li><li name="algebra.lattice.Heyting#or" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="algebra.lattice.Logic#or" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="or(a:A,b:A):A"></a><a id="or(A,A):A"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#or(a:A,b:A):A" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#or(a:A,b:A):A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -489,14 +465,14 @@ classical logic, see the boolean algebra type class implemented as
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">or</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>
+        <span class="name">or</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>
       </span>
       
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Logic.html" class="extype" name="algebra.lattice.Logic">Logic</a></dd></dl></div>
     </li><li name="algebra.lattice.BoundedJoinSemilattice#zero" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="zero:A"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#zero:A" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#zero:A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -505,7 +481,7 @@ classical logic, see the boolean algebra type class implemented as
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">zero</span><span class="result">: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>
+        <span class="name">zero</span><span class="result">: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BoundedJoinSemilattice.html" class="extype" name="algebra.lattice.BoundedJoinSemilattice">BoundedJoinSemilattice</a></dd></dl></div>
@@ -518,7 +494,7 @@ classical logic, see the boolean algebra type class implemented as
                 <li name="scala.Any#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#!=(x$1:Any):Boolean" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#!=(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -534,7 +510,7 @@ classical logic, see the boolean algebra type class implemented as
     </li><li name="scala.Any###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html###():Int" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html###():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -550,7 +526,7 @@ classical logic, see the boolean algebra type class implemented as
     </li><li name="scala.Any#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#==(x$1:Any):Boolean" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#==(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -566,7 +542,7 @@ classical logic, see the boolean algebra type class implemented as
     </li><li name="algebra.lattice.BoundedDistributiveLattice#asCommutativeRig" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asCommutativeRig:algebra.ring.CommutativeRig[A]"></a><a id="asCommutativeRig:CommutativeRig[A]"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#asCommutativeRig:algebra.ring.CommutativeRig[A]" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#asCommutativeRig:algebra.ring.CommutativeRig[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -575,7 +551,7 @@ classical logic, see the boolean algebra type class implemented as
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">asCommutativeRig</span><span class="result">: <a href="../ring/CommutativeRig.html" class="extype" name="algebra.ring.CommutativeRig">CommutativeRig</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</span>
+        <span class="name">asCommutativeRig</span><span class="result">: <a href="../ring/CommutativeRig.html" class="extype" name="algebra.ring.CommutativeRig">CommutativeRig</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">Return a CommutativeRig using join and meet.</p><div class="fullcomment"><div class="comment cmt"><p>Return a CommutativeRig using join and meet. Note this must obey the commutative rig laws since
@@ -584,7 +560,7 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#asInstanceOf[T0]:T0" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#asInstanceOf[T0]:T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -600,7 +576,7 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
     </li><li name="algebra.lattice.BoundedDistributiveLattice#dual" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="dual:algebra.lattice.BoundedDistributiveLattice[A]"></a><a id="dual:BoundedDistributiveLattice[A]"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#dual:algebra.lattice.BoundedDistributiveLattice[A]" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#dual:algebra.lattice.BoundedDistributiveLattice[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -609,7 +585,7 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">dual</span><span class="result">: <a href="BoundedDistributiveLattice.html" class="extype" name="algebra.lattice.BoundedDistributiveLattice">BoundedDistributiveLattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</span>
+        <span class="name">dual</span><span class="result">: <a href="BoundedDistributiveLattice.html" class="extype" name="algebra.lattice.BoundedDistributiveLattice">BoundedDistributiveLattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</span>
       </span>
       
       <p class="shortcomment cmt">This is the lattice with meet and join swapped
@@ -618,7 +594,7 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
     </li><li name="scala.Any#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#equals(x$1:Any):Boolean" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#equals(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -634,7 +610,7 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
     </li><li name="scala.Any#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#hashCode():Int" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#hashCode():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -647,10 +623,26 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="algebra.lattice.DeMorgan#imp" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="imp(a:A,b:A):A"></a><a id="imp(A,A):A"></a>
+      <span class="permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#imp(a:A,b:A):A" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">imp</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>
+      </span>
+      
+      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#isInstanceOf[T0]:Boolean" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#isInstanceOf[T0]:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -666,7 +658,7 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
     </li><li name="algebra.lattice.BoundedMeetSemilattice#isOne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isOne(a:A)(implicitev:algebra.Eq[A]):Boolean"></a><a id="isOne(A)(Eq[A]):Boolean"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#isOne(a:A)(implicitev:algebra.Eq[A]):Boolean" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#isOne(a:A)(implicitev:algebra.Eq[A]):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -675,14 +667,14 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isOne</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="algebra.Eq">Eq</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.3/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isOne</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="algebra.Eq">Eq</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.3/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BoundedMeetSemilattice.html" class="extype" name="algebra.lattice.BoundedMeetSemilattice">BoundedMeetSemilattice</a></dd></dl></div>
     </li><li name="algebra.lattice.BoundedJoinSemilattice#isZero" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isZero(a:A)(implicitev:algebra.Eq[A]):Boolean"></a><a id="isZero(A)(Eq[A]):Boolean"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#isZero(a:A)(implicitev:algebra.Eq[A]):Boolean" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#isZero(a:A)(implicitev:algebra.Eq[A]):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -691,14 +683,14 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isZero</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="algebra.Eq">Eq</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.3/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">isZero</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="algebra.Eq">Eq</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.3/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BoundedJoinSemilattice.html" class="extype" name="algebra.lattice.BoundedJoinSemilattice">BoundedJoinSemilattice</a></dd></dl></div>
-    </li><li name="algebra.lattice.Heyting#join" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="algebra.lattice.DeMorgan#join" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="join(a:A,b:A):A"></a><a id="join(A,A):A"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#join(a:A,b:A):A" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#join(a:A,b:A):A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -707,14 +699,14 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">join</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>
+        <span class="name">join</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="algebra.lattice.Heyting">Heyting</a> → <a href="JoinSemilattice.html" class="extype" name="algebra.lattice.JoinSemilattice">JoinSemilattice</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="algebra.lattice.DeMorgan">DeMorgan</a> → <a href="JoinSemilattice.html" class="extype" name="algebra.lattice.JoinSemilattice">JoinSemilattice</a></dd></dl></div>
     </li><li name="algebra.lattice.JoinSemilattice#joinPartialOrder" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="joinPartialOrder(implicitev:algebra.Eq[A]):algebra.PartialOrder[A]"></a><a id="joinPartialOrder(Eq[A]):PartialOrder[A]"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#joinPartialOrder(implicitev:algebra.Eq[A]):algebra.PartialOrder[A]" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#joinPartialOrder(implicitev:algebra.Eq[A]):algebra.PartialOrder[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -723,14 +715,14 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">joinPartialOrder</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="algebra.Eq">Eq</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</span>)</span><span class="result">: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="algebra.PartialOrder">PartialOrder</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</span>
+        <span class="name">joinPartialOrder</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="algebra.Eq">Eq</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</span>)</span><span class="result">: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="algebra.PartialOrder">PartialOrder</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="JoinSemilattice.html" class="extype" name="algebra.lattice.JoinSemilattice">JoinSemilattice</a></dd></dl></div>
     </li><li name="algebra.lattice.BoundedJoinSemilattice#joinSemilattice" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="joinSemilattice:algebra.BoundedSemilattice[A]"></a><a id="joinSemilattice:BoundedSemilattice[A]"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#joinSemilattice:algebra.BoundedSemilattice[A]" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#joinSemilattice:algebra.BoundedSemilattice[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -739,14 +731,14 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">joinSemilattice</span><span class="result">: <a href="../index.html#BoundedSemilattice[A]=cats.kernel.BoundedSemilattice[A]" class="extmbr" name="algebra.BoundedSemilattice">BoundedSemilattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</span>
+        <span class="name">joinSemilattice</span><span class="result">: <a href="../index.html#BoundedSemilattice[A]=cats.kernel.BoundedSemilattice[A]" class="extmbr" name="algebra.BoundedSemilattice">BoundedSemilattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BoundedJoinSemilattice.html" class="extype" name="algebra.lattice.BoundedJoinSemilattice">BoundedJoinSemilattice</a> → <a href="JoinSemilattice.html" class="extype" name="algebra.lattice.JoinSemilattice">JoinSemilattice</a></dd></dl></div>
-    </li><li name="algebra.lattice.Heyting#meet" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="algebra.lattice.DeMorgan#meet" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="meet(a:A,b:A):A"></a><a id="meet(A,A):A"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#meet(a:A,b:A):A" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#meet(a:A,b:A):A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -755,14 +747,14 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">meet</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>
+        <span class="name">meet</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="algebra.lattice.Heyting">Heyting</a> → <a href="MeetSemilattice.html" class="extype" name="algebra.lattice.MeetSemilattice">MeetSemilattice</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="algebra.lattice.DeMorgan">DeMorgan</a> → <a href="MeetSemilattice.html" class="extype" name="algebra.lattice.MeetSemilattice">MeetSemilattice</a></dd></dl></div>
     </li><li name="algebra.lattice.MeetSemilattice#meetPartialOrder" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="meetPartialOrder(implicitev:algebra.Eq[A]):algebra.PartialOrder[A]"></a><a id="meetPartialOrder(Eq[A]):PartialOrder[A]"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#meetPartialOrder(implicitev:algebra.Eq[A]):algebra.PartialOrder[A]" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#meetPartialOrder(implicitev:algebra.Eq[A]):algebra.PartialOrder[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -771,14 +763,14 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">meetPartialOrder</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="algebra.Eq">Eq</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</span>)</span><span class="result">: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="algebra.PartialOrder">PartialOrder</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</span>
+        <span class="name">meetPartialOrder</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <a href="../index.html#Eq[A]=cats.kernel.Eq[A]" class="extmbr" name="algebra.Eq">Eq</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</span>)</span><span class="result">: <a href="../index.html#PartialOrder[A]=cats.kernel.PartialOrder[A]" class="extmbr" name="algebra.PartialOrder">PartialOrder</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MeetSemilattice.html" class="extype" name="algebra.lattice.MeetSemilattice">MeetSemilattice</a></dd></dl></div>
     </li><li name="algebra.lattice.BoundedMeetSemilattice#meetSemilattice" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="meetSemilattice:algebra.BoundedSemilattice[A]"></a><a id="meetSemilattice:BoundedSemilattice[A]"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#meetSemilattice:algebra.BoundedSemilattice[A]" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#meetSemilattice:algebra.BoundedSemilattice[A]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -787,14 +779,14 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">meetSemilattice</span><span class="result">: <a href="../index.html#BoundedSemilattice[A]=cats.kernel.BoundedSemilattice[A]" class="extmbr" name="algebra.BoundedSemilattice">BoundedSemilattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</span>
+        <span class="name">meetSemilattice</span><span class="result">: <a href="../index.html#BoundedSemilattice[A]=cats.kernel.BoundedSemilattice[A]" class="extmbr" name="algebra.BoundedSemilattice">BoundedSemilattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="BoundedMeetSemilattice.html" class="extype" name="algebra.lattice.BoundedMeetSemilattice">BoundedMeetSemilattice</a> → <a href="MeetSemilattice.html" class="extype" name="algebra.lattice.MeetSemilattice">MeetSemilattice</a></dd></dl></div>
-    </li><li name="algebra.lattice.Heyting#nand" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="algebra.lattice.Logic#nand" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nand(a:A,b:A):A"></a><a id="nand(A,A):A"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#nand(a:A,b:A):A" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#nand(a:A,b:A):A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -803,14 +795,14 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">nand</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>
+        <span class="name">nand</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>
       </span>
       
-      
-    </li><li name="algebra.lattice.Heyting#nor" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Logic.html" class="extype" name="algebra.lattice.Logic">Logic</a></dd></dl></div>
+    </li><li name="algebra.lattice.Logic#nor" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nor(a:A,b:A):A"></a><a id="nor(A,A):A"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#nor(a:A,b:A):A" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#nor(a:A,b:A):A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -819,14 +811,14 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">nor</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>
+        <span class="name">nor</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>
       </span>
       
-      
-    </li><li name="algebra.lattice.Heyting#nxor" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Logic.html" class="extype" name="algebra.lattice.Logic">Logic</a></dd></dl></div>
+    </li><li name="algebra.lattice.Logic#nxor" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nxor(a:A,b:A):A"></a><a id="nxor(A,A):A"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#nxor(a:A,b:A):A" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#nxor(a:A,b:A):A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -835,14 +827,14 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">nxor</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>
+        <span class="name">nxor</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>
       </span>
       
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Logic.html" class="extype" name="algebra.lattice.Logic">Logic</a></dd></dl></div>
     </li><li name="scala.Any#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#toString():String" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#toString():String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -855,10 +847,10 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="algebra.lattice.Heyting#xor" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="algebra.lattice.Logic#xor" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="xor(a:A,b:A):A"></a><a id="xor(A,A):A"></a>
       <span class="permalink">
-      <a href="../../algebra/lattice/Heyting.html#xor(a:A,b:A):A" title="Permalink">
+      <a href="../../algebra/lattice/DeMorgan.html#xor(a:A,b:A):A" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -867,10 +859,10 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">xor</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.Heyting.A">A</span></span>
+        <span class="name">xor</span><span class="params">(<span name="a">a: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>, <span name="b">b: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>)</span><span class="result">: <span class="extype" name="algebra.lattice.DeMorgan.A">A</span></span>
       </span>
       
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Logic.html" class="extype" name="algebra.lattice.Logic">Logic</a></dd></dl></div>
     </li>
               </ol>
             </div>
@@ -881,22 +873,24 @@ meet(a, one) = a, and meet and join are associative, commutative and distributiv
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="algebra.lattice.BoundedDistributiveLattice">
-              <h3>Inherited from <a href="BoundedDistributiveLattice.html" class="extype" name="algebra.lattice.BoundedDistributiveLattice">BoundedDistributiveLattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</h3>
+        <div class="parent" name="algebra.lattice.Logic">
+              <h3>Inherited from <a href="Logic.html" class="extype" name="algebra.lattice.Logic">Logic</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</h3>
+            </div><div class="parent" name="algebra.lattice.BoundedDistributiveLattice">
+              <h3>Inherited from <a href="BoundedDistributiveLattice.html" class="extype" name="algebra.lattice.BoundedDistributiveLattice">BoundedDistributiveLattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</h3>
             </div><div class="parent" name="algebra.lattice.DistributiveLattice">
-              <h3>Inherited from <a href="DistributiveLattice.html" class="extype" name="algebra.lattice.DistributiveLattice">DistributiveLattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</h3>
+              <h3>Inherited from <a href="DistributiveLattice.html" class="extype" name="algebra.lattice.DistributiveLattice">DistributiveLattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</h3>
             </div><div class="parent" name="algebra.lattice.BoundedLattice">
-              <h3>Inherited from <a href="BoundedLattice.html" class="extype" name="algebra.lattice.BoundedLattice">BoundedLattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</h3>
+              <h3>Inherited from <a href="BoundedLattice.html" class="extype" name="algebra.lattice.BoundedLattice">BoundedLattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</h3>
             </div><div class="parent" name="algebra.lattice.BoundedJoinSemilattice">
-              <h3>Inherited from <a href="BoundedJoinSemilattice.html" class="extype" name="algebra.lattice.BoundedJoinSemilattice">BoundedJoinSemilattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</h3>
+              <h3>Inherited from <a href="BoundedJoinSemilattice.html" class="extype" name="algebra.lattice.BoundedJoinSemilattice">BoundedJoinSemilattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</h3>
             </div><div class="parent" name="algebra.lattice.BoundedMeetSemilattice">
-              <h3>Inherited from <a href="BoundedMeetSemilattice.html" class="extype" name="algebra.lattice.BoundedMeetSemilattice">BoundedMeetSemilattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</h3>
+              <h3>Inherited from <a href="BoundedMeetSemilattice.html" class="extype" name="algebra.lattice.BoundedMeetSemilattice">BoundedMeetSemilattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</h3>
             </div><div class="parent" name="algebra.lattice.Lattice">
-              <h3>Inherited from <a href="Lattice.html" class="extype" name="algebra.lattice.Lattice">Lattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</h3>
+              <h3>Inherited from <a href="Lattice.html" class="extype" name="algebra.lattice.Lattice">Lattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</h3>
             </div><div class="parent" name="algebra.lattice.MeetSemilattice">
-              <h3>Inherited from <a href="MeetSemilattice.html" class="extype" name="algebra.lattice.MeetSemilattice">MeetSemilattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</h3>
+              <h3>Inherited from <a href="MeetSemilattice.html" class="extype" name="algebra.lattice.MeetSemilattice">MeetSemilattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</h3>
             </div><div class="parent" name="algebra.lattice.JoinSemilattice">
-              <h3>Inherited from <a href="JoinSemilattice.html" class="extype" name="algebra.lattice.JoinSemilattice">JoinSemilattice</a>[<span class="extype" name="algebra.lattice.Heyting.A">A</span>]</h3>
+              <h3>Inherited from <a href="JoinSemilattice.html" class="extype" name="algebra.lattice.JoinSemilattice">JoinSemilattice</a>[<span class="extype" name="algebra.lattice.DeMorgan.A">A</span>]</h3>
             </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.3/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></h3>
             </div><div class="parent" name="java.io.Serializable">
