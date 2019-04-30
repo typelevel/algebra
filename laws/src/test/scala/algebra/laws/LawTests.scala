@@ -42,6 +42,7 @@ class LawTests extends FunSuite with Configuration with Discipline {
   implicit def orderLaws[A: Cogen: Eq: Arbitrary] = OrderLaws[A]
   implicit def groupLaws[A: Eq: Arbitrary] = GroupLaws[A]
   implicit def logicLaws[A: Eq: Arbitrary] = LogicLaws[A]
+  implicit def deMorganLaws[A: Eq: Arbitrary] = DeMorganLaws[A]
 
   implicit def latticeLaws[A: Eq: Arbitrary] = LatticeLaws[A]
   implicit def ringLaws[A: Eq: Arbitrary: AdditiveMonoid] = RingLaws[A]
@@ -81,7 +82,10 @@ class LawTests extends FunSuite with Configuration with Discipline {
 
   laws[OrderLaws, Boolean].check(_.order)
   laws[LogicLaws, Boolean].check(_.bool)
+  laws[DeMorganLaws, SimpleHeyting].check(_.logic(Logic.fromHeyting(Heyting[SimpleHeyting])))
   laws[LogicLaws, SimpleHeyting].check(_.heyting)
+  laws[DeMorganLaws, SimpleDeMorgan].check(_.deMorgan)
+  laws[DeMorganLaws, Boolean].check(_.deMorgan(DeMorgan.fromBool(Bool[Boolean])))
   laws[LatticePartialOrderLaws, Boolean].check(_.boundedLatticePartialOrder)
   laws[RingLaws, Boolean].check(_.boolRing(booleanRing))
 
