@@ -1,6 +1,6 @@
 package algebra.laws
 
-import catalysts.Platform
+import algebra.laws.platform.Platform
 import org.scalacheck.Prop
 import org.scalacheck.Prop._
 import scala.util.control.NonFatal

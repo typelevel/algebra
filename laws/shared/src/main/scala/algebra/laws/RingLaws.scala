@@ -3,7 +3,7 @@ package laws
 
 import algebra.ring._
 
-import catalysts.Platform
+import algebra.laws.platform.Platform
 
 import org.typelevel.discipline.Predicate
 
