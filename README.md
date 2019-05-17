@@ -91,6 +91,10 @@ For a tour of the Algebraic structures that `algebra` offers, see the
 extensive
 [overview on the Algebra website](https://typelevel.org/algebra/typeclasses/overview.html).
 
+### Code of Conduct
+
+See the [Code of Conduct](CODE_OF_CONDUCT.md)
+
 ### Copyright and License
 
 All code is available to you under the MIT license, available at

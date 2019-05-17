@@ -5,7 +5,7 @@ import scala.{specialized => sp}
 
 /**
  * Heyting algebras are bounded lattices that are also equipped with
- * an additional binary operation `imp` (for impliciation, also
+ * an additional binary operation `imp` (for implication, also
  * written as →).
  *
  * Implication obeys the following laws:
