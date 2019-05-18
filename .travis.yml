@@ -33,9 +33,9 @@ cache:
 
 script:
   - ./sbt "++${TRAVIS_SCALA_VERSION}!" clean coreJS/test lawsJS/test
-  - ./sbt "++${TRAVIS_SCALA_VERSION}!" mimaReportBinaryIssues
+  - if [[ "$TRAVIS_SCALA_VERSION" != 2.13.* ]]; then ./sbt "++${TRAVIS_SCALA_VERSION}!" mimaReportBinaryIssues; fi
   - ./sbt "++${TRAVIS_SCALA_VERSION}!" clean coverage coreJVM/test lawsJVM/test coverageReport
-  - ./sbt "++${TRAVIS_SCALA_VERSION}!" docs/makeMicrosite
+  - if [[ "$TRAVIS_SCALA_VERSION" != 2.13.* ]]; then ./sbt "++${TRAVIS_SCALA_VERSION}!" docs/makeMicrosite; fi
 
 after_success:
   - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" -a "$DEPLOY" = "true" ]; then bash scripts/publish.sh; fi
