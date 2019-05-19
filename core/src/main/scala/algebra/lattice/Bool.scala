@@ -79,6 +79,9 @@ class BoolFromBoolRing[A](orig: BoolRing[A]) extends GenBoolFromBoolRng(orig) wi
   def complement(a: A): A = orig.plus(orig.one, a)
   override def without(a: A, b: A): A = super[GenBoolFromBoolRng].without(a, b)
   override def asBoolRing: BoolRing[A] = orig
+
+  override def meet(a: A, b: A): A = super[GenBoolFromBoolRng].meet(a, b)
+  override def join(a: A, b: A): A = super[GenBoolFromBoolRng].join(a, b)
 }
 
 object Bool extends HeytingFunctions[Bool] with GenBoolFunctions[Bool] {

@@ -88,7 +88,7 @@ object Rules {
     }
 
   def distributive[A: Arbitrary: Eq](a: (A, A) => A)(m: (A, A) => A): (String, Prop) =
-    "distributive" → forAll { (x: A, y: A, z: A) =>
+    "distributive" -> forAll { (x: A, y: A, z: A) =>
       (m(x, a(y, z)) ?== a(m(x, y), m(x, z))) &&
       (m(a(x, y), z) ?== a(m(x, z), m(y, z)))
     }

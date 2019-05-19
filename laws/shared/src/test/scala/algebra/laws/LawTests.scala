@@ -6,20 +6,19 @@ import algebra.ring._
 import algebra.instances.all._
 import algebra.instances.BigDecimalAlgebra
 
-import catalysts.Platform
-import catalysts.macros.TypeTagM // need this import for implicit macros
+import algebra.laws.platform.Platform
 
 import org.typelevel.discipline.Laws
 import org.typelevel.discipline.scalatest.Discipline
 import org.scalacheck.{Arbitrary, Cogen}
 import Arbitrary.arbitrary
 import org.scalactic.anyvals.{PosZDouble, PosInt, PosZInt}
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.prop.Configuration
 import scala.collection.immutable.BitSet
 import scala.util.Random
 
-class LawTests extends FunSuite with Configuration with Discipline {
+class LawTests extends AnyFunSuite with Configuration with Discipline {
 
   lazy val checkConfiguration: PropertyCheckConfiguration =
     PropertyCheckConfiguration(
@@ -73,90 +72,90 @@ class LawTests extends FunSuite with Configuration with Discipline {
     def check(f: L => L#RuleSet): Unit = checkAll(name, f(laws))
   }
 
-  private[laws] def laws[L[_] <: Laws, A](implicit
-      lws: L[A], tag: TypeTagM[A]): LawChecker[L[A]] = laws[L, A]("")
+  private[laws] def laws[L[_] <: Laws, A](name: String)(implicit
+      lws: L[A]): LawChecker[L[A]] = laws[L, A](name, "")
 
-  private[laws] def laws[L[_] <: Laws, A](extraTag: String)(implicit
-      laws: L[A], tag: TypeTagM[A]): LawChecker[L[A]] =
-    LawChecker("[" + tag.name.toString + (if(extraTag != "") "@@" + extraTag else "") + "]", laws)
+  private[laws] def laws[L[_] <: Laws, A](name: String, extraTag: String)(implicit
+      laws: L[A]): LawChecker[L[A]] =
+    LawChecker("[" + name + (if(extraTag != "") "@@" + extraTag else "") + "]", laws)
 
-  laws[OrderLaws, Boolean].check(_.order)
-  laws[LogicLaws, Boolean].check(_.bool)
-  laws[DeMorganLaws, SimpleHeyting].check(_.logic(Logic.fromHeyting(Heyting[SimpleHeyting])))
-  laws[LogicLaws, SimpleHeyting].check(_.heyting)
-  laws[DeMorganLaws, SimpleDeMorgan].check(_.deMorgan)
-  laws[DeMorganLaws, Boolean].check(_.deMorgan(DeMorgan.fromBool(Bool[Boolean])))
-  laws[LatticePartialOrderLaws, Boolean].check(_.boundedLatticePartialOrder)
-  laws[RingLaws, Boolean].check(_.boolRing(booleanRing))
+  laws[OrderLaws, Boolean]("Boolean").check(_.order)
+  laws[LogicLaws, Boolean]("Boolean").check(_.bool)
+  laws[DeMorganLaws, SimpleHeyting]("SimpleHeyting").check(_.logic(Logic.fromHeyting(Heyting[SimpleHeyting])))
+  laws[LogicLaws, SimpleHeyting]("SimpleHeyting").check(_.heyting)
+  laws[DeMorganLaws, SimpleDeMorgan]("SimpleDeMorgan").check(_.deMorgan)
+  laws[DeMorganLaws, Boolean]("Boolean").check(_.deMorgan(DeMorgan.fromBool(Bool[Boolean])))
+  laws[LatticePartialOrderLaws, Boolean]("Boolean").check(_.boundedLatticePartialOrder)
+  laws[RingLaws, Boolean]("Boolean").check(_.boolRing(booleanRing))
 
   // ensure that Bool[A].asBoolRing is a valid BoolRing
-  laws[RingLaws, Boolean]("ring-from-bool").check(_.boolRing(Bool[Boolean].asBoolRing))
+  laws[RingLaws, Boolean]("Boolean", "ring-from-bool").check(_.boolRing(Bool[Boolean].asBoolRing))
 
   // ensure that BoolRing[A].asBool is a valid Bool
-  laws[LogicLaws, Boolean]("bool-from-ring").check(_.bool(new BoolFromBoolRing(booleanRing)))
+  laws[LogicLaws, Boolean]("Boolean", "bool-from-ring").check(_.bool(new BoolFromBoolRing(booleanRing)))
 
-  laws[OrderLaws, String].check(_.order)
-  laws[GroupLaws, String].check(_.monoid)
-
-  {
-    laws[OrderLaws, Option[HasEq[Int]]].check(_.eqv)
-    laws[OrderLaws, Option[HasPartialOrder[Int]]].check(_.partialOrder)
-    laws[OrderLaws, Option[Int]].check(_.order)
-    laws[GroupLaws, Option[Int]].check(_.monoid)
-    laws[OrderLaws, Option[HasEq[String]]].check(_.eqv)
-    laws[OrderLaws, Option[HasPartialOrder[String]]].check(_.partialOrder)
-    laws[OrderLaws, Option[String]].check(_.order)
-    laws[GroupLaws, Option[String]].check(_.monoid)
-  }
-
-  laws[OrderLaws, List[HasEq[Int]]].check(_.eqv)
-  laws[OrderLaws, List[HasPartialOrder[Int]]].check(_.partialOrder)
-  laws[OrderLaws, List[Int]].check(_.order)
-  laws[GroupLaws, List[Int]].check(_.monoid)
-  laws[OrderLaws, List[HasEq[String]]].check(_.eqv)
-  laws[OrderLaws, List[HasPartialOrder[String]]].check(_.partialOrder)
-  laws[OrderLaws, List[String]].check(_.order)
-  laws[GroupLaws, List[String]].check(_.monoid)
-
-  laws[LogicLaws, Set[Byte]].check(_.generalizedBool)
-  laws[RingLaws, Set[Byte]].check(_.boolRng(setBoolRng[Byte]))
-  laws[LogicLaws, Set[Byte]]("bool-from-rng").check(_.generalizedBool(new GenBoolFromBoolRng(setBoolRng)))
-  laws[RingLaws, Set[Byte]]("rng-from-bool").check(_.boolRng(GenBool[Set[Byte]].asBoolRing))
-  laws[OrderLaws, Set[Int]].check(_.partialOrder)
-  laws[RingLaws, Set[Int]].check(_.semiring)
-  laws[RingLaws, Set[String]].check(_.semiring)
-
-  laws[OrderLaws, Map[Char, Int]].check(_.eqv)
-  laws[RingLaws, Map[Char, Int]].check(_.semiring)
-  laws[OrderLaws, Map[Int, BigInt]].check(_.eqv)
-  laws[RingLaws, Map[Int, BigInt]].check(_.semiring)
-
-  laws[OrderLaws, Byte].check(_.order)
-  laws[RingLaws, Byte].check(_.commutativeRing)
-  laws[LatticeLaws, Byte].check(_.lattice)
-
-  laws[OrderLaws, Short].check(_.order)
-  laws[RingLaws, Short].check(_.commutativeRing)
-  laws[LatticeLaws, Short].check(_.lattice)
-
-  laws[OrderLaws, Char].check(_.order)
-
-  laws[OrderLaws, Int].check(_.order)
-  laws[RingLaws, Int].check(_.commutativeRing)
-  laws[LatticeLaws, Int].check(_.boundedDistributiveLattice)
+  laws[OrderLaws, String]("String").check(_.order)
+  laws[GroupLaws, String]("String").check(_.monoid)
 
   {
-    laws[RingLaws, Int].check(_.commutativeRig)
+    laws[OrderLaws, Option[HasEq[Int]]]("Option[HasEq[Int]]").check(_.eqv)
+    laws[OrderLaws, Option[HasPartialOrder[Int]]]("Option[HasPartialOrder[Int]]").check(_.partialOrder)
+    laws[OrderLaws, Option[Int]]("Option[Int]").check(_.order)
+    laws[GroupLaws, Option[Int]]("Option[Int]").check(_.monoid)
+    laws[OrderLaws, Option[HasEq[String]]]("Option[HasEq[String]]").check(_.eqv)
+    laws[OrderLaws, Option[HasPartialOrder[String]]]("Option[HasPartialOrder[String]]").check(_.partialOrder)
+    laws[OrderLaws, Option[String]]("Option[String]").check(_.order)
+    laws[GroupLaws, Option[String]]("Option[String]").check(_.monoid)
   }
 
-  laws[OrderLaws, Long].check(_.order)
-  laws[RingLaws, Long].check(_.commutativeRing)
-  laws[LatticeLaws, Long].check(_.boundedDistributiveLattice)
+  laws[OrderLaws, List[HasEq[Int]]]("List[HasEq[Int]]").check(_.eqv)
+  laws[OrderLaws, List[HasPartialOrder[Int]]]("List[HasPartialOrder[Int]]").check(_.partialOrder)
+  laws[OrderLaws, List[Int]]("List[Int]").check(_.order)
+  laws[GroupLaws, List[Int]]("List[Int]").check(_.monoid)
+  laws[OrderLaws, List[HasEq[String]]]("List[HasEq[String]]").check(_.eqv)
+  laws[OrderLaws, List[HasPartialOrder[String]]]("List[HasPartialOrder[String]]").check(_.partialOrder)
+  laws[OrderLaws, List[String]]("List[String]").check(_.order)
+  laws[GroupLaws, List[String]]("List[String]").check(_.monoid)
 
-  laws[RingLaws, BigInt].check(_.commutativeRing)
+  laws[LogicLaws, Set[Byte]]("Set[Byte]").check(_.generalizedBool)
+  laws[RingLaws, Set[Byte]]("Set[Byte]").check(_.boolRng(setBoolRng[Byte]))
+  laws[LogicLaws, Set[Byte]]("Set[Byte]", "bool-from-rng").check(_.generalizedBool(new GenBoolFromBoolRng(setBoolRng)))
+  laws[RingLaws, Set[Byte]]("Set[Byte]", "rng-from-bool").check(_.boolRng(GenBool[Set[Byte]].asBoolRing))
+  laws[OrderLaws, Set[Int]]("Set[Int]").check(_.partialOrder)
+  laws[RingLaws, Set[Int]]("Set[Int]").check(_.semiring)
+  laws[RingLaws, Set[String]]("Set[String]").check(_.semiring)
 
-  laws[RingLaws, FPApprox[Float]].check(_.field)
-  laws[RingLaws, FPApprox[Double]].check(_.field)
+  laws[OrderLaws, Map[Char, Int]]("Map[Char, Int]").check(_.eqv)
+  laws[RingLaws, Map[Char, Int]]("Map[Char, Int]").check(_.semiring)
+  laws[OrderLaws, Map[Int, BigInt]]("Map[Int, BigInt]").check(_.eqv)
+  laws[RingLaws, Map[Int, BigInt]]("Map[Int, BigInt]").check(_.semiring)
+
+  laws[OrderLaws, Byte]("Byte").check(_.order)
+  laws[RingLaws, Byte]("Byte").check(_.commutativeRing)
+  laws[LatticeLaws, Byte]("Byte").check(_.lattice)
+
+  laws[OrderLaws, Short]("Short").check(_.order)
+  laws[RingLaws, Short]("Short").check(_.commutativeRing)
+  laws[LatticeLaws, Short]("Short").check(_.lattice)
+
+  laws[OrderLaws, Char]("Char").check(_.order)
+
+  laws[OrderLaws, Int]("Int").check(_.order)
+  laws[RingLaws, Int]("Int").check(_.commutativeRing)
+  laws[LatticeLaws, Int]("Int").check(_.boundedDistributiveLattice)
+
+  {
+    laws[RingLaws, Int]("Int").check(_.commutativeRig)
+  }
+
+  laws[OrderLaws, Long]("Long").check(_.order)
+  laws[RingLaws, Long]("Long").check(_.commutativeRing)
+  laws[LatticeLaws, Long]("Long").check(_.boundedDistributiveLattice)
+
+  laws[RingLaws, BigInt]("BigInt").check(_.commutativeRing)
+
+  laws[RingLaws, FPApprox[Float]]("FPApprox[Float]").check(_.field)
+  laws[RingLaws, FPApprox[Double]]("FPApprox[Double]").check(_.field)
 
   // let's limit our BigDecimal-related tests to the JVM for now.
   if (Platform.isJvm) {
@@ -170,7 +169,7 @@ class LawTests extends FunSuite with Configuration with Discipline {
 
       // BigDecimal does have numerical errors, so we can't pass all of
       // the field laws.
-      laws[RingLaws, BigDecimal].check(_.ring)
+      laws[RingLaws, BigDecimal]("BigDecimal").check(_.ring)
     }
 
     {
@@ -180,17 +179,17 @@ class LawTests extends FunSuite with Configuration with Discipline {
         Arbitrary(arbitrary[Double].map(x => BigDecimal(x, mc)))
       implicit val epsBigDecimal = FPApprox.Epsilon.bigDecimalEpsilon(mc)
       implicit val algebra = FPApprox.fpApproxAlgebra(new BigDecimalAlgebra(mc), Order[BigDecimal], epsBigDecimal)
-      laws[RingLaws, FPApprox[BigDecimal]].check(_.field(algebra))
+      laws[RingLaws, FPApprox[BigDecimal]]("FPApprox[BigDecimal]").check(_.field(algebra))
     }
   } else ()
 
   {
     implicit val arbBitSet: Arbitrary[BitSet] =
       Arbitrary(arbitrary[List[Byte]].map(s => BitSet(s.map(_ & 0xff): _*)))
-    laws[LogicLaws, BitSet].check(_.generalizedBool)
+    laws[LogicLaws, BitSet]("BitSet").check(_.generalizedBool)
   }
 
-  laws[RingLaws, (Int, Int)].check(_.ring)
+  laws[RingLaws, (Int, Int)]("(Int, Int)").check(_.ring)
 
   {
     implicit val band = new Band[(Int, Int)] {
@@ -199,10 +198,10 @@ class LawTests extends FunSuite with Configuration with Discipline {
     checkAll("(Int, Int) Band", GroupLaws[(Int, Int)].band)
   }
 
-  laws[OrderLaws, Unit].check(_.order)
-  laws[RingLaws, Unit].check(_.commutativeRing)
-  laws[RingLaws, Unit].check(_.multiplicativeMonoid)
-  laws[LatticeLaws, Unit].check(_.boundedSemilattice)
+  laws[OrderLaws, Unit]("Unit").check(_.order)
+  laws[RingLaws, Unit]("Unit").check(_.commutativeRing)
+  laws[RingLaws, Unit]("Unit").check(_.multiplicativeMonoid)
+  laws[LatticeLaws, Unit]("Unit").check(_.boundedSemilattice)
 
   {
     // In order to check the monoid laws for `Order[N]`, we need
@@ -238,24 +237,24 @@ class LawTests extends FunSuite with Configuration with Discipline {
     }
 
     implicit val monoidOrderN: Monoid[Order[N]] = Order.whenEqualMonoid[N]
-    laws[GroupLaws, Order[N]].check(_.monoid)
+    laws[GroupLaws, Order[N]]("Order[N]").check(_.monoid)
 
     {
       implicit val bsEqN: BoundedSemilattice[Eq[N]] = Eq.allEqualBoundedSemilattice[N]
-      laws[GroupLaws, Eq[N]].check(_.boundedSemilattice)
+      laws[GroupLaws, Eq[N]]("Eq[N]").check(_.boundedSemilattice)
     }
     {
       implicit val sEqN: Semilattice[Eq[N]] = Eq.anyEqualSemilattice[N]
-      laws[GroupLaws, Eq[N]].check(_.semilattice)
+      laws[GroupLaws, Eq[N]]("Eq[N]").check(_.semilattice)
     }
   }
 
-  laws[OrderLaws, Int]("fromOrdering").check(_.order(Order.fromOrdering[Int]))
-  laws[OrderLaws, Array[Int]].check(_.order)
-  laws[OrderLaws, Array[Int]].check(_.partialOrder)
+  laws[OrderLaws, Int]("Int", "fromOrdering").check(_.order(Order.fromOrdering[Int]))
+  laws[OrderLaws, Array[Int]]("Array[Int]").check(_.order)
+  laws[OrderLaws, Array[Int]]("Array[Int]").check(_.partialOrder)
 
   // Rational tests do not return on Scala-js, so we make them JVM only.
-  if (Platform.isJvm) laws[RingLaws, Rat].check(_.field)
+  if (Platform.isJvm) laws[RingLaws, Rat]("Rat").check(_.field)
   else ()
 
   test("Field.fromDouble with subnormal") {

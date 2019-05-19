@@ -1,7 +1,7 @@
 package algebra
 package instances
 
-import scala.{ specialized ⇒ sp }
+import scala.{ specialized => sp }
 
 package object array extends ArrayInstances
 
