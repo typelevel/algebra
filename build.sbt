@@ -26,7 +26,6 @@ lazy val commonSettings = Seq(
     //"-Ywarn-value-discard", // fails with @sp on Unit
     "-Xfuture"
   ) ++ (CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, 10)) => Seq.empty
     case Some((2, v)) if v <= 12 => Seq("-Ywarn-unused-import")
     case _ => Seq.empty
   }),
@@ -237,19 +236,7 @@ def crossVersionSharedSources() =
   }
 
 lazy val scalaMacroDependencies: Seq[Setting[_]] = Seq(
-  libraryDependencies += scalaOrganization.value % "scala-reflect" % scalaVersion.value % "provided",
-  libraryDependencies ++= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      // if scala 2.11+ is used, quasiquotes are merged into scala-reflect
-      case Some((2, scalaMajor)) if scalaMajor >= 11 => Seq()
-      // in Scala 2.10, quasiquotes are provided by macro paradise
-      case Some((2, 10)) =>
-        Seq(
-          compilerPlugin("org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.patch),
-              "org.scalamacros" %% "quasiquotes" % "2.1.0-M5" cross CrossVersion.binary
-        )
-    }
-  }
+  libraryDependencies += scalaOrganization.value % "scala-reflect" % scalaVersion.value % "provided"
 )
 
 addCommandAlias("gitSnapshots", ";set version in ThisBuild := git.gitDescribedVersion.value.get + \"-SNAPSHOT\"")
