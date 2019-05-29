@@ -11,7 +11,7 @@ matrix:
     env: DEPLOY=true
   - scala: 2.11.12
     env: DEPLOY=false
-  - scala: 2.13.0-RC1
+  - scala: 2.13.0-RC2
     env: DEPLOY=false
 
 before_install:
