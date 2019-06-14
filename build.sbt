@@ -3,12 +3,12 @@ import ReleaseTransformations._
 import microsites.ExtraMdFileConfig
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
-lazy val catsVersion = "2.0.0-M2"
+lazy val catsVersion = "2.0.0-M4"
 
 lazy val buildSettings = Seq(
   organization := "org.typelevel",
   scalaVersion := "2.12.8",
-  crossScalaVersions := Seq("2.11.12", "2.12.8", "2.13.0-RC2")
+  crossScalaVersions := Seq("2.11.12", "2.12.8", "2.13.0")
 )
 
 lazy val commonSettings = Seq(
@@ -24,7 +24,6 @@ lazy val commonSettings = Seq(
     "-Ywarn-dead-code",
     "-Ywarn-numeric-widen",
     //"-Ywarn-value-discard", // fails with @sp on Unit
-    "-Xfuture"
   ) ++ (CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((2, v)) if v <= 12 => Seq("-Ywarn-unused-import")
     case _ => Seq.empty
@@ -33,6 +32,7 @@ lazy val commonSettings = Seq(
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, v)) if v <= 12 =>
         Seq(
+          "-Xfuture",
           "-Xfatal-warnings",
           "-Yno-adapted-args"
         )
