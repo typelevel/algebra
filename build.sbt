@@ -3,7 +3,8 @@ import ReleaseTransformations._
 import microsites.ExtraMdFileConfig
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
-lazy val catsVersion = "2.0.0-M4"
+lazy val catsVersion = "2.0.0"
+lazy val catsTestkitScalatestVersion = "1.0.0-RC1"
 
 lazy val buildSettings = Seq(
   organization := "org.typelevel",
@@ -96,6 +97,7 @@ lazy val docs = project.in(file("docs"))
 lazy val aggregate = project.in(file("."))
   .enablePlugins(GhpagesPlugin)
   .enablePlugins(ScalaUnidocPlugin)
+  .disablePlugins(MimaPlugin)
   .settings(algebraSettings: _*)
   .settings(noPublishSettings: _*)
   .settings(docSettings: _*)
@@ -127,7 +129,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   )
   .settings(libraryDependencies ++= Seq(
     "org.typelevel" %%% "cats-kernel" % catsVersion,
-    "org.typelevel" %%% "cats-testkit" % catsVersion % "test"))
+    "org.typelevel" %%% "cats-testkit-scalatest" % catsTestkitScalatestVersion % "test"))
   .settings(algebraSettings: _*)
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
 
@@ -144,7 +146,7 @@ lazy val laws = crossProject(JSPlatform, JVMPlatform)
   .settings(algebraSettings: _*)
   .settings(libraryDependencies ++= Seq(
     "org.typelevel" %%% "cats-kernel-laws" % catsVersion,
-    "org.typelevel" %%% "cats-testkit" % catsVersion % "test"))
+    "org.typelevel" %%% "cats-testkit-scalatest" % catsTestkitScalatestVersion % "test"))
 
 lazy val lawsJVM = laws.jvm
 lazy val lawsJS = laws.js
@@ -154,6 +156,7 @@ lazy val benchmark = project.in(file("benchmark"))
     moduleName := "algebra-benchmark",
     coverageExcludedPackages := "com\\.twitter\\.algebird\\.benchmark.*")
   .enablePlugins(JmhPlugin)
+  .disablePlugins(MimaPlugin)
   .settings(JmhPlugin.projectSettings:_*)
   .settings(noPublishSettings: _*)
   .settings(algebraSettings: _*)
