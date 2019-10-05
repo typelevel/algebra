@@ -23,7 +23,7 @@ See the [Algebra website](https://typelevel.org/algebra) for more information. T
 
 ## getting algebra
 
-Algebra supports Scala 2.11 and 2.12 and is available from
+Algebra supports Scala 2.11, 2.12 and 2.13 and is available from
 Sonatype (and Maven Central). In addition to the JVM, Algebra also
 supports Scala.js.
 
@@ -31,14 +31,14 @@ To use algebra in your own projects, include this snippet in your
 `build.sbt` file:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "algebra" % "1.0.1"
+libraryDependencies += "org.typelevel" %% "algebra" % "2.0.0"
 ```
 
 If you want to use Algebra's laws, you can include those as well with
 this snippet:
 
 ```scala
-libraryDependencies += "org.typelevel" %% "algebra-laws" % "1.0.1"
+libraryDependencies += "org.typelevel" %% "algebra-laws" % "2.0.0"
 ```
 
 ## what we have so far
