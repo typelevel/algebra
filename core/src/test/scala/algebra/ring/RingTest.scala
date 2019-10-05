@@ -2,7 +2,7 @@ package algebra.ring
 
 import algebra.instances.bigInt._
 
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
