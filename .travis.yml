@@ -9,8 +9,6 @@ matrix:
   include:
   - scala: 2.12.8
     env: DEPLOY=true
-  - scala: 2.11.12
-    env: DEPLOY=false
   - scala: 2.13.0
     env: DEPLOY=false
 
