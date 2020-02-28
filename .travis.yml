@@ -9,8 +9,6 @@ matrix:
   include:
   - scala: 2.12.8
     env: DEPLOY=true
-  - scala: 2.11.12
-    env: DEPLOY=false
   - scala: 2.13.0
     env: DEPLOY=false
 
@@ -34,7 +32,6 @@ cache:
 script:
   - ./sbt "++${TRAVIS_SCALA_VERSION}!" clean coreJS/test lawsJS/test
   - if [[ "$TRAVIS_SCALA_VERSION" != 2.13.* ]]; then ./sbt "++${TRAVIS_SCALA_VERSION}!" mimaReportBinaryIssues; fi
-  - ./sbt "++${TRAVIS_SCALA_VERSION}!" clean coverage coreJVM/test lawsJVM/test coverageReport
   - if [[ "$TRAVIS_SCALA_VERSION" != 2.13.* ]]; then ./sbt "++${TRAVIS_SCALA_VERSION}!" docs/makeMicrosite; fi
 
 after_success:

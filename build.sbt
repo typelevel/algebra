@@ -3,13 +3,13 @@ import ReleaseTransformations._
 import microsites.ExtraMdFileConfig
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
-lazy val catsVersion = "2.0.0"
-lazy val catsTestkitScalatestVersion = "1.0.0-RC1"
+lazy val catsVersion = "2.1.1"
+lazy val catsTestkitScalatestVersion = "1.0.1"
 
 lazy val buildSettings = Seq(
   organization := "org.typelevel",
   scalaVersion := "2.12.8",
-  crossScalaVersions := Seq("2.11.12", "2.12.8", "2.13.0")
+  crossScalaVersions := Seq("2.12.8", "2.13.0")
 )
 
 lazy val commonSettings = Seq(

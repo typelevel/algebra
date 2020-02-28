@@ -9,7 +9,7 @@ import algebra.instances.BigDecimalAlgebra
 import algebra.laws.platform.Platform
 
 import org.typelevel.discipline.Laws
-import org.typelevel.discipline.scalatest.Discipline
+import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 import org.scalacheck.{Arbitrary, Cogen}
 import Arbitrary.arbitrary
 import org.scalactic.anyvals.{PosZDouble, PosInt, PosZInt}
@@ -18,7 +18,7 @@ import org.scalatest.prop.Configuration
 import scala.collection.immutable.BitSet
 import scala.util.Random
 
-class LawTests extends AnyFunSuite with Configuration with Discipline {
+class LawTests extends AnyFunSuite with Configuration with FunSuiteDiscipline {
 
   lazy val checkConfiguration: PropertyCheckConfiguration =
     PropertyCheckConfiguration(
