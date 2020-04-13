@@ -8,8 +8,8 @@ lazy val catsTestkitScalatestVersion = "1.0.1"
 
 lazy val buildSettings = Seq(
   organization := "org.typelevel",
-  scalaVersion := "2.12.8",
-  crossScalaVersions := Seq("2.12.8", "2.13.1")
+  scalaVersion := "2.12.11",
+  crossScalaVersions := Seq("2.12.11", "2.13.1")
 )
 
 lazy val commonSettings = Seq(
