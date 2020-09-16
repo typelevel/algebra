@@ -7,9 +7,9 @@ jdk:
 
 matrix:
   include:
-  - scala: 2.12.8
+  - scala: 2.12.11
     env: DEPLOY=true
-  - scala: 2.13.0
+  - scala: 2.13.1
     env: DEPLOY=false
 
 before_install:
