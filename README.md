@@ -5,6 +5,15 @@
 
 # algebra
 
+## current status
+
+This project is currently in low-maintenance mode.
+The existing 2.x version is stable and works with Scala 2.x and Cats 2.x.
+No new features are developed, but bug fix releases will still be made available.
+
+The plan is to eventually move the code in this repository into Cats ([see the ticket in the Cats repository](https://github.com/typelevel/cats/issues/2041)).
+However, we are looking for volunteers to tackle this.
+
 ## the vision
 
 This repo represents an attempt to unify the basic algebraic type
