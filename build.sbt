@@ -6,10 +6,40 @@ import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 lazy val catsVersion = "2.1.1"
 lazy val catsTestkitScalatestVersion = "1.0.1"
 
+val Scala212 = "2.12.12"
+val Scala213 = "2.13.3"
+
+ThisBuild / crossScalaVersions := Seq(Scala212, Scala213)
+ThisBuild / scalaVersion := Scala213
+
+ThisBuild / githubWorkflowArtifactUpload := false
+
+ThisBuild / githubWorkflowPublishTargetBranches := Seq()
+
+ThisBuild / githubWorkflowAddedJobs ++= Seq(
+  WorkflowJob(
+    "microsite",
+    "Microsite",
+    githubWorkflowJobSetup.value.toList ::: List(
+      WorkflowStep.Use("actions", "setup-ruby", "v1", name = Some("Setup Ruby")),
+      WorkflowStep.Run(List("gem install jekyll -v 4.0.0"), name = Some("Setup Jekyll")),
+      WorkflowStep.Sbt(List("docs/makeMicrosite"), name = Some("Build the microsite"))
+    ),
+    scalas = List(Scala212)
+  ),
+  WorkflowJob(
+    "mima",
+    "MiMa",
+    githubWorkflowJobSetup.value.toList ::: List(
+      WorkflowStep.Sbt(List("mimaReportBinaryIssues"), name = Some("Run MiMa"))
+    ),
+    scalas = List(Scala212)
+  )
+)
+
+
 lazy val buildSettings = Seq(
-  organization := "org.typelevel",
-  scalaVersion := "2.12.11",
-  crossScalaVersions := Seq("2.12.11", "2.13.1")
+  organization := "org.typelevel"
 )
 
 lazy val commonSettings = Seq(
