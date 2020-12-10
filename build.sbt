@@ -2,6 +2,7 @@ import sbtrelease.Utilities._
 import ReleaseTransformations._
 import microsites.ExtraMdFileConfig
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
+import com.typesafe.tools.mima.core._
 
 lazy val catsVersion     = "2.3.0"
 lazy val mUnit           = "0.7.19"
@@ -147,7 +148,9 @@ val ignoredABIProblems = {
   import com.typesafe.tools.mima.core._
   import com.typesafe.tools.mima.core.ProblemFilters._
   Seq(
-    exclude[ReversedMissingMethodProblem]("algebra.ring.RingFunctions.defaultFromDouble")
+    exclude[ReversedMissingMethodProblem]("algebra.ring.RingFunctions.defaultFromDouble"),
+    exclude[IncompatibleSignatureProblem]("algebra.instances.all.package.catsKernelStdOrderForChar"),
+    exclude[IncompatibleSignatureProblem]("algebra.instances.char.package.catsKernelStdOrderForChar")
   )
 }
 
