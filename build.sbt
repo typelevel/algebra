@@ -3,7 +3,7 @@ import ReleaseTransformations._
 import microsites.ExtraMdFileConfig
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
-lazy val catsVersion = "2.1.1"
+lazy val catsVersion = "2.3.0"
 lazy val catsTestkitScalatestVersion = "1.0.1"
 
 val Scala212 = "2.12.12"
