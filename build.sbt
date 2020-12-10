@@ -9,8 +9,9 @@ lazy val disciplineMUnit = "1.0.3"
 
 val Scala212 = "2.12.12"
 val Scala213 = "2.13.4"
+val Scala300 = Seq("3.0.0-M1", "3.0.0-M2")
 
-ThisBuild / crossScalaVersions := Seq(Scala212, Scala213)
+ThisBuild / crossScalaVersions := Seq(Scala212, Scala213) ++ Scala300
 ThisBuild / scalaVersion := Scala213
 
 ThisBuild / githubWorkflowArtifactUpload := false
@@ -276,10 +277,6 @@ def crossVersionSharedSources() =
       }
     }
   }
-
-lazy val scalaMacroDependencies: Seq[Setting[_]] = Seq(
-  libraryDependencies += scalaOrganization.value % "scala-reflect" % scalaVersion.value % "provided"
-)
 
 addCommandAlias("gitSnapshots", ";set version in ThisBuild := git.gitDescribedVersion.value.get + \"-SNAPSHOT\"")
 

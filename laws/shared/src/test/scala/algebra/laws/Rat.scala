@@ -93,7 +93,7 @@ object Rat {
 
   def unapply(r: Rat): Some[(BigInt, BigInt)] = Some((r.num, r.den))
 
-  implicit val ratAlgebra =
+  implicit val ratAlgebra: RatAlgebra =
     new RatAlgebra
 
   val RatMinMaxLattice: DistributiveLattice[Rat] =

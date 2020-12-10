@@ -13,3 +13,8 @@ TAGS
 
 # Auto-copied by sbt-microsites
 docs/src/main/tut/contributing.md
+.bloop/
+.metals/
+.bsp/
+project/metals.sbt
+project/project/

@@ -7,7 +7,7 @@ import algebra.ring._
 package object byte extends ByteInstances
 
 trait ByteInstances extends cats.kernel.instances.ByteInstances {
-  implicit val byteAlgebra = new ByteAlgebra
+  implicit val byteAlgebra: ByteAlgebra = new ByteAlgebra
 
   val ByteMinMaxLattice: BoundedDistributiveLattice[Byte] =
     BoundedDistributiveLattice.minMax[Byte](Byte.MinValue, Byte.MaxValue)
