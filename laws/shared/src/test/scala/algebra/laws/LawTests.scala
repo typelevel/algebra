@@ -9,29 +9,12 @@ import algebra.instances.BigDecimalAlgebra
 import algebra.laws.platform.Platform
 
 import org.typelevel.discipline.Laws
-import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 import org.scalacheck.{Arbitrary, Cogen}
 import Arbitrary.arbitrary
-import org.scalactic.anyvals.{PosZDouble, PosInt, PosZInt}
-import org.scalatest.funsuite.AnyFunSuite
-import org.scalatest.prop.Configuration
 import scala.collection.immutable.BitSet
 import scala.util.Random
 
-class LawTests extends AnyFunSuite with Configuration with FunSuiteDiscipline {
-
-  lazy val checkConfiguration: PropertyCheckConfiguration =
-    PropertyCheckConfiguration(
-      minSuccessful = if (Platform.isJvm) PosInt(50) else PosInt(5),
-      maxDiscardedFactor = if (Platform.isJvm) PosZDouble(5.0) else PosZDouble(50.0),
-      minSize = PosZInt(0),
-      sizeRange = if (Platform.isJvm) PosZInt(10) else PosZInt(5),
-      workers = PosInt(1))
-
-  // The scalacheck defaults (100,100) are too high for Scala-js, so we reduce to 10/100.
-  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
-    if (Platform.isJvm) PropertyCheckConfiguration(sizeRange = 100, minSuccessful = 100)
-    else PropertyCheckConfiguration(sizeRange = 10, minSuccessful = 100)
+class LawTests extends munit.DisciplineSuite {
 
   implicit val byteLattice: Lattice[Byte] = ByteMinMaxLattice
   implicit val shortLattice: Lattice[Short] = ShortMinMaxLattice
