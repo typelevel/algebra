@@ -26,14 +26,14 @@ class Rat(val num: BigInt, val den: BigInt) extends Serializable { lhs =>
   def compare(rhs: Rat): Int =
     (lhs.num * rhs.den) compare (rhs.num * lhs.den)
 
-  def abs(): Rat = Rat(num.abs, den)
+  def abs: Rat = Rat(num.abs, den)
 
-  def signum(): Int = num.signum
+  def signum: Int = num.signum
 
   def +(rhs: Rat): Rat =
     Rat((lhs.num * rhs.den) + (rhs.num * lhs.den), (lhs.den * rhs.den))
 
-  def unary_-(): Rat =
+  def unary_- : Rat =
     Rat(-lhs.num, lhs.den)
 
   def *(rhs: Rat): Rat =
@@ -43,7 +43,7 @@ class Rat(val num: BigInt, val den: BigInt) extends Serializable { lhs =>
 
   def %(rhs: Rat) = Rat.Zero
 
-  def reciprocal(): Rat =
+  def reciprocal: Rat =
     if (num == 0) throw new ArithmeticException("/0") else Rat(den, num)
 
   def /(rhs: Rat): Rat =
@@ -52,21 +52,21 @@ class Rat(val num: BigInt, val den: BigInt) extends Serializable { lhs =>
   def **(k: Int): Rat =
     Rat(num.pow(k), den.pow(k))
 
-  def toDouble(): Double = num.toDouble / den.toDouble
+  def toDouble: Double = num.toDouble / den.toDouble
 
-  def toInt(): Int = toDouble.toInt
+  def toInt: Int = toDouble.toInt
 
-  def isWhole(): Boolean = den == 1
+  def isWhole: Boolean = den == 1
 
-  def ceil(): Rat =
+  def ceil: Rat =
     if (num >= 0) Rat((num + den - 1) / den, 1)
     else Rat(num / den, 1)
 
-  def floor(): Rat =
+  def floor: Rat =
     if (num >= 0) Rat(num / den, 1)
     else Rat((num - den + 1) / den, 1)
 
-  def round(): Rat =
+  def round: Rat =
     if (num >= 0) Rat((num + (den / 2)) / den, 1)
     else Rat((num - (den / 2)) / den, 1)
 
@@ -93,7 +93,7 @@ object Rat {
 
   def unapply(r: Rat): Some[(BigInt, BigInt)] = Some((r.num, r.den))
 
-  implicit val ratAlgebra =
+  implicit val ratAlgebra: RatAlgebra =
     new RatAlgebra
 
   val RatMinMaxLattice: DistributiveLattice[Rat] =
@@ -131,6 +131,6 @@ class RatAlgebra extends Field[Rat] with Order[Rat] with Serializable {
 
   def isWhole(a: Rat): Boolean = a.isWhole
   def ceil(a: Rat): Rat = a.ceil
-  def floor(a: Rat): Rat = a .floor
-  def round(a: Rat): Rat = a. round
+  def floor(a: Rat): Rat = a.floor
+  def round(a: Rat): Rat = a.round
 }

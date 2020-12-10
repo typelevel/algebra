@@ -2,14 +2,17 @@ import sbtrelease.Utilities._
 import ReleaseTransformations._
 import microsites.ExtraMdFileConfig
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
+import com.typesafe.tools.mima.core._
 
-lazy val catsVersion = "2.1.1"
-lazy val catsTestkitScalatestVersion = "1.0.1"
+lazy val catsVersion     = "2.3.0"
+lazy val mUnit           = "0.7.19"
+lazy val disciplineMUnit = "1.0.3"
 
 val Scala212 = "2.12.12"
-val Scala213 = "2.13.3"
+val Scala213 = "2.13.4"
+val Scala300 = Seq("3.0.0-M1", "3.0.0-M2")
 
-ThisBuild / crossScalaVersions := Seq(Scala212, Scala213)
+ThisBuild / crossScalaVersions := Seq(Scala212, Scala213) ++ Scala300
 ThisBuild / scalaVersion := Scala213
 
 ThisBuild / githubWorkflowArtifactUpload := false
@@ -145,7 +148,9 @@ val ignoredABIProblems = {
   import com.typesafe.tools.mima.core._
   import com.typesafe.tools.mima.core.ProblemFilters._
   Seq(
-    exclude[ReversedMissingMethodProblem]("algebra.ring.RingFunctions.defaultFromDouble")
+    exclude[ReversedMissingMethodProblem]("algebra.ring.RingFunctions.defaultFromDouble"),
+    exclude[IncompatibleSignatureProblem]("algebra.instances.all.package.catsKernelStdOrderForChar"),
+    exclude[IncompatibleSignatureProblem]("algebra.instances.char.package.catsKernelStdOrderForChar")
   )
 }
 
@@ -155,12 +160,15 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(moduleName := "algebra")
   .settings(
     mimaPreviousArtifacts := Set("org.typelevel" %% "algebra" % binaryCompatibleVersion),
-    mimaBinaryIssueFilters ++= ignoredABIProblems
-  )
-  .settings(libraryDependencies ++= Seq(
+    mimaBinaryIssueFilters ++= ignoredABIProblems,
+    testFrameworks += new TestFramework("munit.Framework"),
+    libraryDependencies ++= Seq(
     "org.typelevel" %%% "cats-kernel" % catsVersion,
-    "org.typelevel" %%% "cats-testkit-scalatest" % catsTestkitScalatestVersion % "test"))
+    "org.typelevel" %%% "discipline-munit" % disciplineMUnit % Test,
+    "org.scalameta" %%% "munit" % mUnit % Test
+  ))
   .settings(algebraSettings: _*)
+  .jsSettings(scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)))
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
 
 lazy val coreJVM = core.jvm
@@ -170,13 +178,18 @@ lazy val laws = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Full)
   .enablePlugins(MimaPlugin)
   .dependsOn(core)
-  .settings(moduleName := "algebra-laws")
-  .settings(mimaPreviousArtifacts :=
-    Set("org.typelevel" %% "algebra-laws" % binaryCompatibleVersion))
+  .settings(
+    moduleName := "algebra-laws",
+    mimaPreviousArtifacts :=
+    Set("org.typelevel" %% "algebra-laws" % binaryCompatibleVersion),
+    testFrameworks += new TestFramework("munit.Framework"),
+    libraryDependencies ++= Seq(
+      "org.typelevel" %%% "cats-kernel-laws" % catsVersion,
+      "org.typelevel" %%% "discipline-munit" % disciplineMUnit % Test,
+      "org.scalameta" %%% "munit" % mUnit % Test
+  ))
+  .jsSettings(scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)))
   .settings(algebraSettings: _*)
-  .settings(libraryDependencies ++= Seq(
-    "org.typelevel" %%% "cats-kernel-laws" % catsVersion,
-    "org.typelevel" %%% "cats-testkit-scalatest" % catsTestkitScalatestVersion % "test"))
 
 lazy val lawsJVM = laws.jvm
 lazy val lawsJS = laws.js
@@ -267,10 +280,6 @@ def crossVersionSharedSources() =
       }
     }
   }
-
-lazy val scalaMacroDependencies: Seq[Setting[_]] = Seq(
-  libraryDependencies += scalaOrganization.value % "scala-reflect" % scalaVersion.value % "provided"
-)
 
 addCommandAlias("gitSnapshots", ";set version in ThisBuild := git.gitDescribedVersion.value.get + \"-SNAPSHOT\"")
 

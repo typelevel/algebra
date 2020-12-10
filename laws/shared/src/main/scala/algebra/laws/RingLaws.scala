@@ -17,12 +17,12 @@ object RingLaws {
       def apply(a: A): Boolean = Eq[A].neqv(a, AdditiveMonoid[A].zero)
     })
 
-  def withPred[A: Eq: Arbitrary](pred0: Predicate[A]): RingLaws[A] = new RingLaws[A] {
-    def Arb = implicitly[Arbitrary[A]]
+  def withPred[A](pred0: Predicate[A])(implicit eqv: Eq[A], arb: Arbitrary[A]): RingLaws[A] = new RingLaws[A] {
+    def Arb = arb
     def pred = pred0
     val nonZeroLaws = new GroupLaws[A] {
-      def Arb = Arbitrary(arbitrary[A] filter pred)
-      def Equ = Eq[A]
+      def Arb = Arbitrary(arbitrary[A](arb) filter pred)
+      def Equ = eqv
     }
   }
 }
