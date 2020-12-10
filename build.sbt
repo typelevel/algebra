@@ -7,7 +7,7 @@ lazy val catsVersion = "2.1.1"
 lazy val catsTestkitScalatestVersion = "1.0.1"
 
 val Scala212 = "2.12.12"
-val Scala213 = "2.13.3"
+val Scala213 = "2.13.4"
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213)
 ThisBuild / scalaVersion := Scala213

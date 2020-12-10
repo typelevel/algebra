@@ -55,7 +55,7 @@ class MapAdditiveMonoid[K, V](implicit V: AdditiveSemigroup[V]) extends Additive
     as.foreach { m =>
       val it = m.iterator
       while (it.hasNext) {
-        val (k, y) = it.next
+        val (k, y) = it.next()
         acc.get(k) match {
           case None => acc(k) = y
           case Some(x) => acc(k) = V.plus(x, y)
@@ -107,7 +107,7 @@ class MapSemiring[K, V](implicit V: Semiring[V]) extends MapAdditiveMonoid[K, V]
           // accumulator.
           val it = acc.iterator
           while (it.hasNext) {
-            val (k, x) = it.next
+            val (k, x) = it.next()
             m.get(k) match {
               case None => acc -= k
               case Some(y) => acc(k) = V.times(x, y)
@@ -118,7 +118,7 @@ class MapSemiring[K, V](implicit V: Semiring[V]) extends MapAdditiveMonoid[K, V]
           // very first element of `as`. if there is only one map in
           // our collection we want to return exactly those values.
           val it = m.iterator
-          while (it.hasNext) acc += it.next
+          while (it.hasNext) acc += it.next()
           ready = true
         }
       }

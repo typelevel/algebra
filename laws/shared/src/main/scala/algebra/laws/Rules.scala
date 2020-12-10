@@ -1,7 +1,6 @@
 package algebra.laws
 
 import cats.kernel._
-import org.scalacheck.Prop
 import org.scalacheck.Prop._
 import org.scalacheck.{Arbitrary, Prop}
 import cats.kernel.instances.boolean._
