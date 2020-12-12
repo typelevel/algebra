@@ -80,7 +80,14 @@ lazy val commonSettings = Seq(
   scalaJSStage in Global := FastOptStage,
   jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
   fork := false,
-  parallelExecution in Test := false
+  parallelExecution in Test := false,
+  Compile / doc / sources := {
+    val old = (Compile / doc / sources).value
+    if (isDotty.value)
+      Seq()
+    else
+      old
+  }
 )
 
 lazy val algebraSettings = buildSettings ++ commonSettings ++ publishSettings
