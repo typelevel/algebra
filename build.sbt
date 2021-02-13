@@ -4,11 +4,11 @@ import microsites.ExtraMdFileConfig
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 import com.typesafe.tools.mima.core._
 
-lazy val catsVersion     = "2.3.1"
-lazy val mUnit           = "0.7.20"
-lazy val disciplineMUnit = "1.0.4"
+lazy val catsVersion     = "2.4.1"
+lazy val mUnit           = "0.7.21"
+lazy val disciplineMUnit = "1.0.5"
 
-val Scala212 = "2.12.12"
+val Scala212 = "2.12.13"
 val Scala213 = "2.13.4"
 val Scala300 = Seq("3.0.0-M2", "3.0.0-M3")
 
@@ -92,6 +92,10 @@ lazy val commonSettings = Seq(
 
 lazy val algebraSettings = buildSettings ++ commonSettings ++ publishSettings
 
+lazy val nativeSettings = Seq(
+  crossScalaVersions ~= (_.filterNot(Scala300.contains))
+)
+
 lazy val docsMappingsAPIDir =
   settingKey[String]("Name of subdirectory in site target directory for api docs")
 
@@ -145,6 +149,8 @@ lazy val aggregate = project.in(file("."))
   .dependsOn(coreJVM, lawsJVM)
   .aggregate(coreJS, lawsJS)
   .dependsOn(coreJS, lawsJS)
+  .aggregate(coreNative, lawsNative)
+  .dependsOn(coreNative, lawsNative)
 
 val binaryCompatibleVersion = "1.0.1"
 
@@ -161,7 +167,7 @@ val ignoredABIProblems = {
   )
 }
 
-lazy val core = crossProject(JSPlatform, JVMPlatform)
+lazy val core = crossProject(JSPlatform, NativePlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .enablePlugins(MimaPlugin)
   .settings(moduleName := "algebra")
@@ -177,11 +183,13 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(algebraSettings: _*)
   .jsSettings(scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)))
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
+  .nativeSettings(nativeSettings)
 
 lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
+lazy val coreNative = core.native
 
-lazy val laws = crossProject(JSPlatform, JVMPlatform)
+lazy val laws = crossProject(JSPlatform, NativePlatform, JVMPlatform)
   .crossType(CrossType.Full)
   .enablePlugins(MimaPlugin)
   .dependsOn(core)
@@ -196,10 +204,12 @@ lazy val laws = crossProject(JSPlatform, JVMPlatform)
       "org.scalameta" %%% "munit" % mUnit % Test
   ))
   .jsSettings(scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)))
+  .nativeSettings(nativeSettings)
   .settings(algebraSettings: _*)
 
 lazy val lawsJVM = laws.jvm
 lazy val lawsJS = laws.js
+lazy val lawsNative = laws.native
 
 lazy val benchmark = project.in(file("benchmark"))
   .settings(
