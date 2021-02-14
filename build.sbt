@@ -15,6 +15,7 @@ val Scala300 = Seq("3.0.0-M2", "3.0.0-M3")
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213) ++ Scala300
 ThisBuild / scalaVersion := Scala213
 
+ThisBuild / githubWorkflowBuildMatrixFailFast := Some(false)
 ThisBuild / githubWorkflowArtifactUpload := false
 
 ThisBuild / githubWorkflowPublishTargetBranches := Seq()
@@ -24,7 +25,7 @@ ThisBuild / githubWorkflowAddedJobs ++= Seq(
     "microsite",
     "Microsite",
     githubWorkflowJobSetup.value.toList ::: List(
-      WorkflowStep.Use("actions", "setup-ruby", "v1", name = Some("Setup Ruby")),
+      WorkflowStep.Use(UseRef.Public("ruby", "setup-ruby", "v1"), Map("ruby-version" -> "2.7"), name = Some("Setup Ruby")),
       WorkflowStep.Run(List("gem install jekyll -v 4.0.0"), name = Some("Setup Jekyll")),
       WorkflowStep.Sbt(List("docs/makeMicrosite"), name = Some("Build the microsite"))
     ),

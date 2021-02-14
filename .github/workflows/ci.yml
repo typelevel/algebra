@@ -20,9 +20,10 @@ jobs:
   build:
     name: Build and Test
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.12, 2.13.4, 3.0.0-M2, 3.0.0-M3]
+        scala: [2.12.13, 2.13.4, 3.0.0-M2, 3.0.0-M3]
         java: [adopt@1.8]
     runs-on: ${{ matrix.os }}
     steps:
@@ -59,7 +60,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.12]
+        scala: [2.12.13]
         java: [adopt@1.8]
     runs-on: ${{ matrix.os }}
     steps:
@@ -86,7 +87,9 @@ jobs:
           key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
 
       - name: Setup Ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
 
       - name: Setup Jekyll
         run: gem install jekyll -v 4.0.0
@@ -99,7 +102,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.12]
+        scala: [2.12.13]
         java: [adopt@1.8]
     runs-on: ${{ matrix.os }}
     steps:
