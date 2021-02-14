@@ -15,10 +15,27 @@ val Scala300 = Seq("3.0.0-M2", "3.0.0-M3")
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213) ++ Scala300
 ThisBuild / scalaVersion := Scala213
 
+ThisBuild / githubWorkflowBuildMatrixAdditions +=
+  "platform" -> List("jvm", "js", "native")
+
+ThisBuild / githubWorkflowBuildMatrixExclusions ++= Scala300.map { dottyVersion =>
+  MatrixExclude(Map("platform" -> "native", "scala" -> dottyVersion))
+} // Dotty is not yet supported by Scala Native
+
+val JvmCond = s"matrix.platform == 'jvm'"
+val JsCond = s"matrix.platform == 'js'"
+val NativeCond = s"matrix.platform == 'native'"
+
 ThisBuild / githubWorkflowBuildMatrixFailFast := Some(false)
 ThisBuild / githubWorkflowArtifactUpload := false
 
 ThisBuild / githubWorkflowPublishTargetBranches := Seq()
+
+ThisBuild / githubWorkflowBuild := Seq(
+  WorkflowStep.Sbt(List("coreJS/test", "lawsJS/test"), name = Some("Validate Scala JS"), cond = Some(JsCond)),
+  WorkflowStep.Sbt(List("coreNative/test", "lawsNative/test"), name = Some("Validate Scala Native"), cond = Some(NativeCond)),
+  WorkflowStep.Sbt(List("coreJVM/test", "lawsJVM/test", "benchmark/test"), name = Some("Validate Scala JVM"), cond = Some(JvmCond))
+)
 
 ThisBuild / githubWorkflowAddedJobs ++= Seq(
   WorkflowJob(

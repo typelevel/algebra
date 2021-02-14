@@ -25,6 +25,12 @@ jobs:
         os: [ubuntu-latest]
         scala: [2.12.13, 2.13.4, 3.0.0-M2, 3.0.0-M3]
         java: [adopt@1.8]
+        platform: [jvm, js, native]
+        exclude:
+          - platform: native
+            scala: 3.0.0-M2
+          - platform: native
+            scala: 3.0.0-M3
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
@@ -52,8 +58,17 @@ jobs:
       - name: Check that workflows are up to date
         run: sbt ++${{ matrix.scala }} githubWorkflowCheck
 
-      - name: Build project
-        run: sbt ++${{ matrix.scala }} test
+      - name: Validate Scala JS
+        if: matrix.platform == 'js'
+        run: sbt ++${{ matrix.scala }} coreJS/test lawsJS/test
+
+      - name: Validate Scala Native
+        if: matrix.platform == 'native'
+        run: sbt ++${{ matrix.scala }} coreNative/test lawsNative/test
+
+      - name: Validate Scala JVM
+        if: matrix.platform == 'jvm'
+        run: sbt ++${{ matrix.scala }} coreJVM/test lawsJVM/test benchmark/test
 
   microsite:
     name: Microsite
