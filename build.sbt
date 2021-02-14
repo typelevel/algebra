@@ -117,7 +117,7 @@ lazy val docSettings = Seq(
   addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), docsMappingsAPIDir),
   git.remoteRepo := "git@github.com:typelevel/algebra.git",
   ghpagesNoJekyll := false,
-  fork in tut := true,
+  fork in mdoc := true,
   fork in (ScalaUnidoc, unidoc) := true,
   scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
       "-doc-source-url", "https://github.com/typelevel/algebra/tree/master€{FILE_PATH}.scala",
@@ -128,7 +128,7 @@ lazy val docSettings = Seq(
 )
 
 lazy val docs = project.in(file("docs"))
-  .enablePlugins(TutPlugin)
+  .enablePlugins(MdocPlugin)
   .enablePlugins(GhpagesPlugin)
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(ScalaUnidocPlugin)
@@ -136,7 +136,6 @@ lazy val docs = project.in(file("docs"))
   .settings(algebraSettings: _*)
   .settings(noPublishSettings: _*)
   .settings(docSettings)
-  .settings((scalacOptions in Tut) ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .dependsOn(coreJVM, lawsJVM)
 
 lazy val aggregate = project.in(file("."))
