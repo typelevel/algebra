@@ -169,7 +169,14 @@ lazy val aggregate = project.in(file("."))
   .aggregate(coreNative, lawsNative)
   .dependsOn(coreNative, lawsNative)
 
-val binaryCompatibleVersion = "1.0.1"
+val binaryCompatibleVersions = Set(
+  "1.0.0",
+  "1.0.1",
+  "2.0.0",
+  "2.0.1",
+  "2.1.0",
+  "2.1.1"
+)
 
 /**
   * Empty this each time we publish a new version (and bump the minor number)
@@ -189,14 +196,15 @@ lazy val core = crossProject(JSPlatform, NativePlatform, JVMPlatform)
   .enablePlugins(MimaPlugin)
   .settings(moduleName := "algebra")
   .settings(
-    mimaPreviousArtifacts := Set("org.typelevel" %% "algebra" % binaryCompatibleVersion),
+    mimaPreviousArtifacts := binaryCompatibleVersions.map(v => "org.typelevel" %% "algebra" % v),
     mimaBinaryIssueFilters ++= ignoredABIProblems,
     testFrameworks += new TestFramework("munit.Framework"),
     libraryDependencies ++= Seq(
-    "org.typelevel" %%% "cats-kernel" % catsVersion,
-    "org.typelevel" %%% "discipline-munit" % disciplineMUnit % Test,
-    "org.scalameta" %%% "munit" % mUnit % Test
-  ))
+      "org.typelevel" %%% "cats-kernel" % catsVersion,
+      "org.typelevel" %%% "discipline-munit" % disciplineMUnit % Test,
+      "org.scalameta" %%% "munit" % mUnit % Test
+    )
+  )
   .settings(algebraSettings: _*)
   .jsSettings(scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)))
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
@@ -212,14 +220,14 @@ lazy val laws = crossProject(JSPlatform, NativePlatform, JVMPlatform)
   .dependsOn(core)
   .settings(
     moduleName := "algebra-laws",
-    mimaPreviousArtifacts :=
-    Set("org.typelevel" %% "algebra-laws" % binaryCompatibleVersion),
+    mimaPreviousArtifacts := binaryCompatibleVersions.map(v => "org.typelevel" %% "algebra-laws" % v),
     testFrameworks += new TestFramework("munit.Framework"),
     libraryDependencies ++= Seq(
       "org.typelevel" %%% "cats-kernel-laws" % catsVersion,
       "org.typelevel" %%% "discipline-munit" % disciplineMUnit % Test,
       "org.scalameta" %%% "munit" % mUnit % Test
-  ))
+    )
+  )
   .jsSettings(scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)))
   .nativeSettings(nativeSettings)
   .settings(algebraSettings: _*)
@@ -230,8 +238,8 @@ lazy val lawsNative = laws.native
 
 lazy val benchmark = project.in(file("benchmark"))
   .settings(
-    moduleName := "algebra-benchmark",
-    coverageExcludedPackages := "com\\.twitter\\.algebird\\.benchmark.*")
+    moduleName := "algebra-benchmark"
+  )
   .enablePlugins(JmhPlugin)
   .disablePlugins(MimaPlugin)
   .settings(JmhPlugin.projectSettings:_*)
