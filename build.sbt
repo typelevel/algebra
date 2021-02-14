@@ -111,7 +111,8 @@ lazy val commonSettings = Seq(
 lazy val algebraSettings = buildSettings ++ commonSettings ++ publishSettings
 
 lazy val nativeSettings = Seq(
-  crossScalaVersions ~= (_.filterNot(Scala300.contains))
+  crossScalaVersions ~= (_.filterNot(Scala300.contains)),
+  publishConfiguration := publishConfiguration.value.withOverwrite(true) // needed since we double-publish on release
 )
 
 lazy val docsMappingsAPIDir =
@@ -290,13 +291,12 @@ lazy val publishSettings = Seq(
     </developers>
   ),
   releaseProcess := Seq[ReleaseStep](
-    checkSnapshotDependencies,
     inquireVersions,
     runTest,
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
-    publishArtifacts,
+    releaseStepCommandAndRemaining("+publishSigned"),
     setNextVersion,
     commitNextVersion,
     releaseStepCommand("sonatypeReleaseAll"),
