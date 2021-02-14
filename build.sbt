@@ -4,27 +4,45 @@ import microsites.ExtraMdFileConfig
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 import com.typesafe.tools.mima.core._
 
-lazy val catsVersion     = "2.3.1"
-lazy val mUnit           = "0.7.20"
-lazy val disciplineMUnit = "1.0.4"
+lazy val catsVersion     = "2.4.1"
+lazy val mUnit           = "0.7.21"
+lazy val disciplineMUnit = "1.0.5"
 
-val Scala212 = "2.12.12"
+val Scala212 = "2.12.13"
 val Scala213 = "2.13.4"
 val Scala300 = Seq("3.0.0-M2", "3.0.0-M3")
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213) ++ Scala300
 ThisBuild / scalaVersion := Scala213
 
+ThisBuild / githubWorkflowBuildMatrixAdditions +=
+  "platform" -> List("jvm", "js", "native")
+
+ThisBuild / githubWorkflowBuildMatrixExclusions ++= Scala300.map { dottyVersion =>
+  MatrixExclude(Map("platform" -> "native", "scala" -> dottyVersion))
+} // Dotty is not yet supported by Scala Native
+
+val JvmCond = s"matrix.platform == 'jvm'"
+val JsCond = s"matrix.platform == 'js'"
+val NativeCond = s"matrix.platform == 'native'"
+
+ThisBuild / githubWorkflowBuildMatrixFailFast := Some(false)
 ThisBuild / githubWorkflowArtifactUpload := false
 
 ThisBuild / githubWorkflowPublishTargetBranches := Seq()
+
+ThisBuild / githubWorkflowBuild := Seq(
+  WorkflowStep.Sbt(List("coreJS/test", "lawsJS/test"), name = Some("Validate Scala JS"), cond = Some(JsCond)),
+  WorkflowStep.Sbt(List("coreNative/test", "lawsNative/test"), name = Some("Validate Scala Native"), cond = Some(NativeCond)),
+  WorkflowStep.Sbt(List("coreJVM/test", "lawsJVM/test", "benchmark/test"), name = Some("Validate Scala JVM"), cond = Some(JvmCond))
+)
 
 ThisBuild / githubWorkflowAddedJobs ++= Seq(
   WorkflowJob(
     "microsite",
     "Microsite",
     githubWorkflowJobSetup.value.toList ::: List(
-      WorkflowStep.Use("actions", "setup-ruby", "v1", name = Some("Setup Ruby")),
+      WorkflowStep.Use(UseRef.Public("ruby", "setup-ruby", "v1"), Map("ruby-version" -> "2.7"), name = Some("Setup Ruby")),
       WorkflowStep.Run(List("gem install jekyll -v 4.0.0"), name = Some("Setup Jekyll")),
       WorkflowStep.Sbt(List("docs/makeMicrosite"), name = Some("Build the microsite"))
     ),
@@ -92,6 +110,10 @@ lazy val commonSettings = Seq(
 
 lazy val algebraSettings = buildSettings ++ commonSettings ++ publishSettings
 
+lazy val nativeSettings = Seq(
+  crossScalaVersions ~= (_.filterNot(Scala300.contains))
+)
+
 lazy val docsMappingsAPIDir =
   settingKey[String]("Name of subdirectory in site target directory for api docs")
 
@@ -112,7 +134,7 @@ lazy val docSettings = Seq(
   addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), docsMappingsAPIDir),
   git.remoteRepo := "git@github.com:typelevel/algebra.git",
   ghpagesNoJekyll := false,
-  fork in tut := true,
+  fork in mdoc := true,
   fork in (ScalaUnidoc, unidoc) := true,
   scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
       "-doc-source-url", "https://github.com/typelevel/algebra/tree/master€{FILE_PATH}.scala",
@@ -123,7 +145,7 @@ lazy val docSettings = Seq(
 )
 
 lazy val docs = project.in(file("docs"))
-  .enablePlugins(TutPlugin)
+  .enablePlugins(MdocPlugin)
   .enablePlugins(GhpagesPlugin)
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(ScalaUnidocPlugin)
@@ -131,7 +153,6 @@ lazy val docs = project.in(file("docs"))
   .settings(algebraSettings: _*)
   .settings(noPublishSettings: _*)
   .settings(docSettings)
-  .settings((scalacOptions in Tut) ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .dependsOn(coreJVM, lawsJVM)
 
 lazy val aggregate = project.in(file("."))
@@ -145,6 +166,8 @@ lazy val aggregate = project.in(file("."))
   .dependsOn(coreJVM, lawsJVM)
   .aggregate(coreJS, lawsJS)
   .dependsOn(coreJS, lawsJS)
+  .aggregate(coreNative, lawsNative)
+  .dependsOn(coreNative, lawsNative)
 
 val binaryCompatibleVersion = "1.0.1"
 
@@ -161,7 +184,7 @@ val ignoredABIProblems = {
   )
 }
 
-lazy val core = crossProject(JSPlatform, JVMPlatform)
+lazy val core = crossProject(JSPlatform, NativePlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .enablePlugins(MimaPlugin)
   .settings(moduleName := "algebra")
@@ -177,11 +200,13 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(algebraSettings: _*)
   .jsSettings(scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)))
   .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
+  .nativeSettings(nativeSettings)
 
 lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
+lazy val coreNative = core.native
 
-lazy val laws = crossProject(JSPlatform, JVMPlatform)
+lazy val laws = crossProject(JSPlatform, NativePlatform, JVMPlatform)
   .crossType(CrossType.Full)
   .enablePlugins(MimaPlugin)
   .dependsOn(core)
@@ -196,10 +221,12 @@ lazy val laws = crossProject(JSPlatform, JVMPlatform)
       "org.scalameta" %%% "munit" % mUnit % Test
   ))
   .jsSettings(scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)))
+  .nativeSettings(nativeSettings)
   .settings(algebraSettings: _*)
 
 lazy val lawsJVM = laws.jvm
 lazy val lawsJS = laws.js
+lazy val lawsNative = laws.native
 
 lazy val benchmark = project.in(file("benchmark"))
   .settings(

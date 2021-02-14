@@ -20,10 +20,17 @@ jobs:
   build:
     name: Build and Test
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.12, 2.13.4, 3.0.0-M2, 3.0.0-M3]
+        scala: [2.12.13, 2.13.4, 3.0.0-M2, 3.0.0-M3]
         java: [adopt@1.8]
+        platform: [jvm, js, native]
+        exclude:
+          - platform: native
+            scala: 3.0.0-M2
+          - platform: native
+            scala: 3.0.0-M3
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
@@ -51,15 +58,24 @@ jobs:
       - name: Check that workflows are up to date
         run: sbt ++${{ matrix.scala }} githubWorkflowCheck
 
-      - name: Build project
-        run: sbt ++${{ matrix.scala }} test
+      - name: Validate Scala JS
+        if: matrix.platform == 'js'
+        run: sbt ++${{ matrix.scala }} coreJS/test lawsJS/test
+
+      - name: Validate Scala Native
+        if: matrix.platform == 'native'
+        run: sbt ++${{ matrix.scala }} coreNative/test lawsNative/test
+
+      - name: Validate Scala JVM
+        if: matrix.platform == 'jvm'
+        run: sbt ++${{ matrix.scala }} coreJVM/test lawsJVM/test benchmark/test
 
   microsite:
     name: Microsite
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.12]
+        scala: [2.12.13]
         java: [adopt@1.8]
     runs-on: ${{ matrix.os }}
     steps:
@@ -86,7 +102,9 @@ jobs:
           key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
 
       - name: Setup Ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
 
       - name: Setup Jekyll
         run: gem install jekyll -v 4.0.0
@@ -99,7 +117,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.12]
+        scala: [2.12.13]
         java: [adopt@1.8]
     runs-on: ${{ matrix.os }}
     steps:

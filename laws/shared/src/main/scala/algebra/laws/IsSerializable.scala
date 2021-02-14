@@ -12,10 +12,10 @@ import scala.util.DynamicVariable
  */
 private[laws] object IsSerializable {
   val runTests = new DynamicVariable[Boolean](true)
-  def apply(): Boolean = (!Platform.isJs) && runTests.value
+  def apply(): Boolean = Platform.isJvm && runTests.value
 
   def testSerialization[M](m: M): Prop.Result =
-    if (Platform.isJs) Result(status = Proof) else {
+    if (Platform.isJvm) {
       import java.io._
       val baos = new ByteArrayOutputStream()
       val oos = new ObjectOutputStream(baos)
@@ -28,11 +28,14 @@ private[laws] object IsSerializable {
         ois.readObject() // just ensure we can read it back
         ois.close()
         Result(status = Proof)
-      } catch { case NonFatal(t) =>
+      } catch {
+        case NonFatal(t) =>
           Result(status = Exception(t))
       } finally {
         oos.close()
         if (ois != null) ois.close() // scalastyle:ignore null
       }
+    } else {
+      Result(status = Proof)
     }
 }
