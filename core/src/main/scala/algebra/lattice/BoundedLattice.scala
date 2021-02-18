@@ -27,8 +27,8 @@ trait BoundedLattice[@sp(Int, Long, Float, Double) A] extends Any with Lattice[A
 }
 
 object BoundedLattice extends
-  BoundedMeetSemilatticeFunctions[BoundedLattice] with
-  BoundedJoinSemilatticeFunctions[BoundedLattice] {
+  BoundedMeetSemilatticeFunctions[BoundedLattice]
+  with BoundedJoinSemilatticeFunctions[BoundedLattice] {
 
   /**
    * Access an implicit `BoundedLattice[A]`.
