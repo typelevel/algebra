@@ -59,8 +59,8 @@ trait HeytingGenBoolOverlap[H[A] <: Heyting[A]] {
 }
 
 trait HeytingFunctions[H[A] <: Heyting[A]] extends
-  BoundedMeetSemilatticeFunctions[H] with
-  BoundedJoinSemilatticeFunctions[H] {
+  BoundedMeetSemilatticeFunctions[H]
+  with BoundedJoinSemilatticeFunctions[H] {
 
   def complement[@sp(Int, Long) A](x: A)(implicit ev: H[A]): A =
     ev.complement(x)

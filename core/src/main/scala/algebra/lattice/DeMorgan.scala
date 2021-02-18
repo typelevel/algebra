@@ -31,9 +31,9 @@ trait DeMorgan[@sp(Int, Long) A] extends Any with Logic[A] { self =>
 }
 
 trait DeMorganFunctions[H[A] <: DeMorgan[A]] extends
-  BoundedMeetSemilatticeFunctions[H] with
-  BoundedJoinSemilatticeFunctions[H] with
-  LogicFunctions[H]
+  BoundedMeetSemilatticeFunctions[H]
+  with BoundedJoinSemilatticeFunctions[H]
+  with LogicFunctions[H]
 
 
 object DeMorgan extends DeMorganFunctions[DeMorgan] {

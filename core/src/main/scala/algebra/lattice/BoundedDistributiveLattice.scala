@@ -30,8 +30,8 @@ trait BoundedDistributiveLattice[@sp(Int, Long, Float, Double) A] extends Any wi
 }
 
 object BoundedDistributiveLattice extends
-  BoundedMeetSemilatticeFunctions[BoundedDistributiveLattice] with
-  BoundedJoinSemilatticeFunctions[BoundedDistributiveLattice] {
+  BoundedMeetSemilatticeFunctions[BoundedDistributiveLattice]
+  with BoundedJoinSemilatticeFunctions[BoundedDistributiveLattice] {
 
   /**
    * Access an implicit `BoundedDistributiveLattice[A]`.
