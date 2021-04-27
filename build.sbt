@@ -4,13 +4,13 @@ import microsites.ExtraMdFileConfig
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 import com.typesafe.tools.mima.core._
 
-lazy val catsVersion     = "2.5.0"
-lazy val mUnit           = "0.7.23"
-lazy val disciplineMUnit = "1.0.7"
+lazy val catsVersion     = "2.6.0"
+lazy val mUnit           = "0.7.25"
+lazy val disciplineMUnit = "1.0.8"
 
 val Scala212 = "2.12.13"
-val Scala213 = "2.13.4"
-val Scala300 = Seq("3.0.0-RC1", "3.0.0-RC2")
+val Scala213 = "2.13.5"
+val Scala300 = Seq("3.0.0-RC2", "3.0.0-RC3")
 
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala213) ++ Scala300
 ThisBuild / scalaVersion := Scala213
@@ -93,19 +93,12 @@ lazy val commonSettings = Seq(
     }
   },
   resolvers += Resolver.sonatypeRepo("public"),
-  scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
-  scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
-  scalaJSStage in Global := FastOptStage,
+  Compile / console / scalacOptions ~= (_ filterNot (_ == "-Ywarn-unused-import")),
+  Test / console / scalacOptions := (Compile / console / scalacOptions).value,
+  Global / scalaJSStage := FastOptStage,
   jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
   fork := false,
-  parallelExecution in Test := false,
-  Compile / doc / sources := {
-    val old = (Compile / doc / sources).value
-    if (isDotty.value)
-      Seq()
-    else
-      old
-  }
+  Test / parallelExecution := false
 )
 
 lazy val algebraSettings = buildSettings ++ commonSettings ++ publishSettings
@@ -130,19 +123,19 @@ lazy val docSettings = Seq(
   micrositeExtraMdFiles := Map(file("CONTRIBUTING.md") -> ExtraMdFileConfig("contributing.md", "page")), // TODO check layout
   micrositeGithubRepo := "algebra",
   autoAPIMappings := true,
-  unidocProjectFilter in (ScalaUnidoc, unidoc) := inProjects(coreJVM, lawsJVM),
+  ScalaUnidoc / unidoc / unidocProjectFilter := inProjects(coreJVM, lawsJVM),
   docsMappingsAPIDir := "api",
-  addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), docsMappingsAPIDir),
+  addMappingsToSiteDir(ScalaUnidoc / packageDoc / mappings, docsMappingsAPIDir),
   git.remoteRepo := "git@github.com:typelevel/algebra.git",
   ghpagesNoJekyll := false,
-  fork in mdoc := true,
-  fork in (ScalaUnidoc, unidoc) := true,
-  scalacOptions in (ScalaUnidoc, unidoc) ++= Seq(
+  mdoc / fork := true,
+  ScalaUnidoc / unidoc / fork := true,
+  ScalaUnidoc / unidoc / scalacOptions ++= Seq(
       "-doc-source-url", "https://github.com/typelevel/algebra/tree/master€{FILE_PATH}.scala",
-      "-sourcepath", baseDirectory.in(LocalRootProject).value.getAbsolutePath,
+      "-sourcepath", (LocalRootProject / baseDirectory).value.getAbsolutePath,
       "-diagrams"
     ),
-  includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
+  makeSite / includeFilter := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
 )
 
 lazy val docs = project.in(file("docs"))
@@ -208,7 +201,7 @@ lazy val core = crossProject(JSPlatform, NativePlatform, JVMPlatform)
   )
   .settings(algebraSettings: _*)
   .jsSettings(scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)))
-  .settings(sourceGenerators in Compile += (sourceManaged in Compile).map(Boilerplate.gen).taskValue)
+  .settings(Compile / sourceGenerators += (Compile / sourceManaged).map(Boilerplate.gen).taskValue)
   .nativeSettings(nativeSettings)
 
 lazy val coreJVM = core.jvm
@@ -257,7 +250,7 @@ lazy val publishSettings = Seq(
   releaseCrossBuild := true,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   publishMavenStyle := true,
-  publishArtifact in Test := false,
+  Test / publishArtifact := false,
   pomIncludeRepository := Function.const(false),
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -316,8 +309,8 @@ lazy val noPublishSettings = Seq(
 
 def crossVersionSharedSources() =
   Seq(Compile, Test).map { sc =>
-    (unmanagedSourceDirectories in sc) ++= {
-      (unmanagedSourceDirectories in sc ).value.map {
+    (sc / unmanagedSourceDirectories) ++= {
+      (sc / unmanagedSourceDirectories).value.map {
         dir:File => new File(dir.getPath + "_" + scalaBinaryVersion.value)
       }
     }
