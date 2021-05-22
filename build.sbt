@@ -4,23 +4,22 @@ import microsites.ExtraMdFileConfig
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 import com.typesafe.tools.mima.core._
 
-lazy val catsVersion     = "2.6.0"
-lazy val mUnit           = "0.7.25"
-lazy val disciplineMUnit = "1.0.8"
+lazy val catsVersion     = "2.6.1"
+lazy val mUnit           = "0.7.26"
+lazy val disciplineMUnit = "1.0.9"
 
 val Scala212 = "2.12.13"
-val Scala213 = "2.13.5"
-val Scala300 = Seq("3.0.0-RC2", "3.0.0-RC3")
+val Scala213 = "2.13.6"
+val Scala300 = "3.0.0"
 
-ThisBuild / crossScalaVersions := Seq(Scala212, Scala213) ++ Scala300
+ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala300)
 ThisBuild / scalaVersion := Scala213
 
 ThisBuild / githubWorkflowBuildMatrixAdditions +=
   "platform" -> List("jvm", "js", "native")
 
-ThisBuild / githubWorkflowBuildMatrixExclusions ++= Scala300.map { dottyVersion =>
-  MatrixExclude(Map("platform" -> "native", "scala" -> dottyVersion))
-} // Dotty is not yet supported by Scala Native
+ThisBuild / githubWorkflowBuildMatrixExclusions +=
+  MatrixExclude(Map("platform" -> "native", "scala" -> Scala300))
 
 val JvmCond = s"matrix.platform == 'jvm'"
 val JsCond = s"matrix.platform == 'js'"

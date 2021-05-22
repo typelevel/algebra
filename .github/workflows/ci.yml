@@ -23,14 +23,12 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.13, 2.13.5, 3.0.0-RC2, 3.0.0-RC3]
+        scala: [2.12.13, 2.13.6, 3.0.0]
         java: [adopt@1.8]
         platform: [jvm, js, native]
         exclude:
           - platform: native
-            scala: 3.0.0-RC2
-          - platform: native
-            scala: 3.0.0-RC3
+            scala: 3.0.0
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
