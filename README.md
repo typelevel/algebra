@@ -7,7 +7,7 @@
 
 ## current status
 
-The code in this repository was moved into Cats in [cats#3877](https://github.com/typelevel/cats/pull/3877).
+The code in this repository was moved into Cats in [cats#3918](https://github.com/typelevel/cats/pull/3918).
 All future development will occur there.
 Algebra will continue to release under the same artifact name and maintain binary compatibility with the 2.x series.
 
