@@ -7,12 +7,9 @@
 
 ## current status
 
-This project is currently in low-maintenance mode.
-The existing 2.x version is stable and works with Scala 2.x and Cats 2.x.
-No new features are developed, but bug fix releases will still be made available.
-
-The plan is to eventually move the code in this repository into Cats ([see the ticket in the Cats repository](https://github.com/typelevel/cats/issues/2041)).
-However, we are looking for volunteers to tackle this.
+The code in this repository was moved into Cats in [cats#3877](https://github.com/typelevel/cats/pull/3877).
+All future development will occur there.
+Algebra will continue to release under the same artifact name and maintain binary compatibility with the 2.x series.
 
 ## the vision
 
