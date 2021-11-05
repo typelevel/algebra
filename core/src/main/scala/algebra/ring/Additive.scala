@@ -7,7 +7,7 @@ import scala.annotation.tailrec
 trait AdditiveSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
   def additive: Semigroup[A] = new Semigroup[A] {
     def combine(x: A, y: A): A = plus(x, y)
-    override def combineAllOption(as: TraversableOnce[A]): Option[A] = trySum(as)
+    override def combineAllOption(as: IterableOnce[A]): Option[A] = trySum(as)
   }
 
   def plus(x: A, y: A): A
@@ -30,14 +30,14 @@ trait AdditiveSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Serial
    *
    * If the sequence is empty, returns None. Otherwise, returns Some(total).
    */
-  def trySum(as: TraversableOnce[A]): Option[A] =
-    as.toIterator.reduceOption(plus)
+  def trySum(as: IterableOnce[A]): Option[A] =
+    as.iterator.reduceOption(plus)
 }
 
 trait AdditiveCommutativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with AdditiveSemigroup[A] {
   override def additive: CommutativeSemigroup[A] = new CommutativeSemigroup[A] {
     def combine(x: A, y: A): A = plus(x, y)
-    override def combineAllOption(as: TraversableOnce[A]): Option[A] = trySum(as)
+    override def combineAllOption(as: IterableOnce[A]): Option[A] = trySum(as)
   }
 }
 
@@ -45,8 +45,8 @@ trait AdditiveMonoid[@sp(Int, Long, Float, Double) A] extends Any with AdditiveS
   override def additive: Monoid[A] = new Monoid[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
-    override def combineAllOption(as: TraversableOnce[A]): Option[A] = trySum(as)
-    override def combineAll(as: TraversableOnce[A]): A = sum(as)
+    override def combineAllOption(as: IterableOnce[A]): Option[A] = trySum(as)
+    override def combineAll(as: IterableOnce[A]): A = sum(as)
   }
 
   def zero: A
@@ -64,19 +64,19 @@ trait AdditiveMonoid[@sp(Int, Long, Float, Double) A] extends Any with AdditiveS
   /**
    * Given a sequence of `as`, compute the sum.
    */
-  def sum(as: TraversableOnce[A]): A =
-    as.foldLeft(zero)(plus)
+  def sum(as: IterableOnce[A]): A =
+    as.iterator.foldLeft(zero)(plus)
 
-  override def trySum(as: TraversableOnce[A]): Option[A] =
-    if (as.isEmpty) None else Some(sum(as))
+  override def trySum(as: IterableOnce[A]): Option[A] =
+    if (as.iterator.isEmpty) None else Some(sum(as))
 }
 
 trait AdditiveCommutativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with AdditiveMonoid[A] with AdditiveCommutativeSemigroup[A] {
   override def additive: CommutativeMonoid[A] = new CommutativeMonoid[A] {
     def empty = zero
     def combine(x: A, y: A): A = plus(x, y)
-    override def combineAllOption(as: TraversableOnce[A]): Option[A] = trySum(as)
-    override def combineAll(as: TraversableOnce[A]): A = sum(as)
+    override def combineAllOption(as: IterableOnce[A]): Option[A] = trySum(as)
+    override def combineAll(as: IterableOnce[A]): A = sum(as)
   }
 }
 
@@ -86,8 +86,8 @@ trait AdditiveGroup[@sp(Int, Long, Float, Double) A] extends Any with AdditiveMo
     def combine(x: A, y: A): A = plus(x, y)
     override def remove(x: A, y: A): A = minus(x, y)
     def inverse(x: A): A = negate(x)
-    override def combineAllOption(as: TraversableOnce[A]): Option[A] = trySum(as)
-    override def combineAll(as: TraversableOnce[A]): A = sum(as)
+    override def combineAllOption(as: IterableOnce[A]): Option[A] = trySum(as)
+    override def combineAll(as: IterableOnce[A]): A = sum(as)
   }
 
   def negate(x: A): A
@@ -106,8 +106,8 @@ trait AdditiveCommutativeGroup[@sp(Int, Long, Float, Double) A] extends Any with
     def combine(x: A, y: A): A = plus(x, y)
     override def remove(x: A, y: A): A = minus(x, y)
     def inverse(x: A): A = negate(x)
-    override def combineAllOption(as: TraversableOnce[A]): Option[A] = trySum(as)
-    override def combineAll(as: TraversableOnce[A]): A = sum(as)
+    override def combineAllOption(as: IterableOnce[A]): Option[A] = trySum(as)
+    override def combineAll(as: IterableOnce[A]): A = sum(as)
   }
 }
 
@@ -122,7 +122,7 @@ trait AdditiveSemigroupFunctions[S[T] <: AdditiveSemigroup[T]] {
   def sumN[@sp(Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: S[A]): A =
     ev.sumN(a, n)
 
-  def trySum[A](as: TraversableOnce[A])(implicit ev: S[A]): Option[A] =
+  def trySum[A](as: IterableOnce[A])(implicit ev: S[A]): Option[A] =
     ev.trySum(as)
 }
 
@@ -133,7 +133,7 @@ trait AdditiveMonoidFunctions[M[T] <: AdditiveMonoid[T]]  extends AdditiveSemigr
   def isZero[@sp(Int, Long, Float, Double) A](a: A)(implicit ev0: M[A], ev1: Eq[A]): Boolean =
     ev0.isZero(a)
 
-  def sum[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: M[A]): A =
+  def sum[@sp(Int, Long, Float, Double) A](as: IterableOnce[A])(implicit ev: M[A]): A =
     ev.sum(as)
 }
 

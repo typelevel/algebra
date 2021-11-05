@@ -50,9 +50,9 @@ class MapAdditiveMonoid[K, V](implicit V: AdditiveSemigroup[V]) extends Additive
     else if (n == 0) zero
     else throw new IllegalArgumentException("Illegal negative exponent to sumN: %s" format n)
 
-  override def sum(as: TraversableOnce[Map[K, V]]): Map[K, V] = {
+  override def sum(as: IterableOnce[Map[K, V]]): Map[K, V] = {
     val acc = mutable.Map.empty[K, V]
-    as.foreach { m =>
+    as.iterator.foreach { m =>
       val it = m.iterator
       while (it.hasNext) {
         val (k, y) = it.next()
@@ -93,13 +93,13 @@ class MapSemiring[K, V](implicit V: Semiring[V]) extends MapAdditiveMonoid[K, V]
     else if (n == 1) x
     else x.map { case (k, v) => (k, V.pow(v, n)) }
 
-  override def tryProduct(as: TraversableOnce[Map[K, V]]): Option[Map[K, V]] =
-    if (as.isEmpty) {
+  override def tryProduct(as: IterableOnce[Map[K, V]]): Option[Map[K, V]] =
+    if (as.iterator.isEmpty) {
       None
     } else {
       val acc = mutable.Map.empty[K, V]
       var ready: Boolean = false
-      as.foreach { m =>
+      as.iterator.foreach { m =>
         if (ready) {
           // at this point all we can do is modify or remove
           // keys. since any "missing" key is effectively zero, and

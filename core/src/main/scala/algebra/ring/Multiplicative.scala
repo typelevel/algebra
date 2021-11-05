@@ -30,8 +30,8 @@ trait MultiplicativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with 
    *
    * If the sequence is empty, returns None. Otherwise, returns Some(total).
    */
-  def tryProduct(as: TraversableOnce[A]): Option[A] =
-    as.toIterator.reduceOption(times)
+  def tryProduct(as: IterableOnce[A]): Option[A] =
+    as.iterator.reduceOption(times)
 }
 
 trait MultiplicativeCommutativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeSemigroup[A] {
@@ -61,11 +61,11 @@ trait MultiplicativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with Mul
   /**
    * Given a sequence of `as`, compute the product.
    */
-  def product(as: TraversableOnce[A]): A =
-    as.foldLeft(one)(times)
+  def product(as: IterableOnce[A]): A =
+    as.iterator.foldLeft(one)(times)
 
-  override def tryProduct(as: TraversableOnce[A]): Option[A] =
-    if (as.isEmpty) None else Some(product(as))
+  override def tryProduct(as: IterableOnce[A]): Option[A] =
+    if (as.iterator.isEmpty) None else Some(product(as))
 }
 
 trait MultiplicativeCommutativeMonoid[@sp(Int, Long, Float, Double) A] extends Any with MultiplicativeMonoid[A] with MultiplicativeCommutativeSemigroup[A] {
@@ -111,7 +111,7 @@ trait MultiplicativeSemigroupFunctions[S[T] <: MultiplicativeSemigroup[T]] {
   def pow[@sp(Int, Long, Float, Double) A](a: A, n: Int)(implicit ev: S[A]): A =
     ev.pow(a, n)
 
-  def tryProduct[A](as: TraversableOnce[A])(implicit ev: S[A]): Option[A] =
+  def tryProduct[A](as: IterableOnce[A])(implicit ev: S[A]): Option[A] =
     ev.tryProduct(as)
 }
 
@@ -122,7 +122,7 @@ trait MultiplicativeMonoidFunctions[M[T] <: MultiplicativeMonoid[T]] extends Mul
   def isOne[@sp(Int, Long, Float, Double) A](a: A)(implicit ev0: M[A], ev1: Eq[A]): Boolean =
     ev0.isOne(a)
 
-  def product[@sp(Int, Long, Float, Double) A](as: TraversableOnce[A])(implicit ev: M[A]): A =
+  def product[@sp(Int, Long, Float, Double) A](as: IterableOnce[A])(implicit ev: M[A]): A =
     ev.product(as)
 }
 
