@@ -193,6 +193,7 @@ lazy val core = crossProject(JSPlatform, NativePlatform, JVMPlatform)
     mimaBinaryIssueFilters ++= ignoredABIProblems,
     testFrameworks += new TestFramework("munit.Framework"),
     libraryDependencies ++= Seq(
+      "org.scala-lang.modules" %%% "scala-collection-compat" % "2.5.0",
       "org.typelevel" %%% "cats-kernel" % catsVersion,
       "org.typelevel" %%% "discipline-munit" % disciplineMUnit % Test,
       "org.scalameta" %%% "munit" % mUnit % Test

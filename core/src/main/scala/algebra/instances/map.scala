@@ -2,6 +2,7 @@ package algebra
 package instances
 
 import scala.collection.mutable
+import scala.collection.compat._
 
 import algebra.ring._
 

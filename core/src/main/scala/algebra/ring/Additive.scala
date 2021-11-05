@@ -3,7 +3,7 @@ package ring
 
 import scala.{ specialized => sp }
 import scala.annotation.tailrec
-
+import scala.collection.compat._
 trait AdditiveSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
   def additive: Semigroup[A] = new Semigroup[A] {
     def combine(x: A, y: A): A = plus(x, y)

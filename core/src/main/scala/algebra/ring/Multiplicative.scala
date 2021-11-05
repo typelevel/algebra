@@ -3,7 +3,7 @@ package ring
 
 import scala.{ specialized => sp }
 import scala.annotation.tailrec
-
+import scala.collection.compat._
 trait MultiplicativeSemigroup[@sp(Int, Long, Float, Double) A] extends Any with Serializable {
   def multiplicative: Semigroup[A] =
     new Semigroup[A] {
